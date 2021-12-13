@@ -38,9 +38,6 @@ public class CoreModelConsumer implements Consumer<CoreModel>
 	protected Map<String, Integer> wordToNID = null;
 	protected Map<String, Integer> casedWordToNID = null;
 	protected Map<String, Integer> synsetIdToNID = null;
-	private Map<String, Integer> morphToNID = null;
-	private Map<String, Integer> pronunciationToNID = null;
-	private Map<String, Integer> sensekeyToNID = null;
 
 	/**
 	 * Constructor
@@ -82,6 +79,7 @@ public class CoreModelConsumer implements Consumer<CoreModel>
 		{
 			lexToNID = Lexes.generateLexes(ps, lexesByLemma, wordToNID, casedWordToNID);
 		}
+		Map<String, Integer> morphToNID = null;
 		try (PrintStream ps = new PrintStream(new FileOutputStream(new File(outDir, makeFilename(Names.MORPHS.FILE))), true, StandardCharsets.UTF_8))
 		{
 			morphToNID = Lexes.generateMorphs(ps, lexesByLemma);
@@ -90,6 +88,7 @@ public class CoreModelConsumer implements Consumer<CoreModel>
 		{
 			Lexes.generateMorphMaps(ps, lexesByLemma, lexToNID, wordToNID, morphToNID);
 		}
+		Map<String, Integer> pronunciationToNID = null;
 		try (PrintStream ps = new PrintStream(new FileOutputStream(new File(outDir, makeFilename(Names.PRONUNCIATIONS.FILE))), true, StandardCharsets.UTF_8))
 		{
 			pronunciationToNID = Lexes.generatePronunciations(ps, lexesByLemma);
@@ -120,7 +119,7 @@ public class CoreModelConsumer implements Consumer<CoreModel>
 	{
 		try (PrintStream ps = new PrintStream(new FileOutputStream(new File(outDir, makeFilename(Names.SENSES.FILE))), true, StandardCharsets.UTF_8))
 		{
-			sensekeyToNID = Senses.generateSenses(ps, sensesById, synsetIdToNID, lexToNID, wordToNID, casedWordToNID);
+			Map<String, Integer> sensekeyToNID = Senses.generateSenses(ps, sensesById, synsetIdToNID, lexToNID, wordToNID, casedWordToNID);
 		}
 		try (PrintStream ps = new PrintStream(new FileOutputStream(new File(outDir, makeFilename(Names.SENSES_SENSES.FILE))), true, StandardCharsets.UTF_8))
 		{
