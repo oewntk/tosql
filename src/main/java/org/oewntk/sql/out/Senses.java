@@ -33,7 +33,7 @@ public class Senses
 		Map<String, Integer> sensekeyToNID = Utils.makeMap(senseKeyStream);
 
 		// insert map
-		final String columns = String.join(",", Names.SENSES.senseid, Names.SENSES.sensekey, Names.SENSES.synsetid, Names.SENSES.luid, Names.SENSES.wordid, Names.SENSES.casedwordid, Names.SENSES.lexid, Names.SENSES.sensenum, Names.SENSES.tagcount);
+		final String columns = String.join(",", Names.SENSES.senseid, Names.SENSES.sensekey, Names.SENSES.sensenum, Names.SENSES.synsetid, Names.SENSES.luid, Names.SENSES.wordid, Names.SENSES.casedwordid, Names.SENSES.lexid, Names.SENSES.tagcount);
 		final Function<Sense, String> toString = sense -> {
 
 			Lex lex = sense.getLex();
@@ -41,6 +41,7 @@ public class Senses
 			String word = casedWord.toLowerCase(Locale.ENGLISH);
 			String synsetId = sense.getSynsetId();
 			String sensekey = sense.getSensekey();
+			int senseNum = sense.getLexIndex();
 			int lexid = sense.findLexid();
 			TagCount tagCount = sense.getTagCount();
 			int wordNID = NIDMaps.lookup(wordIdToNIDMap, word);
@@ -48,8 +49,7 @@ public class Senses
 			int lexNID = NIDMaps.lookup(lexToNIDMap, lex);
 			String casedWordNID = NIDMaps.lookupNullable(casedWordIdToNIDMap, casedWord);
 			String tagCnt = tagCount == null ? "NULL" : Integer.toString(tagCount.getCount());
-			String senseNum = tagCount == null ? "NULL" : Integer.toString(tagCount.getSenseNum());
-			return String.format("'%s',%d,%d,%d,%s,%d,%s,%s", Utils.escape(sensekey), synsetNID, lexNID, wordNID, casedWordNID, lexid, senseNum, tagCnt);
+			return String.format("'%s',%d,%d,%d,%d,%s,%s,%s", Utils.escape(sensekey), senseNum, synsetNID, lexNID, wordNID, casedWordNID, lexid, tagCnt);
 		};
 		if (!Printers.withComment)
 		{
