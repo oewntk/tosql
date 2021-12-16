@@ -54,9 +54,9 @@ public class CoreModelConsumer implements Consumer<CoreModel>
 	{
 		try
 		{
-			lexes(outDir, model.lexesByLemma);
-			synsets(outDir, model.synsetsById);
-			senses(outDir, model.sensesById);
+			lexes(outDir, model.getLexesByLemma());
+			synsets(outDir, model.getSynsetsById());
+			senses(outDir, model.getSensesById());
 			builtins(outDir);
 		}
 		catch (FileNotFoundException e)

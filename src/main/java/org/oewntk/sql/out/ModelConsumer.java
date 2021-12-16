@@ -43,7 +43,7 @@ public class ModelConsumer implements Consumer<Model>
 
 		try
 		{
-			templates(outDir, coreConsumer, model.sensesById, model.verbTemplatesById);
+			templates(outDir, coreConsumer, model.getSensesById(), model.getVerbTemplatesById());
 		}
 		catch (FileNotFoundException e)
 		{

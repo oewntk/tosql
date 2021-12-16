@@ -4,17 +4,13 @@
 
 package org.oewntk.sql.out;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.ObjectOutputStream;
-import java.io.OutputStream;
-import java.util.List;
-import java.util.Map;
-
 import org.oewntk.model.CoreModel;
 import org.oewntk.model.Lex;
 import org.oewntk.model.Synset;
+
+import java.io.*;
+import java.util.List;
+import java.util.Map;
 
 public class SerializeNIDs
 {
@@ -62,23 +58,23 @@ public class SerializeNIDs
 	{
 		try (OutputStream os = new FileOutputStream(new File(outDir, NID_PREFIX + Names.WORDS.FILE)))
 		{
-			serializeWordNIDs(os, model.lexesByLemma);
+			serializeWordNIDs(os, model.getLexesByLemma());
 		}
 		try (OutputStream os = new FileOutputStream(new File(outDir, NID_PREFIX + Names.CASEDWORDS.FILE)))
 		{
-			serializeCasedWordNIDs(os, model.lexesByLemma);
+			serializeCasedWordNIDs(os, model.getLexesByLemma());
 		}
 		try (OutputStream os = new FileOutputStream(new File(outDir, NID_PREFIX + Names.MORPHS.FILE)))
 		{
-			serializeMorphNIDs(os, model.lexesByLemma);
+			serializeMorphNIDs(os, model.getLexesByLemma());
 		}
 		try (OutputStream os = new FileOutputStream(new File(outDir, NID_PREFIX + Names.PRONUNCIATIONS.FILE)))
 		{
-			serializePronunciationNIDs(os, model.lexesByLemma);
+			serializePronunciationNIDs(os, model.getLexesByLemma());
 		}
 		try (OutputStream os = new FileOutputStream(new File(outDir, NID_PREFIX + Names.SYNSETS.FILE)))
 		{
-			serializeSynsetNIDs(os, model.synsetsById);
+			serializeSynsetNIDs(os, model.getSynsetsById());
 		}
 	}
 }
