@@ -39,12 +39,8 @@ public class Synsets
 
 			char type = synset.getType();
 			String definition = synset.getDefinition();
-			String source = synset.getSource();
-			if (source.endsWith(".yaml"))
-			{
-				source = source.substring(0, source.lastIndexOf(".yaml"));
-			}
-			int lexdomainId = BuiltIn.DOMAINNIDS.get(source);
+			String domain = synset.getDomain();
+			int lexdomainId = BuiltIn.DOMAINNIDS.get(domain);
 			return String.format("'%c',%d,'%s'", type, lexdomainId, Utils.escape(definition));
 		};
 		Printers.printInsert(ps, Names.SYNSETS.TABLE, columns, synsetsById, synsetIdToNID, toString);

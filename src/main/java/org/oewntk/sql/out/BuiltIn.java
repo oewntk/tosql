@@ -93,12 +93,12 @@ public class BuiltIn
 			{"derivation", "derivation", 0, 81}, //
 			{"exemplifies", "exemplifies", 0, 82}, //
 			{"is_exemplified_by", "is exemplified by", 0, 83}, //
-			{"domain_topic", "domain category", 0, 91}, //
-			{"has_domain_topic", "domain member category", 0, 92}, //
+			{"domain_topic", "domain topic", 0, 91}, //
+			{"has_domain_topic", "domain member topic", 0, 92}, //
 			{"domain_region", "domain region", 0, 93}, //
 			{"has_domain_region", "domain member region", 0, 94}, //
-			{"domain_usage", "domain usage", 0, 95}, //
-			{"has_domain_usage", "domain member usage", 0, 96}, //
+			{"exemplifies", "domain usage", 0, 95}, //
+			{"is_exemplified_by", "domain member usage", 0, 96}, //
 			{"domain", "domain", 0, 97}, //
 			{"member", "member", 0, 98}, //
 			{"other", "other", 0, 99}, //
