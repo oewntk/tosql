@@ -172,7 +172,7 @@ public class Variables
 				}
 				catch (IllegalArgumentException iae)
 				{
-					System.err.printf("%s:%d '%s'%n", file.getName(), lineNum, line);
+					Tracing.psErr.printf("%s:%d '%s'%n", file.getName(), lineNum, line);
 					throw iae;
 				}
 				if (compress)

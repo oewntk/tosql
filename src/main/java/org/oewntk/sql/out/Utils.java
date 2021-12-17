@@ -30,7 +30,7 @@ public class Utils
 				.peek(e -> i[0]++) //
 				.map(item -> new SimpleEntry<>(item, i[0] /* index.addAndGet(1) */)) //
 				.collect(toMap(SimpleEntry::getKey, SimpleEntry::getValue, (e1, e2) -> 0, TreeMap::new));
-		// map.forEach((k, v) -> System.out.printf("%s %s%n", k, v));
+		// map.forEach((k, v) -> Tracing.psInfo.printf("%s %s%n", k, v));
 		return map;
 	}
 
@@ -51,7 +51,7 @@ public class Utils
 					}
 					return existing;
 				}, TreeMap::new));
-		// map.forEach((k, v) -> System.out.printf("%s %s%n", k, v));
+		// map.forEach((k, v) -> Tracing.psInfo.printf("%s %s%n", k, v));
 		return map;
 	}
 

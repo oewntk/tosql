@@ -64,7 +64,7 @@ public class TestSqlVariables
 			}
 			catch (IllegalArgumentException e)
 			{
-				// System.err.println(e);
+				// Tracing.psErr.println(e);
 			}
 		}
 	}

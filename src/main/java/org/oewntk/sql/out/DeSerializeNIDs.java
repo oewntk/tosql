@@ -17,29 +17,29 @@ public class DeSerializeNIDs
 	public static Map<String, Map<String, Integer>> deserializeNIDs(final File inDir) throws IOException, ClassNotFoundException
 	{
 		Map<String, Map<String, Integer>> maps = new HashMap<>();
-		try (InputStream os = new FileInputStream(new File(inDir, SerializeNIDs.NID_PREFIX + Names.WORDS.FILE)))
+		try (InputStream is = new FileInputStream(new File(inDir, SerializeNIDs.NID_PREFIX + Names.WORDS.FILE)))
 		{
-			var m = DeSerializeNIDs.deSerializeNIDs(os);
+			var m = DeSerializeNIDs.deSerializeNIDs(is);
 			maps.put(Names.WORDS.FILE, m);
 		}
-		try (InputStream os = new FileInputStream(new File(inDir, SerializeNIDs.NID_PREFIX + Names.CASEDWORDS.FILE)))
+		try (InputStream is = new FileInputStream(new File(inDir, SerializeNIDs.NID_PREFIX + Names.CASEDWORDS.FILE)))
 		{
-			var m = DeSerializeNIDs.deSerializeNIDs(os);
+			var m = DeSerializeNIDs.deSerializeNIDs(is);
 			maps.put(Names.CASEDWORDS.FILE, m);
 		}
-		try (InputStream os = new FileInputStream(new File(inDir, SerializeNIDs.NID_PREFIX + Names.MORPHS.FILE)))
+		try (InputStream is = new FileInputStream(new File(inDir, SerializeNIDs.NID_PREFIX + Names.MORPHS.FILE)))
 		{
-			var m = DeSerializeNIDs.deSerializeNIDs(os);
+			var m = DeSerializeNIDs.deSerializeNIDs(is);
 			maps.put(Names.MORPHS.FILE, m);
 		}
-		try (InputStream os = new FileInputStream(new File(inDir, SerializeNIDs.NID_PREFIX + Names.PRONUNCIATIONS.FILE)))
+		try (InputStream is = new FileInputStream(new File(inDir, SerializeNIDs.NID_PREFIX + Names.PRONUNCIATIONS.FILE)))
 		{
-			var m = DeSerializeNIDs.deSerializeNIDs(os);
+			var m = DeSerializeNIDs.deSerializeNIDs(is);
 			maps.put(Names.PRONUNCIATIONS.FILE, m);
 		}
-		try (InputStream os = new FileInputStream(new File(inDir, SerializeNIDs.NID_PREFIX + Names.SYNSETS.FILE)))
+		try (InputStream is = new FileInputStream(new File(inDir, SerializeNIDs.NID_PREFIX + Names.SYNSETS.FILE)))
 		{
-			var m = DeSerializeNIDs.deSerializeNIDs(os);
+			var m = DeSerializeNIDs.deSerializeNIDs(is);
 			maps.put(Names.SYNSETS.FILE, m);
 		}
 		return maps;

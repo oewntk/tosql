@@ -162,7 +162,7 @@ public class CoreModelConsumer implements Consumer<CoreModel>
 	static protected String makeFilename(String name)
 	{
 		String fileName = name + ".sql";
-		System.err.println(fileName);
+		Tracing.psInfo.println(fileName);
 		return fileName;
 	}
 }

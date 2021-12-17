@@ -25,7 +25,7 @@ public class NIDMaps
 		}
 		catch (Exception e)
 		{
-			System.err.printf("lookup of <%s> failed%n", key);
+			Tracing.psErr.printf("lookup of <%s> failed%n", key);
 			throw e;
 		}
 	}
