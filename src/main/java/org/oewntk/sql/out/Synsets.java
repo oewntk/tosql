@@ -39,8 +39,8 @@ public class Synsets
 
 			char type = synset.getType();
 			String definition = synset.getDefinition();
-			String domain = synset.getDomain();
-			int lexdomainId = BuiltIn.DOMAINNIDS.get(domain);
+			String domain = synset.getLexfile();
+			int lexdomainId = BuiltIn.LEXFILENIDS.get(domain);
 			return String.format("'%c',%d,'%s'", type, lexdomainId, Utils.escape(definition));
 		};
 		Printers.printInsert(ps, Names.SYNSETS.TABLE, columns, synsetsById, synsetIdToNID, toString);

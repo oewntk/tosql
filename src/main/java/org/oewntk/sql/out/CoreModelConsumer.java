@@ -32,6 +32,11 @@ public class CoreModelConsumer implements Consumer<CoreModel>
 	protected final File outDir;
 
 	/**
+	 * Logging info
+	 */
+	private final PrintStream ps;
+
+	/**
 	 * NID maps
 	 */
 	protected Map<Lex, Integer> lexToNID = null;
@@ -44,9 +49,10 @@ public class CoreModelConsumer implements Consumer<CoreModel>
 	 *
 	 * @param outDir output directory
 	 */
-	public CoreModelConsumer(File outDir)
+	public CoreModelConsumer(final File outDir, final PrintStream ps)
 	{
 		this.outDir = outDir;
+		this.ps = ps;
 	}
 
 	@Override

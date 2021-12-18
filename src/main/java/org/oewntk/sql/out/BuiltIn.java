@@ -63,7 +63,7 @@ public class BuiltIn
 			{"adjs.ppl", "a", "adj.ppl", 44}, //
 	};
 
-	public static final Map<String, Integer> DOMAINNIDS = Stream.of(domainsArray).collect(toMap(data -> (String) data[2], data -> (Integer) data[3]));
+	public static final Map<String, Integer> LEXFILENIDS = Stream.of(domainsArray).collect(toMap(data -> (String) data[2], data -> (Integer) data[3]));
 
 	public static final Map<Object[], Integer> DOMAIN2NIDS = Stream.of(domainsArray).collect(toMap(data -> new String[]{Utils.escape((String) data[0]), Utils.escape((String) data[1]), Utils.escape((String) data[2])}, data -> (Integer) data[3]));
 
@@ -91,14 +91,12 @@ public class BuiltIn
 			{"participle", "participle", 0, 71}, //
 			{"pertainym", "pertainym", 0, 80}, //
 			{"derivation", "derivation", 0, 81}, //
-			{"exemplifies", "exemplifies", 0, 82}, //
-			{"is_exemplified_by", "is exemplified by", 0, 83}, //
 			{"domain_topic", "domain topic", 0, 91}, //
 			{"has_domain_topic", "domain member topic", 0, 92}, //
 			{"domain_region", "domain region", 0, 93}, //
 			{"has_domain_region", "domain member region", 0, 94}, //
-			{"exemplifies", "domain usage", 0, 95}, //
-			{"is_exemplified_by", "domain member usage", 0, 96}, //
+			{"exemplifies", "exemplifies", 0, 95}, // domain usage
+			{"is_exemplified_by", "is exemplified by", 0, 96}, // domain member usage
 			{"domain", "domain", 0, 97}, //
 			{"member", "member", 0, 98}, //
 			{"other", "other", 0, 99}, //

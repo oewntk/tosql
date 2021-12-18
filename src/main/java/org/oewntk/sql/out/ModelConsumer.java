@@ -30,15 +30,20 @@ public class ModelConsumer implements Consumer<Model>
 	 */
 	private final File outDir;
 
-	public ModelConsumer(File outDir)
+	/**
+	 * Logging info
+	 */
+	private final PrintStream ps;
+	public ModelConsumer(File outDir, PrintStream ps)
 	{
 		this.outDir = outDir;
+		this.ps = ps;
 	}
 
 	@Override
 	public void accept(final Model model)
 	{
-		CoreModelConsumer coreConsumer = new CoreModelConsumer(outDir);
+		CoreModelConsumer coreConsumer = new CoreModelConsumer(outDir, ps);
 		coreConsumer.accept(model);
 
 		try
