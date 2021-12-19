@@ -18,12 +18,10 @@ public class Lexes
 	{
 	}
 
-	public static Map<Lex, Integer> generateLexes(final PrintStream ps, final Map<String, List<Lex>> lexesByLemma, final Map<String, Integer> wordIdToNID, final Map<String, Integer> casedwordIdToNID)
+	public static Map<Lex, Integer> generateLexes(final PrintStream ps, final Collection<Lex> lexes, final Map<String, Integer> wordIdToNID, final Map<String, Integer> casedwordIdToNID)
 	{
 		// stream of lexes
-		Stream<Lex> lexStream = lexesByLemma.entrySet() //
-				.stream() //
-				.flatMap(e -> e.getValue().stream()); //
+		Stream<Lex> lexStream = lexes.stream();
 
 		// make lex-to-nid map
 		Map<Lex, Integer> lexToNID = Utils.makeSortedMap(lexStream);
@@ -58,22 +56,21 @@ public class Lexes
 		return lexToNID;
 	}
 
-	public static Map<String, Integer> makeWordNIDs(final Map<String, List<Lex>> lexesByLemma)
+	public static Map<String, Integer> makeWordNIDs(final Collection<Lex> lexes)
 	{
 		// stream of words
-		Stream<String> wordStream = lexesByLemma.keySet() //
-				.stream() //
-				.map(lex -> lex.toLowerCase(Locale.ENGLISH)) //
+		Stream<String> wordStream = lexes.stream() //
+				.map(Lex::getLCLemma) //
 				.distinct();
 
 		// make word-to-nid map
 		return Utils.makeMap(wordStream);
 	}
 
-	public static Map<String, Integer> generateWords(final PrintStream ps, final Map<String, List<Lex>> lexesByLemma)
+	public static Map<String, Integer> generateWords(final PrintStream ps, final Collection<Lex> lexes)
 	{
 		// make word-to-nid map
-		Map<String, Integer> wordToNID = makeWordNIDs(lexesByLemma);
+		Map<String, Integer> wordToNID = makeWordNIDs(lexes);
 
 		// insert map
 		final String columns = String.join(",", Names.WORDS.wordid, Names.WORDS.word);
@@ -83,21 +80,21 @@ public class Lexes
 		return wordToNID;
 	}
 
-	public static Map<String, Integer> makeCasedWordNIDs(final Map<String, List<Lex>> lexesByLemma)
+	public static Map<String, Integer> makeCasedWordNIDs(final Collection<Lex> lexes)
 	{
 		// stream of cased words
-		Stream<String> casedWordStream = lexesByLemma.keySet() //
-				.stream() //
-				.filter(lexId -> !lexId.equals(lexId.toLowerCase(Locale.ENGLISH)));
+		Stream<String> casedWordStream = lexes.stream() //
+				.filter(lex -> !lex.getLemma().equals(lex.getLCLemma()))
+				.map(Lex::getLemma);
 
 		// make casedword-to-nid map
 		return Utils.makeMap(casedWordStream);
 	}
 
-	public static Map<String, Integer> generateCasedWords(final PrintStream ps, final Map<String, List<Lex>> lexesByLemma, final Map<String, Integer> wordIdToNID)
+	public static Map<String, Integer> generateCasedWords(final PrintStream ps, final Collection<Lex> lexes, final Map<String, Integer> wordIdToNID)
 	{
 		// make casedword-to-nid map
-		Map<String, Integer> casedWordToNID = makeCasedWordNIDs(lexesByLemma);
+		Map<String, Integer> casedWordToNID = makeCasedWordNIDs(lexes);
 
 		// insert map
 		final String columns = String.join(",", Names.CASEDWORDS.casedwordid, Names.CASEDWORDS.casedword, Names.CASEDWORDS.wordid);
@@ -107,12 +104,10 @@ public class Lexes
 		return casedWordToNID;
 	}
 
-	public static Map<String, Integer> makeMorphs(final Map<String, List<Lex>> lexesByLemma)
+	public static Map<String, Integer> makeMorphs(final Collection<Lex> lexes)
 	{
 		// stream of morphs
-		Stream<String> morphStream = lexesByLemma.values() //
-				.stream() //
-				.flatMap(List::stream) //
+		Stream<String> morphStream = lexes.stream() //
 				.filter(lex -> lex.getForms() != null && lex.getForms().length > 0) //
 				.flatMap(lex -> Arrays.stream(lex.getForms())) //
 				.sorted() //
@@ -122,10 +117,10 @@ public class Lexes
 		return Utils.makeMap(morphStream);
 	}
 
-	public static Map<String, Integer> generateMorphs(final PrintStream ps, final Map<String, List<Lex>> lexesByLemma)
+	public static Map<String, Integer> generateMorphs(final PrintStream ps, final Collection<Lex> lexes)
 	{
 		// make morph-to-nid map
-		Map<String, Integer> morphToNID = makeMorphs(lexesByLemma);
+		Map<String, Integer> morphToNID = makeMorphs(lexes);
 
 		// insert map
 		final String columns = String.join(",", Names.MORPHS.morphid, Names.MORPHS.morph);
@@ -135,12 +130,10 @@ public class Lexes
 		return morphToNID;
 	}
 
-	public static void generateMorphMaps(final PrintStream ps, final Map<String, List<Lex>> lexesByLemma, final Map<Lex, Integer> lexToNID, final Map<String, Integer> wordIdToNID, final Map<String, Integer> morphIdToNID)
+	public static void generateMorphMaps(final PrintStream ps, final Collection<Lex> lexes, final Map<Lex, Integer> lexToNID, final Map<String, Integer> wordIdToNID, final Map<String, Integer> morphIdToNID)
 	{
 		// stream of lexes
-		Stream<Lex> lexStream = lexesByLemma.values() //
-				.stream() //
-				.flatMap(List::stream) //
+		Stream<Lex> lexStream = lexes.stream() //
 				.filter(lex -> lex.getForms() != null && lex.getForms().length > 0);
 
 		// insert map
@@ -186,12 +179,10 @@ public class Lexes
 		}
 	}
 
-	public static Map<String, Integer> makePronunciations(final Map<String, List<Lex>> lexesByLemma)
+	public static Map<String, Integer> makePronunciations(final Collection<Lex> lexes)
 	{
 		// stream of pronunciation values
-		Stream<String> pronunciationValueStream = lexesByLemma.values() //
-				.stream() //
-				.flatMap(List::stream) //
+		Stream<String> pronunciationValueStream = lexes.stream() //
 				.filter(lex -> lex.getPronunciations() != null && lex.getPronunciations().length > 0) //
 				.flatMap(lex -> Arrays.stream(lex.getPronunciations())) //
 				.map(Pronunciation::getValue) //
@@ -202,10 +193,10 @@ public class Lexes
 		return Utils.makeMap(pronunciationValueStream);
 	}
 
-	public static Map<String, Integer> generatePronunciations(final PrintStream ps, final Map<String, List<Lex>> lexesByLemma)
+	public static Map<String, Integer> generatePronunciations(final PrintStream ps, final Collection<Lex> lexes)
 	{
 		// make pronunciation_value-to-nid map
-		Map<String, Integer> pronunciationValueToNID = makePronunciations(lexesByLemma);
+		Map<String, Integer> pronunciationValueToNID = makePronunciations(lexes);
 
 		// insert map
 		final String columns = String.join(",", Names.PRONUNCIATIONS.pronunciationid, Names.PRONUNCIATIONS.pronunciation);
@@ -215,12 +206,10 @@ public class Lexes
 		return pronunciationValueToNID;
 	}
 
-	public static void generatePronunciationMaps(final PrintStream ps, final Map<String, List<Lex>> lexesByLemma, final Map<Lex, Integer> lexToNID, final Map<String, Integer> wordIdToNID, final Map<String, Integer> pronunciationIdToNID)
+	public static void generatePronunciationMaps(final PrintStream ps, final Collection<Lex> lexes, final Map<Lex, Integer> lexToNID, final Map<String, Integer> wordIdToNID, final Map<String, Integer> pronunciationIdToNID)
 	{
 		// stream of lexes
-		Stream<Lex> lexStream = lexesByLemma.values() //
-				.stream() //
-				.flatMap(List::stream) //
+		Stream<Lex> lexStream = lexes.stream() //
 				.filter(lex -> lex.getPronunciations() != null && lex.getPronunciations().length > 0);
 
 		// insert map

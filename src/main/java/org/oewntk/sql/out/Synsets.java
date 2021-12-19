@@ -8,6 +8,7 @@ import org.oewntk.model.Synset;
 
 import java.io.PrintStream;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
@@ -19,19 +20,19 @@ public class Synsets
 	{
 	}
 
-	public static Map<String, Integer> makeSynsetNIDs(final Map<String, Synset> synsetsById)
+	public static Map<String, Integer> makeSynsetNIDs(final Collection<Synset> synsets)
 	{
 		// stream of synsetIds
-		Stream<String> synsetIdStream = synsetsById.keySet() //
-				.stream() //
+		Stream<String> synsetIdStream = synsets.stream() //
+				.map(Synset::getSynsetId) //
 				.sorted();
 		return Utils.makeMap(synsetIdStream);
 	}
 
-	public static Map<String, Integer> generateSynsets(final PrintStream ps, final Map<String, Synset> synsetsById)
+	public static Map<String, Integer> generateSynsets(final PrintStream ps, final Collection<Synset> synsets)
 	{
 		// make synsetId-to-nid map
-		Map<String, Integer> synsetIdToNID = makeSynsetNIDs(synsetsById);
+		Map<String, Integer> synsetIdToNID = makeSynsetNIDs(synsets);
 
 		// insert map
 		final String columns = String.join(",", Names.SYNSETS.synsetid, Names.SYNSETS.posid, Names.SYNSETS.domainid, Names.SYNSETS.definition);
@@ -43,16 +44,15 @@ public class Synsets
 			int lexdomainId = BuiltIn.LEXFILENIDS.get(domain);
 			return String.format("'%c',%d,'%s'", type, lexdomainId, Utils.escape(definition));
 		};
-		Printers.printInsert(ps, Names.SYNSETS.TABLE, columns, synsetsById, synsetIdToNID, toString);
+		Printers.printInsert(ps, Names.SYNSETS.TABLE, columns, synsets, Synset::getSynsetId, synsetIdToNID, toString);
 
 		return synsetIdToNID;
 	}
 
-	public static void generateSynsetRelations(final PrintStream ps, final Map<String, Synset> synsetsById, final Map<String, Integer> synsetIdToNIDMap)
+	public static void generateSynsetRelations(final PrintStream ps, final Collection<Synset> synsets, final Map<String, Integer> synsetIdToNIDMap)
 	{
 		// synset stream
-		Stream<Synset> synsetStream = synsetsById.values() //
-				.stream() //
+		Stream<Synset> synsetStream = synsets.stream() //
 				.filter(synset -> {
 					var relations = synset.getRelations();
 					return relations != null && relations.size() > 0;
@@ -110,11 +110,10 @@ public class Synsets
 		}
 	}
 
-	public static void generateSamples(final PrintStream ps, final Map<String, Synset> synsetsById, final Map<String, Integer> synsetIdToNIDMap)
+	public static void generateSamples(final PrintStream ps, final Collection<Synset> synsets, final Map<String, Integer> synsetIdToNIDMap)
 	{
 		// stream of synsets
-		Stream<Synset> synsetStream = synsetsById.values() //
-				.stream() //
+		Stream<Synset> synsetStream = synsets.stream() //
 				.filter(synset -> {
 					var examples = synset.getExamples();
 					return examples != null && examples.length > 0;

@@ -9,38 +9,38 @@ import org.oewntk.model.Lex;
 import org.oewntk.model.Synset;
 
 import java.io.*;
-import java.util.List;
+import java.util.Collection;
 import java.util.Map;
 
 public class SerializeNIDs
 {
 	static final String NID_PREFIX = "nid_";
 
-	public static void serializeWordNIDs(final OutputStream os, final Map<String, List<Lex>> lexesByLemma) throws IOException
+	public static void serializeWordNIDs(final OutputStream os, final Collection<Lex> lexes) throws IOException
 	{
-		Map<String, Integer> wordToNID = Lexes.makeWordNIDs(lexesByLemma);
+		Map<String, Integer> wordToNID = Lexes.makeWordNIDs(lexes);
 		serialize(os, wordToNID);
 	}
 
-	public static void serializeCasedWordNIDs(final OutputStream os, final Map<String, List<Lex>> lexesByLemma) throws IOException
+	public static void serializeCasedWordNIDs(final OutputStream os, final Collection<Lex> lexes) throws IOException
 	{
-		Map<String, Integer> casedToNID = Lexes.makeCasedWordNIDs(lexesByLemma);
+		Map<String, Integer> casedToNID = Lexes.makeCasedWordNIDs(lexes);
 		serialize(os, casedToNID);
 	}
 
-	public static void serializeMorphNIDs(final OutputStream os, final Map<String, List<Lex>> lexesByLemma) throws IOException
+	public static void serializeMorphNIDs(final OutputStream os, final Collection<Lex> lexes) throws IOException
 	{
-		Map<String, Integer> morphToNID = Lexes.makeMorphs(lexesByLemma);
+		Map<String, Integer> morphToNID = Lexes.makeMorphs(lexes);
 		serialize(os, morphToNID);
 	}
 
-	public static void serializePronunciationNIDs(final OutputStream os, final Map<String, List<Lex>> lexesByLemma) throws IOException
+	public static void serializePronunciationNIDs(final OutputStream os, final Collection<Lex> lexes) throws IOException
 	{
-		Map<String, Integer> pronunciationValueToNID = Lexes.makeMorphs(lexesByLemma);
+		Map<String, Integer> pronunciationValueToNID = Lexes.makeMorphs(lexes);
 		serialize(os, pronunciationValueToNID);
 	}
 
-	public static void serializeSynsetNIDs(final OutputStream os, final Map<String, Synset> synsetsById) throws IOException
+	public static void serializeSynsetNIDs(final OutputStream os, final Collection<Synset> synsetsById) throws IOException
 	{
 		Map<String, Integer> synsetIdToNID = Synsets.makeSynsetNIDs(synsetsById);
 		serialize(os, synsetIdToNID);
@@ -58,23 +58,23 @@ public class SerializeNIDs
 	{
 		try (OutputStream os = new FileOutputStream(new File(outDir, NID_PREFIX + Names.WORDS.FILE)))
 		{
-			serializeWordNIDs(os, model.getLexesByLemma());
+			serializeWordNIDs(os, model.lexes);
 		}
 		try (OutputStream os = new FileOutputStream(new File(outDir, NID_PREFIX + Names.CASEDWORDS.FILE)))
 		{
-			serializeCasedWordNIDs(os, model.getLexesByLemma());
+			serializeCasedWordNIDs(os, model.lexes);
 		}
 		try (OutputStream os = new FileOutputStream(new File(outDir, NID_PREFIX + Names.MORPHS.FILE)))
 		{
-			serializeMorphNIDs(os, model.getLexesByLemma());
+			serializeMorphNIDs(os, model.lexes);
 		}
 		try (OutputStream os = new FileOutputStream(new File(outDir, NID_PREFIX + Names.PRONUNCIATIONS.FILE)))
 		{
-			serializePronunciationNIDs(os, model.getLexesByLemma());
+			serializePronunciationNIDs(os, model.lexes);
 		}
 		try (OutputStream os = new FileOutputStream(new File(outDir, NID_PREFIX + Names.SYNSETS.FILE)))
 		{
-			serializeSynsetNIDs(os, model.getSynsetsById());
+			serializeSynsetNIDs(os, model.synsets);
 		}
 	}
 }

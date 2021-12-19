@@ -9,10 +9,7 @@ import org.oewntk.model.Sense;
 import org.oewntk.model.TagCount;
 
 import java.io.PrintStream;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
+import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Stream;
 
@@ -22,11 +19,11 @@ public class Senses
 	{
 	}
 
-	public static Map<String, Integer> generateSenses(final PrintStream ps, final Map<String, Sense> sensesById, final Map<String, Integer> synsetIdToNIDMap, final Map<Lex, Integer> lexToNIDMap, final Map<String, Integer> wordIdToNIDMap, final Map<String, Integer> casedWordIdToNIDMap)
+	public static Map<String, Integer> generateSenses(final PrintStream ps, final Collection<Sense> senses, final Map<String, Integer> synsetIdToNIDMap, final Map<Lex, Integer> lexToNIDMap, final Map<String, Integer> wordIdToNIDMap, final Map<String, Integer> casedWordIdToNIDMap)
 	{
 		// stream of sensekeys
-		Stream<String> senseKeyStream = sensesById.keySet()    //
-				.stream() //
+		Stream<String> senseKeyStream = senses.stream() //
+				.map(Sense::getSensekey)
 				.sorted();
 
 		// make sensekey-to-nid map
@@ -53,7 +50,7 @@ public class Senses
 		};
 		if (!Printers.withComment)
 		{
-			Printers.printInsert(ps, Names.SENSES.TABLE, columns, sensesById, sensekeyToNID, toString);
+			Printers.printInsert(ps, Names.SENSES.TABLE, columns, senses, Sense::getSensekey, sensekeyToNID, toString);
 		}
 		else
 		{
@@ -67,16 +64,15 @@ public class Senses
 						toString.apply(sense), //
 						String.format("%s %s '%s'", sensekey, synsetId, casedWord),};
 			};
-			Printers.printInsertWithComment(ps, Names.SENSES.TABLE, columns, sensesById, sensekeyToNID, toStringWithComment);
+			Printers.printInsertWithComment(ps, Names.SENSES.TABLE, columns, senses, Sense::getSensekey, sensekeyToNID, toStringWithComment);
 		}
 		return sensekeyToNID;
 	}
 
-	public static void generateSenseRelations(final PrintStream ps, final Map<String, Sense> sensesById, final Map<String, Integer> synsetIdToNIDMap, final Map<Lex, Integer> lexToNIDMap, final Map<String, Integer> wordIdToNIDMap)
+	public static void generateSenseRelations(final PrintStream ps, final Collection<Sense> senses, final Map<String,Sense> sensesById, final Map<String, Integer> synsetIdToNIDMap, final Map<Lex, Integer> lexToNIDMap, final Map<String, Integer> wordIdToNIDMap)
 	{
 		// stream of senses
-		Stream<Sense> senseStream = sensesById.values() //
-				.stream() //
+		Stream<Sense> senseStream = senses.stream() //
 				.filter(s -> {
 					var relations = s.getRelations();
 					return relations != null && relations.size() > 0;
@@ -155,11 +151,10 @@ public class Senses
 		}
 	}
 
-	public static void generateAdjPositions(final PrintStream ps, final Map<String, Sense> sensesById, final Map<String, Integer> synsetIdToNIDMap, final Map<Lex, Integer> lexToNIDMap, final Map<String, Integer> wordIdToNIDMap)
+	public static void generateAdjPositions(final PrintStream ps, final Collection<Sense> senses, final Map<String, Integer> synsetIdToNIDMap, final Map<Lex, Integer> lexToNIDMap, final Map<String, Integer> wordIdToNIDMap)
 	{
 		// stream of senses
-		Stream<Sense> senseStream = sensesById.values() //
-				.stream() //
+		Stream<Sense> senseStream = senses.stream() //
 				.filter(s -> {
 					var adjPosition = s.getAdjPosition();
 					return adjPosition != null;
@@ -181,11 +176,10 @@ public class Senses
 		Printers.printInsert(ps, Names.SENSES_ADJPOSITIONS.TABLE, columns, senseStream, toString, false);
 	}
 
-	public static void generateVerbFrames(final PrintStream ps, final Map<String, Sense> sensesById, final Map<String, Integer> synsetIdToNIDMap, final Map<Lex, Integer> lexToNIDMap, final Map<String, Integer> wordIdToNIDMap)
+	public static void generateVerbFrames(final PrintStream ps, final Collection<Sense> senses, final Map<String, Integer> synsetIdToNIDMap, final Map<Lex, Integer> lexToNIDMap, final Map<String, Integer> wordIdToNIDMap)
 	{
 		// stream of senses
-		Stream<Sense> senseStream = sensesById.values() //
-				.stream() //
+		Stream<Sense> senseStream = senses.stream() //
 				.filter(s -> {
 					var frames = s.getVerbFrames();
 					return frames != null && frames.length > 0;

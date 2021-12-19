@@ -14,6 +14,7 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.PrintStream;
 import java.nio.charset.StandardCharsets;
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Consumer;
@@ -60,9 +61,9 @@ public class CoreModelConsumer implements Consumer<CoreModel>
 	{
 		try
 		{
-			lexes(outDir, model.getLexesByLemma());
-			synsets(outDir, model.getSynsetsById());
-			senses(outDir, model.getSensesById());
+			lexes(outDir, model.lexes);
+			synsets(outDir, model.synsets);
+			senses(outDir, model.senses, model.getSensesById());
 			builtins(outDir);
 		}
 		catch (FileNotFoundException e)
@@ -71,73 +72,73 @@ public class CoreModelConsumer implements Consumer<CoreModel>
 		}
 	}
 
-	private void lexes(final File outDir, final Map<String, List<Lex>> lexesByLemma) throws FileNotFoundException
+	private void lexes(final File outDir, final Collection<Lex> lexes) throws FileNotFoundException
 	{
 		try (PrintStream ps = new PrintStream(new FileOutputStream(new File(outDir, makeFilename(Names.WORDS.FILE))), true, StandardCharsets.UTF_8))
 		{
-			wordToNID = Lexes.generateWords(ps, lexesByLemma);
+			wordToNID = Lexes.generateWords(ps, lexes);
 		}
 		try (PrintStream ps = new PrintStream(new FileOutputStream(new File(outDir, makeFilename(Names.CASEDWORDS.FILE))), true, StandardCharsets.UTF_8))
 		{
-			casedWordToNID = Lexes.generateCasedWords(ps, lexesByLemma, wordToNID);
+			casedWordToNID = Lexes.generateCasedWords(ps, lexes, wordToNID);
 		}
 		try (PrintStream ps = new PrintStream(new FileOutputStream(new File(outDir, makeFilename(Names.LEXES.FILE))), true, StandardCharsets.UTF_8))
 		{
-			lexToNID = Lexes.generateLexes(ps, lexesByLemma, wordToNID, casedWordToNID);
+			lexToNID = Lexes.generateLexes(ps, lexes, wordToNID, casedWordToNID);
 		}
-		Map<String, Integer> morphToNID = null;
+		Map<String, Integer> morphToNID;
 		try (PrintStream ps = new PrintStream(new FileOutputStream(new File(outDir, makeFilename(Names.MORPHS.FILE))), true, StandardCharsets.UTF_8))
 		{
-			morphToNID = Lexes.generateMorphs(ps, lexesByLemma);
+			morphToNID = Lexes.generateMorphs(ps, lexes);
 		}
 		try (PrintStream ps = new PrintStream(new FileOutputStream(new File(outDir, makeFilename(Names.LEXES_MORPHS.FILE))), true, StandardCharsets.UTF_8))
 		{
-			Lexes.generateMorphMaps(ps, lexesByLemma, lexToNID, wordToNID, morphToNID);
+			Lexes.generateMorphMaps(ps, lexes, lexToNID, wordToNID, morphToNID);
 		}
-		Map<String, Integer> pronunciationToNID = null;
+		Map<String, Integer> pronunciationToNID;
 		try (PrintStream ps = new PrintStream(new FileOutputStream(new File(outDir, makeFilename(Names.PRONUNCIATIONS.FILE))), true, StandardCharsets.UTF_8))
 		{
-			pronunciationToNID = Lexes.generatePronunciations(ps, lexesByLemma);
+			pronunciationToNID = Lexes.generatePronunciations(ps, lexes);
 		}
 		try (PrintStream ps = new PrintStream(new FileOutputStream(new File(outDir, makeFilename(Names.LEXES_PRONUNCIATIONS.FILE))), true, StandardCharsets.UTF_8))
 		{
-			Lexes.generatePronunciationMaps(ps, lexesByLemma, lexToNID, wordToNID, pronunciationToNID);
+			Lexes.generatePronunciationMaps(ps, lexes, lexToNID, wordToNID, pronunciationToNID);
 		}
 	}
 
-	private void synsets(final File outDir, final Map<String, Synset> synsetsById) throws FileNotFoundException
+	private void synsets(final File outDir, final Collection<Synset> synsets) throws FileNotFoundException
 	{
 		try (PrintStream ps = new PrintStream(new FileOutputStream(new File(outDir, makeFilename(Names.SYNSETS.FILE))), true, StandardCharsets.UTF_8))
 		{
-			synsetIdToNID = Synsets.generateSynsets(ps, synsetsById);
+			synsetIdToNID = Synsets.generateSynsets(ps, synsets);
 		}
 		try (PrintStream ps = new PrintStream(new FileOutputStream(new File(outDir, makeFilename(Names.SAMPLES.FILE))), true, StandardCharsets.UTF_8))
 		{
-			Synsets.generateSamples(ps, synsetsById, synsetIdToNID);
+			Synsets.generateSamples(ps, synsets, synsetIdToNID);
 		}
 		try (PrintStream ps = new PrintStream(new FileOutputStream(new File(outDir, makeFilename(Names.SYNSETS_SYNSETS.FILE))), true, StandardCharsets.UTF_8))
 		{
-			Synsets.generateSynsetRelations(ps, synsetsById, synsetIdToNID);
+			Synsets.generateSynsetRelations(ps, synsets, synsetIdToNID);
 		}
 	}
 
-	private void senses(final File outDir, final Map<String, Sense> sensesById) throws FileNotFoundException
+	private void senses(final File outDir, final Collection<Sense> senses, final Map<String, Sense> sensesById) throws FileNotFoundException
 	{
 		try (PrintStream ps = new PrintStream(new FileOutputStream(new File(outDir, makeFilename(Names.SENSES.FILE))), true, StandardCharsets.UTF_8))
 		{
-			Map<String, Integer> sensekeyToNID = Senses.generateSenses(ps, sensesById, synsetIdToNID, lexToNID, wordToNID, casedWordToNID);
+			Map<String, Integer> sensekeyToNID = Senses.generateSenses(ps, senses, synsetIdToNID, lexToNID, wordToNID, casedWordToNID);
 		}
 		try (PrintStream ps = new PrintStream(new FileOutputStream(new File(outDir, makeFilename(Names.SENSES_SENSES.FILE))), true, StandardCharsets.UTF_8))
 		{
-			Senses.generateSenseRelations(ps, sensesById, synsetIdToNID, lexToNID, wordToNID);
+			Senses.generateSenseRelations(ps, senses, sensesById, synsetIdToNID, lexToNID, wordToNID);
 		}
 		try (PrintStream ps = new PrintStream(new FileOutputStream(new File(outDir, makeFilename(Names.SENSES_VFRAMES.FILE))), true, StandardCharsets.UTF_8))
 		{
-			Senses.generateVerbFrames(ps, sensesById, synsetIdToNID, lexToNID, wordToNID);
+			Senses.generateVerbFrames(ps, senses, synsetIdToNID, lexToNID, wordToNID);
 		}
 		try (PrintStream ps = new PrintStream(new FileOutputStream(new File(outDir, makeFilename(Names.SENSES_ADJPOSITIONS.FILE))), true, StandardCharsets.UTF_8))
 		{
-			Senses.generateAdjPositions(ps, sensesById, synsetIdToNID, lexToNID, wordToNID);
+			Senses.generateAdjPositions(ps, senses, synsetIdToNID, lexToNID, wordToNID);
 		}
 	}
 

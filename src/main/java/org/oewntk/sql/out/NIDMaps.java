@@ -4,12 +4,12 @@
 
 package org.oewntk.sql.out;
 
-import java.io.PrintStream;
-import java.util.List;
-import java.util.Map;
-
 import org.oewntk.model.Lex;
 import org.oewntk.model.Synset;
+
+import java.io.PrintStream;
+import java.util.Collection;
+import java.util.Map;
 
 public class NIDMaps
 {
@@ -33,40 +33,42 @@ public class NIDMaps
 	static <T> String lookupNullable(Map<T, Integer> map, T key)
 	{
 		Integer value = map.get(key);
-		if(value == null)
+		if (value == null)
+		{
 			return "NULL";
+		}
 		return value.toString();
 	}
 
 	// P R I N T
 
-	public static void printWords(final PrintStream ps, final Map<String, List<Lex>> lexesByLemma)
+	public static void printWords(final PrintStream ps, final Collection<Lex> lexes)
 	{
-		Map<String, Integer> wordToNID = Lexes.makeWordNIDs(lexesByLemma);
+		Map<String, Integer> wordToNID = Lexes.makeWordNIDs(lexes);
 		print(ps, wordToNID);
 	}
 
-	public static void printCasedWords(final PrintStream ps, final Map<String, List<Lex>> lexesByLemma)
+	public static void printCasedWords(final PrintStream ps, final Collection<Lex> lexes)
 	{
-		Map<String, Integer> casedToNID = Lexes.makeCasedWordNIDs(lexesByLemma);
+		Map<String, Integer> casedToNID = Lexes.makeCasedWordNIDs(lexes);
 		print(ps, casedToNID);
 	}
 
-	public static void printMorphs(final PrintStream ps, final Map<String, List<Lex>> lexesByLemma)
+	public static void printMorphs(final PrintStream ps, final Collection<Lex> lexes)
 	{
-		Map<String, Integer> morphToNID = Lexes.makeMorphs(lexesByLemma);
+		Map<String, Integer> morphToNID = Lexes.makeMorphs(lexes);
 		print(ps, morphToNID);
 	}
 
-	public static void printPronunciations(final PrintStream ps, final Map<String, List<Lex>> lexesByLemma)
+	public static void printPronunciations(final PrintStream ps, final Collection<Lex> lexes)
 	{
-		Map<String, Integer> pronunciationValueToNID = Lexes.makePronunciations(lexesByLemma);
+		Map<String, Integer> pronunciationValueToNID = Lexes.makePronunciations(lexes);
 		print(ps, pronunciationValueToNID);
 	}
 
-	public static void printSynsets(final PrintStream ps, final Map<String, Synset> synsetsById)
+	public static void printSynsets(final PrintStream ps, final Collection<Synset> synsets)
 	{
-		Map<String, Integer> synsetIdToNID = Synsets.makeSynsetNIDs(synsetsById);
+		Map<String, Integer> synsetIdToNID = Synsets.makeSynsetNIDs(synsets);
 		print(ps, synsetIdToNID);
 	}
 

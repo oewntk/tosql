@@ -7,6 +7,7 @@ package org.oewntk.sql.out;
 import java.io.PrintStream;
 import java.util.AbstractMap;
 import java.util.AbstractMap.SimpleEntry;
+import java.util.Comparator;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.TreeMap;
@@ -59,7 +60,8 @@ public class Utils
 			final Function<Entry<Integer, T>, String> toString)
 	{
 		// make object-to-nid map
-		Stream<Entry<Integer, T>> stream = byId.entrySet().stream();
+		Stream<Entry<Integer, T>> stream = byId.entrySet().stream() //
+				.sorted(Comparator.comparingInt(Entry::getKey));
 
 		// insert map
 		Printers.printInsert(ps, table, columns, stream, toString, false);
