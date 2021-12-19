@@ -11,6 +11,7 @@ import java.util.Comparator;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.TreeMap;
+import java.util.function.BinaryOperator;
 import java.util.function.Function;
 import java.util.stream.Stream;
 
@@ -18,19 +19,27 @@ import static java.util.stream.Collectors.toMap;
 
 public class Utils
 {
+	private static final BinaryOperator<Integer> mergingFunction = (existing, replacement) -> {
+		if (existing.equals(replacement))
+		{
+			throw new IllegalArgumentException(existing + "," + replacement);
+		}
+		return existing;
+	};
+
 	// map factory
 
 	public static <T> Map<T, Integer> makeMap(final Stream<T> stream)
 	{
 		//final AtomicInteger index = new AtomicInteger();
 		//index.set(0);
-		final int[] i = { 0 };
+		final int[] i = {0};
 		//noinspection UnnecessaryLocalVariable
 		Map<T, Integer> map = stream //
 				.sequential() //
-				.peek(e -> i[0]++) //
+				.peek(e -> ++i[0]) //
 				.map(item -> new SimpleEntry<>(item, i[0] /* index.addAndGet(1) */)) //
-				.collect(toMap(SimpleEntry::getKey, SimpleEntry::getValue, (e1, e2) -> 0, TreeMap::new));
+				.collect(toMap(SimpleEntry::getKey, SimpleEntry::getValue, mergingFunction));
 		// map.forEach((k, v) -> Tracing.psInfo.printf("%s %s%n", k, v));
 		return map;
 	}
@@ -39,25 +48,19 @@ public class Utils
 	{
 		//final AtomicInteger index = new AtomicInteger();
 		//index.set(0);
-		final int[] i = { 0 };
+		final int[] i = {0};
+
 		//noinspection UnnecessaryLocalVariable
 		Map<T, Integer> map = stream //
 				.sequential() //
-				.peek(e -> i[0]++) //
+				.peek(e -> ++i[0]) //
 				.map(item -> new AbstractMap.SimpleEntry<>(item, i[0] /* index.addAndGet(1) */)) //
-				.collect(toMap(SimpleEntry::getKey, SimpleEntry::getValue, (existing, replacement) -> {
-					if (existing.equals(replacement))
-					{
-						throw new IllegalArgumentException(existing + "," + replacement);
-					}
-					return existing;
-				}, TreeMap::new));
+				.collect(toMap(SimpleEntry::getKey, SimpleEntry::getValue, mergingFunction, TreeMap::new));
 		// map.forEach((k, v) -> Tracing.psInfo.printf("%s %s%n", k, v));
 		return map;
 	}
 
-	public static <T> void generateTable(final PrintStream ps, final String table, final String columns, final Map<Integer, T> byId,
-			final Function<Entry<Integer, T>, String> toString)
+	public static <T> void generateTable(final PrintStream ps, final String table, final String columns, final Map<Integer, T> byId, final Function<Entry<Integer, T>, String> toString)
 	{
 		// make object-to-nid map
 		Stream<Entry<Integer, T>> stream = byId.entrySet().stream() //

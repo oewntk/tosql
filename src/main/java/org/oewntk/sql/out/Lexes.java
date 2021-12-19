@@ -30,8 +30,8 @@ public class Lexes
 		final String columns = String.join(",", Names.LEXES.luid, Names.LEXES.posid, Names.LEXES.wordid, Names.LEXES.casedwordid);
 		final Function<Lex, String> toString = lex -> {
 
-			String word = lex.getLemma().toLowerCase(Locale.ENGLISH);
-			int wordNID = NIDMaps.lookup(wordIdToNID, word);
+			String word = lex.getLCLemma();
+			int wordNID = NIDMaps.lookupLC(wordIdToNID, word);
 			String casedWordNID = NIDMaps.lookupNullable(casedwordIdToNID, lex.getLemma());
 			char type = lex.getType();
 			return String.format("'%c',%d,%s", type, wordNID, casedWordNID);
@@ -64,7 +64,9 @@ public class Lexes
 				.distinct();
 
 		// make word-to-nid map
-		return Utils.makeMap(wordStream);
+		var map = Utils.makeMap(wordStream);
+		assert !map.values().stream().anyMatch(i -> i == 0);
+		return map;
 	}
 
 	public static Map<String, Integer> generateWords(final PrintStream ps, final Collection<Lex> lexes)
@@ -84,11 +86,13 @@ public class Lexes
 	{
 		// stream of cased words
 		Stream<String> casedWordStream = lexes.stream() //
-				.filter(lex -> !lex.getLemma().equals(lex.getLCLemma()))
+				.filter(Lex::isCased) //
 				.map(Lex::getLemma);
 
 		// make casedword-to-nid map
-		return Utils.makeMap(casedWordStream);
+		var map = Utils.makeMap(casedWordStream);
+		assert !map.values().stream().anyMatch(i -> i == 0);
+		return map;
 	}
 
 	public static Map<String, Integer> generateCasedWords(final PrintStream ps, final Collection<Lex> lexes, final Map<String, Integer> wordIdToNID)
@@ -98,7 +102,7 @@ public class Lexes
 
 		// insert map
 		final String columns = String.join(",", Names.CASEDWORDS.casedwordid, Names.CASEDWORDS.casedword, Names.CASEDWORDS.wordid);
-		final Function<String, String> toString = casedWord -> String.format("'%s',%d", Utils.escape(casedWord), NIDMaps.lookup(wordIdToNID, casedWord.toLowerCase(Locale.ENGLISH)));
+		final Function<String, String> toString = casedWord -> String.format("'%s',%d", Utils.escape(casedWord), NIDMaps.lookupLC(wordIdToNID, casedWord.toLowerCase(Locale.ENGLISH)));
 		Printers.printInsert(ps, Names.CASEDWORDS.TABLE, columns, casedWordToNID, toString);
 
 		return casedWordToNID;
@@ -141,9 +145,8 @@ public class Lexes
 		final Function<Lex, List<String>> toString = lex -> {
 
 			var strings = new ArrayList<String>();
-			String casedWord = lex.getLemma();
-			String word = casedWord.toLowerCase(Locale.ENGLISH);
-			int wordNID = NIDMaps.lookup(wordIdToNID, word);
+			String word = lex.getLCLemma();
+			int wordNID = NIDMaps.lookupLC(wordIdToNID, word);
 			int lexNID = NIDMaps.lookup(lexToNID, lex);
 			char type = lex.getType();
 			for (String morph : lex.getForms())
@@ -217,8 +220,8 @@ public class Lexes
 		final Function<Lex, List<String>> toString = lex -> {
 
 			var strings = new ArrayList<String>();
-			String word = lex.getLemma().toLowerCase(Locale.ENGLISH);
-			int wordNID = NIDMaps.lookup(wordIdToNID, word);
+			String word = lex.getLCLemma();
+			int wordNID = NIDMaps.lookupLC(wordIdToNID, word);
 			int lexNID = NIDMaps.lookup(lexToNID, lex);
 			char type = lex.getType();
 			for (Pronunciation pronunciation : lex.getPronunciations())

@@ -23,8 +23,7 @@ public class Senses
 	{
 		// stream of sensekeys
 		Stream<String> senseKeyStream = senses.stream() //
-				.map(Sense::getSensekey)
-				.sorted();
+				.map(Sense::getSensekey).sorted();
 
 		// make sensekey-to-nid map
 		Map<String, Integer> sensekeyToNID = Utils.makeMap(senseKeyStream);
@@ -35,13 +34,13 @@ public class Senses
 
 			Lex lex = sense.getLex();
 			String casedWord = lex.getLemma();
-			String word = casedWord.toLowerCase(Locale.ENGLISH);
+			String word = lex.getLCLemma();
 			String synsetId = sense.getSynsetId();
 			String sensekey = sense.getSensekey();
 			int senseNum = sense.getLexIndex();
 			int lexid = sense.findLexid();
 			TagCount tagCount = sense.getTagCount();
-			int wordNID = NIDMaps.lookup(wordIdToNIDMap, word);
+			int wordNID = NIDMaps.lookupLC(wordIdToNIDMap, word);
 			int synsetNID = NIDMaps.lookup(synsetIdToNIDMap, synsetId);
 			int lexNID = NIDMaps.lookup(lexToNIDMap, lex);
 			String casedWordNID = NIDMaps.lookupNullable(casedWordIdToNIDMap, casedWord);
@@ -69,7 +68,7 @@ public class Senses
 		return sensekeyToNID;
 	}
 
-	public static void generateSenseRelations(final PrintStream ps, final Collection<Sense> senses, final Map<String,Sense> sensesById, final Map<String, Integer> synsetIdToNIDMap, final Map<Lex, Integer> lexToNIDMap, final Map<String, Integer> wordIdToNIDMap)
+	public static void generateSenseRelations(final PrintStream ps, final Collection<Sense> senses, final Map<String, Sense> sensesById, final Map<String, Integer> synsetIdToNIDMap, final Map<Lex, Integer> lexToNIDMap, final Map<String, Integer> wordIdToNIDMap)
 	{
 		// stream of senses
 		Stream<Sense> senseStream = senses.stream() //
@@ -85,10 +84,9 @@ public class Senses
 			var strings = new ArrayList<String>();
 			String synsetId1 = sense.getSynsetId();
 			Lex lex1 = sense.getLex();
-			String casedword1 = lex1.getLemma();
-			String word1 = casedword1.toLowerCase(Locale.ENGLISH);
+			String word1 = lex1.getLCLemma();
 			int lu1NID = NIDMaps.lookup(lexToNIDMap, lex1);
-			int wordNID1 = NIDMaps.lookup(wordIdToNIDMap, word1);
+			int wordNID1 = NIDMaps.lookupLC(wordIdToNIDMap, word1);
 			int synsetNID1 = NIDMaps.lookup(synsetIdToNIDMap, synsetId1);
 			var relations = sense.getRelations();
 			for (String relation : relations.keySet())
@@ -103,11 +101,10 @@ public class Senses
 					Sense sense2 = sensesById.get(senseId2);
 					String synsetId2 = sense2.getSynsetId();
 					Lex lex2 = sense2.getLex();
-					String casedword2 = lex2.getLemma();
-					String word2 = casedword2.toLowerCase(Locale.ENGLISH);
+					String word2 = lex2.getLCLemma();
 
 					int lu2NID = NIDMaps.lookup(lexToNIDMap, lex2);
-					int wordNID2 = NIDMaps.lookup(wordIdToNIDMap, word2);
+					int wordNID2 = NIDMaps.lookupLC(wordIdToNIDMap, word2);
 					int synsetNID2 = NIDMaps.lookup(synsetIdToNIDMap, synsetId2);
 					strings.add(String.format("%d,%d,%d,%d,%d,%d,%d", synsetNID1, lu1NID, wordNID1, synsetNID2, lu2NID, wordNID2, relationId));
 				}
@@ -166,11 +163,10 @@ public class Senses
 
 			String synsetId = sense.getSynsetId();
 			Lex lex = sense.getLex();
-			String casedword = lex.getLemma();
-			String word = casedword.toLowerCase(Locale.ENGLISH);
+			String word = lex.getLCLemma();
 			int synsetNID = NIDMaps.lookup(synsetIdToNIDMap, synsetId);
 			int luNID = NIDMaps.lookup(lexToNIDMap, lex);
-			int wordNID = NIDMaps.lookup(wordIdToNIDMap, word);
+			int wordNID = NIDMaps.lookupLC(wordIdToNIDMap, word);
 			return String.format("%d,%d,%d,'%s'", synsetNID, luNID, wordNID, sense.getAdjPosition());
 		};
 		Printers.printInsert(ps, Names.SENSES_ADJPOSITIONS.TABLE, columns, senseStream, toString, false);
@@ -191,9 +187,9 @@ public class Senses
 
 			var strings = new ArrayList<String>();
 			String synsetId = sense.getSynsetId();
-			String wordId = sense.getWordId().toLowerCase(Locale.ENGLISH);
+			String word = sense.getLCLemma();
 			int synsetNID = NIDMaps.lookup(synsetIdToNIDMap, synsetId);
-			int wordNID = NIDMaps.lookup(wordIdToNIDMap, wordId);
+			int wordNID = NIDMaps.lookupLC(wordIdToNIDMap, word);
 			Lex lex = sense.getLex();
 			int luNID = NIDMaps.lookup(lexToNIDMap, lex);
 
@@ -223,9 +219,9 @@ public class Senses
 
 			var strings = new ArrayList<String>();
 			String synsetId = sense.getSynsetId();
-			String wordId = sense.getWordId().toLowerCase(Locale.ENGLISH);
+			String word = sense.getLCLemma();
 			int synsetNID = NIDMaps.lookup(synsetIdToNIDMap, synsetId);
-			int wordNID = NIDMaps.lookup(wordIdToNIDMap, wordId);
+			int wordNID = NIDMaps.lookupLC(wordIdToNIDMap, word);
 			Lex lex = sense.getLex();
 			int luNID = NIDMaps.lookup(lexToNIDMap, lex);
 

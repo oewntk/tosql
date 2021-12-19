@@ -33,7 +33,8 @@ public class Printers
 			{
 				ps.print(',');
 			}
-			ps.printf("%n(%d,%s)", NIDMaps.lookup(objectToNID, k), s);
+			int nid = NIDMaps.lookup(objectToNID, k);
+			ps.printf("%n(%d,%s)", nid, s);
 		});
 		ps.println(";");
 	}

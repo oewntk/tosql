@@ -9,6 +9,7 @@ import org.oewntk.model.Synset;
 
 import java.io.PrintStream;
 import java.util.Collection;
+import java.util.Locale;
 import java.util.Map;
 
 public class NIDMaps
@@ -17,11 +18,19 @@ public class NIDMaps
 	{
 	}
 
+	static int lookupLC(Map<String, Integer> map, String key)
+	{
+		assert key.equals(key.toLowerCase(Locale.ENGLISH));
+		return lookup(map, key);
+	}
+
 	static <T> int lookup(Map<T, Integer> map, T key)
 	{
 		try
 		{
-			return map.get(key);
+			int nid = map.get(key);
+			assert nid != 0;
+			return nid;
 		}
 		catch (Exception e)
 		{
