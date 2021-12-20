@@ -15,7 +15,6 @@ import java.io.FileOutputStream;
 import java.io.PrintStream;
 import java.nio.charset.StandardCharsets;
 import java.util.Collection;
-import java.util.List;
 import java.util.Map;
 import java.util.function.Consumer;
 
@@ -33,11 +32,6 @@ public class CoreModelConsumer implements Consumer<CoreModel>
 	protected final File outDir;
 
 	/**
-	 * Logging info
-	 */
-	private final PrintStream ps;
-
-	/**
 	 * NID maps
 	 */
 	protected Map<Lex, Integer> lexToNID = null;
@@ -50,15 +44,16 @@ public class CoreModelConsumer implements Consumer<CoreModel>
 	 *
 	 * @param outDir output directory
 	 */
-	public CoreModelConsumer(final File outDir, final PrintStream ps)
+	public CoreModelConsumer(final File outDir)
 	{
 		this.outDir = outDir;
-		this.ps = ps;
 	}
 
 	@Override
 	public void accept(final CoreModel model)
 	{
+		Tracing.psInfo.printf("[Model] %s%n", model.getSource());
+
 		try
 		{
 			lexes(outDir, model.lexes);

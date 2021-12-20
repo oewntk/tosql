@@ -13,6 +13,7 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.PrintStream;
 import java.nio.charset.StandardCharsets;
+import java.util.Arrays;
 import java.util.Map;
 import java.util.function.Consumer;
 import java.util.function.Function;
@@ -31,19 +32,21 @@ public class ModelConsumer implements Consumer<Model>
 	private final File outDir;
 
 	/**
-	 * Logging info
+	 * Constructor
+	 *
+	 * @param outDir output directory
 	 */
-	private final PrintStream ps;
-	public ModelConsumer(File outDir, PrintStream ps)
+	public ModelConsumer(File outDir)
 	{
 		this.outDir = outDir;
-		this.ps = ps;
 	}
 
 	@Override
 	public void accept(final Model model)
 	{
-		CoreModelConsumer coreConsumer = new CoreModelConsumer(outDir, ps);
+		Tracing.psInfo.printf("[Model] %s%n", Arrays.toString(model.getSources()));
+
+		CoreModelConsumer coreConsumer = new CoreModelConsumer(outDir);
 		coreConsumer.accept(model);
 
 		try
