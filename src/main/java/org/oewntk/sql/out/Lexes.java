@@ -91,7 +91,7 @@ public class Lexes
 
 		// make casedword-to-nid map
 		var map = Utils.makeMap(casedWordStream);
-		assert !map.values().stream().anyMatch(i -> i == 0);
+		assert map.values().stream().noneMatch(i -> i == 0);
 		return map;
 	}
 

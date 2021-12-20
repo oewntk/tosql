@@ -5,12 +5,9 @@
 package org.oewntk.sql.out;
 
 import java.io.PrintStream;
-import java.util.AbstractMap;
+import java.util.*;
 import java.util.AbstractMap.SimpleEntry;
-import java.util.Comparator;
-import java.util.Map;
 import java.util.Map.Entry;
-import java.util.TreeMap;
 import java.util.function.BinaryOperator;
 import java.util.function.Function;
 import java.util.stream.Stream;
@@ -34,13 +31,13 @@ public class Utils
 		//final AtomicInteger index = new AtomicInteger();
 		//index.set(0);
 		final int[] i = {0};
-		//noinspection UnnecessaryLocalVariable
 		Map<T, Integer> map = stream //
 				.sequential() //
 				.peek(e -> ++i[0]) //
 				.map(item -> new SimpleEntry<>(item, i[0] /* index.addAndGet(1) */)) //
 				.collect(toMap(SimpleEntry::getKey, SimpleEntry::getValue, mergingFunction));
 		// map.forEach((k, v) -> Tracing.psInfo.printf("%s %s%n", k, v));
+		// Tracing.psErr.printf("map <%s> size: %d%n", map.getClass().getSimpleName(), map.size());
 		return map;
 	}
 
@@ -49,14 +46,13 @@ public class Utils
 		//final AtomicInteger index = new AtomicInteger();
 		//index.set(0);
 		final int[] i = {0};
-
-		//noinspection UnnecessaryLocalVariable
 		Map<T, Integer> map = stream //
 				.sequential() //
 				.peek(e -> ++i[0]) //
 				.map(item -> new AbstractMap.SimpleEntry<>(item, i[0] /* index.addAndGet(1) */)) //
 				.collect(toMap(SimpleEntry::getKey, SimpleEntry::getValue, mergingFunction, TreeMap::new));
 		// map.forEach((k, v) -> Tracing.psInfo.printf("%s %s%n", k, v));
+		// Tracing.psErr.printf("sorted map <%s> size: %d%n", map.getClass().getSimpleName(), map.size());
 		return map;
 	}
 
