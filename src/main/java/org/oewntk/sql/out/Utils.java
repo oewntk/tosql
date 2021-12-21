@@ -16,12 +16,20 @@ import static java.util.stream.Collectors.toMap;
 
 public class Utils
 {
-	private static final BinaryOperator<Integer> mergingFunction = (existing, replacement) -> {
+	private static final BinaryOperator<Integer> mergingKeepFunction = (existing, replacement) -> {
 		if (existing.equals(replacement))
 		{
 			throw new IllegalArgumentException(existing + "," + replacement);
 		}
 		return existing;
+	};
+
+	private static final BinaryOperator<Integer> mergingReplaceFunction = (existing, replacement) -> {
+		if (existing.equals(replacement))
+		{
+			throw new IllegalArgumentException(existing + "," + replacement);
+		}
+		return replacement;
 	};
 
 	// map factory
@@ -35,9 +43,7 @@ public class Utils
 				.sequential() //
 				.peek(e -> ++i[0]) //
 				.map(item -> new SimpleEntry<>(item, i[0] /* index.addAndGet(1) */)) //
-				.collect(toMap(SimpleEntry::getKey, SimpleEntry::getValue, mergingFunction));
-		// map.forEach((k, v) -> Tracing.psInfo.printf("%s %s%n", k, v));
-		// Tracing.psErr.printf("map <%s> size: %d%n", map.getClass().getSimpleName(), map.size());
+				.collect(toMap(SimpleEntry::getKey, SimpleEntry::getValue, mergingKeepFunction));
 		return map;
 	}
 
@@ -50,9 +56,7 @@ public class Utils
 				.sequential() //
 				.peek(e -> ++i[0]) //
 				.map(item -> new AbstractMap.SimpleEntry<>(item, i[0] /* index.addAndGet(1) */)) //
-				.collect(toMap(SimpleEntry::getKey, SimpleEntry::getValue, mergingFunction, TreeMap::new));
-		// map.forEach((k, v) -> Tracing.psInfo.printf("%s %s%n", k, v));
-		// Tracing.psErr.printf("sorted map <%s> size: %d%n", map.getClass().getSimpleName(), map.size());
+				.collect(toMap(SimpleEntry::getKey, SimpleEntry::getValue, mergingKeepFunction, TreeMap::new));
 		return map;
 	}
 
