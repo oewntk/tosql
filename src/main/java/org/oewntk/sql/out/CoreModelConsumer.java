@@ -63,7 +63,7 @@ public class CoreModelConsumer implements Consumer<CoreModel>
 		}
 		catch (FileNotFoundException e)
 		{
-			e.printStackTrace();
+			e.printStackTrace(Tracing.psErr);
 		}
 	}
 

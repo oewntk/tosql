@@ -55,7 +55,7 @@ public class ModelConsumer implements Consumer<Model>
 		}
 		catch (FileNotFoundException e)
 		{
-			e.printStackTrace();
+			e.printStackTrace(Tracing.psErr);
 		}
 	}
 
