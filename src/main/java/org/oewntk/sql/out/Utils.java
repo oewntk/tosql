@@ -34,29 +34,42 @@ public class Utils
 
 	// map factory
 
-	public static <T> Map<T, Integer> makeMap(final Stream<T> stream)
+	/**
+	 * Make NID
+	 * To be used with objects that support equal and comparable
+	 *
+	 * @param stream must be distinct
+	 * @param <T>    type of stream elements
+	 * @return map if object-to-NID pairs
+	 */
+	public static <T> Map<T, Integer> makeNIDMap(final Stream<T> stream)
 	{
 		//final AtomicInteger index = new AtomicInteger();
 		//index.set(0);
 		final int[] i = {0};
 		Map<T, Integer> map = stream //
 				.sequential() //
+				.sorted() //
 				.peek(e -> ++i[0]) //
 				.map(item -> new SimpleEntry<>(item, i[0] /* index.addAndGet(1) */)) //
-				.collect(toMap(SimpleEntry::getKey, SimpleEntry::getValue, mergingKeepFunction));
+				.collect(toMap(SimpleEntry::getKey, SimpleEntry::getValue, (existing, replacement) -> {
+					throw new IllegalArgumentException(existing + "," + replacement);
+				}, TreeMap::new));
 		return map;
 	}
 
-	public static <T extends Comparable<T>> Map<T, Integer> makeSortedMap(final Stream<T> stream)
+	public static <T> Map<T, Integer> makeNIDIdentityMap(final Stream<T> stream, final Comparator<T> comparator)
 	{
 		//final AtomicInteger index = new AtomicInteger();
 		//index.set(0);
 		final int[] i = {0};
 		Map<T, Integer> map = stream //
-				.sequential() //
+				.sorted(comparator).sequential() //
 				.peek(e -> ++i[0]) //
-				.map(item -> new AbstractMap.SimpleEntry<>(item, i[0] /* index.addAndGet(1) */)) //
-				.collect(toMap(SimpleEntry::getKey, SimpleEntry::getValue, mergingKeepFunction, TreeMap::new));
+				.map(item -> new SimpleEntry<>(item, i[0] /* index.addAndGet(1) */)) //
+				.collect(toMap(SimpleEntry::getKey, SimpleEntry::getValue, (existing, replacement) -> {
+					throw new IllegalArgumentException(existing + "," + replacement);
+				}, IdentityHashMap::new));
 		return map;
 	}
 

@@ -52,7 +52,7 @@ public class CoreModelConsumer implements Consumer<CoreModel>
 	@Override
 	public void accept(final CoreModel model)
 	{
-		Tracing.psInfo.printf("[Model] %s%n", model.getSource());
+		Tracing.psInfo.printf("[CoreModel] %s%n", model.getSource());
 
 		try
 		{

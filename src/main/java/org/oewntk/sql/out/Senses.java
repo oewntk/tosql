@@ -23,10 +23,12 @@ public class Senses
 	{
 		// stream of sensekeys
 		Stream<String> senseKeyStream = senses.stream() //
-				.map(Sense::getSensekey).sorted();
+				.map(Sense::getSensekey) //
+				.distinct() //
+				.sorted();
 
 		// make sensekey-to-nid map
-		Map<String, Integer> sensekeyToNID = Utils.makeMap(senseKeyStream);
+		Map<String, Integer> sensekeyToNID = Utils.makeNIDMap(senseKeyStream);
 
 		// insert map
 		final String columns = String.join(",", Names.SENSES.senseid, Names.SENSES.sensekey, Names.SENSES.sensenum, Names.SENSES.synsetid, Names.SENSES.luid, Names.SENSES.wordid, Names.SENSES.casedwordid, Names.SENSES.lexid, Names.SENSES.tagcount);

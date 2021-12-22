@@ -24,7 +24,7 @@ public class Lexes
 		Stream<Lex> lexStream = lexes.stream();
 
 		// make lex-to-nid map
-		Map<Lex, Integer> lexToNID = Utils.makeSortedMap(lexStream);
+		Map<Lex, Integer> lexToNID = Utils.makeNIDIdentityMap(lexStream, Lex.comparatorByKeyOEWN);
 
 		// insert map
 		final String columns = String.join(",", Names.LEXES.luid, Names.LEXES.posid, Names.LEXES.wordid, Names.LEXES.casedwordid);
@@ -38,7 +38,7 @@ public class Lexes
 		};
 		if (!Printers.withComment)
 		{
-			Printers.printInsert(ps, Names.LEXES.TABLE, columns, lexToNID, toString);
+			Printers.printInsert(ps, Names.LEXES.TABLE, columns, lexToNID, Lex.comparatorByKeyOEWN, toString);
 		}
 		else
 		{
@@ -51,7 +51,7 @@ public class Lexes
 						String.format("%c '%s'", type, casedWord), //
 				};
 			};
-			Printers.printInsertWithComment(ps, Names.LEXES.TABLE, columns, lexToNID, toStrings);
+			Printers.printInsertWithComment(ps, Names.LEXES.TABLE, columns, lexToNID, Lex.comparatorByKeyOEWN, toStrings);
 		}
 		return lexToNID;
 	}
@@ -60,12 +60,12 @@ public class Lexes
 	{
 		// stream of words
 		Stream<String> wordStream = lexes.stream() //
-				.map(Lex::getLCLemma) //
+				.map(Lex::getLCLemma)
 				.distinct();
 
 		// make word-to-nid map
-		var map = Utils.makeMap(wordStream);
-		assert !map.values().stream().anyMatch(i -> i == 0);
+		var map = Utils.makeNIDMap(wordStream);
+		assert map.values().stream().noneMatch(i -> i == 0);
 		return map;
 	}
 
@@ -87,10 +87,11 @@ public class Lexes
 		// stream of cased words
 		Stream<String> casedWordStream = lexes.stream() //
 				.filter(Lex::isCased) //
-				.map(Lex::getLemma);
+				.map(Lex::getLemma)
+				.distinct();
 
 		// make casedword-to-nid map
-		var map = Utils.makeMap(casedWordStream);
+		var map = Utils.makeNIDMap(casedWordStream);
 		assert map.values().stream().noneMatch(i -> i == 0);
 		return map;
 	}
@@ -118,7 +119,7 @@ public class Lexes
 				.distinct();
 
 		// make morph-to-nid map
-		return Utils.makeMap(morphStream);
+		return Utils.makeNIDMap(morphStream);
 	}
 
 	public static Map<String, Integer> generateMorphs(final PrintStream ps, final Collection<Lex> lexes)
@@ -193,7 +194,7 @@ public class Lexes
 				.distinct();
 
 		// make pronunciation_value-to-nid map
-		return Utils.makeMap(pronunciationValueStream);
+		return Utils.makeNIDMap(pronunciationValueStream);
 	}
 
 	public static Map<String, Integer> generatePronunciations(final PrintStream ps, final Collection<Lex> lexes)

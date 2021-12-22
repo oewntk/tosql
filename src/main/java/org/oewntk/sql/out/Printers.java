@@ -39,19 +39,40 @@ public class Printers
 		ps.println(";");
 	}
 
-	public static <T> void printInsertWithComment(final PrintStream ps, final String table, final String columns, final Map<T, Integer> objectToNID, final Function<T, String[]> toStringWithComments)
+	public static <T> void printInsert(final PrintStream ps, final String table, final String columns, final Map<T, Integer> objectToNID, final Comparator<T> comparator, final Function<T, String> toString)
 	{
 		ps.printf("INSERT INTO %s (%s) VALUES", table, columns);
 
 		final int[] i = {1};  // used as a final int holder
-		objectToNID.keySet().forEach(k -> {
-			String[] s = toStringWithComments.apply(k);
-			if (i[0]++ != 1)
-			{
-				ps.print(',');
-			}
-			ps.printf("%n(%d,%s) /* %s */", NIDMaps.lookup(objectToNID, k), s[0], s[1]);
-		});
+		objectToNID.keySet().stream() //
+				.sorted(comparator) //
+				.forEach(k -> {
+					String s = toString.apply(k);
+					if (i[0]++ != 1)
+					{
+						ps.print(',');
+					}
+					int nid = NIDMaps.lookup(objectToNID, k);
+					ps.printf("%n(%d,%s)", nid, s);
+				});
+		ps.println(";");
+	}
+
+	public static <T> void printInsertWithComment(final PrintStream ps, final String table, final String columns, final Map<T, Integer> objectToNID, final Comparator<T> comparator, final Function<T, String[]> toStringWithComments)
+	{
+		ps.printf("INSERT INTO %s (%s) VALUES", table, columns);
+
+		final int[] i = {1};  // used as a final int holder
+		objectToNID.keySet().stream() //
+				.sorted(comparator) //
+				.forEach(k -> {
+					String[] s = toStringWithComments.apply(k);
+					if (i[0]++ != 1)
+					{
+						ps.print(',');
+					}
+					ps.printf("%n(%d,%s) /* %s */", NIDMaps.lookup(objectToNID, k), s[0], s[1]);
+				});
 		ps.println(";");
 	}
 

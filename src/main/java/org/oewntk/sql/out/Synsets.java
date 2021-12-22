@@ -26,7 +26,7 @@ public class Synsets
 		Stream<String> synsetIdStream = synsets.stream() //
 				.map(Synset::getSynsetId) //
 				.sorted();
-		return Utils.makeMap(synsetIdStream);
+		return Utils.makeNIDMap(synsetIdStream);
 	}
 
 	public static Map<String, Integer> generateSynsets(final PrintStream ps, final Collection<Synset> synsets)
