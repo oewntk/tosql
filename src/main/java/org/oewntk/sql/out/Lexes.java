@@ -24,7 +24,7 @@ public class Lexes
 		// stream of lex key
 		Stream<Key<Lex>> lexKeyStream = lexes.stream().map(Key.OEWN::of);
 
-		// make lexkey-to-nid map
+		// make lex key-to-nid map
 		Map<Key<Lex>, Integer> lexKeyToNID = Utils.makeNIDMap(lexKeyStream);
 
 		// insert map
