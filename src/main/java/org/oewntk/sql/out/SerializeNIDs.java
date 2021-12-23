@@ -56,23 +56,23 @@ public class SerializeNIDs
 
 	static public void serializeNIDs(final CoreModel model, final File outDir) throws IOException
 	{
-		try (OutputStream os = new FileOutputStream(new File(outDir, NID_PREFIX + Names.WORDS.FILE)))
+		try (OutputStream os = new FileOutputStream(new File(outDir, NID_PREFIX + Names.WORDS.FILE + ".ser")))
 		{
 			serializeWordNIDs(os, model.lexes);
 		}
-		try (OutputStream os = new FileOutputStream(new File(outDir, NID_PREFIX + Names.CASEDWORDS.FILE)))
+		try (OutputStream os = new FileOutputStream(new File(outDir, NID_PREFIX + Names.CASEDWORDS.FILE + ".ser")))
 		{
 			serializeCasedWordNIDs(os, model.lexes);
 		}
-		try (OutputStream os = new FileOutputStream(new File(outDir, NID_PREFIX + Names.MORPHS.FILE)))
+		try (OutputStream os = new FileOutputStream(new File(outDir, NID_PREFIX + Names.MORPHS.FILE + ".ser")))
 		{
 			serializeMorphNIDs(os, model.lexes);
 		}
-		try (OutputStream os = new FileOutputStream(new File(outDir, NID_PREFIX + Names.PRONUNCIATIONS.FILE)))
+		try (OutputStream os = new FileOutputStream(new File(outDir, NID_PREFIX + Names.PRONUNCIATIONS.FILE + ".ser")))
 		{
 			serializePronunciationNIDs(os, model.lexes);
 		}
-		try (OutputStream os = new FileOutputStream(new File(outDir, NID_PREFIX + Names.SYNSETS.FILE)))
+		try (OutputStream os = new FileOutputStream(new File(outDir, NID_PREFIX + Names.SYNSETS.FILE + ".ser")))
 		{
 			serializeSynsetNIDs(os, model.synsets);
 		}
