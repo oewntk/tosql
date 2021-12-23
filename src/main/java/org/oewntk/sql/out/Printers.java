@@ -4,6 +4,9 @@
 
 package org.oewntk.sql.out;
 
+import org.oewntk.model.Key;
+import org.oewntk.model.Lex;
+
 import java.io.PrintStream;
 import java.util.Collection;
 import java.util.Comparator;
@@ -39,43 +42,6 @@ public class Printers
 		ps.println(";");
 	}
 
-	public static <T> void printInsert(final PrintStream ps, final String table, final String columns, final Map<T, Integer> objectToNID, final Comparator<T> comparator, final Function<T, String> toString)
-	{
-		ps.printf("INSERT INTO %s (%s) VALUES", table, columns);
-
-		final int[] i = {1};  // used as a final int holder
-		objectToNID.keySet().stream() //
-				.sorted(comparator) //
-				.forEach(k -> {
-					String s = toString.apply(k);
-					if (i[0]++ != 1)
-					{
-						ps.print(',');
-					}
-					int nid = NIDMaps.lookup(objectToNID, k);
-					ps.printf("%n(%d,%s)", nid, s);
-				});
-		ps.println(";");
-	}
-
-	public static <T> void printInsertWithComment(final PrintStream ps, final String table, final String columns, final Map<T, Integer> objectToNID, final Comparator<T> comparator, final Function<T, String[]> toStringWithComments)
-	{
-		ps.printf("INSERT INTO %s (%s) VALUES", table, columns);
-
-		final int[] i = {1};  // used as a final int holder
-		objectToNID.keySet().stream() //
-				.sorted(comparator) //
-				.forEach(k -> {
-					String[] s = toStringWithComments.apply(k);
-					if (i[0]++ != 1)
-					{
-						ps.print(',');
-					}
-					ps.printf("%n(%d,%s) /* %s */", NIDMaps.lookup(objectToNID, k), s[0], s[1]);
-				});
-		ps.println(";");
-	}
-
 	public static <T> void printInsert(final PrintStream ps, final String table, final String columns, final Collection<T> objects, final Function<T, String> toId, final Map<String, Integer> objectIdToNID, final Function<T, String> toString)
 	{
 		ps.printf("INSERT INTO %s (%s) VALUES", table, columns);
@@ -104,6 +70,40 @@ public class Printers
 			}
 			String[] s = toStringWithComments.apply(object);
 			ps.printf("%n(%d,%s) /* %s */", NIDMaps.lookup(objectIdToNID, toId.apply(object)), s[0], s[1]);
+		});
+		ps.println(";");
+	}
+
+	// ley key map
+
+	public static void printInsert(final PrintStream ps, final String table, final String columns, final Collection<Lex> lexes, final Map<Key<Lex>, Integer> lexKeyToNID, final Function<Lex, String> toString)
+	{
+		ps.printf("INSERT INTO %s (%s) VALUES", table, columns);
+
+		final int[] i = {1};  // used as a final int holder
+		lexes.forEach(lex -> {
+			if (i[0]++ != 1)
+			{
+				ps.print(',');
+			}
+			String s = toString.apply(lex);
+			ps.printf("%n(%d,%s)", NIDMaps.lookup(lexKeyToNID, Key.OEWN.of(lex)), s);
+		});
+		ps.println(";");
+	}
+
+	public static void printInsertWithComment(final PrintStream ps, final String table, final String columns, final Collection<Lex> lexes, final Map<Key<Lex>, Integer> lexKeyToNID, final Function<Lex, String[]> toStringWithComments)
+	{
+		ps.printf("INSERT INTO %s (%s) VALUES", table, columns);
+
+		final int[] i = {1};  // used as a final int holder
+		lexes.forEach(lex -> {
+			if (i[0]++ != 1)
+			{
+				ps.print(',');
+			}
+			String[] s = toStringWithComments.apply(lex);
+			ps.printf("%n(%d,%s) /* %s */", NIDMaps.lookup(lexKeyToNID, Key.OEWN.of(lex)), s[0], s[1]);
 		});
 		ps.println(";");
 	}

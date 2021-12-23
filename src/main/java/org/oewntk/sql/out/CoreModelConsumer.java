@@ -4,10 +4,7 @@
 
 package org.oewntk.sql.out;
 
-import org.oewntk.model.CoreModel;
-import org.oewntk.model.Lex;
-import org.oewntk.model.Sense;
-import org.oewntk.model.Synset;
+import org.oewntk.model.*;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -34,7 +31,7 @@ public class CoreModelConsumer implements Consumer<CoreModel>
 	/**
 	 * NID maps
 	 */
-	protected Map<Lex, Integer> lexToNID = null;
+	protected Map<Key<Lex>, Integer> lexKeyToNID = null;
 	protected Map<String, Integer> wordToNID = null;
 	protected Map<String, Integer> casedWordToNID = null;
 	protected Map<String, Integer> synsetIdToNID = null;
@@ -79,7 +76,7 @@ public class CoreModelConsumer implements Consumer<CoreModel>
 		}
 		try (PrintStream ps = new PrintStream(new FileOutputStream(new File(outDir, makeFilename(Names.LEXES.FILE))), true, StandardCharsets.UTF_8))
 		{
-			lexToNID = Lexes.generateLexes(ps, lexes, wordToNID, casedWordToNID);
+			lexKeyToNID = Lexes.generateLexes(ps, lexes, wordToNID, casedWordToNID);
 		}
 		Map<String, Integer> morphToNID;
 		try (PrintStream ps = new PrintStream(new FileOutputStream(new File(outDir, makeFilename(Names.MORPHS.FILE))), true, StandardCharsets.UTF_8))
@@ -88,7 +85,7 @@ public class CoreModelConsumer implements Consumer<CoreModel>
 		}
 		try (PrintStream ps = new PrintStream(new FileOutputStream(new File(outDir, makeFilename(Names.LEXES_MORPHS.FILE))), true, StandardCharsets.UTF_8))
 		{
-			Lexes.generateMorphMaps(ps, lexes, lexToNID, wordToNID, morphToNID);
+			Lexes.generateMorphMaps(ps, lexes, lexKeyToNID, wordToNID, morphToNID);
 		}
 		Map<String, Integer> pronunciationToNID;
 		try (PrintStream ps = new PrintStream(new FileOutputStream(new File(outDir, makeFilename(Names.PRONUNCIATIONS.FILE))), true, StandardCharsets.UTF_8))
@@ -97,7 +94,7 @@ public class CoreModelConsumer implements Consumer<CoreModel>
 		}
 		try (PrintStream ps = new PrintStream(new FileOutputStream(new File(outDir, makeFilename(Names.LEXES_PRONUNCIATIONS.FILE))), true, StandardCharsets.UTF_8))
 		{
-			Lexes.generatePronunciationMaps(ps, lexes, lexToNID, wordToNID, pronunciationToNID);
+			Lexes.generatePronunciationMaps(ps, lexes, lexKeyToNID, wordToNID, pronunciationToNID);
 		}
 	}
 
@@ -121,19 +118,19 @@ public class CoreModelConsumer implements Consumer<CoreModel>
 	{
 		try (PrintStream ps = new PrintStream(new FileOutputStream(new File(outDir, makeFilename(Names.SENSES.FILE))), true, StandardCharsets.UTF_8))
 		{
-			Map<String, Integer> sensekeyToNID = Senses.generateSenses(ps, senses, synsetIdToNID, lexToNID, wordToNID, casedWordToNID);
+			Map<String, Integer> sensekeyToNID = Senses.generateSenses(ps, senses, synsetIdToNID, lexKeyToNID, wordToNID, casedWordToNID);
 		}
 		try (PrintStream ps = new PrintStream(new FileOutputStream(new File(outDir, makeFilename(Names.SENSES_SENSES.FILE))), true, StandardCharsets.UTF_8))
 		{
-			Senses.generateSenseRelations(ps, senses, sensesById, synsetIdToNID, lexToNID, wordToNID);
+			Senses.generateSenseRelations(ps, senses, sensesById, synsetIdToNID, lexKeyToNID, wordToNID);
 		}
 		try (PrintStream ps = new PrintStream(new FileOutputStream(new File(outDir, makeFilename(Names.SENSES_VFRAMES.FILE))), true, StandardCharsets.UTF_8))
 		{
-			Senses.generateVerbFrames(ps, senses, synsetIdToNID, lexToNID, wordToNID);
+			Senses.generateVerbFrames(ps, senses, synsetIdToNID, lexKeyToNID, wordToNID);
 		}
 		try (PrintStream ps = new PrintStream(new FileOutputStream(new File(outDir, makeFilename(Names.SENSES_ADJPOSITIONS.FILE))), true, StandardCharsets.UTF_8))
 		{
-			Senses.generateAdjPositions(ps, senses, synsetIdToNID, lexToNID, wordToNID);
+			Senses.generateAdjPositions(ps, senses, synsetIdToNID, lexKeyToNID, wordToNID);
 		}
 	}
 

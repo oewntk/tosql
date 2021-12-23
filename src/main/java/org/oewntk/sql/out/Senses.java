@@ -4,12 +4,16 @@
 
 package org.oewntk.sql.out;
 
+import org.oewntk.model.Key;
 import org.oewntk.model.Lex;
 import org.oewntk.model.Sense;
 import org.oewntk.model.TagCount;
 
 import java.io.PrintStream;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+import java.util.Map;
 import java.util.function.Function;
 import java.util.stream.Stream;
 
@@ -19,7 +23,7 @@ public class Senses
 	{
 	}
 
-	public static Map<String, Integer> generateSenses(final PrintStream ps, final Collection<Sense> senses, final Map<String, Integer> synsetIdToNIDMap, final Map<Lex, Integer> lexToNIDMap, final Map<String, Integer> wordIdToNIDMap, final Map<String, Integer> casedWordIdToNIDMap)
+	public static Map<String, Integer> generateSenses(final PrintStream ps, final Collection<Sense> senses, final Map<String, Integer> synsetIdToNIDMap, final Map<Key<Lex>, Integer> lexKeyToNIDMap, final Map<String, Integer> wordIdToNIDMap, final Map<String, Integer> casedWordIdToNIDMap)
 	{
 		// stream of sensekeys
 		Stream<String> senseKeyStream = senses.stream() //
@@ -44,7 +48,7 @@ public class Senses
 			TagCount tagCount = sense.getTagCount();
 			int wordNID = NIDMaps.lookupLC(wordIdToNIDMap, word);
 			int synsetNID = NIDMaps.lookup(synsetIdToNIDMap, synsetId);
-			int lexNID = NIDMaps.lookup(lexToNIDMap, lex);
+			int lexNID = NIDMaps.lookup(lexKeyToNIDMap, Key.OEWN.of(lex));
 			String casedWordNID = NIDMaps.lookupNullable(casedWordIdToNIDMap, casedWord);
 			String tagCnt = tagCount == null ? "NULL" : Integer.toString(tagCount.getCount());
 			return String.format("'%s',%d,%d,%d,%d,%s,%s,%s", Utils.escape(sensekey), senseNum, synsetNID, lexNID, wordNID, casedWordNID, lexid, tagCnt);
@@ -70,7 +74,7 @@ public class Senses
 		return sensekeyToNID;
 	}
 
-	public static void generateSenseRelations(final PrintStream ps, final Collection<Sense> senses, final Map<String, Sense> sensesById, final Map<String, Integer> synsetIdToNIDMap, final Map<Lex, Integer> lexToNIDMap, final Map<String, Integer> wordIdToNIDMap)
+	public static void generateSenseRelations(final PrintStream ps, final Collection<Sense> senses, final Map<String, Sense> sensesById, final Map<String, Integer> synsetIdToNIDMap, final Map<Key<Lex>, Integer> lexKeyToNIDMap, final Map<String, Integer> wordIdToNIDMap)
 	{
 		// stream of senses
 		Stream<Sense> senseStream = senses.stream() //
@@ -87,7 +91,7 @@ public class Senses
 			String synsetId1 = sense.getSynsetId();
 			Lex lex1 = sense.getLex();
 			String word1 = lex1.getLCLemma();
-			int lu1NID = NIDMaps.lookup(lexToNIDMap, lex1);
+			int lu1NID = NIDMaps.lookup(lexKeyToNIDMap, Key.OEWN.of(lex1));
 			int wordNID1 = NIDMaps.lookupLC(wordIdToNIDMap, word1);
 			int synsetNID1 = NIDMaps.lookup(synsetIdToNIDMap, synsetId1);
 			var relations = sense.getRelations();
@@ -105,7 +109,7 @@ public class Senses
 					Lex lex2 = sense2.getLex();
 					String word2 = lex2.getLCLemma();
 
-					int lu2NID = NIDMaps.lookup(lexToNIDMap, lex2);
+					int lu2NID = NIDMaps.lookup(lexKeyToNIDMap, Key.OEWN.of(lex2));
 					int wordNID2 = NIDMaps.lookupLC(wordIdToNIDMap, word2);
 					int synsetNID2 = NIDMaps.lookup(synsetIdToNIDMap, synsetId2);
 					strings.add(String.format("%d,%d,%d,%d,%d,%d,%d", synsetNID1, lu1NID, wordNID1, synsetNID2, lu2NID, wordNID2, relationId));
@@ -150,7 +154,7 @@ public class Senses
 		}
 	}
 
-	public static void generateAdjPositions(final PrintStream ps, final Collection<Sense> senses, final Map<String, Integer> synsetIdToNIDMap, final Map<Lex, Integer> lexToNIDMap, final Map<String, Integer> wordIdToNIDMap)
+	public static void generateAdjPositions(final PrintStream ps, final Collection<Sense> senses, final Map<String, Integer> synsetIdToNIDMap, final Map<Key<Lex>, Integer> lexKeyToNIDMap, final Map<String, Integer> wordIdToNIDMap)
 	{
 		// stream of senses
 		Stream<Sense> senseStream = senses.stream() //
@@ -167,14 +171,14 @@ public class Senses
 			Lex lex = sense.getLex();
 			String word = lex.getLCLemma();
 			int synsetNID = NIDMaps.lookup(synsetIdToNIDMap, synsetId);
-			int luNID = NIDMaps.lookup(lexToNIDMap, lex);
+			int luNID = NIDMaps.lookup(lexKeyToNIDMap, Key.OEWN.of(lex));
 			int wordNID = NIDMaps.lookupLC(wordIdToNIDMap, word);
 			return String.format("%d,%d,%d,'%s'", synsetNID, luNID, wordNID, sense.getAdjPosition());
 		};
 		Printers.printInsert(ps, Names.SENSES_ADJPOSITIONS.TABLE, columns, senseStream, toString, false);
 	}
 
-	public static void generateVerbFrames(final PrintStream ps, final Collection<Sense> senses, final Map<String, Integer> synsetIdToNIDMap, final Map<Lex, Integer> lexToNIDMap, final Map<String, Integer> wordIdToNIDMap)
+	public static void generateVerbFrames(final PrintStream ps, final Collection<Sense> senses, final Map<String, Integer> synsetIdToNIDMap, final Map<Key<Lex>, Integer> lexKeyToNIDMap, final Map<String, Integer> wordIdToNIDMap)
 	{
 		// stream of senses
 		Stream<Sense> senseStream = senses.stream() //
@@ -193,7 +197,7 @@ public class Senses
 			int synsetNID = NIDMaps.lookup(synsetIdToNIDMap, synsetId);
 			int wordNID = NIDMaps.lookupLC(wordIdToNIDMap, word);
 			Lex lex = sense.getLex();
-			int luNID = NIDMaps.lookup(lexToNIDMap, lex);
+			int luNID = NIDMaps.lookup(lexKeyToNIDMap, Key.OEWN.of(lex));
 
 			for (var frameId : sense.getVerbFrames())
 			{
@@ -205,7 +209,7 @@ public class Senses
 		Printers.printInserts(ps, Names.SENSES_VFRAMES.TABLE, columns, senseStream, toString, false);
 	}
 
-	public static void generateVerbTemplates(final PrintStream ps, final Map<String, Sense> sensesById, final Map<String, Integer> synsetIdToNIDMap, final Map<Lex, Integer> lexToNIDMap, final Map<String, Integer> wordIdToNIDMap)
+	public static void generateVerbTemplates(final PrintStream ps, final Map<String, Sense> sensesById, final Map<String, Integer> synsetIdToNIDMap, final Map<Key<Lex>, Integer> lexKeyToNIDMap, final Map<String, Integer> wordIdToNIDMap)
 	{
 		// stream of senses
 		Stream<Sense> senseStream = sensesById.values() //
@@ -225,7 +229,7 @@ public class Senses
 			int synsetNID = NIDMaps.lookup(synsetIdToNIDMap, synsetId);
 			int wordNID = NIDMaps.lookupLC(wordIdToNIDMap, word);
 			Lex lex = sense.getLex();
-			int luNID = NIDMaps.lookup(lexToNIDMap, lex);
+			int luNID = NIDMaps.lookup(lexKeyToNIDMap, Key.OEWN.of(lex));
 
 			for (var templateId : sense.getVerbTemplates())
 			{

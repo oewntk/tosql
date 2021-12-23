@@ -58,21 +58,6 @@ public class Utils
 		return map;
 	}
 
-	public static <T> Map<T, Integer> makeNIDIdentityMap(final Stream<T> stream, final Comparator<T> comparator)
-	{
-		//final AtomicInteger index = new AtomicInteger();
-		//index.set(0);
-		final int[] i = {0};
-		Map<T, Integer> map = stream //
-				.sorted(comparator).sequential() //
-				.peek(e -> ++i[0]) //
-				.map(item -> new SimpleEntry<>(item, i[0] /* index.addAndGet(1) */)) //
-				.collect(toMap(SimpleEntry::getKey, SimpleEntry::getValue, (existing, replacement) -> {
-					throw new IllegalArgumentException(existing + "," + replacement);
-				}, IdentityHashMap::new));
-		return map;
-	}
-
 	public static <T> void generateTable(final PrintStream ps, final String table, final String columns, final Map<Integer, T> byId, final Function<Entry<Integer, T>, String> toString)
 	{
 		// make object-to-nid map
