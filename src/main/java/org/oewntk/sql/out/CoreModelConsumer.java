@@ -118,7 +118,7 @@ public class CoreModelConsumer implements Consumer<CoreModel>
 	{
 		try (PrintStream ps = new PrintStream(new FileOutputStream(new File(outDir, makeFilename(Names.SENSES.FILE))), true, StandardCharsets.UTF_8))
 		{
-			Map<String, Integer> sensekeyToNID = Senses.generateSenses(ps, senses, synsetIdToNID, lexKeyToNID, wordToNID, casedWordToNID);
+			/* Map<String, Integer> sensekeyToNID =*/ Senses.generateSenses(ps, senses, synsetIdToNID, lexKeyToNID, wordToNID, casedWordToNID);
 		}
 		try (PrintStream ps = new PrintStream(new FileOutputStream(new File(outDir, makeFilename(Names.SENSES_SENSES.FILE))), true, StandardCharsets.UTF_8))
 		{

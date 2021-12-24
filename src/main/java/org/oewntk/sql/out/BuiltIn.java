@@ -63,9 +63,9 @@ public class BuiltIn
 			{"adjs.ppl", "a", "adj.ppl", 44}, //
 	};
 
-	public static final Map<String, Integer> LEXFILENIDS = Stream.of(domainsArray).collect(toMap(data -> (String) data[2], data -> (Integer) data[3]));
+	public static final Map<String, Integer> LEXFILE_NIDS = Stream.of(domainsArray).collect(toMap(data -> (String) data[2], data -> (Integer) data[3]));
 
-	public static final Map<Object[], Integer> DOMAIN2NIDS = Stream.of(domainsArray).collect(toMap(data -> new String[]{Utils.escape((String) data[0]), Utils.escape((String) data[1]), Utils.escape((String) data[2])}, data -> (Integer) data[3]));
+	public static final Map<Object[], Integer> DOMAIN_TO_NIDS = Stream.of(domainsArray).collect(toMap(data -> new String[]{Utils.escape((String) data[0]), Utils.escape((String) data[1]), Utils.escape((String) data[2])}, data -> (Integer) data[3]));
 
 	// link, recurses, linkid
 	private static final Object[][] relationTypesArray = new Object[][]{ //
@@ -102,11 +102,11 @@ public class BuiltIn
 			{"other", "other", 0, 99}, //
 	};
 
-	public static final Map<String, Integer> RELATIONTYPES = Stream.of(relationTypesArray).collect(toMap(data -> (String) data[1], data -> (Integer) data[3]));
+	public static final Map<String, Integer> RELATION_TYPES = Stream.of(relationTypesArray).collect(toMap(data -> (String) data[1], data -> (Integer) data[3]));
 
-	public static final Map<Object[], Integer> RELATION2NIDS = Stream.of(relationTypesArray).collect(toMap(data -> new Object[]{Utils.escape((String) data[1]), data[2]}, data -> (Integer) data[3]));
+	public static final Map<Object[], Integer> RELATION_TO_NIDS = Stream.of(relationTypesArray).collect(toMap(data -> new Object[]{Utils.escape((String) data[1]), data[2]}, data -> (Integer) data[3]));
 
-	public static final Map<String, Integer> OEWN_RELATIONTYPES = Stream.of(relationTypesArray).collect(toMap(data -> (String) data[0], data -> (Integer) data[3]));
+	public static final Map<String, Integer> OEWN_RELATION_TYPES = Stream.of(relationTypesArray).collect(toMap(data -> (String) data[0], data -> (Integer) data[3]));
 
 	// positionname, position
 	private static final Object[][] adjPositionTypesArray = new Object[][]{ //
@@ -115,7 +115,7 @@ public class BuiltIn
 			{"immediately postnominal", "ip"}, //
 	};
 
-	public static final Map<String, String> ADJPOSITIONTYPES = Stream.of(adjPositionTypesArray).collect(toMap(data -> (String) data[0], data -> (String) data[1]));
+	public static final Map<String, String> ADJPOSITION_TYPES = Stream.of(adjPositionTypesArray).collect(toMap(data -> (String) data[0], data -> (String) data[1]));
 
 	// posname, pos
 	private static final Object[][] posArray = new Object[][]{ //
@@ -126,34 +126,34 @@ public class BuiltIn
 			{"adjective satellite", "s"}, //
 	};
 
-	public static final Map<String, String> POSTYPES = Stream.of(posArray).collect(toMap(data -> (String) data[0], data -> (String) data[1]));
+	public static final Map<String, String> POS_TYPES = Stream.of(posArray).collect(toMap(data -> (String) data[0], data -> (String) data[1]));
 
-	public static final Map<String, Integer> VERBFRAMES = Stream.of(VerbFrame.VALUES).collect(toMap(data -> (String) data[1], data -> (Integer) data[2]));
+	public static final Map<String, Integer> VERB_FRAMES = Stream.of(VerbFrame.VALUES).collect(toMap(data -> (String) data[1], data -> (Integer) data[2]));
 
-	public static final Map<String, Integer> VERBFRAMEID2NIDS = Stream.of(VerbFrame.VALUES).collect(toMap(data -> (String) data[0], data -> (Integer) data[2]));
+	public static final Map<String, Integer> VERB_FRAME_ID_TO_NIDS = Stream.of(VerbFrame.VALUES).collect(toMap(data -> (String) data[0], data -> (Integer) data[2]));
 
 	public static void generatePosTypes(final PrintStream ps)
 	{
-		Printers.printInsert(ps, Names.POSES.TABLE, String.join(",", Names.POSES.posid, Names.POSES.pos), "%n('%s','%s')", BuiltIn.POSTYPES);
+		Printers.printInsert(ps, Names.POSES.TABLE, String.join(",", Names.POSES.posid, Names.POSES.pos), "%n('%s','%s')", BuiltIn.POS_TYPES);
 	}
 
 	public static void generateAdjectivePositionTypes(final PrintStream ps)
 	{
-		Printers.printInsert(ps, Names.ADJPOSITIONS.TABLE, String.join(",", Names.ADJPOSITIONS.positionid, Names.ADJPOSITIONS.position), "%n('%s','%s')", BuiltIn.ADJPOSITIONTYPES);
+		Printers.printInsert(ps, Names.ADJPOSITIONS.TABLE, String.join(",", Names.ADJPOSITIONS.positionid, Names.ADJPOSITIONS.position), "%n('%s','%s')", BuiltIn.ADJPOSITION_TYPES);
 	}
 
 	public static void generateRelationTypes(final PrintStream ps)
 	{
-		Printers.printInsert2(ps, Names.RELS.TABLE, String.join(",", Names.RELS.relationid, Names.RELS.relation, Names.RELS.recurses), "%n(%d,'%s', %d)", BuiltIn.RELATION2NIDS);
+		Printers.printInsert2(ps, Names.RELS.TABLE, String.join(",", Names.RELS.relationid, Names.RELS.relation, Names.RELS.recurses), "%n(%d,'%s', %d)", BuiltIn.RELATION_TO_NIDS);
 	}
 
 	public static void generateDomains(final PrintStream ps)
 	{
-		Printers.printInsert3(ps, Names.DOMAINS.TABLE, String.join(",", Names.DOMAINS.domainid, Names.DOMAINS.domain, Names.DOMAINS.posid, Names.DOMAINS.domainname), "%n(%d,'%s','%s','%s')", BuiltIn.DOMAIN2NIDS);
+		Printers.printInsert3(ps, Names.DOMAINS.TABLE, String.join(",", Names.DOMAINS.domainid, Names.DOMAINS.domain, Names.DOMAINS.posid, Names.DOMAINS.domainname), "%n(%d,'%s','%s','%s')", BuiltIn.DOMAIN_TO_NIDS);
 	}
 
 	public static void generateVerbFrames(final PrintStream ps)
 	{
-		Printers.printInsert(ps, Names.VFRAMES.TABLE, String.join(",", Names.VFRAMES.frameid, Names.VFRAMES.frame), "%n(%d,'%s')", BuiltIn.VERBFRAMES);
+		Printers.printInsert(ps, Names.VFRAMES.TABLE, String.join(",", Names.VFRAMES.frameid, Names.VFRAMES.frame), "%n(%d,'%s')", BuiltIn.VERB_FRAMES);
 	}
 }

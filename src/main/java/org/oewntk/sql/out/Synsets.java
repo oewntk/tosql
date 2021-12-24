@@ -41,7 +41,7 @@ public class Synsets
 			char type = synset.getType();
 			String definition = synset.getDefinition();
 			String domain = synset.getLexfile();
-			int lexdomainId = BuiltIn.LEXFILENIDS.get(domain);
+			int lexdomainId = BuiltIn.LEXFILE_NIDS.get(domain);
 			return String.format("'%c',%d,'%s'", type, lexdomainId, Utils.escape(definition));
 		};
 		Printers.printInsert(ps, Names.SYNSETS.TABLE, columns, synsets, Synset::getSynsetId, synsetIdToNID, toString);
@@ -68,11 +68,11 @@ public class Synsets
 			var relations = synset.getRelations();
 			for (String relation : relations.keySet())
 			{
-				if (!BuiltIn.OEWN_RELATIONTYPES.containsKey(relation))
+				if (!BuiltIn.OEWN_RELATION_TYPES.containsKey(relation))
 				{
 					throw new IllegalArgumentException(relation);
 				}
-				int relationId = BuiltIn.OEWN_RELATIONTYPES.get(relation);
+				int relationId = BuiltIn.OEWN_RELATION_TYPES.get(relation);
 				for (String synset2Id : relations.get(relation))
 				{
 					int synset2NID = NIDMaps.lookup(synsetIdToNIDMap, synset2Id);

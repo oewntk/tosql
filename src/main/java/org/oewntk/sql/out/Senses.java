@@ -23,6 +23,7 @@ public class Senses
 	{
 	}
 
+	@SuppressWarnings("UnusedReturnValue")
 	public static Map<String, Integer> generateSenses(final PrintStream ps, final Collection<Sense> senses, final Map<String, Integer> synsetIdToNIDMap, final Map<Key<Lex>, Integer> lexKeyToNIDMap, final Map<String, Integer> wordIdToNIDMap, final Map<String, Integer> casedWordIdToNIDMap)
 	{
 		// stream of sensekeys
@@ -97,11 +98,11 @@ public class Senses
 			var relations = sense.getRelations();
 			for (String relation : relations.keySet())
 			{
-				if (!BuiltIn.OEWN_RELATIONTYPES.containsKey(relation))
+				if (!BuiltIn.OEWN_RELATION_TYPES.containsKey(relation))
 				{
 					throw new IllegalArgumentException(relation);
 				}
-				int relationId = BuiltIn.OEWN_RELATIONTYPES.get(relation);
+				int relationId = BuiltIn.OEWN_RELATION_TYPES.get(relation);
 				for (String senseId2 : relations.get(relation))
 				{
 					Sense sense2 = sensesById.get(senseId2);
@@ -201,7 +202,7 @@ public class Senses
 
 			for (var frameId : sense.getVerbFrames())
 			{
-				int frameNID = BuiltIn.VERBFRAMEID2NIDS.get(frameId);
+				int frameNID = BuiltIn.VERB_FRAME_ID_TO_NIDS.get(frameId);
 				strings.add(String.format("%d,%d,%d,%d", synsetNID, luNID, wordNID, frameNID));
 			}
 			return strings;

@@ -47,7 +47,7 @@ public class Utils
 		//final AtomicInteger index = new AtomicInteger();
 		//index.set(0);
 		final int[] i = {0};
-		Map<T, Integer> map = stream //
+		return stream //
 				.sequential() //
 				.sorted() //
 				.peek(e -> ++i[0]) //
@@ -55,7 +55,6 @@ public class Utils
 				.collect(toMap(SimpleEntry::getKey, SimpleEntry::getValue, (existing, replacement) -> {
 					throw new IllegalArgumentException(existing + "," + replacement);
 				}, TreeMap::new));
-		return map;
 	}
 
 	public static <T> void generateTable(final PrintStream ps, final String table, final String columns, final Map<Integer, T> byId, final Function<Entry<Integer, T>, String> toString)
