@@ -6,6 +6,7 @@ package org.oewntk.sql;
 
 import org.junit.BeforeClass;
 import org.junit.Test;
+import org.oewntk.model.Tracing;
 import org.oewntk.sql.out.Names;
 
 import java.io.OutputStream;
@@ -17,13 +18,7 @@ import static org.junit.Assert.assertEquals;
 
 public class TestSqlBundle
 {
-	private static final PrintStream ps = !System.getProperties().containsKey("SILENT") ? System.out : new PrintStream(new OutputStream()
-	{
-		public void write(int b)
-		{
-			//DO NOTHING
-		}
-	});
+	private static final PrintStream ps = !System.getProperties().containsKey("SILENT") ? Tracing.psInfo : Tracing.psNull;
 
 	private static ResourceBundle bundle;
 

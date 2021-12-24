@@ -5,6 +5,7 @@
 package org.oewntk.sql;
 
 import org.junit.Test;
+import org.oewntk.model.Tracing;
 import org.oewntk.sql.out.Variables;
 
 import java.io.OutputStream;
@@ -15,13 +16,7 @@ import static org.junit.Assert.fail;
 
 public class TestSqlVariables
 {
-	private static final PrintStream ps = !System.getProperties().containsKey("SILENT") ? System.out : new PrintStream(new OutputStream()
-	{
-		public void write(int b)
-		{
-			//DO NOTHING
-		}
-	});
+	private static final PrintStream ps = !System.getProperties().containsKey("SILENT") ? Tracing.psInfo : Tracing.psNull;
 
 	private final String[] wellFormedInputs = new String[]{ //
 			"${senses.file} ${senses_vtemplates.templateid} a ${senses_vframes.file} b ${lexes_pronunciations.wordid} c", //
