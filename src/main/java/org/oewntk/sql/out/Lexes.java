@@ -150,7 +150,7 @@ public class Lexes
 			var strings = new ArrayList<String>();
 			String word = lex.getLCLemma();
 			int wordNID = NIDMaps.lookupLC(wordIdToNID, word);
-			int lexNID = NIDMaps.lookup(lexKeyToNID, KeyF.W_P_A_functional.Mono.of_t(lex));
+			int lexNID = NIDMaps.lookup(lexKeyToNID, KeyF.F_W_P_A.Mono.of_t(lex));
 			char type = lex.getType();
 			for (String morph : lex.getForms())
 			{
@@ -225,7 +225,7 @@ public class Lexes
 			var strings = new ArrayList<String>();
 			String word = lex.getLCLemma();
 			int wordNID = NIDMaps.lookupLC(wordIdToNID, word);
-			int lexNID = NIDMaps.lookup(lexKeyToNID, KeyF.W_P_A_functional.Mono.of_t(lex));
+			int lexNID = NIDMaps.lookup(lexKeyToNID, KeyF.F_W_P_A.Mono.of_t(lex));
 			char type = lex.getType();
 			for (Pronunciation pronunciation : lex.getPronunciations())
 			{

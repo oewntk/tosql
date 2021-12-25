@@ -5,7 +5,6 @@
 package org.oewntk.sql.out;
 
 import org.oewntk.model.Key;
-import org.oewntk.model.KeyF;
 import org.oewntk.model.Lex;
 import org.oewntk.model.Synset;
 

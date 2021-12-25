@@ -88,7 +88,7 @@ public class Printers
 				ps.print(',');
 			}
 			String s = toString.apply(lex);
-			ps.printf("%n(%d,%s)", NIDMaps.lookup(lexKeyToNID, KeyF.W_P_A_functional.Mono.of_t(lex)), s);
+			ps.printf("%n(%d,%s)", NIDMaps.lookup(lexKeyToNID, KeyF.F_W_P_A.Mono.of_t(lex)), s);
 		});
 		ps.println(";");
 	}
@@ -104,7 +104,7 @@ public class Printers
 				ps.print(',');
 			}
 			String[] s = toStringWithComments.apply(lex);
-			ps.printf("%n(%d,%s) /* %s */", NIDMaps.lookup(lexKeyToNID, KeyF.W_P_A_functional.Mono.of_t(lex)), s[0], s[1]);
+			ps.printf("%n(%d,%s) /* %s */", NIDMaps.lookup(lexKeyToNID, KeyF.F_W_P_A.Mono.of_t(lex)), s[0], s[1]);
 		});
 		ps.println(";");
 	}

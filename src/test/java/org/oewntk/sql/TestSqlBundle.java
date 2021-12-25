@@ -9,7 +9,6 @@ import org.junit.Test;
 import org.oewntk.model.Tracing;
 import org.oewntk.sql.out.Names;
 
-import java.io.OutputStream;
 import java.io.PrintStream;
 import java.util.ResourceBundle;
 import java.util.TreeSet;

@@ -8,7 +8,6 @@ import org.junit.Test;
 import org.oewntk.model.Tracing;
 import org.oewntk.sql.out.Variables;
 
-import java.io.OutputStream;
 import java.io.PrintStream;
 
 import static org.junit.Assert.assertNotNull;
