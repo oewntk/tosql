@@ -5,6 +5,7 @@
 package org.oewntk.sql.out;
 
 import org.oewntk.model.Key;
+import org.oewntk.model.KeyF;
 import org.oewntk.model.Lex;
 import org.oewntk.model.Pronunciation;
 
@@ -19,13 +20,13 @@ public class Lexes
 	{
 	}
 
-	public static Map<Key<Lex>, Integer> generateLexes(final PrintStream ps, final Collection<Lex> lexes, final Map<String, Integer> wordIdToNID, final Map<String, Integer> casedwordIdToNID)
+	public static Map<Key, Integer> generateLexes(final PrintStream ps, final Collection<Lex> lexes, final Map<String, Integer> wordIdToNID, final Map<String, Integer> casedwordIdToNID)
 	{
 		// stream of lex key
-		Stream<Key<Lex>> lexKeyStream = lexes.stream().map(Key.OEWN::of);
+		Stream<Key> lexKeyStream = lexes.stream().map(Key.W_P_A::of_t);
 
 		// make lex key-to-nid map
-		Map<Key<Lex>, Integer> lexKeyToNID = Utils.makeNIDMap(lexKeyStream);
+		Map<Key, Integer> lexKeyToNID = Utils.makeNIDMap(lexKeyStream);
 
 		// insert map
 		final String columns = String.join(",", Names.LEXES.luid, Names.LEXES.posid, Names.LEXES.wordid, Names.LEXES.casedwordid);
@@ -136,7 +137,7 @@ public class Lexes
 		return morphToNID;
 	}
 
-	public static void generateMorphMaps(final PrintStream ps, final Collection<Lex> lexes, final Map<Key<Lex>, Integer> lexKeyToNID, final Map<String, Integer> wordIdToNID, final Map<String, Integer> morphIdToNID)
+	public static void generateMorphMaps(final PrintStream ps, final Collection<Lex> lexes, final Map<Key, Integer> lexKeyToNID, final Map<String, Integer> wordIdToNID, final Map<String, Integer> morphIdToNID)
 	{
 		// stream of lexes
 		Stream<Lex> lexStream = lexes.stream() //
@@ -149,7 +150,7 @@ public class Lexes
 			var strings = new ArrayList<String>();
 			String word = lex.getLCLemma();
 			int wordNID = NIDMaps.lookupLC(wordIdToNID, word);
-			int lexNID = NIDMaps.lookup(lexKeyToNID, Key.OEWN.of(lex));
+			int lexNID = NIDMaps.lookup(lexKeyToNID, KeyF.W_P_A_functional.Mono.of_t(lex));
 			char type = lex.getType();
 			for (String morph : lex.getForms())
 			{
@@ -211,7 +212,7 @@ public class Lexes
 		return pronunciationValueToNID;
 	}
 
-	public static void generatePronunciationMaps(final PrintStream ps, final Collection<Lex> lexes, final Map<Key<Lex>, Integer> lexKeyToNID, final Map<String, Integer> wordIdToNID, final Map<String, Integer> pronunciationIdToNID)
+	public static void generatePronunciationMaps(final PrintStream ps, final Collection<Lex> lexes, final Map<Key, Integer> lexKeyToNID, final Map<String, Integer> wordIdToNID, final Map<String, Integer> pronunciationIdToNID)
 	{
 		// stream of lexes
 		Stream<Lex> lexStream = lexes.stream() //
@@ -224,7 +225,7 @@ public class Lexes
 			var strings = new ArrayList<String>();
 			String word = lex.getLCLemma();
 			int wordNID = NIDMaps.lookupLC(wordIdToNID, word);
-			int lexNID = NIDMaps.lookup(lexKeyToNID, Key.OEWN.of(lex));
+			int lexNID = NIDMaps.lookup(lexKeyToNID, KeyF.W_P_A_functional.Mono.of_t(lex));
 			char type = lex.getType();
 			for (Pronunciation pronunciation : lex.getPronunciations())
 			{

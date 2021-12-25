@@ -31,7 +31,7 @@ public class CoreModelConsumer implements Consumer<CoreModel>
 	/**
 	 * NID maps
 	 */
-	protected Map<Key<Lex>, Integer> lexKeyToNID = null;
+	protected Map<Key, Integer> lexKeyToNID = null;
 	protected Map<String, Integer> wordToNID = null;
 	protected Map<String, Integer> casedWordToNID = null;
 	protected Map<String, Integer> synsetIdToNID = null;

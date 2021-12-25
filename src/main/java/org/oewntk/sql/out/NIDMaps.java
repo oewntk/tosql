@@ -4,6 +4,8 @@
 
 package org.oewntk.sql.out;
 
+import org.oewntk.model.Key;
+import org.oewntk.model.KeyF;
 import org.oewntk.model.Lex;
 import org.oewntk.model.Synset;
 
@@ -24,7 +26,22 @@ public class NIDMaps
 		return lookup(map, key);
 	}
 
-	static <T> int lookup(Map<T, Integer> map, T key)
+	static <T> int lookup(final Map<T, Integer> map, T key)
+	{
+		try
+		{
+			int nid = map.get(key);
+			assert nid != 0;
+			return nid;
+		}
+		catch (Exception e)
+		{
+			Tracing.psErr.printf("lookup of <%s> failed%n", key);
+			throw e;
+		}
+	}
+
+	public static int lookup(final Map<Key, Integer> map, final Key key)
 	{
 		try
 		{

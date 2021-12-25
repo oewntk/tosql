@@ -5,6 +5,7 @@
 package org.oewntk.sql.out;
 
 import org.oewntk.model.Key;
+import org.oewntk.model.KeyF;
 import org.oewntk.model.Lex;
 
 import java.io.PrintStream;
@@ -76,7 +77,7 @@ public class Printers
 
 	// ley key map
 
-	public static void printInsert(final PrintStream ps, final String table, final String columns, final Collection<Lex> lexes, final Map<Key<Lex>, Integer> lexKeyToNID, final Function<Lex, String> toString)
+	public static void printInsert(final PrintStream ps, final String table, final String columns, final Collection<Lex> lexes, final Map<Key, Integer> lexKeyToNID, final Function<Lex, String> toString)
 	{
 		ps.printf("INSERT INTO %s (%s) VALUES", table, columns);
 
@@ -87,12 +88,12 @@ public class Printers
 				ps.print(',');
 			}
 			String s = toString.apply(lex);
-			ps.printf("%n(%d,%s)", NIDMaps.lookup(lexKeyToNID, Key.OEWN.of(lex)), s);
+			ps.printf("%n(%d,%s)", NIDMaps.lookup(lexKeyToNID, KeyF.W_P_A_functional.Mono.of_t(lex)), s);
 		});
 		ps.println(";");
 	}
 
-	public static void printInsertWithComment(final PrintStream ps, final String table, final String columns, final Collection<Lex> lexes, final Map<Key<Lex>, Integer> lexKeyToNID, final Function<Lex, String[]> toStringWithComments)
+	public static void printInsertWithComment(final PrintStream ps, final String table, final String columns, final Collection<Lex> lexes, final Map<Key, Integer> lexKeyToNID, final Function<Lex, String[]> toStringWithComments)
 	{
 		ps.printf("INSERT INTO %s (%s) VALUES", table, columns);
 
@@ -103,7 +104,7 @@ public class Printers
 				ps.print(',');
 			}
 			String[] s = toStringWithComments.apply(lex);
-			ps.printf("%n(%d,%s) /* %s */", NIDMaps.lookup(lexKeyToNID, Key.OEWN.of(lex)), s[0], s[1]);
+			ps.printf("%n(%d,%s) /* %s */", NIDMaps.lookup(lexKeyToNID, KeyF.W_P_A_functional.Mono.of_t(lex)), s[0], s[1]);
 		});
 		ps.println(";");
 	}
