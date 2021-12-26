@@ -41,7 +41,7 @@ public class Senses
 			String word = lex.getLCLemma();
 			String synsetId = sense.getSynsetId();
 			String sensekey = sense.getSensekey();
-			int senseNum = sense.getLexIndex();
+			int senseNum = sense.getLexIndex() + 1;
 			int lexid = sense.findLexid();
 			TagCount tagCount = sense.getTagCount();
 			int wordNID = NIDMaps.lookupLC(wordIdToNIDMap, word);
