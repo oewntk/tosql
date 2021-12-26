@@ -31,12 +31,6 @@ public class TestSqlBundle
 	}
 
 	@Test
-	public void testBundleKeys()
-	{
-		assertEquals(bundle.keySet(), bundle.keySet());
-	}
-
-	@Test
 	public void testBundleValues()
 	{
 		for (String key : new TreeSet<>(bundle.keySet()))
@@ -53,8 +47,8 @@ public class TestSqlBundle
 	@Test
 	public void testClasses()
 	{
-		assertEquals(Names.WORDS.FILE, "words");
-		assertEquals(Names.SENSES.FILE, "senses");
-		assertEquals(Names.SYNSETS.FILE, "synsets");
+		assertEquals("words", Names.WORDS.FILE);
+		assertEquals("senses", Names.SENSES.FILE);
+		assertEquals("synsets", Names.SYNSETS.FILE);
 	}
 }
