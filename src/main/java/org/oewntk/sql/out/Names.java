@@ -142,25 +142,25 @@ public class Names
 		public static final String tagcount = bundle.getString("senses.tagcount");
 	}
 
-	public static class SENSES_SENSES
+	public static class SYNSETS_SYNSETS
 	{
 		public static final String FILE = bundle.getString("synsets_synsets.file");
 		public static final String TABLE = bundle.getString("synsets_synsets.table");
 		public static final String synset1id = bundle.getString("synsets_synsets.synset1id");
-		public static final String lu1id = bundle.getString("synsets_synsets.lu1id");
-		public static final String word1id = bundle.getString("synsets_synsets.word1id");
 		public static final String synset2id = bundle.getString("synsets_synsets.synset2id");
-		public static final String lu2id = bundle.getString("synsets_synsets.lu2id");
-		public static final String word2id = bundle.getString("synsets_synsets.word2id");
 		public static final String relationid = bundle.getString("synsets_synsets.relationid");
 	}
 
-	public static class SYNSETS_SYNSETS
+	public static class SENSES_SENSES
 	{
 		public static final String FILE = bundle.getString("senses_senses.file");
 		public static final String TABLE = bundle.getString("senses_senses.table");
 		public static final String synset1id = bundle.getString("senses_senses.synset1id");
+		public static final String lu1id = bundle.getString("synsets_synsets.lu1id");
+		public static final String word1id = bundle.getString("synsets_synsets.word1id");
 		public static final String synset2id = bundle.getString("senses_senses.synset2id");
+		public static final String lu2id = bundle.getString("synsets_synsets.lu2id");
+		public static final String word2id = bundle.getString("synsets_synsets.word2id");
 		public static final String relationid = bundle.getString("senses_senses.relationid");
 	}
 
