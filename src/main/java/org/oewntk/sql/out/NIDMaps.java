@@ -19,12 +19,6 @@ public class NIDMaps
 	{
 	}
 
-	static int lookupLC(Map<String, Integer> map, String key)
-	{
-		assert key.equals(key.toLowerCase(Locale.ENGLISH));
-		return lookup(map, key);
-	}
-
 	static <T> int lookup(final Map<T, Integer> map, T key)
 	{
 		try
@@ -53,6 +47,12 @@ public class NIDMaps
 			Tracing.psErr.printf("lookup of <%s> failed%n", key);
 			throw e;
 		}
+	}
+
+	static int lookupLC(Map<String, Integer> map, String key)
+	{
+		assert key.equals(key.toLowerCase(Locale.ENGLISH));
+		return lookup(map, key);
 	}
 
 	static <T> String lookupNullable(Map<T, Integer> map, T key)
