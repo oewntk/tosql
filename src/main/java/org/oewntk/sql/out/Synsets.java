@@ -7,10 +7,7 @@ package org.oewntk.sql.out;
 import org.oewntk.model.Synset;
 
 import java.io.PrintStream;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Stream;
 
@@ -24,8 +21,7 @@ public class Synsets
 	{
 		// stream of synsetIds
 		Stream<String> synsetIdStream = synsets.stream() //
-				.map(Synset::getSynsetId) //
-				.sorted();
+				.map(Synset::getSynsetId);
 		return Utils.makeNIDMap(synsetIdStream);
 	}
 
@@ -44,8 +40,21 @@ public class Synsets
 			int lexdomainId = BuiltIn.LEXFILE_NIDS.get(domain);
 			return String.format("'%c',%d,'%s'", type, lexdomainId, Utils.escape(definition));
 		};
-		Printers.printInsert(ps, Names.SYNSETS.TABLE, columns, synsets, Synset::getSynsetId, synsetIdToNID, toString);
+		if (!Printers.withComment)
+		{
+			Printers.printInsert(ps, Names.SYNSETS.TABLE, columns, synsets, Synset::getSynsetId, synsetIdToNID, toString);
+		}
+		else
+		{
+			Function<Synset, String[]> toStrings = (synset) -> {
 
+				var stringsWithComment = new String[2];
+				stringsWithComment[0] = toString.apply(synset);
+				stringsWithComment[1] = synset.getSynsetId();
+				return stringsWithComment;
+			};
+			Printers.printInsertWithComment(ps, Names.SYNSETS.TABLE, columns, synsets, Synset::getSynsetId, synsetIdToNID, toStrings);
+		}
 		return synsetIdToNID;
 	}
 
@@ -56,7 +65,8 @@ public class Synsets
 				.filter(synset -> {
 					var relations = synset.getRelations();
 					return relations != null && relations.size() > 0;
-				});
+				}) //
+				.sorted(Comparator.comparing(Synset::getSynsetId));
 
 		// insert
 		final String columns = String.join(",", Names.SYNSETS_SYNSETS.synset1id, Names.SYNSETS_SYNSETS.synset2id, Names.SYNSETS_SYNSETS.relationid);
@@ -117,7 +127,8 @@ public class Synsets
 				.filter(synset -> {
 					var examples = synset.getExamples();
 					return examples != null && examples.length > 0;
-				});
+				}) //
+				.sorted(Comparator.comparing(Synset::getSynsetId));
 
 		// insert
 		final String columns = String.join(",", Names.SAMPLES.sampleid, Names.SAMPLES.synsetid, Names.SAMPLES.sample);

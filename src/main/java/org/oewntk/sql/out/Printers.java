@@ -9,8 +9,8 @@ import org.oewntk.model.KeyF;
 import org.oewntk.model.Lex;
 
 import java.io.PrintStream;
+import java.util.AbstractMap.SimpleEntry;
 import java.util.Collection;
-import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
@@ -48,14 +48,17 @@ public class Printers
 		ps.printf("INSERT INTO %s (%s) VALUES", table, columns);
 
 		final int[] i = {1};  // used as a final int holder
-		objects.forEach(object -> {
-			if (i[0]++ != 1)
-			{
-				ps.print(',');
-			}
-			String s = toString.apply(object);
-			ps.printf("%n(%d,%s)", NIDMaps.lookup(objectIdToNID, toId.apply(object)), s);
-		});
+		objects.stream() //
+				.map(object -> new SimpleEntry<>(object, NIDMaps.lookup(objectIdToNID, toId.apply(object)))) //
+				.sorted(Map.Entry.comparingByValue()) //
+				.forEach(entry -> {
+					if (i[0]++ != 1)
+					{
+						ps.print(',');
+					}
+					String s = toString.apply(entry.getKey());
+					ps.printf("%n(%d,%s)", entry.getValue(), s);
+				});
 		ps.println(";");
 	}
 
@@ -64,14 +67,17 @@ public class Printers
 		ps.printf("INSERT INTO %s (%s) VALUES", table, columns);
 
 		final int[] i = {1};  // used as a final int holder
-		objects.forEach(object -> {
-			if (i[0]++ != 1)
-			{
-				ps.print(',');
-			}
-			String[] s = toStringWithComments.apply(object);
-			ps.printf("%n(%d,%s) /* %s */", NIDMaps.lookup(objectIdToNID, toId.apply(object)), s[0], s[1]);
-		});
+		objects.stream() //
+				.map(object -> new SimpleEntry<>(object, NIDMaps.lookup(objectIdToNID, toId.apply(object)))) //
+				.sorted(Map.Entry.comparingByValue()) //
+				.forEach(entry -> {
+					if (i[0]++ != 1)
+					{
+						ps.print(',');
+					}
+					String[] s = toStringWithComments.apply(entry.getKey());
+					ps.printf("%n(%d,%s) /* %s */", entry.getValue(), s[0], s[1]);
+				});
 		ps.println(";");
 	}
 
@@ -82,14 +88,19 @@ public class Printers
 		ps.printf("INSERT INTO %s (%s) VALUES", table, columns);
 
 		final int[] i = {1};  // used as a final int holder
-		lexes.forEach(lex -> {
-			if (i[0]++ != 1)
-			{
-				ps.print(',');
-			}
-			String s = toString.apply(lex);
-			ps.printf("%n(%d,%s)", NIDMaps.lookup(lexKeyToNID, KeyF.F_W_P_A.Mono.of_t(lex)), s);
-		});
+		lexes.stream() //
+				.map(lex -> new SimpleEntry<>(lex, NIDMaps.lookup(lexKeyToNID, KeyF.F_W_P_A.Mono.of_t(lex)))) //
+				.sorted(Map.Entry.comparingByValue()) //
+				.forEach(e -> {
+					if (i[0]++ != 1)
+					{
+						ps.print(',');
+					}
+					Lex lex = e.getKey();
+					Integer v = e.getValue();
+					String s = toString.apply(lex);
+					ps.printf("%n(%d,%s)", v, s);
+				});
 		ps.println(";");
 	}
 
@@ -98,14 +109,19 @@ public class Printers
 		ps.printf("INSERT INTO %s (%s) VALUES", table, columns);
 
 		final int[] i = {1};  // used as a final int holder
-		lexes.forEach(lex -> {
-			if (i[0]++ != 1)
-			{
-				ps.print(',');
-			}
-			String[] s = toStringWithComments.apply(lex);
-			ps.printf("%n(%d,%s) /* %s */", NIDMaps.lookup(lexKeyToNID, KeyF.F_W_P_A.Mono.of_t(lex)), s[0], s[1]);
-		});
+		lexes.stream() //
+				.map(lex -> new SimpleEntry<>(lex, NIDMaps.lookup(lexKeyToNID, KeyF.F_W_P_A.Mono.of_t(lex)))) //
+				.sorted(Map.Entry.comparingByValue()) //
+				.forEach(e -> {
+					if (i[0]++ != 1)
+					{
+						ps.print(',');
+					}
+					Lex lex = e.getKey();
+					Integer v = e.getValue();
+					String[] s = toStringWithComments.apply(lex);
+					ps.printf("%n(%d,%s) /* %s */", v, s[0], s[1]);
+				});
 		ps.println(";");
 	}
 
@@ -215,56 +231,59 @@ public class Printers
 
 	// to table
 
-	public static <T> void printInsert(final PrintStream ps, final String table, final String columns, final String format, final Map<String, T> mapper)
+	public static <T extends Comparable<T>> void printInsert(final PrintStream ps, final String table, final String columns, final String format, final Map<String, T> mapper)
 	{
 		ps.printf("INSERT INTO %s (%s) VALUES", table, columns);
 
-		final int[] i = {1};  // I am using it only as an int holder
-		mapper.keySet().stream() //
-				.sorted(Comparator.comparing(String::toString)) //
-				.forEach(k -> {
+		final int[] i = {1};  // used only as an int holder
+		mapper.entrySet().stream() //
+				.sorted(Map.Entry.comparingByValue())  //
+				.forEach(e -> {
 					if (i[0]++ != 1)
 					{
 						ps.print(',');
 					}
-					T val = mapper.get(k);
+					String k = e.getKey();
+					T val = e.getValue();
 					ps.printf(format, val, Utils.escape(k));
 				});
 		ps.println(";");
 	}
 
-	public static <T> void printInsert2(final PrintStream ps, final String table, final String columns, final String format, final Map<Object[], T> mapper)
+	public static <T extends Comparable<T>> void printInsert2(final PrintStream ps, final String table, final String columns, final String format, final Map<Object[], T> mapper)
 	{
 		ps.printf("INSERT INTO %s (%s) VALUES", table, columns);
 
-		final int[] i = {1};  // I am using it only as an int holder
-		mapper.keySet().stream() //
-				.sorted(Comparator.comparing(k -> k[0].toString() + "#" + k[1].toString()))  //
-				.forEach(k -> {
+		final int[] i = {1};  // used it only as an int holder
+		mapper.entrySet().stream() //
+				.sorted(Map.Entry.comparingByValue())  //
+				.forEach(e -> {
 					if (i[0]++ != 1)
 					{
 						ps.print(',');
 					}
-					T val = mapper.get(k);
-					ps.printf(format, val, k[0], k[1]);
+					Object[] k = e.getKey();
+					T v = e.getValue();
+					ps.printf(format, v, k[0], k[1]);
 				});
 		ps.println(";");
 	}
 
-	public static <T> void printInsert3(final PrintStream ps, final String table, final String columns, final String format, final Map<Object[], T> mapper)
+	public static <T extends Comparable<T>> void printInsert3(final PrintStream ps, final String table, final String columns, final String format, final Map<Object[], T> mapper)
 	{
 		ps.printf("INSERT INTO %s (%s) VALUES", table, columns);
 
-		final int[] i = {1};  // I am using it only as an int holder
-		mapper.keySet().stream() //
-				.sorted(Comparator.comparing(k -> k[0].toString() + "#" + k[1].toString() + "#" + k[2].toString())) //
-				.forEach(k -> {
+		final int[] i = {1};  // used it only as an int holder
+		mapper.entrySet().stream() //
+				.sorted(Map.Entry.comparingByValue()) //
+				.forEach(e -> {
 					if (i[0]++ != 1)
 					{
 						ps.print(',');
 					}
-					T val = mapper.get(k);
-					ps.printf(format, val, k[0], k[1], k[2]);
+					Object[] k = e.getKey();
+					T v = e.getValue();
+					ps.printf(format, v, k[0], k[1], k[2]);
 				});
 		ps.println(";");
 	}

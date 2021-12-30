@@ -4,11 +4,16 @@
 
 package org.oewntk.sql.out;
 
+import org.oewntk.model.CoreModel;
 import org.oewntk.model.Key;
 import org.oewntk.model.Lex;
 import org.oewntk.model.Synset;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.PrintStream;
+import java.nio.charset.StandardCharsets;
 import java.util.Collection;
 import java.util.Locale;
 import java.util.Map;
@@ -100,5 +105,29 @@ public class NIDMaps
 	private static void print(final PrintStream ps, final Map<String, Integer> toNID)
 	{
 		toNID.keySet().stream().sorted().forEach(k -> ps.printf("%s %d%n", k, toNID.get(k)));
+	}
+
+	public static void printMaps(final CoreModel model, final File outDir) throws IOException
+	{
+		try (PrintStream ps = new PrintStream(new FileOutputStream(new File(outDir, Names.WORDS.FILE)), true, StandardCharsets.UTF_8))
+		{
+			NIDMaps.printWords(ps, model.lexes);
+		}
+		try (PrintStream ps = new PrintStream(new FileOutputStream(new File(outDir, Names.CASEDWORDS.FILE)), true, StandardCharsets.UTF_8))
+		{
+			NIDMaps.printCasedWords(ps, model.lexes);
+		}
+		try (PrintStream ps = new PrintStream(new FileOutputStream(new File(outDir, Names.MORPHS.FILE)), true, StandardCharsets.UTF_8))
+		{
+			NIDMaps.printMorphs(ps, model.lexes);
+		}
+		try (PrintStream ps = new PrintStream(new FileOutputStream(new File(outDir, Names.PRONUNCIATIONS.FILE)), true, StandardCharsets.UTF_8))
+		{
+			NIDMaps.printPronunciations(ps, model.lexes);
+		}
+		try (PrintStream ps = new PrintStream(new FileOutputStream(new File(outDir, Names.SYNSETS.FILE)), true, StandardCharsets.UTF_8))
+		{
+			NIDMaps.printSynsets(ps, model.synsets);
+		}
 	}
 }

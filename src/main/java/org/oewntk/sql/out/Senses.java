@@ -4,13 +4,13 @@
 
 package org.oewntk.sql.out;
 
-import org.oewntk.model.*;
+import org.oewntk.model.Key;
+import org.oewntk.model.Lex;
+import org.oewntk.model.Sense;
+import org.oewntk.model.TagCount;
 
 import java.io.PrintStream;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Stream;
 
@@ -79,7 +79,8 @@ public class Senses
 				.filter(s -> {
 					var relations = s.getRelations();
 					return relations != null && relations.size() > 0;
-				});
+				}) //
+				.sorted(Comparator.comparing(Sense::getSensekey));
 
 		// insert map
 		final String columns = String.join(",", Names.SENSES_SENSES.synset1id, Names.SENSES_SENSES.lu1id, Names.SENSES_SENSES.word1id, Names.SENSES_SENSES.synset2id, Names.SENSES_SENSES.lu2id, Names.SENSES_SENSES.word2id, Names.SENSES_SENSES.relationid);
@@ -140,7 +141,7 @@ public class Senses
 						String casedword2 = lex2.getLemma();
 						stringWithComments.add(new String[]{ //
 								strings.get(i), //
-								String.format("%s %s -%s-> %s %s", synsetId1, casedword1, relation, synsetId2, casedword2), //
+								String.format("%s '%s' -%s-> %s '%s'", synsetId1, casedword1, relation, synsetId2, casedword2), //
 						});
 						i++;
 					}
@@ -159,7 +160,8 @@ public class Senses
 				.filter(s -> {
 					var adjPosition = s.getAdjPosition();
 					return adjPosition != null;
-				});
+				}) //
+				.sorted(Comparator.comparing(Sense::getSensekey));
 
 		// insert map
 		final String columns = String.join(",", Names.SENSES_ADJPOSITIONS.synsetid, Names.SENSES_ADJPOSITIONS.luid, Names.SENSES_ADJPOSITIONS.wordid, Names.SENSES_ADJPOSITIONS.positionid);
@@ -173,7 +175,17 @@ public class Senses
 			int wordNID = NIDMaps.lookupLC(wordIdToNIDMap, word);
 			return String.format("%d,%d,%d,'%s'", synsetNID, luNID, wordNID, sense.getAdjPosition());
 		};
-		Printers.printInsert(ps, Names.SENSES_ADJPOSITIONS.TABLE, columns, senseStream, toString, false);
+		if (!Printers.withComment)
+		{
+			Printers.printInsert(ps, Names.SENSES_ADJPOSITIONS.TABLE, columns, senseStream, toString, false);
+		}
+		else
+		{
+			Function<Sense, String[]> toStrings = (sense) -> new String[]{ //
+					toString.apply(sense), //
+					sense.getSensekey()};
+			Printers.printInsertWithComment(ps, Names.SENSES_ADJPOSITIONS.TABLE, columns, senseStream, toStrings, false);
+		}
 	}
 
 	public static void generateVerbFrames(final PrintStream ps, final Collection<Sense> senses, final Map<String, Integer> synsetIdToNIDMap, final Map<Key, Integer> lexKeyToNIDMap, final Map<String, Integer> wordIdToNIDMap)
@@ -183,7 +195,8 @@ public class Senses
 				.filter(s -> {
 					var frames = s.getVerbFrames();
 					return frames != null && frames.length > 0;
-				});
+				}) //
+				.sorted(Comparator.comparing(Sense::getSensekey));
 
 		// insert map
 		final String columns = String.join(",", Names.SENSES_VFRAMES.synsetid, Names.SENSES_VFRAMES.luid, Names.SENSES_VFRAMES.wordid, Names.SENSES_VFRAMES.frameid);
@@ -204,7 +217,28 @@ public class Senses
 			}
 			return strings;
 		};
-		Printers.printInserts(ps, Names.SENSES_VFRAMES.TABLE, columns, senseStream, toString, false);
+		if (!Printers.withComment)
+		{
+			Printers.printInserts(ps, Names.SENSES_VFRAMES.TABLE, columns, senseStream, toString, false);
+		}
+		else
+		{
+			final Function<Sense, List<String[]>> toStrings = sense -> {
+
+				var strings = toString.apply(sense);
+				var stringsWithComment = new ArrayList<String[]>();
+				String sensekey = sense.getSensekey();
+				for (int i = 0; i < sense.getVerbFrames().length; i++)
+				{
+					stringsWithComment.add(new String[]{ //
+							strings.get(i), //
+							sensekey});
+					i++;
+				}
+				return stringsWithComment;
+			};
+			Printers.printInsertsWithComment(ps, Names.SENSES_VFRAMES.TABLE, columns, senseStream, toStrings, false);
+		}
 	}
 
 	public static void generateVerbTemplates(final PrintStream ps, final Map<String, Sense> sensesById, final Map<String, Integer> synsetIdToNIDMap, final Map<Key, Integer> lexKeyToNIDMap, final Map<String, Integer> wordIdToNIDMap)
@@ -215,7 +249,8 @@ public class Senses
 				.filter(s -> {
 					var templates = s.getVerbTemplates();
 					return templates != null && templates.length > 0;
-				});
+				}) //
+				.sorted(Comparator.comparing(Sense::getSensekey));
 
 		// insert map
 		final String columns = String.join(",", Names.SENSES_VTEMPLATES.synsetid, Names.SENSES_VTEMPLATES.luid, Names.SENSES_VTEMPLATES.wordid, Names.SENSES_VTEMPLATES.templateid);
@@ -235,6 +270,27 @@ public class Senses
 			}
 			return strings;
 		};
-		Printers.printInserts(ps, Names.SENSES_VTEMPLATES.TABLE, columns, senseStream, toString, false);
+		if (!Printers.withComment)
+		{
+			Printers.printInserts(ps, Names.SENSES_VTEMPLATES.TABLE, columns, senseStream, toString, false);
+		}
+		else
+		{
+			final Function<Sense, List<String[]>> toStrings = sense -> {
+
+				var strings = toString.apply(sense);
+				var stringsWithComment = new ArrayList<String[]>();
+				String sensekey = sense.getSensekey();
+				for (int i = 0; i < sense.getVerbTemplates().length; i++)
+				{
+					stringsWithComment.add(new String[]{ //
+							strings.get(i), //
+							sensekey});
+					i++;
+				}
+				return stringsWithComment;
+			};
+			Printers.printInsertsWithComment(ps, Names.SENSES_VTEMPLATES.TABLE, columns, senseStream, toStrings, false);
+		}
 	}
 }

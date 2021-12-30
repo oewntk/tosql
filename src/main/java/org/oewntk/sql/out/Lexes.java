@@ -141,7 +141,8 @@ public class Lexes
 	{
 		// stream of lexes
 		Stream<Lex> lexStream = lexes.stream() //
-				.filter(lex -> lex.getForms() != null && lex.getForms().length > 0);
+				.filter(lex -> lex.getForms() != null && lex.getForms().length > 0) //
+				.sorted(Comparator.comparing(Lex::getLemma));
 
 		// insert map
 		final String columns = String.join(",", Names.LEXES_MORPHS.morphid, Names.LEXES_MORPHS.luid, Names.LEXES_MORPHS.wordid, Names.LEXES_MORPHS.posid);
@@ -216,7 +217,8 @@ public class Lexes
 	{
 		// stream of lexes
 		Stream<Lex> lexStream = lexes.stream() //
-				.filter(lex -> lex.getPronunciations() != null && lex.getPronunciations().length > 0);
+				.filter(lex -> lex.getPronunciations() != null && lex.getPronunciations().length > 0) //
+				.sorted(Comparator.comparing(Lex::getLemma));
 
 		// insert map
 		final String columns = String.join(",", Names.LEXES_PRONUNCIATIONS.pronunciationid, Names.LEXES_PRONUNCIATIONS.variety, Names.LEXES_PRONUNCIATIONS.luid, Names.LEXES_PRONUNCIATIONS.wordid, Names.LEXES_PRONUNCIATIONS.posid);
