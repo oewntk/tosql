@@ -4,14 +4,16 @@
 
 package org.oewntk.sql.out;
 
-import org.oewntk.sql.out.Variables;
-
-import java.io.File;
-import java.io.IOException;
-import java.io.PrintStream;
-import java.nio.file.Path;
+import java.io.*;
+import java.net.URISyntaxException;
+import java.net.URL;
 import java.nio.file.Paths;
 import java.util.Arrays;
+import java.util.Enumeration;
+import java.util.ResourceBundle;
+import java.util.function.BiConsumer;
+import java.util.jar.JarEntry;
+import java.util.jar.JarFile;
 
 /**
  * Main class that generates the SQL schema
@@ -27,13 +29,25 @@ public class SchemaGenerator
 	 * @param args command-line arguments [-compat:lexid] [-compat:pointer] yamlDir [outputDir]
 	 * @throws IOException io
 	 */
-	public static void main(String[] args) throws IOException
+	public static void main(String[] args) throws IOException, URISyntaxException
+	{
+		if ("-compat".equals(args[0]))
+		{
+			ResourceBundle bundle = ResourceBundle.getBundle("NamesCompat");
+			Names.set(bundle);
+			args = Arrays.copyOfRange(args, 1, args.length);
+		}
+
+		new SchemaGenerator().generate(args);
+	}
+
+	public void generate(String[] args) throws IOException, URISyntaxException
 	{
 		File output = null;
 
 		// Output
 		String arg1 = args[0];
-		if (! "-".equals(arg1))
+		if (!"-".equals(arg1))
 		{
 			if (arg1.endsWith(".sql"))
 			{
@@ -60,45 +74,125 @@ public class SchemaGenerator
 		}
 
 		// Input
-		String[] inputs = Arrays.copyOfRange(args, 1, args.length);
+		String inputSubdir = args[1];
+		String[] inputs = Arrays.copyOfRange(args, 2, args.length);
 
 		// Single output if console or file
 		if (output == null || output.isFile())
 		{
 			try (PrintStream ps = output == null ? System.out : new PrintStream(output))
 			{
-				for (var input : inputs)
-				{
-					// System.err.println(arg);
-					File file = new File(input);
-					Variables.varSubstitutionInFile(file, ps, true);
-				}
+				processInputs(inputSubdir, inputs, (is, name) -> {
+
+					try
+					{
+						Variables.varSubstitutionInIS(is, ps, true);
+					}
+					catch (IOException e)
+					{
+						e.printStackTrace();
+					}
+				});
 			}
 		}
+
 		// Multiple outputs if output is directory
 		else if (output.isDirectory())
 		{
-			for (var input : inputs)
-			{
-				File file = new File(input);
-				Path path = Paths.get(file.getAbsolutePath());
-				String inputDir = path.getParent().toString();
+			final File dir = output;
+			processInputs(inputSubdir, inputs, (is, name) -> {
 
-				String name = file.getName();
-				if (output.getAbsolutePath().equals(inputDir))
-				{
-					name = "@" + name;
-				}
-				File output2 = new File(output, name);
+				System.err.println(name);
+				File output2 = new File(dir, name);
 				try (PrintStream ps = new PrintStream(output2))
 				{
-					Variables.varSubstitutionInFile(file, ps, true);
+					Variables.varSubstitutionInIS(is, ps, true);
+				}
+				catch (IOException e)
+				{
+					e.printStackTrace();
+				}
+			});
+		}
+		else
+		{
+			System.err.println("Internal error");
+		}
+	}
+
+	private void processInputs(final String path, final String[] inputs, final BiConsumer<InputStream, String> consumer) throws IOException
+	{
+		// external resources
+		if (inputs != null && inputs.length > 0)
+		{
+			for (String input : inputs)
+			{
+				File file = new File(path, input);
+				String fileName = Paths.get(input).getFileName().toString();
+				try (FileInputStream fis = new FileInputStream(file))
+				{
+					consumer.accept(fis, fileName);
+				}
+			}
+			return;
+		}
+
+		// internal resources
+		final File jarFile = new File(getClass().getProtectionDomain().getCodeSource().getLocation().getPath());
+		if (jarFile.isFile())
+		{
+			// Run with JAR file
+			String prefix = "sqltemplates/" + path + "/";
+			try (final JarFile jar = new JarFile(jarFile))
+			{
+				final Enumeration<JarEntry> entries = jar.entries(); //gives ALL entries in jar
+				while (entries.hasMoreElements())
+				{
+					final JarEntry entry = entries.nextElement();
+					if (entry.isDirectory())
+					{
+						continue;
+					}
+
+					final String name = entry.getName();
+					//filter according to the path
+					if (name.startsWith(prefix))
+					{
+						String fileName = Paths.get(name).getFileName().toString();
+						try (InputStream is = jar.getInputStream(entry))
+						{
+							consumer.accept(is, fileName);
+						}
+					}
 				}
 			}
 		}
 		else
 		{
-			System.err.println("Internal error");
+			// Run with IDE
+			final URL url = SchemaGenerator.class.getResource("/sqltemplates/" + path);
+			if (url != null)
+			{
+				try
+				{
+					final File dir = new File(url.toURI());
+					File[] files = dir.listFiles();
+					if (files != null)
+					{
+						for (File file : files)
+						{
+							try (FileInputStream fis = new FileInputStream(file))
+							{
+								consumer.accept(fis, file.getName());
+							}
+						}
+					}
+				}
+				catch (URISyntaxException ex)
+				{
+					// never happens
+				}
+			}
 		}
 	}
 }

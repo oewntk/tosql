@@ -1,0 +1,3 @@
+ALTER TABLE `${synsets_synsets.table}` ADD CONSTRAINT `fk_${synsets_synsets.table}_${synsets_synsets.synset1id}`    FOREIGN KEY     (`${synsets_synsets.synset1id}`)    REFERENCES  `${synsets.table}`      (`${synsets.synsetid}`);
+ALTER TABLE `${synsets_synsets.table}` ADD CONSTRAINT `fk_${synsets_synsets.table}_${synsets_synsets.synset2id}`    FOREIGN KEY     (`${synsets_synsets.synset2id}`)    REFERENCES  `${synsets.table}`      (`${synsets.synsetid}`);
+ALTER TABLE `${synsets_synsets.table}` ADD CONSTRAINT `fk_${synsets_synsets.table}_${synsets_synsets.relationid}`   FOREIGN KEY     (`${synsets_synsets.relationid}`)   REFERENCES  `${relations.table}`    (`${relations.relationid}`);

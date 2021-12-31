@@ -1,0 +1,7 @@
+ALTER TABLE `${senses_senses.table}` ADD CONSTRAINT `fk_${senses_senses.table}_${senses_senses.synset1id}`      FOREIGN KEY     (`${senses_senses.synset1id}`)      REFERENCES  `${synsets.table}`      (`${synsets.synsetid}`);
+ALTER TABLE `${senses_senses.table}` ADD CONSTRAINT `fk_${senses_senses.table}_${senses_senses.synset2id}`      FOREIGN KEY     (`${senses_senses.synset2id}`)      REFERENCES  `${synsets.table}`      (`${synsets.synsetid}`);
+ALTER TABLE `${senses_senses.table}` ADD CONSTRAINT `fk_${senses_senses.table}_${senses_senses.relationid}`     FOREIGN KEY     (`${senses_senses.relationid}`)     REFERENCES  `${relations.table}`    (`${relations.relationid}`);
+ALTER TABLE `${senses_senses.table}` ADD CONSTRAINT `fk_${senses_senses.table}_${senses_senses.lu1id}`          FOREIGN KEY     (`${senses_senses.lu1id}`)          REFERENCES  `${lexes.table}`        (`${lexes.luid}`);
+ALTER TABLE `${senses_senses.table}` ADD CONSTRAINT `fk_${senses_senses.table}_${senses_senses.lu2id}`          FOREIGN KEY     (`${senses_senses.lu2id}`)          REFERENCES  `${lexes.table}`        (`${lexes.luid}`);
+ALTER TABLE `${senses_senses.table}` ADD CONSTRAINT `fk_${senses_senses.table}_${senses_senses.word1id}`        FOREIGN KEY     (`${senses_senses.word1id}`)        REFERENCES  `${words.table}`        (`${words.wordid}`);
+ALTER TABLE `${senses_senses.table}` ADD CONSTRAINT `fk_${senses_senses.table}_${senses_senses.word2id}`        FOREIGN KEY     (`${senses_senses.word2id}`)        REFERENCES  `${words.table}`        (`${words.wordid}`);

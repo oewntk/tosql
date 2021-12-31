@@ -8,6 +8,7 @@ import java.io.*;
 import java.nio.charset.Charset;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.ResourceBundle;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -15,7 +16,7 @@ public class Variables
 {
 	public static final Map<String, String> toValue = new HashMap<>();
 
-	static
+	public static void set()
 	{
 		toValue.put("words.file", Names.WORDS.FILE);
 		toValue.put("words.table", Names.WORDS.TABLE);
@@ -156,10 +157,35 @@ public class Variables
 		toValue.put("senses_vtemplates.templateid", Names.SENSES_VTEMPLATES.templateid);
 	}
 
-	public static void varSubstitutionInFile(File file, PrintStream ps, final boolean compress) throws IOException
+	static
+	{
+		set();
+	}
+
+	public static void set(final ResourceBundle bundle)
+	{
+		Names.set(bundle);
+		set();
+	}
+
+	public static void varSubstitutionInFile(final File file, final PrintStream ps, final boolean compress) throws IOException
 	{
 		// iterate on lines
-		try (BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(file), Charset.defaultCharset())))
+		try (InputStream is = new FileInputStream(file))
+		{
+			varSubstitutionInIS(is, ps, compress);
+		}
+		catch (IllegalArgumentException iae)
+		{
+			Tracing.psErr.printf("%s %s", file, iae.getMessage());
+			throw iae;
+		}
+	}
+
+	public static void varSubstitutionInIS(final InputStream is, final PrintStream ps, final boolean compress) throws IOException
+	{
+		// iterate on lines
+		try (BufferedReader reader = new BufferedReader(new InputStreamReader(is, Charset.defaultCharset())))
 		{
 			int lineNum = 0;
 			String line;
@@ -172,7 +198,7 @@ public class Variables
 				}
 				catch (IllegalArgumentException iae)
 				{
-					Tracing.psErr.printf("%s:%d '%s'%n", file.getName(), lineNum, line);
+					Tracing.psErr.printf("%d '%s'", lineNum, line);
 					throw iae;
 				}
 				if (compress)

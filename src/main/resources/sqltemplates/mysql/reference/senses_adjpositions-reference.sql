@@ -1,0 +1,4 @@
+ALTER TABLE `${senses_adjpositions.table}` ADD CONSTRAINT   `fk_${senses_adjpositions.table}_${senses_adjpositions.synsetid}`   FOREIGN KEY     (`${senses_adjpositions.synsetid}`)     REFERENCES  `${synsets.table}`      (`${synsets.synsetid}`);
+ALTER TABLE `${senses_adjpositions.table}` ADD CONSTRAINT   `fk_${senses_adjpositions.table}_${senses_adjpositions.luid}`       FOREIGN KEY     (`${senses_adjpositions.luid}`)         REFERENCES  `${lexes.table}`        (`${lexes.luid}`);
+ALTER TABLE `${senses_adjpositions.table}` ADD CONSTRAINT   `fk_${senses_adjpositions.table}_${senses_adjpositions.wordid}`     FOREIGN KEY     (`${senses_adjpositions.wordid}`)       REFERENCES  `${words.table}`        (`${words.wordid}`);
+ALTER TABLE `${senses_adjpositions.table}` ADD CONSTRAINT   `fk_${senses_adjpositions.table}_${senses_adjpositions.positionid}` FOREIGN KEY     (`${senses_adjpositions.positionid}`)   REFERENCES  `${adjpositions.table}` (`${adjpositions.positionid}`);

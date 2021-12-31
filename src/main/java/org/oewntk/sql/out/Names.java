@@ -8,210 +8,539 @@ import java.util.ResourceBundle;
 
 public class Names
 {
-	private static final boolean COMPAT = false;
+	static ResourceBundle bundle = ResourceBundle.getBundle("Names");
 
-	private static final ResourceBundle bundle = ResourceBundle.getBundle(COMPAT ? "NamesCompat" : "Names");
+	static void set(ResourceBundle bundle)
+	{
+		WORDS.set(bundle);
+		CASEDWORDS.set(bundle);
+		PRONUNCIATIONS.set(bundle);
+		MORPHS.set(bundle);
+		SYNSETS.set(bundle);
+		POSES.set(bundle);
+		RELS.set(bundle);
+		SAMPLES.set(bundle);
+		DOMAINS.set(bundle);
+		VFRAMES.set(bundle);
+		VTEMPLATES.set(bundle);
+		ADJPOSITIONS.set(bundle);
+		LEXES.set(bundle);
+		SENSES.set(bundle);
+		SYNSETS_SYNSETS.set(bundle);
+		SENSES_SENSES.set(bundle);
+		LEXES_MORPHS.set(bundle);
+		LEXES_PRONUNCIATIONS.set(bundle);
+		SENSES_ADJPOSITIONS.set(bundle);
+		SENSES_VFRAMES.set(bundle);
+		SENSES_VTEMPLATES.set(bundle);
+	}
 
 	public static class WORDS
 	{
-		public static final String FILE = bundle.getString("words.file");
-		public static final String TABLE = bundle.getString("words.table");
-		public static final String wordid = bundle.getString("words.wordid");
-		public static final String word = bundle.getString("words.word");
+		public static String FILE;
+		public static String TABLE;
+		public static String wordid;
+		public static String word;
+
+		public static void set(ResourceBundle bundle)
+		{
+			FILE = bundle.getString("words.file");
+			TABLE = bundle.getString("words.table");
+			wordid = bundle.getString("words.wordid");
+			word = bundle.getString("words.word");
+		}
+
+		static
+		{
+			set(bundle);
+		}
 	}
 
 	public static class CASEDWORDS
 	{
-		public static final String FILE = bundle.getString("casedwords.file");
-		public static final String TABLE = bundle.getString("casedwords.table");
-		public static final String casedwordid = bundle.getString("casedwords.casedwordid");
-		public static final String casedword = bundle.getString("casedwords.casedword");
-		public static final String wordid = bundle.getString("casedwords.wordid");
+		public static String FILE;
+		public static String TABLE;
+		public static String casedwordid;
+		public static String casedword;
+		public static String wordid;
+
+		public static void set(ResourceBundle bundle)
+		{
+			FILE = bundle.getString("casedwords.file");
+			TABLE = bundle.getString("casedwords.table");
+			casedwordid = bundle.getString("casedwords.casedwordid");
+			casedword = bundle.getString("casedwords.casedword");
+			wordid = bundle.getString("casedwords.wordid");
+		}
+
+		static
+		{
+			set(bundle);
+		}
 	}
 
 	public static class PRONUNCIATIONS
 	{
-		public static final String FILE = bundle.getString("pronunciations.file");
-		public static final String TABLE = bundle.getString("pronunciations.table");
-		public static final String pronunciationid = bundle.getString("pronunciations.pronunciationid");
-		public static final String pronunciation = bundle.getString("pronunciations.pronunciation");
+		public static String FILE;
+		public static String TABLE;
+		public static String pronunciationid;
+		public static String pronunciation;
+
+		public static void set(ResourceBundle bundle)
+		{
+			FILE = bundle.getString("pronunciations.file");
+			TABLE = bundle.getString("pronunciations.table");
+			pronunciationid = bundle.getString("pronunciations.pronunciationid");
+			pronunciation = bundle.getString("pronunciations.pronunciation");
+		}
+
+		static
+		{
+			set(bundle);
+		}
 	}
 
 	public static class MORPHS
 	{
-		public static final String FILE = bundle.getString("morphs.file");
-		public static final String TABLE = bundle.getString("morphs.table");
-		public static final String morphid = bundle.getString("morphs.morphid");
-		public static final String morph = bundle.getString("morphs.morph");
+		public static String FILE;
+		public static String TABLE;
+		public static String morphid;
+		public static String morph;
+
+		public static void set(ResourceBundle bundle)
+		{
+			FILE = bundle.getString("morphs.file");
+			TABLE = bundle.getString("morphs.table");
+			morphid = bundle.getString("morphs.morphid");
+			morph = bundle.getString("morphs.morph");
+		}
+
+		static
+		{
+			set(bundle);
+		}
 	}
 
 	public static class SYNSETS
 	{
-		public static final String FILE = bundle.getString("synsets.file");
-		public static final String TABLE = bundle.getString("synsets.table");
-		public static final String synsetid = bundle.getString("synsets.synsetid");
-		public static final String posid = bundle.getString("synsets.posid");
-		public static final String domainid = bundle.getString("synsets.domainid");
-		public static final String definition = bundle.getString("synsets.definition");
+		public static String FILE;
+		public static String TABLE;
+		public static String synsetid;
+		public static String posid;
+		public static String domainid;
+		public static String definition;
+
+		public static void set(ResourceBundle bundle)
+		{
+			FILE = bundle.getString("synsets.file");
+			TABLE = bundle.getString("synsets.table");
+			synsetid = bundle.getString("synsets.synsetid");
+			posid = bundle.getString("synsets.posid");
+			domainid = bundle.getString("synsets.domainid");
+			definition = bundle.getString("synsets.definition");
+		}
+
+		static
+		{
+			set(bundle);
+		}
 	}
 
 	public static class POSES
 	{
-		public static final String FILE = bundle.getString("poses.file");
-		public static final String TABLE = bundle.getString("poses.table");
-		public static final String posid = bundle.getString("poses.posid");
-		public static final String pos = bundle.getString("poses.pos");
+		public static String FILE;
+		public static String TABLE;
+		public static String posid;
+		public static String pos;
+
+		public static void set(ResourceBundle bundle)
+		{
+			FILE = bundle.getString("poses.file");
+			TABLE = bundle.getString("poses.table");
+			posid = bundle.getString("poses.posid");
+			pos = bundle.getString("poses.pos");
+		}
+
+		static
+		{
+			set(bundle);
+		}
 	}
 
 	public static class RELS
 	{
-		public static final String FILE = bundle.getString("relations.file");
-		public static final String TABLE = bundle.getString("relations.table");
-		public static final String relationid = bundle.getString("relations.relationid");
-		public static final String relation = bundle.getString("relations.relation");
-		public static final String recurses = bundle.getString("relations.recurses");
+		public static String FILE;
+		public static String TABLE;
+		public static String relationid;
+		public static String relation;
+		public static String recurses;
+
+		public static void set(ResourceBundle bundle)
+		{
+			FILE = bundle.getString("relations.file");
+			TABLE = bundle.getString("relations.table");
+			relationid = bundle.getString("relations.relationid");
+			relation = bundle.getString("relations.relation");
+			recurses = bundle.getString("relations.recurses");
+		}
+
+		static
+		{
+			set(bundle);
+		}
 	}
 
 	public static class SAMPLES
 	{
-		public static final String FILE = bundle.getString("samples.file");
-		public static final String TABLE = bundle.getString("samples.table");
-		public static final String sampleid = bundle.getString("samples.sampleid");
-		public static final String sample = bundle.getString("samples.sample");
-		public static final String synsetid = bundle.getString("samples.synsetid");
+		public static String FILE;
+		public static String TABLE;
+		public static String sampleid;
+		public static String sample;
+		public static String synsetid;
+
+		public static void set(ResourceBundle bundle)
+		{
+			FILE = bundle.getString("samples.file");
+			TABLE = bundle.getString("samples.table");
+			sampleid = bundle.getString("samples.sampleid");
+			sample = bundle.getString("samples.sample");
+			synsetid = bundle.getString("samples.synsetid");
+		}
+
+		static
+		{
+			set(bundle);
+		}
 	}
 
 	public static class DOMAINS
 	{
-		public static final String FILE = bundle.getString("domains.file");
-		public static final String TABLE = bundle.getString("domains.table");
-		public static final String domainid = bundle.getString("domains.domainid");
-		public static final String domain = bundle.getString("domains.domain");
-		public static final String domainname = bundle.getString("domains.domainname");
-		public static final String posid = bundle.getString("domains.posid");
+		public static String FILE;
+		public static String TABLE;
+		public static String domainid;
+		public static String domain;
+		public static String domainname;
+		public static String posid;
+
+		public static void set(ResourceBundle bundle)
+		{
+			FILE = bundle.getString("domains.file");
+			TABLE = bundle.getString("domains.table");
+			domainid = bundle.getString("domains.domainid");
+			domain = bundle.getString("domains.domain");
+			domainname = bundle.getString("domains.domainname");
+			posid = bundle.getString("domains.posid");
+		}
+
+		static
+		{
+			set(bundle);
+		}
 	}
 
 	public static class VFRAMES
 	{
-		public static final String FILE = bundle.getString("vframes.file");
-		public static final String TABLE = bundle.getString("vframes.table");
-		public static final String frameid = bundle.getString("vframes.frameid");
-		public static final String frame = bundle.getString("vframes.frame");
+		public static String FILE;
+		public static String TABLE;
+		public static String frameid;
+		public static String frame;
+
+		public static void set(ResourceBundle bundle)
+		{
+			FILE = bundle.getString("vframes.file");
+			TABLE = bundle.getString("vframes.table");
+			frameid = bundle.getString("vframes.frameid");
+			frame = bundle.getString("vframes.frame");
+		}
+
+		static
+		{
+			set(bundle);
+		}
 	}
 
 	public static class VTEMPLATES
 	{
-		public static final String FILE = bundle.getString("vtemplates.file");
-		public static final String TABLE = bundle.getString("vtemplates.table");
-		public static final String templateid = bundle.getString("vtemplates.templateid");
-		public static final String template = bundle.getString("vtemplates.template");
+		public static String FILE;
+		public static String TABLE;
+		public static String templateid;
+		public static String template;
+
+		public static void set(ResourceBundle bundle)
+		{
+			FILE = bundle.getString("vtemplates.file");
+			TABLE = bundle.getString("vtemplates.table");
+			templateid = bundle.getString("vtemplates.templateid");
+			template = bundle.getString("vtemplates.template");
+		}
+
+		static
+		{
+			set(bundle);
+		}
 	}
 
 	public static class ADJPOSITIONS
 	{
-		public static final String FILE = bundle.getString("adjpositions.file");
-		public static final String TABLE = bundle.getString("adjpositions.table");
-		public static final String positionid = bundle.getString("adjpositions.positionid");
-		public static final String position = bundle.getString("adjpositions.position");
+		public static String FILE;
+		public static String TABLE;
+		public static String positionid;
+		public static String position;
+
+		public static void set(ResourceBundle bundle)
+		{
+			FILE = bundle.getString("adjpositions.file");
+			TABLE = bundle.getString("adjpositions.table");
+			positionid = bundle.getString("adjpositions.positionid");
+			position = bundle.getString("adjpositions.position");
+		}
+
+		static
+		{
+			set(bundle);
+		}
 	}
 
 	// maps
 
 	public static class LEXES // word - casedword - pronunciations - morphs
 	{
-		public static final String FILE = bundle.getString("lexes.file");
-		public static final String TABLE = bundle.getString("lexes.table");
-		public static final String luid = bundle.getString("lexes.luid");
-		public static final String posid = bundle.getString("lexes.posid");
-		public static final String wordid = bundle.getString("lexes.wordid");
-		public static final String casedwordid = bundle.getString("lexes.casedwordid");
+		public static String FILE;
+		public static String TABLE;
+		public static String luid;
+		public static String posid;
+		public static String wordid;
+		public static String casedwordid;
+
+		public static void set(ResourceBundle bundle)
+		{
+			FILE = bundle.getString("lexes.file");
+			TABLE = bundle.getString("lexes.table");
+			luid = bundle.getString("lexes.luid");
+			posid = bundle.getString("lexes.posid");
+			wordid = bundle.getString("lexes.wordid");
+			casedwordid = bundle.getString("lexes.casedwordid");
+		}
+
+		static
+		{
+			set(bundle);
+		}
 	}
 
 	public static class SENSES // word - casedword - synset
 	{
-		public static final String FILE = bundle.getString("senses.file");
-		public static final String TABLE = bundle.getString("senses.table");
-		public static final String senseid = bundle.getString("senses.senseid");
-		public static final String sensekey = bundle.getString("senses.sensekey");
-		public static final String luid = bundle.getString("senses.luid");
-		public static final String wordid = bundle.getString("senses.wordid");
-		public static final String casedwordid = bundle.getString("senses.casedwordid");
-		public static final String synsetid = bundle.getString("senses.synsetid");
-		public static final String sensenum = bundle.getString("senses.sensenum");
-		public static final String lexid = bundle.getString("senses.lexid");
-		public static final String tagcount = bundle.getString("senses.tagcount");
+		public static String FILE;
+		public static String TABLE;
+		public static String senseid;
+		public static String sensekey;
+		public static String luid;
+		public static String wordid;
+		public static String casedwordid;
+		public static String synsetid;
+		public static String sensenum;
+		public static String lexid;
+		public static String tagcount;
+
+		public static void set(ResourceBundle bundle)
+		{
+			FILE = bundle.getString("senses.file");
+			TABLE = bundle.getString("senses.table");
+			senseid = bundle.getString("senses.senseid");
+			sensekey = bundle.getString("senses.sensekey");
+			luid = bundle.getString("senses.luid");
+			wordid = bundle.getString("senses.wordid");
+			casedwordid = bundle.getString("senses.casedwordid");
+			synsetid = bundle.getString("senses.synsetid");
+			sensenum = bundle.getString("senses.sensenum");
+			lexid = bundle.getString("senses.lexid");
+			tagcount = bundle.getString("senses.tagcount");
+		}
+
+		static
+		{
+			set(bundle);
+		}
 	}
 
 	public static class SYNSETS_SYNSETS
 	{
-		public static final String FILE = bundle.getString("synsets_synsets.file");
-		public static final String TABLE = bundle.getString("synsets_synsets.table");
-		public static final String synset1id = bundle.getString("synsets_synsets.synset1id");
-		public static final String synset2id = bundle.getString("synsets_synsets.synset2id");
-		public static final String relationid = bundle.getString("synsets_synsets.relationid");
+		public static String FILE;
+		public static String TABLE;
+		public static String synset1id;
+		public static String synset2id;
+		public static String relationid;
+
+		public static void set(ResourceBundle bundle)
+		{
+			FILE = bundle.getString("synsets_synsets.file");
+			TABLE = bundle.getString("synsets_synsets.table");
+			synset1id = bundle.getString("synsets_synsets.synset1id");
+			synset2id = bundle.getString("synsets_synsets.synset2id");
+			relationid = bundle.getString("synsets_synsets.relationid");
+		}
+
+		static
+		{
+			set(bundle);
+		}
 	}
 
 	public static class SENSES_SENSES
 	{
-		public static final String FILE = bundle.getString("senses_senses.file");
-		public static final String TABLE = bundle.getString("senses_senses.table");
-		public static final String synset1id = bundle.getString("senses_senses.synset1id");
-		public static final String lu1id = bundle.getString("synsets_synsets.lu1id");
-		public static final String word1id = bundle.getString("synsets_synsets.word1id");
-		public static final String synset2id = bundle.getString("senses_senses.synset2id");
-		public static final String lu2id = bundle.getString("synsets_synsets.lu2id");
-		public static final String word2id = bundle.getString("synsets_synsets.word2id");
-		public static final String relationid = bundle.getString("senses_senses.relationid");
+		public static String FILE;
+		public static String TABLE;
+		public static String synset1id;
+		public static String lu1id;
+		public static String word1id;
+		public static String synset2id;
+		public static String lu2id;
+		public static String word2id;
+		public static String relationid;
+
+		public static void set(ResourceBundle bundle)
+		{
+			FILE = bundle.getString("senses_senses.file");
+			TABLE = bundle.getString("senses_senses.table");
+			synset1id = bundle.getString("senses_senses.synset1id");
+			lu1id = bundle.getString("synsets_synsets.lu1id");
+			word1id = bundle.getString("synsets_synsets.word1id");
+			synset2id = bundle.getString("senses_senses.synset2id");
+			lu2id = bundle.getString("synsets_synsets.lu2id");
+			word2id = bundle.getString("synsets_synsets.word2id");
+			relationid = bundle.getString("senses_senses.relationid");
+		}
+
+		static
+		{
+			set(bundle);
+		}
 	}
 
 	public static class LEXES_MORPHS
 	{
-		public static final String FILE = bundle.getString("lexes_morphs.file");
-		public static final String TABLE = bundle.getString("lexes_morphs.table");
-		public static final String luid = bundle.getString("lexes_morphs.luid");
-		public static final String wordid = bundle.getString("lexes_morphs.wordid");
-		public static final String posid = bundle.getString("lexes_morphs.posid");
-		public static final String morphid = bundle.getString("lexes_morphs.morphid");
+		public static String FILE;
+		public static String TABLE;
+		public static String luid;
+		public static String wordid;
+		public static String posid;
+		public static String morphid;
+
+		public static void set(ResourceBundle bundle)
+		{
+			FILE = bundle.getString("lexes_morphs.file");
+			TABLE = bundle.getString("lexes_morphs.table");
+			luid = bundle.getString("lexes_morphs.luid");
+			wordid = bundle.getString("lexes_morphs.wordid");
+			posid = bundle.getString("lexes_morphs.posid");
+			morphid = bundle.getString("lexes_morphs.morphid");
+		}
+
+		static
+		{
+			set(bundle);
+		}
 	}
 
 	public static class LEXES_PRONUNCIATIONS
 	{
-		public static final String FILE = bundle.getString("lexes_pronunciations.file");
-		public static final String TABLE = bundle.getString("lexes_pronunciations.file");
-		public static final String luid = bundle.getString("lexes_pronunciations.luid");
-		public static final String wordid = bundle.getString("lexes_pronunciations.wordid");
-		public static final String posid = bundle.getString("lexes_pronunciations.posid");
-		public static final String pronunciationid = bundle.getString("lexes_pronunciations.pronunciationid");
-		public static final String variety = bundle.getString("lexes_pronunciations.variety");
+		public static String FILE;
+		public static String TABLE;
+		public static String luid;
+		public static String wordid;
+		public static String posid;
+		public static String pronunciationid;
+		public static String variety;
+
+		public static void set(ResourceBundle bundle)
+		{
+			FILE = bundle.getString("lexes_pronunciations.file");
+			TABLE = bundle.getString("lexes_pronunciations.file");
+			luid = bundle.getString("lexes_pronunciations.luid");
+			wordid = bundle.getString("lexes_pronunciations.wordid");
+			posid = bundle.getString("lexes_pronunciations.posid");
+			pronunciationid = bundle.getString("lexes_pronunciations.pronunciationid");
+			variety = bundle.getString("lexes_pronunciations.variety");
+		}
+
+		static
+		{
+			set(bundle);
+		}
 	}
 
 	public static class SENSES_ADJPOSITIONS
 	{
-		public static final String FILE = bundle.getString("senses_adjpositions.file");
-		public static final String TABLE = bundle.getString("senses_adjpositions.file");
-		public static final String synsetid = bundle.getString("senses_adjpositions.synsetid");
-		public static final String luid = bundle.getString("senses_adjpositions.luid");
-		public static final String wordid = bundle.getString("senses_adjpositions.wordid");
-		public static final String positionid = bundle.getString("senses_adjpositions.positionid");
+		public static String FILE;
+		public static String TABLE;
+		public static String synsetid;
+		public static String luid;
+		public static String wordid;
+		public static String positionid;
+
+		public static void set(ResourceBundle bundle)
+		{
+			FILE = bundle.getString("senses_adjpositions.file");
+			TABLE = bundle.getString("senses_adjpositions.file");
+			synsetid = bundle.getString("senses_adjpositions.synsetid");
+			luid = bundle.getString("senses_adjpositions.luid");
+			wordid = bundle.getString("senses_adjpositions.wordid");
+			positionid = bundle.getString("senses_adjpositions.positionid");
+		}
+
+		static
+		{
+			set(bundle);
+		}
 	}
 
 	public static class SENSES_VFRAMES
 	{
-		public static final String FILE = bundle.getString("senses_vframes.file");
-		public static final String TABLE = bundle.getString("senses_vframes.table");
-		public static final String synsetid = bundle.getString("senses_vframes.synsetid");
-		public static final String luid = bundle.getString("senses_vframes.luid");
-		public static final String wordid = bundle.getString("senses_vframes.wordid");
-		public static final String frameid = bundle.getString("senses_vframes.frameid");
+		public static String FILE;
+		public static String TABLE;
+		public static String synsetid;
+		public static String luid;
+		public static String wordid;
+		public static String frameid;
+
+		public static void set(ResourceBundle bundle)
+		{
+			FILE = bundle.getString("senses_vframes.file");
+			TABLE = bundle.getString("senses_vframes.table");
+			synsetid = bundle.getString("senses_vframes.synsetid");
+			luid = bundle.getString("senses_vframes.luid");
+			wordid = bundle.getString("senses_vframes.wordid");
+			frameid = bundle.getString("senses_vframes.frameid");
+		}
+
+		static
+		{
+			set(bundle);
+		}
 	}
 
 	public static class SENSES_VTEMPLATES
 	{
-		public static final String FILE = bundle.getString("senses_vtemplates.file");
-		public static final String TABLE = bundle.getString("senses_vtemplates.table");
-		public static final String luid = bundle.getString("senses_vtemplates.luid");
-		public static final String wordid = bundle.getString("senses_vtemplates.wordid");
-		public static final String synsetid = bundle.getString("senses_vtemplates.synsetid");
-		public static final String templateid = bundle.getString("senses_vtemplates.templateid");
+		public static String FILE;
+		public static String TABLE;
+		public static String luid;
+		public static String wordid;
+		public static String synsetid;
+		public static String templateid;
+
+		public static void set(ResourceBundle bundle)
+		{
+			FILE = bundle.getString("senses_vtemplates.file");
+			TABLE = bundle.getString("senses_vtemplates.table");
+			luid = bundle.getString("senses_vtemplates.luid");
+			wordid = bundle.getString("senses_vtemplates.wordid");
+			synsetid = bundle.getString("senses_vtemplates.synsetid");
+			templateid = bundle.getString("senses_vtemplates.templateid");
+		}
+
+		static
+		{
+			set(bundle);
+		}
 	}
 }

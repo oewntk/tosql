@@ -8,6 +8,7 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import org.oewntk.model.Tracing;
 import org.oewntk.sql.out.Names;
+import org.oewntk.sql.out.Variables;
 
 import java.io.PrintStream;
 import java.util.ResourceBundle;
@@ -50,5 +51,18 @@ public class TestSqlBundle
 		assertEquals("words", Names.WORDS.FILE);
 		assertEquals("senses", Names.SENSES.FILE);
 		assertEquals("synsets", Names.SYNSETS.FILE);
+	}
+
+	@Test
+	public void testCompat()
+	{
+		Variables.set(bundleCompat);
+		assertEquals("vframesentences", Variables.varSubstitution("${vtemplates.table}"));
+
+		Variables.set(bundle);
+		assertEquals("vtemplates", Variables.varSubstitution("${vtemplates.table}"));
+
+		Variables.set(bundleCompat);
+		assertEquals("vframesentences", Variables.varSubstitution("${vtemplates.table}"));
 	}
 }
