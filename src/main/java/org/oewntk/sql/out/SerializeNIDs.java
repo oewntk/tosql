@@ -6,6 +6,7 @@ package org.oewntk.sql.out;
 
 import org.oewntk.model.CoreModel;
 import org.oewntk.model.Lex;
+import org.oewntk.model.Sense;
 import org.oewntk.model.Synset;
 
 import java.io.*;
@@ -40,6 +41,12 @@ public class SerializeNIDs
 		serialize(os, pronunciationValueToNID);
 	}
 
+	private static void serializeSensesNIDs(final OutputStream os, final Collection<Sense> senses) throws IOException
+	{
+		Map<String, Integer> senseToNID = Senses.makeSenseNIDs(senses);
+		serialize(os, senseToNID);
+	}
+
 	public static void serializeSynsetNIDs(final OutputStream os, final Collection<Synset> synsetsById) throws IOException
 	{
 		Map<String, Integer> synsetIdToNID = Synsets.makeSynsetNIDs(synsetsById);
@@ -71,6 +78,10 @@ public class SerializeNIDs
 		try (OutputStream os = new FileOutputStream(new File(outDir, NID_PREFIX + Names.PRONUNCIATIONS.FILE + ".ser")))
 		{
 			serializePronunciationNIDs(os, model.lexes);
+		}
+		try (OutputStream os = new FileOutputStream(new File(outDir, NID_PREFIX + Names.SENSES.FILE + ".ser")))
+		{
+			serializeSensesNIDs(os, model.senses);
 		}
 		try (OutputStream os = new FileOutputStream(new File(outDir, NID_PREFIX + Names.SYNSETS.FILE + ".ser")))
 		{

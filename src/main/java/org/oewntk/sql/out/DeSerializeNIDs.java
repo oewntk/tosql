@@ -37,6 +37,11 @@ public class DeSerializeNIDs
 			var m = DeSerializeNIDs.deSerializeNIDs(is);
 			maps.put(Names.PRONUNCIATIONS.FILE, m);
 		}
+		try (InputStream is = new FileInputStream(new File(inDir, SerializeNIDs.NID_PREFIX + Names.SENSES.FILE)))
+		{
+			var m = DeSerializeNIDs.deSerializeNIDs(is);
+			maps.put(Names.SENSES.FILE, m);
+		}
 		try (InputStream is = new FileInputStream(new File(inDir, SerializeNIDs.NID_PREFIX + Names.SYNSETS.FILE)))
 		{
 			var m = DeSerializeNIDs.deSerializeNIDs(is);
