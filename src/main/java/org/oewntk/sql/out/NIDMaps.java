@@ -4,10 +4,7 @@
 
 package org.oewntk.sql.out;
 
-import org.oewntk.model.CoreModel;
-import org.oewntk.model.Key;
-import org.oewntk.model.Lex;
-import org.oewntk.model.Synset;
+import org.oewntk.model.*;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -102,6 +99,12 @@ public class NIDMaps
 		print(ps, synsetIdToNID);
 	}
 
+	private static void printSenses(final PrintStream ps, final Collection<Sense> senses)
+	{
+		Map<String, Integer> synsetIdToNID = Senses.makeSenseNIDs(senses);
+		print(ps, synsetIdToNID);
+	}
+
 	private static void print(final PrintStream ps, final Map<String, Integer> toNID)
 	{
 		toNID.keySet().stream().sorted().forEach(k -> ps.printf("%s %d%n", k, toNID.get(k)));
@@ -128,6 +131,10 @@ public class NIDMaps
 		try (PrintStream ps = new PrintStream(new FileOutputStream(new File(outDir, Names.SYNSETS.FILE)), true, StandardCharsets.UTF_8))
 		{
 			NIDMaps.printSynsets(ps, model.synsets);
+		}
+		try (PrintStream ps = new PrintStream(new FileOutputStream(new File(outDir, Names.SENSES.FILE)), true, StandardCharsets.UTF_8))
+		{
+			NIDMaps.printSenses(ps, model.senses);
 		}
 	}
 }
