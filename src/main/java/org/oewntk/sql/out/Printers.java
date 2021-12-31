@@ -28,112 +28,148 @@ public class Printers
 
 	public static <T> void printInsert(final PrintStream ps, final String table, final String columns, final Map<T, Integer> objectToNID, final Function<T, String> toString)
 	{
-		ps.printf("INSERT INTO %s (%s) VALUES", table, columns);
-
-		final int[] i = {1};  // used as a final int holder
-		objectToNID.keySet().forEach(k -> {
-			String s = toString.apply(k);
-			if (i[0]++ != 1)
-			{
-				ps.print(',');
-			}
-			int nid = NIDMaps.lookup(objectToNID, k);
-			ps.printf("%n(%d,%s)", nid, s);
-		});
-		ps.println(";");
+		if (objectToNID.isEmpty())
+		{
+			ps.print("-- NONE");
+		}
+		else
+		{
+			ps.printf("INSERT INTO %s (%s) VALUES", table, columns);
+			final int[] i = {1};  // used as a final int holder
+			objectToNID.keySet().forEach(k -> {
+				String s = toString.apply(k);
+				if (i[0]++ != 1)
+				{
+					ps.print(',');
+				}
+				int nid = NIDMaps.lookup(objectToNID, k);
+				ps.printf("%n(%d,%s)", nid, s);
+			});
+			ps.println(";");
+		}
 	}
 
 	public static <T> void printInsert(final PrintStream ps, final String table, final String columns, final Collection<T> objects, final Function<T, String> toId, final Map<String, Integer> objectIdToNID, final Function<T, String> toString)
 	{
-		ps.printf("INSERT INTO %s (%s) VALUES", table, columns);
+		if (objects.isEmpty())
+		{
+			ps.print("-- NONE");
+		}
+		else
+		{
+			ps.printf("INSERT INTO %s (%s) VALUES", table, columns);
 
-		final int[] i = {1};  // used as a final int holder
-		objects.stream() //
-				.map(object -> new SimpleEntry<>(object, NIDMaps.lookup(objectIdToNID, toId.apply(object)))) //
-				.sorted(Map.Entry.comparingByValue()) //
-				.forEach(entry -> {
-					if (i[0]++ != 1)
-					{
-						ps.print(',');
-					}
-					String s = toString.apply(entry.getKey());
-					ps.printf("%n(%d,%s)", entry.getValue(), s);
-				});
-		ps.println(";");
+			final int[] i = {1};  // used as a final int holder
+			objects.stream() //
+					.map(object -> new SimpleEntry<>(object, NIDMaps.lookup(objectIdToNID, toId.apply(object)))) //
+					.sorted(Map.Entry.comparingByValue()) //
+					.forEach(entry -> {
+						if (i[0]++ != 1)
+						{
+							ps.print(',');
+						}
+						String s = toString.apply(entry.getKey());
+						ps.printf("%n(%d,%s)", entry.getValue(), s);
+					});
+			ps.println(";");
+		}
 	}
 
 	public static <T> void printInsertWithComment(final PrintStream ps, final String table, final String columns, final Collection<T> objects, final Function<T, String> toId, final Map<String, Integer> objectIdToNID, final Function<T, String[]> toStringWithComments)
 	{
-		ps.printf("INSERT INTO %s (%s) VALUES", table, columns);
+		if (objects.isEmpty())
+		{
+			ps.print("-- NONE");
+		}
+		else
+		{
+			ps.printf("INSERT INTO %s (%s) VALUES", table, columns);
 
-		final int[] i = {1};  // used as a final int holder
-		objects.stream() //
-				.map(object -> new SimpleEntry<>(object, NIDMaps.lookup(objectIdToNID, toId.apply(object)))) //
-				.sorted(Map.Entry.comparingByValue()) //
-				.forEach(entry -> {
-					if (i[0]++ != 1)
-					{
-						ps.print(',');
-					}
-					String[] s = toStringWithComments.apply(entry.getKey());
-					ps.printf("%n(%d,%s) /* %s */", entry.getValue(), s[0], s[1]);
-				});
-		ps.println(";");
+			final int[] i = {1};  // used as a final int holder
+			objects.stream() //
+					.map(object -> new SimpleEntry<>(object, NIDMaps.lookup(objectIdToNID, toId.apply(object)))) //
+					.sorted(Map.Entry.comparingByValue()) //
+					.forEach(entry -> {
+						if (i[0]++ != 1)
+						{
+							ps.print(',');
+						}
+						String[] s = toStringWithComments.apply(entry.getKey());
+						ps.printf("%n(%d,%s) /* %s */", entry.getValue(), s[0], s[1]);
+					});
+			ps.println(";");
+		}
 	}
 
 	// ley key map
 
 	public static void printInsert(final PrintStream ps, final String table, final String columns, final Collection<Lex> lexes, final Map<Key, Integer> lexKeyToNID, final Function<Lex, String> toString)
 	{
-		ps.printf("INSERT INTO %s (%s) VALUES", table, columns);
+		if (lexes.isEmpty())
+		{
+			ps.print("-- NONE");
+		}
+		else
+		{
+			ps.printf("INSERT INTO %s (%s) VALUES", table, columns);
 
-		final int[] i = {1};  // used as a final int holder
-		lexes.stream() //
-				.map(lex -> new SimpleEntry<>(lex, NIDMaps.lookup(lexKeyToNID, KeyF.F_W_P_A.Mono.of_t(lex)))) //
-				.sorted(Map.Entry.comparingByValue()) //
-				.forEach(e -> {
-					if (i[0]++ != 1)
-					{
-						ps.print(',');
-					}
-					Lex lex = e.getKey();
-					Integer v = e.getValue();
-					String s = toString.apply(lex);
-					ps.printf("%n(%d,%s)", v, s);
-				});
-		ps.println(";");
+			final int[] i = {1};  // used as a final int holder
+			lexes.stream() //
+					.map(lex -> new SimpleEntry<>(lex, NIDMaps.lookup(lexKeyToNID, KeyF.F_W_P_A.Mono.of_t(lex)))) //
+					.sorted(Map.Entry.comparingByValue()) //
+					.forEach(e -> {
+						if (i[0]++ != 1)
+						{
+							ps.print(',');
+						}
+						Lex lex = e.getKey();
+						Integer v = e.getValue();
+						String s = toString.apply(lex);
+						ps.printf("%n(%d,%s)", v, s);
+					});
+			ps.println(";");
+		}
 	}
 
 	public static void printInsertWithComment(final PrintStream ps, final String table, final String columns, final Collection<Lex> lexes, final Map<Key, Integer> lexKeyToNID, final Function<Lex, String[]> toStringWithComments)
 	{
-		ps.printf("INSERT INTO %s (%s) VALUES", table, columns);
+		if (lexes.isEmpty())
+		{
+			ps.print("-- NONE");
+		}
+		else
+		{
+			ps.printf("INSERT INTO %s (%s) VALUES", table, columns);
 
-		final int[] i = {1};  // used as a final int holder
-		lexes.stream() //
-				.map(lex -> new SimpleEntry<>(lex, NIDMaps.lookup(lexKeyToNID, KeyF.F_W_P_A.Mono.of_t(lex)))) //
-				.sorted(Map.Entry.comparingByValue()) //
-				.forEach(e -> {
-					if (i[0]++ != 1)
-					{
-						ps.print(',');
-					}
-					Lex lex = e.getKey();
-					Integer v = e.getValue();
-					String[] s = toStringWithComments.apply(lex);
-					ps.printf("%n(%d,%s) /* %s */", v, s[0], s[1]);
-				});
-		ps.println(";");
+			final int[] i = {1};  // used as a final int holder
+			lexes.stream() //
+					.map(lex -> new SimpleEntry<>(lex, NIDMaps.lookup(lexKeyToNID, KeyF.F_W_P_A.Mono.of_t(lex)))) //
+					.sorted(Map.Entry.comparingByValue()) //
+					.forEach(e -> {
+						if (i[0]++ != 1)
+						{
+							ps.print(',');
+						}
+						Lex lex = e.getKey();
+						Integer v = e.getValue();
+						String[] s = toStringWithComments.apply(lex);
+						ps.printf("%n(%d,%s) /* %s */", v, s[0], s[1]);
+					});
+			ps.println(";");
+		}
 	}
 
 	// from streams
 
 	public static <T> void printInsert(final PrintStream ps, final String table, final String columns, final Stream<T> stream, final Function<T, String> toString, final boolean withNumber)
 	{
-		ps.printf("INSERT INTO %s (%s) VALUES", table, columns);
-
 		final int[] i = {1};  // used as a final int holder
 		stream.forEach(object -> {
-			if (i[0] != 1)
+			if (i[0] == 1)
+			{
+				ps.printf("INSERT INTO %s (%s) VALUES", table, columns);
+			}
+			else
 			{
 				ps.print(',');
 			}
@@ -153,11 +189,13 @@ public class Printers
 
 	public static <T> void printInsertWithComment(final PrintStream ps, final String table, final String columns, final Stream<T> stream, final Function<T, String[]> toStringWithComment, final boolean withNumber)
 	{
-		ps.printf("INSERT INTO %s (%s) VALUES", table, columns);
-
 		final int[] i = {1};  // used as a final int holder
 		stream.forEach(object -> {
-			if (i[0] != 1)
+			if (i[0] == 1)
+			{
+				ps.printf("INSERT INTO %s (%s) VALUES", table, columns);
+			}
+			else
 			{
 				ps.print(',');
 			}
@@ -177,14 +215,16 @@ public class Printers
 
 	public static <T> void printInserts(final PrintStream ps, final String table, final String columns, final Stream<T> stream, final Function<T, List<String>> toStrings, final boolean withNumber)
 	{
-		ps.printf("INSERT INTO %s (%s) VALUES", table, columns);
-
 		final int[] i = {1};  // used as a final int holder
 		stream.forEach(object -> {
 			List<String> ss = toStrings.apply(object);
 			for (String s : ss)
 			{
-				if (i[0] != 1)
+				if (i[0] == 1)
+				{
+					ps.printf("INSERT INTO %s (%s) VALUES", table, columns);
+				}
+				else
 				{
 					ps.print(',');
 				}
@@ -204,14 +244,16 @@ public class Printers
 
 	public static <T> void printInsertsWithComment(final PrintStream ps, final String table, final String columns, final Stream<T> stream, final Function<T, List<String[]>> toStringsWithComments, final boolean withNumber)
 	{
-		ps.printf("INSERT INTO %s (%s) VALUES", table, columns);
-
 		final int[] i = {1};  // used as a final int holder
 		stream.forEach(object -> {
 			List<String[]> ss = toStringsWithComments.apply(object);
 			for (String[] s : ss)
 			{
-				if (i[0] != 1)
+				if (i[0] == 1)
+				{
+					ps.printf("INSERT INTO %s (%s) VALUES", table, columns);
+				}
+				else
 				{
 					ps.print(',');
 				}
