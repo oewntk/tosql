@@ -9,7 +9,7 @@
 
 This writes a model to SQL format.
 
-Project [tosql](https://github.com/x-englishwordnet/tosql)
+Project [tosql](https://github.com/oewntk/tosql)
 
 ## Dataflow
 
@@ -17,6 +17,6 @@ Project [tosql](https://github.com/x-englishwordnet/tosql)
 
 ## Maven Central
 
-		<groupId>io.github.x-englishwordnet</groupId>
+		<groupId>io.github.oewntk</groupId>
 		<artifactId>tosql</artifactId>
 		<version>1.0.0-SNAPSHOT</version>
