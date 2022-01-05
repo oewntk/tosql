@@ -6,6 +6,7 @@ package org.oewntk.sql.out;
 
 import org.oewntk.model.Model;
 import org.oewntk.model.Sense;
+import org.oewntk.model.VerbFrame;
 import org.oewntk.model.VerbTemplate;
 
 import java.io.File;
@@ -14,6 +15,7 @@ import java.io.FileOutputStream;
 import java.io.PrintStream;
 import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.Map;
 import java.util.function.Consumer;
 import java.util.function.Function;
@@ -46,9 +48,21 @@ public class ModelConsumer implements Consumer<Model>
 	{
 		Tracing.psInfo.printf("[Model] %s%n", Arrays.toString(model.getSources()));
 
+		// core
 		CoreModelConsumer coreConsumer = new CoreModelConsumer(outDir);
 		coreConsumer.accept(model);
 
+		// verb frames
+		try
+		{
+			frames(outDir, model.verbFrames);
+		}
+		catch (FileNotFoundException e)
+		{
+			e.printStackTrace(Tracing.psErr);
+		}
+
+		// verb templates
 		try
 		{
 			templates(outDir, coreConsumer, model.getSensesById(), model.getVerbTemplatesById());
@@ -59,12 +73,21 @@ public class ModelConsumer implements Consumer<Model>
 		}
 	}
 
+	private void frames(final File outDir, final Collection<VerbFrame> verbFrames) throws FileNotFoundException
+	{
+		try (PrintStream ps = new PrintStream(new FileOutputStream(new File(outDir, CoreModelConsumer.makeFilename(Names.SENSES_VFRAMES.FILE))), true, StandardCharsets.UTF_8))
+		{
+			VerbFrames.generateVerbFrames(ps, verbFrames);
+		}
+	}
+
 	private void templates(final File outDir, final CoreModelConsumer coreConsumer, final Map<String, Sense> sensesById, final Map<Integer, VerbTemplate> verbTemplatesById) throws FileNotFoundException
 	{
 		try (PrintStream ps = new PrintStream(new FileOutputStream(new File(outDir, CoreModelConsumer.makeFilename(Names.SENSES_VTEMPLATES.FILE))), true, StandardCharsets.UTF_8))
 		{
 			Senses.generateVerbTemplates(ps, sensesById, coreConsumer.synsetIdToNID, coreConsumer.lexKeyToNID, coreConsumer.wordToNID);
 		}
+
 		final Function<Map.Entry<Integer, VerbTemplate>, String> toString = entry -> String.format("%d, '%s'", entry.getKey(), Utils.escape(entry.getValue().getTemplate()));
 		try (PrintStream ps = new PrintStream(new FileOutputStream(new File(outDir, CoreModelConsumer.makeFilename(Names.VTEMPLATES.FILE))), true, StandardCharsets.UTF_8))
 		{

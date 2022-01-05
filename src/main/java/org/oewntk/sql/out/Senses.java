@@ -220,7 +220,7 @@ public class Senses
 
 			for (var frameId : sense.getVerbFrames())
 			{
-				int frameNID = BuiltIn.VERB_FRAME_ID_TO_NIDS.get(frameId);
+				int frameNID = VerbFrames.VERB_FRAME_ID_TO_NIDS.get(frameId);
 				strings.add(String.format("%d,%d,%d,%d", synsetNID, luNID, wordNID, frameNID));
 			}
 			return strings;

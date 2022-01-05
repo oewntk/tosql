@@ -4,8 +4,6 @@
 
 package org.oewntk.sql.out;
 
-import org.oewntk.model.VerbFrame;
-
 import java.io.PrintStream;
 import java.util.Map;
 import java.util.stream.Stream;
@@ -128,10 +126,6 @@ public class BuiltIn
 
 	public static final Map<String, String> POS_TYPES = Stream.of(posArray).collect(toMap(data -> (String) data[0], data -> (String) data[1]));
 
-	public static final Map<String, Integer> VERB_FRAMES = Stream.of(VerbFrame.VALUES).collect(toMap(data -> (String) data[1], data -> (Integer) data[2]));
-
-	public static final Map<String, Integer> VERB_FRAME_ID_TO_NIDS = Stream.of(VerbFrame.VALUES).collect(toMap(data -> (String) data[0], data -> (Integer) data[2]));
-
 	public static void generatePosTypes(final PrintStream ps)
 	{
 		Printers.printInsert(ps, Names.POSES.TABLE, String.join(",", Names.POSES.posid, Names.POSES.pos), "%n('%s','%s')", BuiltIn.POS_TYPES);
@@ -150,10 +144,5 @@ public class BuiltIn
 	public static void generateDomains(final PrintStream ps)
 	{
 		Printers.printInsert3(ps, Names.DOMAINS.TABLE, String.join(",", Names.DOMAINS.domainid, Names.DOMAINS.domain, Names.DOMAINS.posid, Names.DOMAINS.domainname), "%n(%d,'%s','%s','%s')", BuiltIn.DOMAIN_TO_NIDS);
-	}
-
-	public static void generateVerbFrames(final PrintStream ps)
-	{
-		Printers.printInsert(ps, Names.VFRAMES.TABLE, String.join(",", Names.VFRAMES.frameid, Names.VFRAMES.frame), "%n(%d,'%s')", BuiltIn.VERB_FRAMES);
 	}
 }

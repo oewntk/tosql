@@ -140,10 +140,6 @@ public class CoreModelConsumer implements Consumer<CoreModel>
 		{
 			BuiltIn.generateDomains(ps);
 		}
-		try (PrintStream ps = new PrintStream(new FileOutputStream(new File(outDir, makeFilename(Names.VFRAMES.FILE))), true, StandardCharsets.UTF_8))
-		{
-			BuiltIn.generateVerbFrames(ps);
-		}
 		try (PrintStream ps = new PrintStream(new FileOutputStream(new File(outDir, makeFilename(Names.POSES.FILE))), true, StandardCharsets.UTF_8))
 		{
 			BuiltIn.generatePosTypes(ps);
