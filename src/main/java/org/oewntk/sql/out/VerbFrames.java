@@ -63,7 +63,7 @@ public class VerbFrames
 	/**
 	 * Map frame id (via, ...) to numeric id
 	 */
-	public static final Map<String, Integer> VERB_FRAME_ID_TO_NIDS = Stream.of(VERBFRAME_VALUES).collect(toMap(data -> (String) data[0], data -> (Integer) data[2]));
+	public static final Map<String, Integer> VERB_FRAME_ID_TO_NIDS = Stream.of(VERBFRAME_VALUES).collect(toMap(data -> (String) data[0], data -> (Integer) data[1]));
 
 	public static void generateVerbFrames(final PrintStream ps, final Collection<VerbFrame> verbFrames)
 	{
