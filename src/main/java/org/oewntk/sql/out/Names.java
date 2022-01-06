@@ -8,7 +8,7 @@ import java.util.ResourceBundle;
 
 public class Names
 {
-	static ResourceBundle bundle = ResourceBundle.getBundle("Names");
+	static final ResourceBundle bundle = ResourceBundle.getBundle("Names");
 
 	static void set(ResourceBundle bundle)
 	{

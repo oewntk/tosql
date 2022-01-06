@@ -29,7 +29,7 @@ public class SchemaGenerator
 	 * @param args command-line arguments [-compat:lexid] [-compat:pointer] yamlDir [outputDir]
 	 * @throws IOException io
 	 */
-	public static void main(String[] args) throws IOException, URISyntaxException
+	public static void main(String[] args) throws IOException
 	{
 		if ("-compat".equals(args[0]))
 		{
@@ -41,7 +41,7 @@ public class SchemaGenerator
 		new SchemaGenerator().generate(args);
 	}
 
-	public void generate(String[] args) throws IOException, URISyntaxException
+	public void generate(String[] args) throws IOException
 	{
 		File output = null;
 

@@ -203,7 +203,7 @@ public class Variables
 				}
 				if (compress)
 				{
-					line = line.replaceAll("  +", " ");
+					line = line.replaceAll("\\s+", " ");
 				}
 				ps.println(line);
 			}
