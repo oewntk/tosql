@@ -15,6 +15,9 @@ import java.util.stream.Stream;
 
 import static java.util.stream.Collectors.toMap;
 
+/**
+ * Process verb frames
+ */
 public class VerbFrames
 {
 	// name, frameid
@@ -65,17 +68,13 @@ public class VerbFrames
 	 */
 	public static final Map<String, Integer> VERB_FRAME_ID_TO_NIDS = Stream.of(VERBFRAME_VALUES).collect(toMap(data -> (String) data[0], data -> (Integer) data[1]));
 
-	public static void generateVerbFrames(final PrintStream ps, final Collection<VerbFrame> verbFrames)
-	{
-		int[] i = {0};
-		var table = verbFrames.stream() //
-				.peek(vf -> ++i[0]) //
-				.map(vf -> new SimpleEntry<>(vf.getFrame(), getNID(vf, i[0]))) //
-				.collect(Collectors.toMap(SimpleEntry::getKey, SimpleEntry::getValue));
-
-		Printers.printInsert(ps, Names.VFRAMES.TABLE, String.join(",", Names.VFRAMES.frameid, Names.VFRAMES.frame), "%n(%d,'%s')", table);
-	}
-
+	/**
+	 * Get nid
+	 *
+	 * @param vf    verb frame
+	 * @param index index
+	 * @return nod
+	 */
 	private static int getNID(VerbFrame vf, int index)
 	{
 		String id = vf.getId();
@@ -85,5 +84,22 @@ public class VerbFrames
 			return nid;
 		}
 		return 100 + index;
+	}
+
+	/**
+	 * Generate verb frame table
+	 *
+	 * @param ps         print stm
+	 * @param verbFrames verb frames
+	 */
+	public static void generateVerbFrames(final PrintStream ps, final Collection<VerbFrame> verbFrames)
+	{
+		int[] i = {0};
+		var table = verbFrames.stream() //
+				.peek(vf -> ++i[0]) //
+				.map(vf -> new SimpleEntry<>(vf.getFrame(), getNID(vf, i[0]))) //
+				.collect(Collectors.toMap(SimpleEntry::getKey, SimpleEntry::getValue));
+
+		Printers.printInsert(ps, Names.VFRAMES.TABLE, String.join(",", Names.VFRAMES.frameid, Names.VFRAMES.frame), "%n(%d,'%s')", table);
 	}
 }

@@ -13,46 +13,98 @@ import java.io.*;
 import java.util.Collection;
 import java.util.Map;
 
+/**
+ * Serialize ID to Numeric IDs maps
+ */
 public class SerializeNIDs
 {
 	static final String NID_PREFIX = "nid_";
 
+	/**
+	 * Serialize words id-to-nid map
+	 *
+	 * @param os    output stream
+	 * @param lexes lexes
+	 * @throws IOException io exception
+	 */
 	public static void serializeWordNIDs(final OutputStream os, final Collection<Lex> lexes) throws IOException
 	{
 		Map<String, Integer> wordToNID = Lexes.makeWordNIDs(lexes);
 		serialize(os, wordToNID);
 	}
 
+	/**
+	 * Serialize cased words id-to-nid map
+	 *
+	 * @param os    output stream
+	 * @param lexes lexes
+	 * @throws IOException io exception
+	 */
 	public static void serializeCasedWordNIDs(final OutputStream os, final Collection<Lex> lexes) throws IOException
 	{
 		Map<String, Integer> casedToNID = Lexes.makeCasedWordNIDs(lexes);
 		serialize(os, casedToNID);
 	}
 
+	/**
+	 * Serialize morphs id-to-nid map
+	 *
+	 * @param os    output stream
+	 * @param lexes lexes
+	 * @throws IOException io exception
+	 */
 	public static void serializeMorphNIDs(final OutputStream os, final Collection<Lex> lexes) throws IOException
 	{
-		Map<String, Integer> morphToNID = Lexes.makeMorphs(lexes);
+		Map<String, Integer> morphToNID = Lexes.makeMorphNIDs(lexes);
 		serialize(os, morphToNID);
 	}
 
+	/**
+	 * Serialize pronunciations id-to-nid map
+	 *
+	 * @param os    output stream
+	 * @param lexes lexes
+	 * @throws IOException io exception
+	 */
 	public static void serializePronunciationNIDs(final OutputStream os, final Collection<Lex> lexes) throws IOException
 	{
-		Map<String, Integer> pronunciationValueToNID = Lexes.makeMorphs(lexes);
+		Map<String, Integer> pronunciationValueToNID = Lexes.makeMorphNIDs(lexes);
 		serialize(os, pronunciationValueToNID);
 	}
 
+	/**
+	 * Serialize senses id-to-nid map
+	 *
+	 * @param os     output stream
+	 * @param senses senses
+	 * @throws IOException io exception
+	 */
 	private static void serializeSensesNIDs(final OutputStream os, final Collection<Sense> senses) throws IOException
 	{
 		Map<String, Integer> senseToNID = Senses.makeSenseNIDs(senses);
 		serialize(os, senseToNID);
 	}
 
-	public static void serializeSynsetNIDs(final OutputStream os, final Collection<Synset> synsetsById) throws IOException
+	/**
+	 * Serialize id-to-nid map
+	 *
+	 * @param os      output stream
+	 * @param synsets synsets
+	 * @throws IOException io exception
+	 */
+	public static void serializeSynsetNIDs(final OutputStream os, final Collection<Synset> synsets) throws IOException
 	{
-		Map<String, Integer> synsetIdToNID = Synsets.makeSynsetNIDs(synsetsById);
+		Map<String, Integer> synsetIdToNID = Synsets.makeSynsetNIDs(synsets);
 		serialize(os, synsetIdToNID);
 	}
 
+	/**
+	 * Serialize object
+	 *
+	 * @param os     output stream
+	 * @param object object
+	 * @throws IOException io exception
+	 */
 	private static void serialize(final OutputStream os, final Object object) throws IOException
 	{
 		try (ObjectOutputStream oos = new ObjectOutputStream(os))
@@ -61,6 +113,13 @@ public class SerializeNIDs
 		}
 	}
 
+	/**
+	 * Serialize all id-to-nid maps
+	 *
+	 * @param model  model
+	 * @param outDir output dir
+	 * @throws IOException io exception
+	 */
 	static public void serializeNIDs(final CoreModel model, final File outDir) throws IOException
 	{
 		try (OutputStream os = new FileOutputStream(new File(outDir, NID_PREFIX + Names.WORDS.FILE + ".ser")))

@@ -5,17 +5,25 @@
 package org.oewntk.sql.out;
 
 import java.io.PrintStream;
-import java.util.*;
 import java.util.AbstractMap.SimpleEntry;
+import java.util.Comparator;
+import java.util.Map;
 import java.util.Map.Entry;
+import java.util.TreeMap;
 import java.util.function.BinaryOperator;
 import java.util.function.Function;
 import java.util.stream.Stream;
 
 import static java.util.stream.Collectors.toMap;
 
+/**
+ * Utilities
+ */
 public class Utils
 {
+	/**
+	 * Merging function, keep existing element against replacement
+	 */
 	private static final BinaryOperator<Integer> mergingKeepFunction = (existing, replacement) -> {
 		if (existing.equals(replacement))
 		{
@@ -24,6 +32,9 @@ public class Utils
 		return existing;
 	};
 
+	/**
+	 * Merging function, keep replacement element against replacement
+	 */
 	private static final BinaryOperator<Integer> mergingReplaceFunction = (existing, replacement) -> {
 		if (existing.equals(replacement))
 		{
@@ -57,10 +68,20 @@ public class Utils
 				}, TreeMap::new));
 	}
 
-	public static <T> void generateTable(final PrintStream ps, final String table, final String columns, final Map<Integer, T> byId, final Function<Entry<Integer, T>, String> toString)
+	/**
+	 * Generate table
+	 *
+	 * @param ps       print stream
+	 * @param table    table name
+	 * @param columns  column name
+	 * @param byNid    nid-to-value map, values mapped by nid
+	 * @param toString nid-to-value pair stringifier
+	 * @param <T>      type of values
+	 */
+	public static <T> void generateTable(final PrintStream ps, final String table, final String columns, final Map<Integer, T> byNid, final Function<Entry<Integer, T>, String> toString)
 	{
 		// make object-to-nid map
-		Stream<Entry<Integer, T>> stream = byId.entrySet().stream() //
+		Stream<Entry<Integer, T>> stream = byNid.entrySet().stream() //
 				.sorted(Comparator.comparingInt(Entry::getKey));
 
 		// insert map
@@ -69,6 +90,12 @@ public class Utils
 
 	// escape
 
+	/**
+	 * Escape string for it to be handled by SQL
+	 *
+	 * @param str string
+	 * @return SQL escaped string
+	 */
 	public static String escape(final String str)
 	{
 		return str.replace("'", "''");

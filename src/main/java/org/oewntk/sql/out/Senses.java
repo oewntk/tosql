@@ -14,14 +14,26 @@ import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Stream;
 
+/**
+ * Process senses
+ */
 public class Senses
 {
 	private Senses()
 	{
 	}
 
+	/**
+	 * Make id function, this adds the case-sensitive lemma to make it unique
+	 */
 	private static final Function<Sense, String> makeId = sense -> sense.getSensekey() + ' ' + sense.getLex().getLemma().replace(' ', '_');
 
+	/**
+	 * Make sense id-to-nid map
+	 *
+	 * @param senses senses
+	 * @return id-to-nid map
+	 */
 	public static Map<String, Integer> makeSenseNIDs(final Collection<Sense> senses)
 	{
 		// stream of sensekey␣lemma
@@ -34,6 +46,17 @@ public class Senses
 		return Utils.makeNIDMap(idStream);
 	}
 
+	/**
+	 * Generate senses table
+	 *
+	 * @param ps                  print stream
+	 * @param senses              senses
+	 * @param synsetIdToNIDMap    id-to-nid map for synsets
+	 * @param lexKeyToNIDMap      key-to-nid map for lexes
+	 * @param wordIdToNIDMap      id-to-nid map for words
+	 * @param casedWordIdToNIDMap id-to-nid map for cased words
+	 * @return senses id-to-nid map
+	 */
 	@SuppressWarnings("UnusedReturnValue")
 	public static Map<String, Integer> generateSenses(final PrintStream ps, final Collection<Sense> senses, final Map<String, Integer> synsetIdToNIDMap, final Map<Key, Integer> lexKeyToNIDMap, final Map<String, Integer> wordIdToNIDMap, final Map<String, Integer> casedWordIdToNIDMap)
 	{
@@ -80,6 +103,16 @@ public class Senses
 		return idToNID;
 	}
 
+	/**
+	 * Generate sense relations
+	 *
+	 * @param ps               print stream
+	 * @param senses           senses
+	 * @param sensesById       senses by id
+	 * @param synsetIdToNIDMap id-to-nid map for synsets
+	 * @param lexKeyToNIDMap   key-to-nid map for lexes
+	 * @param wordIdToNIDMap   id-to-nid map for words
+	 */
 	public static void generateSenseRelations(final PrintStream ps, final Collection<Sense> senses, final Map<String, Sense> sensesById, final Map<String, Integer> synsetIdToNIDMap, final Map<Key, Integer> lexKeyToNIDMap, final Map<String, Integer> wordIdToNIDMap)
 	{
 		// stream of senses
@@ -161,6 +194,15 @@ public class Senses
 		}
 	}
 
+	/**
+	 * Generate senses to adj position
+	 *
+	 * @param ps               print stream
+	 * @param senses           senses
+	 * @param synsetIdToNIDMap id-to-nid map for synsets
+	 * @param lexKeyToNIDMap   key-to-nid map for lexes
+	 * @param wordIdToNIDMap   id-to-nid map for words
+	 */
 	public static void generateAdjPositions(final PrintStream ps, final Collection<Sense> senses, final Map<String, Integer> synsetIdToNIDMap, final Map<Key, Integer> lexKeyToNIDMap, final Map<String, Integer> wordIdToNIDMap)
 	{
 		// stream of senses
@@ -196,6 +238,15 @@ public class Senses
 		}
 	}
 
+	/**
+	 * Generate senses to verb frames
+	 *
+	 * @param ps               print stream
+	 * @param senses           senses
+	 * @param synsetIdToNIDMap id-to-nid map for synsets
+	 * @param lexKeyToNIDMap   key-to-nid map for lexes
+	 * @param wordIdToNIDMap   id-to-nid map for words
+	 */
 	public static void generateVerbFrames(final PrintStream ps, final Collection<Sense> senses, final Map<String, Integer> synsetIdToNIDMap, final Map<Key, Integer> lexKeyToNIDMap, final Map<String, Integer> wordIdToNIDMap)
 	{
 		// stream of senses
@@ -249,6 +300,15 @@ public class Senses
 		}
 	}
 
+	/**
+	 * Generate senses to verb templates
+	 *
+	 * @param ps               print stream
+	 * @param sensesById       senses by id
+	 * @param synsetIdToNIDMap id-to-nid map for synsets
+	 * @param lexKeyToNIDMap   key-to-nid map for lexes
+	 * @param wordIdToNIDMap   id-to-nid map for words
+	 */
 	public static void generateVerbTemplates(final PrintStream ps, final Map<String, Sense> sensesById, final Map<String, Integer> synsetIdToNIDMap, final Map<Key, Integer> lexKeyToNIDMap, final Map<String, Integer> wordIdToNIDMap)
 	{
 		// stream of senses

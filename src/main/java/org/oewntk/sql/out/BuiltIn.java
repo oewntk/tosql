@@ -10,6 +10,9 @@ import java.util.stream.Stream;
 
 import static java.util.stream.Collectors.toMap;
 
+/**
+ * Builtins
+ */
 public class BuiltIn
 {
 	// lexdomain, lexdomainid
@@ -63,7 +66,7 @@ public class BuiltIn
 
 	public static final Map<String, Integer> LEXFILE_NIDS = Stream.of(domainsArray).collect(toMap(data -> (String) data[2], data -> (Integer) data[3]));
 
-	public static final Map<Object[], Integer> DOMAIN_TO_NIDS = Stream.of(domainsArray).collect(toMap(data -> new String[]{Utils.escape((String) data[0]), Utils.escape((String) data[1]), Utils.escape((String) data[2])}, data -> (Integer) data[3]));
+	private static final Map<Object[], Integer> DOMAIN_TO_NIDS = Stream.of(domainsArray).collect(toMap(data -> new String[]{Utils.escape((String) data[0]), Utils.escape((String) data[1]), Utils.escape((String) data[2])}, data -> (Integer) data[3]));
 
 	// link, recurses, linkid
 	private static final Object[][] relationTypesArray = new Object[][]{ //
@@ -100,9 +103,9 @@ public class BuiltIn
 			{"other", "other", 0, 99}, //
 	};
 
-	public static final Map<String, Integer> RELATION_TYPES = Stream.of(relationTypesArray).collect(toMap(data -> (String) data[1], data -> (Integer) data[3]));
+	// public static final Map<String, Integer> RELATION_TYPES = Stream.of(relationTypesArray).collect(toMap(data -> (String) data[1], data -> (Integer) data[3]));
 
-	public static final Map<Object[], Integer> RELATION_TO_NIDS = Stream.of(relationTypesArray).collect(toMap(data -> new Object[]{Utils.escape((String) data[1]), data[2]}, data -> (Integer) data[3]));
+	private static final Map<Object[], Integer> RELATION_TO_NIDS = Stream.of(relationTypesArray).collect(toMap(data -> new Object[]{Utils.escape((String) data[1]), data[2]}, data -> (Integer) data[3]));
 
 	public static final Map<String, Integer> OEWN_RELATION_TYPES = Stream.of(relationTypesArray).collect(toMap(data -> (String) data[0], data -> (Integer) data[3]));
 
@@ -113,7 +116,7 @@ public class BuiltIn
 			{"immediately postnominal", "ip"}, //
 	};
 
-	public static final Map<String, String> ADJPOSITION_TYPES = Stream.of(adjPositionTypesArray).collect(toMap(data -> (String) data[0], data -> (String) data[1]));
+	private static final Map<String, String> ADJPOSITION_TYPES = Stream.of(adjPositionTypesArray).collect(toMap(data -> (String) data[0], data -> (String) data[1]));
 
 	// posname, pos
 	private static final Object[][] posArray = new Object[][]{ //
@@ -124,23 +127,43 @@ public class BuiltIn
 			{"adjective satellite", "s"}, //
 	};
 
-	public static final Map<String, String> POS_TYPES = Stream.of(posArray).collect(toMap(data -> (String) data[0], data -> (String) data[1]));
+	private static final Map<String, String> POS_TYPES = Stream.of(posArray).collect(toMap(data -> (String) data[0], data -> (String) data[1]));
 
+	/**
+	 * Generate pos types table
+	 *
+	 * @param ps print stream
+	 */
 	public static void generatePosTypes(final PrintStream ps)
 	{
 		Printers.printInsert(ps, Names.POSES.TABLE, String.join(",", Names.POSES.posid, Names.POSES.pos), "%n('%s','%s')", BuiltIn.POS_TYPES);
 	}
 
+	/**
+	 * Generate adjective position types table
+	 *
+	 * @param ps print stream
+	 */
 	public static void generateAdjectivePositionTypes(final PrintStream ps)
 	{
 		Printers.printInsert(ps, Names.ADJPOSITIONS.TABLE, String.join(",", Names.ADJPOSITIONS.positionid, Names.ADJPOSITIONS.position), "%n('%s','%s')", BuiltIn.ADJPOSITION_TYPES);
 	}
 
+	/**
+	 * Generate relation types table
+	 *
+	 * @param ps print stream
+	 */
 	public static void generateRelationTypes(final PrintStream ps)
 	{
 		Printers.printInsert2(ps, Names.RELS.TABLE, String.join(",", Names.RELS.relationid, Names.RELS.relation, Names.RELS.recurses), "%n(%d,'%s', %d)", BuiltIn.RELATION_TO_NIDS);
 	}
 
+	/**
+	 * Generate domains table
+	 *
+	 * @param ps print stream
+	 */
 	public static void generateDomains(final PrintStream ps)
 	{
 		Printers.printInsert3(ps, Names.DOMAINS.TABLE, String.join(",", Names.DOMAINS.domainid, Names.DOMAINS.domain, Names.DOMAINS.posid, Names.DOMAINS.domainname), "%n(%d,'%s','%s','%s')", BuiltIn.DOMAIN_TO_NIDS);

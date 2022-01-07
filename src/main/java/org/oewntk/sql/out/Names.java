@@ -6,6 +6,9 @@ package org.oewntk.sql.out;
 
 import java.util.ResourceBundle;
 
+/**
+ * Names from resources
+ */
 public class Names
 {
 	static final ResourceBundle bundle = ResourceBundle.getBundle("Names");

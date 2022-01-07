@@ -4,8 +4,6 @@
 
 package org.oewntk.sql.out;
 
-import org.oewntk.sql.out.CoreModelConsumer;
-
 import java.io.File;
 import java.io.IOException;
 
@@ -13,7 +11,6 @@ import java.io.IOException;
  * Main class that generates the WN database in the WNDB format as per wndb(5WN)
  *
  * @author Bernard Bou
- * @see "https://wordnet.princeton.edu/documentation/wndb5wn"
  */
 public class GrindBuiltIn
 {

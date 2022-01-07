@@ -4,16 +4,23 @@
 
 package org.oewntk.sql.out;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.ObjectInputStream;
+import java.io.*;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * Deserialize ID to Numeric IDs maps
+ */
 public class DeSerializeNIDs
 {
+	/**
+	 * Deserialize id-to_nid maps
+	 *
+	 * @param inDir input directory
+	 * @return id-to-nid map indexed by name
+	 * @throws IOException            io exception
+	 * @throws ClassNotFoundException class not found exception
+	 */
 	public static Map<String, Map<String, Integer>> deserializeNIDs(final File inDir) throws IOException, ClassNotFoundException
 	{
 		Map<String, Map<String, Integer>> maps = new HashMap<>();
@@ -50,11 +57,27 @@ public class DeSerializeNIDs
 		return maps;
 	}
 
+	/**
+	 * Deserialize id-to_nid map
+	 *
+	 * @param is input stream
+	 * @return id-to-nid map
+	 * @throws IOException            io exception
+	 * @throws ClassNotFoundException class not found exception
+	 */
 	public static Map<String, Integer> deSerializeNIDs(final InputStream is) throws IOException, ClassNotFoundException
 	{
 		return (Map<String, Integer>) deSerialize(is);
 	}
 
+	/**
+	 * Deserialize object
+	 *
+	 * @param is input stream
+	 * @return object
+	 * @throws IOException            io exception
+	 * @throws ClassNotFoundException class not found exception
+	 */
 	private static Object deSerialize(final InputStream is) throws IOException, ClassNotFoundException
 	{
 		try (ObjectInputStream ois = new ObjectInputStream(is))
@@ -63,6 +86,13 @@ public class DeSerializeNIDs
 		}
 	}
 
+	/**
+	 * Main
+	 *
+	 * @param args cmd-line args
+	 * @throws IOException            io exception
+	 * @throws ClassNotFoundException class not found exception
+	 */
 	static public void main(String[] args) throws IOException, ClassNotFoundException
 	{
 		File inDir = new File(args[0]);

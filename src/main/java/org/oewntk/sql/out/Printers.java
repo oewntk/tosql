@@ -16,6 +16,9 @@ import java.util.Map;
 import java.util.function.Function;
 import java.util.stream.Stream;
 
+/**
+ * Insert printers
+ */
 public class Printers
 {
 	private Printers()
@@ -26,6 +29,16 @@ public class Printers
 
 	// from maps
 
+	/**
+	 * Print inserts for objects mapped by nids
+	 *
+	 * @param ps          print stream
+	 * @param table       table name
+	 * @param columns     column names
+	 * @param objectToNID objects-to-nid map
+	 * @param toString    stringifier of objects
+	 * @param <T>         type of objects
+	 */
 	public static <T> void printInsert(final PrintStream ps, final String table, final String columns, final Map<T, Integer> objectToNID, final Function<T, String> toString)
 	{
 		if (objectToNID.isEmpty())
@@ -49,6 +62,18 @@ public class Printers
 		}
 	}
 
+	/**
+	 * Print inserts for collection
+	 *
+	 * @param ps            print stream
+	 * @param table         table name
+	 * @param columns       column names
+	 * @param objects       collection of objects
+	 * @param toId          id extractor
+	 * @param objectIdToNID id-to-nid map
+	 * @param toString      stringifier of objects
+	 * @param <T>           type of objects
+	 */
 	public static <T> void printInsert(final PrintStream ps, final String table, final String columns, final Collection<T> objects, final Function<T, String> toId, final Map<String, Integer> objectIdToNID, final Function<T, String> toString)
 	{
 		if (objects.isEmpty())
@@ -75,6 +100,18 @@ public class Printers
 		}
 	}
 
+	/**
+	 * Print inserts for collection with comments
+	 *
+	 * @param ps                   print stream
+	 * @param table                table name
+	 * @param columns              column names
+	 * @param objects              collection of objects
+	 * @param toId                 id extractor
+	 * @param objectIdToNID        id-to-nid map
+	 * @param toStringWithComments double stringifier of objects, two strings are produced: [0] insert values , [1] comment
+	 * @param <T>                  type of objects
+	 */
 	public static <T> void printInsertWithComment(final PrintStream ps, final String table, final String columns, final Collection<T> objects, final Function<T, String> toId, final Map<String, Integer> objectIdToNID, final Function<T, String[]> toStringWithComments)
 	{
 		if (objects.isEmpty())
@@ -101,8 +138,18 @@ public class Printers
 		}
 	}
 
-	// ley key map
+	// lexes
 
+	/**
+	 * Print inserts from lexes
+	 *
+	 * @param ps          print stream
+	 * @param table       table name
+	 * @param columns     column names
+	 * @param lexes       lexes
+	 * @param lexKeyToNID lex_key-to-nid map
+	 * @param toString    stringifier of objects
+	 */
 	public static void printInsert(final PrintStream ps, final String table, final String columns, final Collection<Lex> lexes, final Map<Key, Integer> lexKeyToNID, final Function<Lex, String> toString)
 	{
 		if (lexes.isEmpty())
@@ -131,6 +178,16 @@ public class Printers
 		}
 	}
 
+	/**
+	 * Print inserts from lexes with comments
+	 *
+	 * @param ps                   print stream
+	 * @param table                table name
+	 * @param columns              column names
+	 * @param lexes                lexes
+	 * @param lexKeyToNID          lex_key-to-nid map
+	 * @param toStringWithComments double stringifier of objects, two strings are produced: [0] insert values , [1] comment
+	 */
 	public static void printInsertWithComment(final PrintStream ps, final String table, final String columns, final Collection<Lex> lexes, final Map<Key, Integer> lexKeyToNID, final Function<Lex, String[]> toStringWithComments)
 	{
 		if (lexes.isEmpty())
@@ -161,6 +218,17 @@ public class Printers
 
 	// from streams
 
+	/**
+	 * Print inserts from stream
+	 *
+	 * @param ps         print stream
+	 * @param table      table name
+	 * @param columns    column names
+	 * @param stream     stream of objects
+	 * @param toString   stringifier of objects
+	 * @param withNumber whether to number objects
+	 * @param <T>        type of objects in stream
+	 */
 	public static <T> void printInsert(final PrintStream ps, final String table, final String columns, final Stream<T> stream, final Function<T, String> toString, final boolean withNumber)
 	{
 		final int[] i = {1};  // used as a final int holder
@@ -187,6 +255,17 @@ public class Printers
 		ps.println(";");
 	}
 
+	/**
+	 * Print inserts from stream with comments
+	 *
+	 * @param ps                  print stream
+	 * @param table               table name
+	 * @param columns             column names
+	 * @param stream              stream of objects
+	 * @param toStringWithComment double stringifier of objects, two strings are produced: [0] insert values , [1] comment
+	 * @param withNumber          whether to number objects
+	 * @param <T>                 type of objects in stream
+	 */
 	public static <T> void printInsertWithComment(final PrintStream ps, final String table, final String columns, final Stream<T> stream, final Function<T, String[]> toStringWithComment, final boolean withNumber)
 	{
 		final int[] i = {1};  // used as a final int holder
@@ -213,6 +292,17 @@ public class Printers
 		ps.println(";");
 	}
 
+	/**
+	 * Print inserts from stream
+	 *
+	 * @param ps         print stream
+	 * @param table      table name
+	 * @param columns    column names
+	 * @param stream     stream of objects
+	 * @param toStrings  stringifier for multiple values
+	 * @param withNumber whether to number objects
+	 * @param <T>        type of objects in stream
+	 */
 	public static <T> void printInserts(final PrintStream ps, final String table, final String columns, final Stream<T> stream, final Function<T, List<String>> toStrings, final boolean withNumber)
 	{
 		final int[] i = {1};  // used as a final int holder
@@ -242,6 +332,17 @@ public class Printers
 		ps.println(";");
 	}
 
+	/**
+	 * Print inserts from stream with comments
+	 *
+	 * @param ps                    print stream
+	 * @param table                 table name
+	 * @param columns               column names
+	 * @param stream                stream of objects
+	 * @param toStringsWithComments double stringifier of objects, two strings are produced: [0] insert values , [1] comment
+	 * @param withNumber            whether to number objects
+	 * @param <T>                   type of objects in stream
+	 */
 	public static <T> void printInsertsWithComment(final PrintStream ps, final String table, final String columns, final Stream<T> stream, final Function<T, List<String[]>> toStringsWithComments, final boolean withNumber)
 	{
 		final int[] i = {1};  // used as a final int holder
@@ -273,6 +374,16 @@ public class Printers
 
 	// to table
 
+	/**
+	 * Print inserts, single value
+	 *
+	 * @param ps      print stream
+	 * @param table   table name
+	 * @param columns column names
+	 * @param format  value format
+	 * @param mapper  objects by id
+	 * @param <T>     type of objects
+	 */
 	public static <T extends Comparable<T>> void printInsert(final PrintStream ps, final String table, final String columns, final String format, final Map<String, T> mapper)
 	{
 		ps.printf("INSERT INTO %s (%s) VALUES", table, columns);
@@ -292,6 +403,16 @@ public class Printers
 		ps.println(";");
 	}
 
+	/**
+	 * Print inserts, 2 values
+	 *
+	 * @param ps      print stream
+	 * @param table   table name
+	 * @param columns column names
+	 * @param format  value format
+	 * @param mapper  object arrays by id
+	 * @param <T>     type of objects
+	 */
 	public static <T extends Comparable<T>> void printInsert2(final PrintStream ps, final String table, final String columns, final String format, final Map<Object[], T> mapper)
 	{
 		ps.printf("INSERT INTO %s (%s) VALUES", table, columns);
@@ -311,6 +432,16 @@ public class Printers
 		ps.println(";");
 	}
 
+	/**
+	 * Print inserts, 3 values
+	 *
+	 * @param ps      print stream
+	 * @param table   table name
+	 * @param columns column names
+	 * @param format  value format
+	 * @param mapper  object arrays by id
+	 * @param <T>     type of objects
+	 */
 	public static <T extends Comparable<T>> void printInsert3(final PrintStream ps, final String table, final String columns, final String format, final Map<Object[], T> mapper)
 	{
 		ps.printf("INSERT INTO %s (%s) VALUES", table, columns);

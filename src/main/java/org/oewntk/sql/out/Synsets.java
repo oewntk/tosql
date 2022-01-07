@@ -11,12 +11,21 @@ import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Stream;
 
+/**
+ * Process synsets
+ */
 public class Synsets
 {
 	private Synsets()
 	{
 	}
 
+	/**
+	 * Make synset id-to-nid map
+	 *
+	 * @param synsets synsets
+	 * @return id-to-nid map
+	 */
 	public static Map<String, Integer> makeSynsetNIDs(final Collection<Synset> synsets)
 	{
 		// stream of synsetIds
@@ -25,6 +34,13 @@ public class Synsets
 		return Utils.makeNIDMap(synsetIdStream);
 	}
 
+	/**
+	 * Generate synsets table
+	 *
+	 * @param ps      print stream
+	 * @param synsets synsets
+	 * @return synsets id-to-nid map
+	 */
 	public static Map<String, Integer> generateSynsets(final PrintStream ps, final Collection<Synset> synsets)
 	{
 		// make synsetId-to-nid map
@@ -58,6 +74,13 @@ public class Synsets
 		return synsetIdToNID;
 	}
 
+	/**
+	 * Generate synset relations table
+	 *
+	 * @param ps               print stream
+	 * @param synsets          synsets
+	 * @param synsetIdToNIDMap id-to-nid map
+	 */
 	public static void generateSynsetRelations(final PrintStream ps, final Collection<Synset> synsets, final Map<String, Integer> synsetIdToNIDMap)
 	{
 		// synset stream
@@ -120,6 +143,13 @@ public class Synsets
 		}
 	}
 
+	/**
+	 * Generate samples table
+	 *
+	 * @param ps               print stream
+	 * @param synsets          synsets
+	 * @param synsetIdToNIDMap id-to-nid map
+	 */
 	public static void generateSamples(final PrintStream ps, final Collection<Synset> synsets, final Map<String, Integer> synsetIdToNIDMap)
 	{
 		// stream of synsets

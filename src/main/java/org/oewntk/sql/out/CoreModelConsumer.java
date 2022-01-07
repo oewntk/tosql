@@ -16,7 +16,7 @@ import java.util.Map;
 import java.util.function.Consumer;
 
 /**
- * Main class that generates the WN database in the SQL format
+ * Main class that generates the core WN database in the SQL format
  *
  * @author Bernard Bou
  * @see "https://sqlunet.sourceforge.net/schema.html"
@@ -64,6 +64,13 @@ public class CoreModelConsumer implements Consumer<CoreModel>
 		}
 	}
 
+	/**
+	 * Consume lexes
+	 *
+	 * @param outDir out dir
+	 * @param lexes  lexes
+	 * @throws FileNotFoundException file not found exception
+	 */
 	private void lexes(final File outDir, final Collection<Lex> lexes) throws FileNotFoundException
 	{
 		try (PrintStream ps = new PrintStream(new FileOutputStream(new File(outDir, makeFilename(Names.WORDS.FILE))), true, StandardCharsets.UTF_8))
@@ -85,7 +92,7 @@ public class CoreModelConsumer implements Consumer<CoreModel>
 		}
 		try (PrintStream ps = new PrintStream(new FileOutputStream(new File(outDir, makeFilename(Names.LEXES_MORPHS.FILE))), true, StandardCharsets.UTF_8))
 		{
-			Lexes.generateMorphMaps(ps, lexes, lexKeyToNID, wordToNID, morphToNID);
+			Lexes.generateLexMorphMappings(ps, lexes, lexKeyToNID, wordToNID, morphToNID);
 		}
 		Map<String, Integer> pronunciationToNID;
 		try (PrintStream ps = new PrintStream(new FileOutputStream(new File(outDir, makeFilename(Names.PRONUNCIATIONS.FILE))), true, StandardCharsets.UTF_8))
@@ -94,10 +101,17 @@ public class CoreModelConsumer implements Consumer<CoreModel>
 		}
 		try (PrintStream ps = new PrintStream(new FileOutputStream(new File(outDir, makeFilename(Names.LEXES_PRONUNCIATIONS.FILE))), true, StandardCharsets.UTF_8))
 		{
-			Lexes.generatePronunciationMaps(ps, lexes, lexKeyToNID, wordToNID, pronunciationToNID);
+			Lexes.generateLexPronunciationMappings(ps, lexes, lexKeyToNID, wordToNID, pronunciationToNID);
 		}
 	}
 
+	/**
+	 * Consume synsets
+	 *
+	 * @param outDir  out dir
+	 * @param synsets synsets
+	 * @throws FileNotFoundException file not found exception
+	 */
 	private void synsets(final File outDir, final Collection<Synset> synsets) throws FileNotFoundException
 	{
 		try (PrintStream ps = new PrintStream(new FileOutputStream(new File(outDir, makeFilename(Names.SYNSETS.FILE))), true, StandardCharsets.UTF_8))
@@ -114,11 +128,20 @@ public class CoreModelConsumer implements Consumer<CoreModel>
 		}
 	}
 
+	/**
+	 * Consume senses
+	 *
+	 * @param outDir     out dir
+	 * @param senses     senses
+	 * @param sensesById senses mapped by sensekeys
+	 * @throws FileNotFoundException file not found exception
+	 */
 	private void senses(final File outDir, final Collection<Sense> senses, final Map<String, Sense> sensesById) throws FileNotFoundException
 	{
 		try (PrintStream ps = new PrintStream(new FileOutputStream(new File(outDir, makeFilename(Names.SENSES.FILE))), true, StandardCharsets.UTF_8))
 		{
-			/* Map<String, Integer> idToNID =*/ Senses.generateSenses(ps, senses, synsetIdToNID, lexKeyToNID, wordToNID, casedWordToNID);
+			/* Map<String, Integer> idToNID =*/
+			Senses.generateSenses(ps, senses, synsetIdToNID, lexKeyToNID, wordToNID, casedWordToNID);
 		}
 		try (PrintStream ps = new PrintStream(new FileOutputStream(new File(outDir, makeFilename(Names.SENSES_SENSES.FILE))), true, StandardCharsets.UTF_8))
 		{
@@ -134,6 +157,12 @@ public class CoreModelConsumer implements Consumer<CoreModel>
 		}
 	}
 
+	/**
+	 * Consume builtins
+	 *
+	 * @param outDir out dir
+	 * @throws FileNotFoundException file not found exception
+	 */
 	public static void builtins(final File outDir) throws FileNotFoundException
 	{
 		try (PrintStream ps = new PrintStream(new FileOutputStream(new File(outDir, makeFilename(Names.DOMAINS.TABLE))), true, StandardCharsets.UTF_8))
@@ -154,6 +183,12 @@ public class CoreModelConsumer implements Consumer<CoreModel>
 		}
 	}
 
+	/**
+	 * Make SQL filename
+	 *
+	 * @param name name
+	 * @return filename
+	 */
 	static protected String makeFilename(String name)
 	{
 		String fileName = name + ".sql";

@@ -12,10 +12,19 @@ import java.util.ResourceBundle;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+/**
+ * Variable substitution
+ */
 public class Variables
 {
+	/**
+	 * Variable-value map
+	 */
 	public static final Map<String, String> toValue = new HashMap<>();
 
+	/**
+	 * Set values in map
+	 */
 	public static void set()
 	{
 		toValue.put("words.file", Names.WORDS.FILE);
@@ -162,12 +171,25 @@ public class Variables
 		set();
 	}
 
+	/**
+	 * Set values from resource bundle
+	 *
+	 * @param bundle resource bundle
+	 */
 	public static void set(final ResourceBundle bundle)
 	{
 		Names.set(bundle);
 		set();
 	}
 
+	/**
+	 * Substitute values to variables in file
+	 *
+	 * @param file     input file
+	 * @param ps       print stream
+	 * @param compress whether to compress spaces to single space
+	 * @throws IOException io exception
+	 */
 	public static void varSubstitutionInFile(final File file, final PrintStream ps, final boolean compress) throws IOException
 	{
 		// iterate on lines
@@ -182,6 +204,14 @@ public class Variables
 		}
 	}
 
+	/**
+	 * Substitute values to variables in input stream
+	 *
+	 * @param is       input stream
+	 * @param ps       print stream
+	 * @param compress whether to compress spaces to single space
+	 * @throws IOException io exception
+	 */
 	public static void varSubstitutionInIS(final InputStream is, final PrintStream ps, final boolean compress) throws IOException
 	{
 		// iterate on lines
@@ -210,6 +240,12 @@ public class Variables
 		}
 	}
 
+	/**
+	 * Substitute values to variables in string
+	 *
+	 * @param input input string
+	 * @return string with values substituted fir variable name
+	 */
 	public static String varSubstitution(String input)
 	{
 		Pattern p = Pattern.compile("\\$\\{([a-zA-Z0-9_.]+)}");

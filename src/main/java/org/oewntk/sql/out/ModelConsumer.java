@@ -73,6 +73,13 @@ public class ModelConsumer implements Consumer<Model>
 		}
 	}
 
+	/**
+	 * Consume frames
+	 *
+	 * @param outDir     out dir
+	 * @param verbFrames verb frames
+	 * @throws FileNotFoundException file not found exception
+	 */
 	private void frames(final File outDir, final Collection<VerbFrame> verbFrames) throws FileNotFoundException
 	{
 		try (PrintStream ps = new PrintStream(new FileOutputStream(new File(outDir, CoreModelConsumer.makeFilename(Names.SENSES_VFRAMES.FILE))), true, StandardCharsets.UTF_8))
@@ -81,6 +88,15 @@ public class ModelConsumer implements Consumer<Model>
 		}
 	}
 
+	/**
+	 * Consume templates
+	 *
+	 * @param outDir            out dir
+	 * @param coreConsumer      core consumer
+	 * @param sensesById        senses by id
+	 * @param verbTemplatesById verb templates by id
+	 * @throws FileNotFoundException file not found exception
+	 */
 	private void templates(final File outDir, final CoreModelConsumer coreConsumer, final Map<String, Sense> sensesById, final Map<Integer, VerbTemplate> verbTemplatesById) throws FileNotFoundException
 	{
 		try (PrintStream ps = new PrintStream(new FileOutputStream(new File(outDir, CoreModelConsumer.makeFilename(Names.SENSES_VTEMPLATES.FILE))), true, StandardCharsets.UTF_8))

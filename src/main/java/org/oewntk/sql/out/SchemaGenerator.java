@@ -16,7 +16,7 @@ import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 
 /**
- * Main class that generates the SQL schema
+ * Main class that generates the SQL schema by instantiating templates
  *
  * @author Bernard Bou
  * @see "https://sqlunet.sourceforge.net/schema.html"
@@ -26,8 +26,8 @@ public class SchemaGenerator
 	/**
 	 * Main entry point
 	 *
-	 * @param args command-line arguments [-compat:lexid] [-compat:pointer] yamlDir [outputDir]
-	 * @throws IOException io
+	 * @param args command-line args
+	 * @throws IOException io exception
 	 */
 	public static void main(String[] args) throws IOException
 	{
@@ -41,6 +41,12 @@ public class SchemaGenerator
 		new SchemaGenerator().generate(args);
 	}
 
+	/**
+	 * Generate schema
+	 *
+	 * @param args cmd-line args
+	 * @throws IOException io exception
+	 */
 	public void generate(String[] args) throws IOException
 	{
 		File output = null;
@@ -82,7 +88,7 @@ public class SchemaGenerator
 		{
 			try (PrintStream ps = output == null ? System.out : new PrintStream(output))
 			{
-				processInputs(inputSubdir, inputs, (is, name) -> {
+				processTemplates(inputSubdir, inputs, (is, name) -> {
 
 					try
 					{
@@ -100,7 +106,7 @@ public class SchemaGenerator
 		else if (output.isDirectory())
 		{
 			final File dir = output;
-			processInputs(inputSubdir, inputs, (is, name) -> {
+			processTemplates(inputSubdir, inputs, (is, name) -> {
 
 				System.err.println(name);
 				File output2 = new File(dir, name);
@@ -120,7 +126,15 @@ public class SchemaGenerator
 		}
 	}
 
-	private void processInputs(final String path, final String[] inputs, final BiConsumer<InputStream, String> consumer) throws IOException
+	/**
+	 * Process input template files
+	 *
+	 * @param path     path of inputs
+	 * @param inputs   inputs
+	 * @param consumer string consumer
+	 * @throws IOException io exception
+	 */
+	private void processTemplates(final String path, final String[] inputs, final BiConsumer<InputStream, String> consumer) throws IOException
 	{
 		// external resources
 		if (inputs != null && inputs.length > 0)
