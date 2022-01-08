@@ -149,11 +149,11 @@ public class CoreModelConsumer implements Consumer<CoreModel>
 		}
 		try (PrintStream ps = new PrintStream(new FileOutputStream(new File(outDir, makeFilename(Names.SENSES_VFRAMES.FILE))), true, StandardCharsets.UTF_8))
 		{
-			Senses.generateVerbFrames(ps, senses, synsetIdToNID, lexKeyToNID, wordToNID);
+			Senses.generateSensesVerbFrames(ps, senses, synsetIdToNID, lexKeyToNID, wordToNID);
 		}
 		try (PrintStream ps = new PrintStream(new FileOutputStream(new File(outDir, makeFilename(Names.SENSES_ADJPOSITIONS.FILE))), true, StandardCharsets.UTF_8))
 		{
-			Senses.generateAdjPositions(ps, senses, synsetIdToNID, lexKeyToNID, wordToNID);
+			Senses.generateSensesAdjPositions(ps, senses, synsetIdToNID, lexKeyToNID, wordToNID);
 		}
 	}
 

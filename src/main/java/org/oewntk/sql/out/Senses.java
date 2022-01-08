@@ -203,7 +203,7 @@ public class Senses
 	 * @param lexKeyToNIDMap   key-to-nid map for lexes
 	 * @param wordIdToNIDMap   id-to-nid map for words
 	 */
-	public static void generateAdjPositions(final PrintStream ps, final Collection<Sense> senses, final Map<String, Integer> synsetIdToNIDMap, final Map<Key, Integer> lexKeyToNIDMap, final Map<String, Integer> wordIdToNIDMap)
+	public static void generateSensesAdjPositions(final PrintStream ps, final Collection<Sense> senses, final Map<String, Integer> synsetIdToNIDMap, final Map<Key, Integer> lexKeyToNIDMap, final Map<String, Integer> wordIdToNIDMap)
 	{
 		// stream of senses
 		Stream<Sense> senseStream = senses.stream() //
@@ -247,7 +247,7 @@ public class Senses
 	 * @param lexKeyToNIDMap   key-to-nid map for lexes
 	 * @param wordIdToNIDMap   id-to-nid map for words
 	 */
-	public static void generateVerbFrames(final PrintStream ps, final Collection<Sense> senses, final Map<String, Integer> synsetIdToNIDMap, final Map<Key, Integer> lexKeyToNIDMap, final Map<String, Integer> wordIdToNIDMap)
+	public static void generateSensesVerbFrames(final PrintStream ps, final Collection<Sense> senses, final Map<String, Integer> synsetIdToNIDMap, final Map<Key, Integer> lexKeyToNIDMap, final Map<String, Integer> wordIdToNIDMap)
 	{
 		// stream of senses
 		Stream<Sense> senseStream = senses.stream() //
@@ -309,7 +309,7 @@ public class Senses
 	 * @param lexKeyToNIDMap   key-to-nid map for lexes
 	 * @param wordIdToNIDMap   id-to-nid map for words
 	 */
-	public static void generateVerbTemplates(final PrintStream ps, final Map<String, Sense> sensesById, final Map<String, Integer> synsetIdToNIDMap, final Map<Key, Integer> lexKeyToNIDMap, final Map<String, Integer> wordIdToNIDMap)
+	public static void generateSensesVerbTemplates(final PrintStream ps, final Map<String, Sense> sensesById, final Map<String, Integer> synsetIdToNIDMap, final Map<Key, Integer> lexKeyToNIDMap, final Map<String, Integer> wordIdToNIDMap)
 	{
 		// stream of senses
 		Stream<Sense> senseStream = sensesById.values() //

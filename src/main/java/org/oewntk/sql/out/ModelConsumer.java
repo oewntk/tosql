@@ -82,7 +82,7 @@ public class ModelConsumer implements Consumer<Model>
 	 */
 	private void frames(final File outDir, final Collection<VerbFrame> verbFrames) throws FileNotFoundException
 	{
-		try (PrintStream ps = new PrintStream(new FileOutputStream(new File(outDir, CoreModelConsumer.makeFilename(Names.SENSES_VFRAMES.FILE))), true, StandardCharsets.UTF_8))
+		try (PrintStream ps = new PrintStream(new FileOutputStream(new File(outDir, CoreModelConsumer.makeFilename(Names.VFRAMES.FILE))), true, StandardCharsets.UTF_8))
 		{
 			VerbFrames.generateVerbFrames(ps, verbFrames);
 		}
@@ -101,7 +101,7 @@ public class ModelConsumer implements Consumer<Model>
 	{
 		try (PrintStream ps = new PrintStream(new FileOutputStream(new File(outDir, CoreModelConsumer.makeFilename(Names.SENSES_VTEMPLATES.FILE))), true, StandardCharsets.UTF_8))
 		{
-			Senses.generateVerbTemplates(ps, sensesById, coreConsumer.synsetIdToNID, coreConsumer.lexKeyToNID, coreConsumer.wordToNID);
+			Senses.generateSensesVerbTemplates(ps, sensesById, coreConsumer.synsetIdToNID, coreConsumer.lexKeyToNID, coreConsumer.wordToNID);
 		}
 
 		final Function<Map.Entry<Integer, VerbTemplate>, String> toString = entry -> String.format("%d, '%s'", entry.getKey(), Utils.escape(entry.getValue().getTemplate()));
