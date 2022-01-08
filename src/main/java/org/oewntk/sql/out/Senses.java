@@ -292,7 +292,6 @@ public class Senses
 					stringsWithComment.add(new String[]{ //
 							strings.get(i), //
 							sensekey});
-					i++;
 				}
 				return stringsWithComment;
 			};
@@ -354,7 +353,6 @@ public class Senses
 					stringsWithComment.add(new String[]{ //
 							strings.get(i), //
 							sensekey});
-					i++;
 				}
 				return stringsWithComment;
 			};
