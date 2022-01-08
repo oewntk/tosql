@@ -185,7 +185,7 @@ public class Lexes
 	 * @param wordToNID   word-to-nid map
 	 * @param morphToNID  morph-to-nid map
 	 */
-	public static void generateLexMorphMappings(final PrintStream ps, final Collection<Lex> lexes, final Map<Key, Integer> lexKeyToNID, final Map<String, Integer> wordToNID, final Map<String, Integer> morphToNID)
+	public static void generateLexesMorphs(final PrintStream ps, final Collection<Lex> lexes, final Map<Key, Integer> lexKeyToNID, final Map<String, Integer> wordToNID, final Map<String, Integer> morphToNID)
 	{
 		// stream of lexes
 		Stream<Lex> lexStream = lexes.stream() //
@@ -284,7 +284,7 @@ public class Lexes
 	 * @param wordToNID          word-to-nid map
 	 * @param pronunciationToNID pronunciation-to-nid
 	 */
-	public static void generateLexPronunciationMappings(final PrintStream ps, final Collection<Lex> lexes, final Map<Key, Integer> lexKeyToNID, final Map<String, Integer> wordToNID, final Map<String, Integer> pronunciationToNID)
+	public static void generateLexesPronunciations(final PrintStream ps, final Collection<Lex> lexes, final Map<Key, Integer> lexKeyToNID, final Map<String, Integer> wordToNID, final Map<String, Integer> pronunciationToNID)
 	{
 		// stream of lexes
 		Stream<Lex> lexStream = lexes.stream() //

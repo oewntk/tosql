@@ -92,7 +92,7 @@ public class CoreModelConsumer implements Consumer<CoreModel>
 		}
 		try (PrintStream ps = new PrintStream(new FileOutputStream(new File(outDir, makeFilename(Names.LEXES_MORPHS.FILE))), true, StandardCharsets.UTF_8))
 		{
-			Lexes.generateLexMorphMappings(ps, lexes, lexKeyToNID, wordToNID, morphToNID);
+			Lexes.generateLexesMorphs(ps, lexes, lexKeyToNID, wordToNID, morphToNID);
 		}
 		Map<String, Integer> pronunciationToNID;
 		try (PrintStream ps = new PrintStream(new FileOutputStream(new File(outDir, makeFilename(Names.PRONUNCIATIONS.FILE))), true, StandardCharsets.UTF_8))
@@ -101,7 +101,7 @@ public class CoreModelConsumer implements Consumer<CoreModel>
 		}
 		try (PrintStream ps = new PrintStream(new FileOutputStream(new File(outDir, makeFilename(Names.LEXES_PRONUNCIATIONS.FILE))), true, StandardCharsets.UTF_8))
 		{
-			Lexes.generateLexPronunciationMappings(ps, lexes, lexKeyToNID, wordToNID, pronunciationToNID);
+			Lexes.generateLexesPronunciations(ps, lexes, lexKeyToNID, wordToNID, pronunciationToNID);
 		}
 	}
 
