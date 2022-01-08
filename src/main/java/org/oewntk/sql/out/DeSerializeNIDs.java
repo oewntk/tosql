@@ -89,7 +89,7 @@ public class DeSerializeNIDs
 	/**
 	 * Main
 	 *
-	 * @param args cmd-line args
+	 * @param args command-line arguments
 	 * @throws IOException            io exception
 	 * @throws ClassNotFoundException class not found exception
 	 */

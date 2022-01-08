@@ -26,7 +26,7 @@ public class SchemaGenerator
 	/**
 	 * Main entry point
 	 *
-	 * @param args command-line args
+	 * @param args command-line arguments
 	 * @throws IOException io exception
 	 */
 	public static void main(String[] args) throws IOException
@@ -44,7 +44,7 @@ public class SchemaGenerator
 	/**
 	 * Generate schema
 	 *
-	 * @param args cmd-line args
+	 * @param args command-line arguments
 	 * @throws IOException io exception
 	 */
 	public void generate(String[] args) throws IOException

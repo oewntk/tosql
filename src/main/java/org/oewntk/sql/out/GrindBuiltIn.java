@@ -17,7 +17,7 @@ public class GrindBuiltIn
 	/**
 	 * Main entry point
 	 *
-	 * @param args command-line arguments [-compat:lexid] [-compat:pointer] yamlDir [outputDir]
+	 * @param args command-line arguments yamlDir [outputDir]
 	 * @throws IOException io
 	 */
 	public static void main(String[] args) throws IOException
