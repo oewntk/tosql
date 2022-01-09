@@ -70,7 +70,7 @@ public class SchemaGenerator
 			else
 			{
 				output = new File(arg1);
-				if (!output.exists() || !output.isDirectory())
+				if (!output.exists())
 				{
 					// System.err.println("Output to new dir " + arg1);
 					//noinspection ResultOfMethodCallIgnored
