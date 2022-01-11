@@ -1,0 +1,506 @@
+<HTML>
+    <HEAD>
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <TITLE>MYSQL</TITLE>
+        <LINK rel="stylesheet" href="style-sql.css" type="text/css">
+    </HEAD>
+    <BODY>
+        <DIV class="sqlsection">WordNet (verb frames/templates)</DIV>
+        <DIV class="sqlsubsection">verb frames</DIV>
+        <DIV class="sqlcomment">get verb frames for "snow"</DIV>
+        <DIV class="sqlquery">
+            <DIV class="sqlstatement">SELECT word,frame,SUBSTRING(definition FROM 1 FOR 32) FROM senses_vframes INNER JOIN vframes USING (frameid) INNER JOIN words USING (wordid) INNER JOIN synsets USING (synsetid) WHERE word = 'snow'</DIV>
+            <TABLE class="sqlresultset" border="1">
+                <TBODY>
+                    <TR class="sqlheader">
+                        <TH>word</TH><TH>frame</TH><TH>SUBSTRING(definition FROM 1 FOR 32)</TH>
+                    </TR>
+                    <TR class="sqlrow">
+                        <TD class="sqlfield">snow</TD><TD class="sqlfield">Somebody ----s somebody</TD><TD class="sqlfield">conceal one's true motives from </TD>
+                    </TR>
+                    <TR class="sqlrow">
+                        <TD class="sqlfield">snow</TD><TD class="sqlfield">It is ----ing</TD><TD class="sqlfield">fall as snow</TD>
+                    </TR>
+                </TBODY>
+            </TABLE>
+        </DIV>
+        <DIV class="sqlcomment">get verb template for "rain"</DIV>
+        <DIV class="sqlquery">
+            <DIV class="sqlstatement">SELECT word,template,SUBSTRING(definition FROM 1 FOR 32) FROM senses_vtemplates LEFT JOIN vtemplates USING (templateid) INNER JOIN words USING (wordid) INNER JOIN synsets USING (synsetid) WHERE word = 'rain'</DIV>
+            <TABLE class="sqlresultset" border="1">
+                <TBODY>
+                    <TR class="sqlheader">
+                        <TH>word</TH><TH>template</TH><TH>SUBSTRING(definition FROM 1 FOR 32)</TH>
+                    </TR>
+                    <TR class="sqlrow">
+                        <TD class="sqlfield">rain</TD><TD class="sqlfield">It was %sing all day long</TD><TD class="sqlfield">precipitate as rain</TD>
+                    </TR>
+                </TBODY>
+            </TABLE>
+        </DIV>
+        <DIV class="sqlcomment">get verb frames for "clean"</DIV>
+        <DIV class="sqlquery">
+            <DIV class="sqlstatement">SELECT word,frame,SUBSTRING(definition FROM 1 FOR 32) FROM senses_vframes INNER JOIN vframes USING (frameid) RIGHT JOIN words USING (wordid) RIGHT JOIN synsets USING (synsetid) WHERE word = 'clean' ORDER BY synsetid</DIV>
+            <TABLE class="sqlresultset" border="1">
+                <TBODY>
+                    <TR class="sqlheader">
+                        <TH>word</TH><TH>frame</TH><TH>SUBSTRING(definition FROM 1 FOR 32)</TH>
+                    </TR>
+                    <TR class="sqlrow">
+                        <TD class="sqlfield">clean</TD><TD class="sqlfield">Somebody ----s somebody</TD><TD class="sqlfield">clean one's body or parts thereo</TD>
+                    </TR>
+                    <TR class="sqlrow">
+                        <TD class="sqlfield">clean</TD><TD class="sqlfield">Somebody ----s something</TD><TD class="sqlfield">clean one's body or parts thereo</TD>
+                    </TR>
+                    <TR class="sqlrow">
+                        <TD class="sqlfield">clean</TD><TD class="sqlfield">Somebody ----s</TD><TD class="sqlfield">clean one's body or parts thereo</TD>
+                    </TR>
+                    <TR class="sqlrow">
+                        <TD class="sqlfield">clean</TD><TD class="sqlfield">Somebody ----s something</TD><TD class="sqlfield">remove unwanted substances from,</TD>
+                    </TR>
+                    <TR class="sqlrow">
+                        <TD class="sqlfield">clean</TD><TD class="sqlfield">Somebody ----s something</TD><TD class="sqlfield">remove shells or husks from</TD>
+                    </TR>
+                    <TR class="sqlrow">
+                        <TD class="sqlfield">clean</TD><TD class="sqlfield">Somebody ----s something</TD><TD class="sqlfield">remove unwanted substances from</TD>
+                    </TR>
+                    <TR class="sqlrow">
+                        <TD class="sqlfield">clean</TD><TD class="sqlfield">Something ----s something</TD><TD class="sqlfield">remove unwanted substances from</TD>
+                    </TR>
+                    <TR class="sqlrow">
+                        <TD class="sqlfield">clean</TD><TD class="sqlfield">Somebody ----s something PP</TD><TD class="sqlfield">remove while making clean</TD>
+                    </TR>
+                    <TR class="sqlrow">
+                        <TD class="sqlfield">clean</TD><TD class="sqlfield">Somebody ----s something</TD><TD class="sqlfield">make clean by removing dirt, fil</TD>
+                    </TR>
+                    <TR class="sqlrow">
+                        <TD class="sqlfield">clean</TD><TD class="sqlfield">Something ----s something</TD><TD class="sqlfield">make clean by removing dirt, fil</TD>
+                    </TR>
+                    <TR class="sqlrow">
+                        <TD class="sqlfield">clean</TD><TD class="sqlfield">Somebody ----s</TD><TD class="sqlfield">clean and tidy up the house</TD>
+                    </TR>
+                    <TR class="sqlrow">
+                        <TD class="sqlfield">clean</TD><TD class="sqlfield">Somebody ----s PP</TD><TD class="sqlfield">remove all contents or possessio</TD>
+                    </TR>
+                    <TR class="sqlrow">
+                        <TD class="sqlfield">clean</TD><TD class="sqlfield">Somebody ----s somebody of something</TD><TD class="sqlfield">remove all contents or possessio</TD>
+                    </TR>
+                    <TR class="sqlrow">
+                        <TD class="sqlfield">clean</TD><TD class="sqlfield">Somebody ----s something</TD><TD class="sqlfield">remove all contents or possessio</TD>
+                    </TR>
+                    <TR class="sqlrow">
+                        <TD class="sqlfield">clean</TD><TD class="sqlfield">Something ----s something</TD><TD class="sqlfield">remove all contents or possessio</TD>
+                    </TR>
+                    <TR class="sqlrow">
+                        <TD class="sqlfield">clean</TD><TD class="sqlfield">Somebody ----s somebody</TD><TD class="sqlfield">deprive wholly of money in a gam</TD>
+                    </TR>
+                    <TR class="sqlrow">
+                        <TD class="sqlfield">clean</TD><TD class="sqlfield">Something ----s</TD><TD class="sqlfield">be cleanable</TD>
+                    </TR>
+                    <TR class="sqlrow">
+                        <TD class="sqlfield">clean</TD><TD class="sqlfield">Something is ----ing PP</TD><TD class="sqlfield">be cleanable</TD>
+                    </TR>
+                </TBODY>
+            </TABLE>
+        </DIV>
+        <DIV class="sqlcomment">get verb template for "clean"</DIV>
+        <DIV class="sqlquery">
+            <DIV class="sqlstatement">SELECT word,template,SUBSTRING(definition FROM 1 FOR 32) FROM senses_vtemplates LEFT JOIN vtemplates USING (templateid) RIGHT JOIN words USING (wordid) RIGHT JOIN synsets USING (synsetid) WHERE word = 'clean' ORDER BY synsetid</DIV>
+            <TABLE class="sqlresultset" border="1">
+                <TBODY>
+                    <TR class="sqlheader">
+                        <TH>word</TH><TH>template</TH><TH>SUBSTRING(definition FROM 1 FOR 32)</TH>
+                    </TR>
+                    <TR class="sqlrow">
+                        <TD class="sqlfield">clean</TD><TD class="sqlfield">They %s themselves</TD><TD class="sqlfield">clean one's body or parts thereo</TD>
+                    </TR>
+                    <TR class="sqlrow">
+                        <TD class="sqlfield">clean</TD><TD class="sqlfield">The chefs %s the vegetables</TD><TD class="sqlfield">remove shells or husks from</TD>
+                    </TR>
+                    <TR class="sqlrow">
+                        <TD class="sqlfield">clean</TD><TD class="sqlfield">They %s the snow from the path</TD><TD class="sqlfield">remove while making clean</TD>
+                    </TR>
+                    <TR class="sqlrow">
+                        <TD class="sqlfield">clean</TD><TD class="sqlfield">They %s the cape</TD><TD class="sqlfield">make clean by removing dirt, fil</TD>
+                    </TR>
+                </TBODY>
+            </TABLE>
+        </DIV>
+        <DIV class="sqlcomment">get verb frames for "write"</DIV>
+        <DIV class="sqlquery">
+            <DIV class="sqlstatement">SELECT word,frame,SUBSTRING(definition FROM 1 FOR 32) FROM senses_vframes INNER JOIN vframes USING (frameid) RIGHT JOIN words USING (wordid) RIGHT JOIN synsets USING (synsetid) WHERE word = 'write' ORDER BY synsetid</DIV>
+            <TABLE class="sqlresultset" border="1">
+                <TBODY>
+                    <TR class="sqlheader">
+                        <TH>word</TH><TH>frame</TH><TH>SUBSTRING(definition FROM 1 FOR 32)</TH>
+                    </TR>
+                    <TR class="sqlrow">
+                        <TD class="sqlfield">write</TD><TD class="sqlfield">Somebody ----s</TD><TD class="sqlfield">communicate or express by writin</TD>
+                    </TR>
+                    <TR class="sqlrow">
+                        <TD class="sqlfield">write</TD><TD class="sqlfield">Somebody ----s that CLAUSE</TD><TD class="sqlfield">communicate or express by writin</TD>
+                    </TR>
+                    <TR class="sqlrow">
+                        <TD class="sqlfield">write</TD><TD class="sqlfield">Somebody ----s somebody</TD><TD class="sqlfield">communicate or express by writin</TD>
+                    </TR>
+                    <TR class="sqlrow">
+                        <TD class="sqlfield">write</TD><TD class="sqlfield">Somebody ----s something</TD><TD class="sqlfield">communicate or express by writin</TD>
+                    </TR>
+                    <TR class="sqlrow">
+                        <TD class="sqlfield">write</TD><TD class="sqlfield">Somebody ----s something to somebody</TD><TD class="sqlfield">communicate or express by writin</TD>
+                    </TR>
+                    <TR class="sqlrow">
+                        <TD class="sqlfield">write</TD><TD class="sqlfield">Somebody ----s somebody something</TD><TD class="sqlfield">communicate or express by writin</TD>
+                    </TR>
+                    <TR class="sqlrow">
+                        <TD class="sqlfield">write</TD><TD class="sqlfield">Somebody ----s something</TD><TD class="sqlfield">record data on a computer</TD>
+                    </TR>
+                    <TR class="sqlrow">
+                        <TD class="sqlfield">write</TD><TD class="sqlfield">Something ----s something</TD><TD class="sqlfield">record data on a computer</TD>
+                    </TR>
+                    <TR class="sqlrow">
+                        <TD class="sqlfield">write</TD><TD class="sqlfield">Somebody ----s to somebody</TD><TD class="sqlfield">communicate (with) in writing</TD>
+                    </TR>
+                    <TR class="sqlrow">
+                        <TD class="sqlfield">write</TD><TD class="sqlfield">Somebody ----s somebody</TD><TD class="sqlfield">communicate (with) in writing</TD>
+                    </TR>
+                    <TR class="sqlrow">
+                        <TD class="sqlfield">write</TD><TD class="sqlfield">Somebody ----s</TD><TD class="sqlfield">mark or trace words or symbols o</TD>
+                    </TR>
+                    <TR class="sqlrow">
+                        <TD class="sqlfield">write</TD><TD class="sqlfield">Somebody ----s something</TD><TD class="sqlfield">mark or trace words or symbols o</TD>
+                    </TR>
+                    <TR class="sqlrow">
+                        <TD class="sqlfield">write</TD><TD class="sqlfield">Somebody ----s something</TD><TD class="sqlfield">create code, write a computer pr</TD>
+                    </TR>
+                    <TR class="sqlrow">
+                        <TD class="sqlfield">write</TD><TD class="sqlfield">Somebody ----s something</TD><TD class="sqlfield">produce a literary work</TD>
+                    </TR>
+                    <TR class="sqlrow">
+                        <TD class="sqlfield">write</TD><TD class="sqlfield">Somebody ----s something</TD><TD class="sqlfield">write or name the letters that c</TD>
+                    </TR>
+                    <TR class="sqlrow">
+                        <TD class="sqlfield">write</TD><TD class="sqlfield">Somebody ----s</TD><TD class="sqlfield">write music</TD>
+                    </TR>
+                    <TR class="sqlrow">
+                        <TD class="sqlfield">write</TD><TD class="sqlfield">Somebody ----s something</TD><TD class="sqlfield">write music</TD>
+                    </TR>
+                </TBODY>
+            </TABLE>
+        </DIV>
+        <DIV class="sqlcomment">get example template for "write"</DIV>
+        <DIV class="sqlquery">
+            <DIV class="sqlstatement">SELECT word,template,SUBSTRING(definition FROM 1 FOR 32) FROM senses_vtemplates LEFT JOIN vtemplates USING (templateid) RIGHT JOIN words USING (wordid) RIGHT JOIN synsets USING (synsetid) WHERE word = 'write' ORDER BY synsetid</DIV>
+            <TABLE class="sqlresultset" border="1">
+                <TBODY>
+                    <TR class="sqlheader">
+                        <TH>word</TH><TH>template</TH><TH>SUBSTRING(definition FROM 1 FOR 32)</TH>
+                    </TR>
+                    <TR class="sqlrow">
+                        <TD class="sqlfield">write</TD><TD class="sqlfield">They %s them the information</TD><TD class="sqlfield">communicate or express by writin</TD>
+                    </TR>
+                    <TR class="sqlrow">
+                        <TD class="sqlfield">write</TD><TD class="sqlfield">They %s the information to them</TD><TD class="sqlfield">communicate or express by writin</TD>
+                    </TR>
+                    <TR class="sqlrow">
+                        <TD class="sqlfield">write</TD><TD class="sqlfield">Sam and Sue %s the movie</TD><TD class="sqlfield">produce a literary work</TD>
+                    </TR>
+                    <TR class="sqlrow">
+                        <TD class="sqlfield">write</TD><TD class="sqlfield">Did he %s his major works over a short period of time?</TD><TD class="sqlfield">write music</TD>
+                    </TR>
+                </TBODY>
+            </TABLE>
+        </DIV>
+        <DIV class="sqlcomment">get verb frames and example template grouped by synset for "write"</DIV>
+        <DIV class="sqlquery">
+            <DIV class="sqlstatement">SELECT word,SUBSTRING(definition FROM 1 FOR 32),SUBSTRING(GROUP_CONCAT(frame) FROM 1 FOR 70),SUBSTRING(GROUP_CONCAT(template) FROM 1 FOR 32) FROM senses_vframes INNER JOIN vframes USING (frameid) LEFT JOIN senses_vtemplates USING (synsetid,wordid) LEFT JOIN vtemplates USING (templateid) RIGHT JOIN words USING (wordid) RIGHT JOIN synsets USING (synsetid) WHERE word = 'write' GROUP BY synsetid ORDER BY synsetid</DIV>
+            <TABLE class="sqlresultset" border="1">
+                <TBODY>
+                    <TR class="sqlheader">
+                        <TH>word</TH><TH>SUBSTRING(definition FROM 1 FOR 32)</TH><TH>SUBSTRING(GROUP_CONCAT(frame) FROM 1 FOR 70)</TH><TH>SUBSTRING(GROUP_CONCAT(template) FROM 1 FOR 32)</TH>
+                    </TR>
+                    <TR class="sqlrow">
+                        <TD class="sqlfield">write</TD><TD class="sqlfield">communicate or express by writin</TD><TD class="sqlfield">Somebody ----s somebody something,Somebody ----s something to somebody</TD><TD class="sqlfield">They %s the information to them,</TD>
+                    </TR>
+                    <TR class="sqlrow">
+                        <TD class="sqlfield">write</TD><TD class="sqlfield">record data on a computer</TD><TD class="sqlfield">Somebody ----s something,Something ----s something</TD><TD class="sqlfield"></TD>
+                    </TR>
+                    <TR class="sqlrow">
+                        <TD class="sqlfield">write</TD><TD class="sqlfield">communicate (with) in writing</TD><TD class="sqlfield">Somebody ----s to somebody,Somebody ----s somebody</TD><TD class="sqlfield"></TD>
+                    </TR>
+                    <TR class="sqlrow">
+                        <TD class="sqlfield">write</TD><TD class="sqlfield">mark or trace words or symbols o</TD><TD class="sqlfield">Somebody ----s,Somebody ----s something</TD><TD class="sqlfield"></TD>
+                    </TR>
+                    <TR class="sqlrow">
+                        <TD class="sqlfield">write</TD><TD class="sqlfield">create code, write a computer pr</TD><TD class="sqlfield">Somebody ----s something</TD><TD class="sqlfield"></TD>
+                    </TR>
+                    <TR class="sqlrow">
+                        <TD class="sqlfield">write</TD><TD class="sqlfield">produce a literary work</TD><TD class="sqlfield">Somebody ----s something</TD><TD class="sqlfield">Sam and Sue %s the movie</TD>
+                    </TR>
+                    <TR class="sqlrow">
+                        <TD class="sqlfield">write</TD><TD class="sqlfield">write or name the letters that c</TD><TD class="sqlfield">Somebody ----s something</TD><TD class="sqlfield"></TD>
+                    </TR>
+                    <TR class="sqlrow">
+                        <TD class="sqlfield">write</TD><TD class="sqlfield">write music</TD><TD class="sqlfield">Somebody ----s,Somebody ----s something</TD><TD class="sqlfield">Did he %s his major works over a</TD>
+                    </TR>
+                </TBODY>
+            </TABLE>
+        </DIV>
+        <DIV class="sqlcomment">verb frames matching n senses</DIV>
+        <DIV class="sqlquery">
+            <DIV class="sqlstatement">SELECT frameid,frame,COUNT(*) AS N FROM senses  INNER JOIN senses_vframes USING (wordid,synsetid)  INNER JOIN vframes USING (frameid)  LEFT JOIN words USING (wordid)  LEFT JOIN synsets USING (synsetid) GROUP BY frameid ORDER BY N DESC</DIV>
+            <TABLE class="sqlresultset" border="1">
+                <TBODY>
+                    <TR class="sqlheader">
+                        <TH>frameid</TH><TH>frame</TH><TH>N</TH>
+                    </TR>
+                    <TR class="sqlrow">
+                        <TD class="sqlfield">8</TD><TD class="sqlfield">Somebody ----s something</TD><TD class="sqlfield">13233</TD>
+                    </TR>
+                    <TR class="sqlrow">
+                        <TD class="sqlfield">2</TD><TD class="sqlfield">Somebody ----s</TD><TD class="sqlfield">5152</TD>
+                    </TR>
+                    <TR class="sqlrow">
+                        <TD class="sqlfield">9</TD><TD class="sqlfield">Somebody ----s somebody</TD><TD class="sqlfield">5079</TD>
+                    </TR>
+                    <TR class="sqlrow">
+                        <TD class="sqlfield">11</TD><TD class="sqlfield">Something ----s something</TD><TD class="sqlfield">4897</TD>
+                    </TR>
+                    <TR class="sqlrow">
+                        <TD class="sqlfield">1</TD><TD class="sqlfield">Something ----s</TD><TD class="sqlfield">3608</TD>
+                    </TR>
+                    <TR class="sqlrow">
+                        <TD class="sqlfield">22</TD><TD class="sqlfield">Somebody ----s PP</TD><TD class="sqlfield">2219</TD>
+                    </TR>
+                    <TR class="sqlrow">
+                        <TD class="sqlfield">10</TD><TD class="sqlfield">Something ----s somebody</TD><TD class="sqlfield">2127</TD>
+                    </TR>
+                    <TR class="sqlrow">
+                        <TD class="sqlfield">4</TD><TD class="sqlfield">Something is ----ing PP</TD><TD class="sqlfield">1058</TD>
+                    </TR>
+                    <TR class="sqlrow">
+                        <TD class="sqlfield">21</TD><TD class="sqlfield">Somebody ----s something PP</TD><TD class="sqlfield">1023</TD>
+                    </TR>
+                    <TR class="sqlrow">
+                        <TD class="sqlfield">26</TD><TD class="sqlfield">Somebody ----s that CLAUSE</TD><TD class="sqlfield">676</TD>
+                    </TR>
+                    <TR class="sqlrow">
+                        <TD class="sqlfield">20</TD><TD class="sqlfield">Somebody ----s somebody PP</TD><TD class="sqlfield">475</TD>
+                    </TR>
+                    <TR class="sqlrow">
+                        <TD class="sqlfield">15</TD><TD class="sqlfield">Somebody ----s something to somebody</TD><TD class="sqlfield">386</TD>
+                    </TR>
+                    <TR class="sqlrow">
+                        <TD class="sqlfield">14</TD><TD class="sqlfield">Somebody ----s somebody something</TD><TD class="sqlfield">202</TD>
+                    </TR>
+                    <TR class="sqlrow">
+                        <TD class="sqlfield">24</TD><TD class="sqlfield">Somebody ----s somebody to INFINITIVE</TD><TD class="sqlfield">198</TD>
+                    </TR>
+                    <TR class="sqlrow">
+                        <TD class="sqlfield">28</TD><TD class="sqlfield">Somebody ----s to INFINITIVE</TD><TD class="sqlfield">190</TD>
+                    </TR>
+                    <TR class="sqlrow">
+                        <TD class="sqlfield">16</TD><TD class="sqlfield">Somebody ----s something from somebody</TD><TD class="sqlfield">152</TD>
+                    </TR>
+                    <TR class="sqlrow">
+                        <TD class="sqlfield">17</TD><TD class="sqlfield">Somebody ----s somebody with something</TD><TD class="sqlfield">124</TD>
+                    </TR>
+                    <TR class="sqlrow">
+                        <TD class="sqlfield">33</TD><TD class="sqlfield">Somebody ----s VERB-ing</TD><TD class="sqlfield">111</TD>
+                    </TR>
+                    <TR class="sqlrow">
+                        <TD class="sqlfield">31</TD><TD class="sqlfield">Somebody ----s something with something</TD><TD class="sqlfield">104</TD>
+                    </TR>
+                    <TR class="sqlrow">
+                        <TD class="sqlfield">6</TD><TD class="sqlfield">Something ----s Adjective/Noun</TD><TD class="sqlfield">69</TD>
+                    </TR>
+                    <TR class="sqlrow">
+                        <TD class="sqlfield">7</TD><TD class="sqlfield">Somebody ----s Adjective</TD><TD class="sqlfield">67</TD>
+                    </TR>
+                    <TR class="sqlrow">
+                        <TD class="sqlfield">27</TD><TD class="sqlfield">Somebody ----s to somebody</TD><TD class="sqlfield">64</TD>
+                    </TR>
+                    <TR class="sqlrow">
+                        <TD class="sqlfield">13</TD><TD class="sqlfield">Somebody ----s on something</TD><TD class="sqlfield">57</TD>
+                    </TR>
+                    <TR class="sqlrow">
+                        <TD class="sqlfield">18</TD><TD class="sqlfield">Somebody ----s somebody of something</TD><TD class="sqlfield">57</TD>
+                    </TR>
+                    <TR class="sqlrow">
+                        <TD class="sqlfield">5</TD><TD class="sqlfield">Something ----s something Adjective/Noun</TD><TD class="sqlfield">54</TD>
+                    </TR>
+                    <TR class="sqlrow">
+                        <TD class="sqlfield">29</TD><TD class="sqlfield">Somebody ----s whether INFINITIVE</TD><TD class="sqlfield">51</TD>
+                    </TR>
+                    <TR class="sqlrow">
+                        <TD class="sqlfield">3</TD><TD class="sqlfield">It is ----ing</TD><TD class="sqlfield">43</TD>
+                    </TR>
+                    <TR class="sqlrow">
+                        <TD class="sqlfield">34</TD><TD class="sqlfield">It ----s that CLAUSE</TD><TD class="sqlfield">42</TD>
+                    </TR>
+                    <TR class="sqlrow">
+                        <TD class="sqlfield">30</TD><TD class="sqlfield">Somebody ----s somebody into V-ing something</TD><TD class="sqlfield">37</TD>
+                    </TR>
+                    <TR class="sqlrow">
+                        <TD class="sqlfield">23</TD><TD class="sqlfield">Somebody's (body part) ----s</TD><TD class="sqlfield">35</TD>
+                    </TR>
+                    <TR class="sqlrow">
+                        <TD class="sqlfield">19</TD><TD class="sqlfield">Somebody ----s something on somebody</TD><TD class="sqlfield">34</TD>
+                    </TR>
+                    <TR class="sqlrow">
+                        <TD class="sqlfield">12</TD><TD class="sqlfield">Something ----s to somebody</TD><TD class="sqlfield">25</TD>
+                    </TR>
+                    <TR class="sqlrow">
+                        <TD class="sqlfield">25</TD><TD class="sqlfield">Somebody ----s somebody INFINITIVE</TD><TD class="sqlfield">19</TD>
+                    </TR>
+                    <TR class="sqlrow">
+                        <TD class="sqlfield">32</TD><TD class="sqlfield">Somebody ----s INFINITIVE</TD><TD class="sqlfield">9</TD>
+                    </TR>
+                    <TR class="sqlrow">
+                        <TD class="sqlfield">35</TD><TD class="sqlfield">Something ----s INFINITIVE</TD><TD class="sqlfield">5</TD>
+                    </TR>
+                    <TR class="sqlrow">
+                        <TD class="sqlfield">37</TD><TD class="sqlfield">Somebody ----s for something</TD><TD class="sqlfield">1</TD>
+                    </TR>
+                    <TR class="sqlrow">
+                        <TD class="sqlfield">38</TD><TD class="sqlfield">Somebody ----s on somebody</TD><TD class="sqlfield">1</TD>
+                    </TR>
+                    <TR class="sqlrow">
+                        <TD class="sqlfield">36</TD><TD class="sqlfield">Somebody ----s at something</TD><TD class="sqlfield">1</TD>
+                    </TR>
+                    <TR class="sqlrow">
+                        <TD class="sqlfield">39</TD><TD class="sqlfield">Somebody ----s out of somebody</TD><TD class="sqlfield">1</TD>
+                    </TR>
+                </TBODY>
+            </TABLE>
+        </DIV>
+        <DIV class="sqlcomment">sense matching n verb frames</DIV>
+        <DIV class="sqlquery">
+            <DIV class="sqlstatement">SELECT sensekey,definition,COUNT(*) AS N FROM senses  INNER JOIN senses_vframes USING (wordid,synsetid)  INNER JOIN vframes USING (frameid)  LEFT JOIN words USING (wordid)  LEFT JOIN synsets USING (synsetid) GROUP BY sensekey,definition,senseid ORDER BY N DESC LIMIT 20</DIV>
+            <TABLE class="sqlresultset" border="1">
+                <TBODY>
+                    <TR class="sqlheader">
+                        <TH>sensekey</TH><TH>definition</TH><TH>N</TH>
+                    </TR>
+                    <TR class="sqlrow">
+                        <TD class="sqlfield">prepare%2:30:00::</TD><TD class="sqlfield">make ready or suitable or equip in advance for a particular purpose or for some use, event, etc</TD><TD class="sqlfield">8</TD>
+                    </TR>
+                    <TR class="sqlrow">
+                        <TD class="sqlfield">gear_up%2:30:00::</TD><TD class="sqlfield">make ready or suitable or equip in advance for a particular purpose or for some use, event, etc</TD><TD class="sqlfield">8</TD>
+                    </TR>
+                    <TR class="sqlrow">
+                        <TD class="sqlfield">attract%2:35:00::</TD><TD class="sqlfield">direct toward itself or oneself by means of some psychological power or physical attributes</TD><TD class="sqlfield">7</TD>
+                    </TR>
+                    <TR class="sqlrow">
+                        <TD class="sqlfield">repulse%2:35:00::</TD><TD class="sqlfield">cause to move back by force or influence</TD><TD class="sqlfield">7</TD>
+                    </TR>
+                    <TR class="sqlrow">
+                        <TD class="sqlfield">draw_in%2:35:00::</TD><TD class="sqlfield">direct toward itself or oneself by means of some psychological power or physical attributes</TD><TD class="sqlfield">7</TD>
+                    </TR>
+                    <TR class="sqlrow">
+                        <TD class="sqlfield">force_back%2:35:00::</TD><TD class="sqlfield">cause to move back by force or influence</TD><TD class="sqlfield">7</TD>
+                    </TR>
+                    <TR class="sqlrow">
+                        <TD class="sqlfield">beat_back%2:35:00::</TD><TD class="sqlfield">cause to move back by force or influence</TD><TD class="sqlfield">7</TD>
+                    </TR>
+                    <TR class="sqlrow">
+                        <TD class="sqlfield">ready%2:30:00::</TD><TD class="sqlfield">make ready or suitable or equip in advance for a particular purpose or for some use, event, etc</TD><TD class="sqlfield">7</TD>
+                    </TR>
+                    <TR class="sqlrow">
+                        <TD class="sqlfield">set%2:30:09::</TD><TD class="sqlfield">make ready or suitable or equip in advance for a particular purpose or for some use, event, etc</TD><TD class="sqlfield">7</TD>
+                    </TR>
+                    <TR class="sqlrow">
+                        <TD class="sqlfield">take_hold%2:35:00::</TD><TD class="sqlfield">have or hold in one's hands or grip</TD><TD class="sqlfield">7</TD>
+                    </TR>
+                    <TR class="sqlrow">
+                        <TD class="sqlfield">push_back%2:35:00::</TD><TD class="sqlfield">cause to move back by force or influence</TD><TD class="sqlfield">7</TD>
+                    </TR>
+                    <TR class="sqlrow">
+                        <TD class="sqlfield">fix%2:30:03::</TD><TD class="sqlfield">make ready or suitable or equip in advance for a particular purpose or for some use, event, etc</TD><TD class="sqlfield">7</TD>
+                    </TR>
+                    <TR class="sqlrow">
+                        <TD class="sqlfield">pull%2:35:02::</TD><TD class="sqlfield">direct toward itself or oneself by means of some psychological power or physical attributes</TD><TD class="sqlfield">7</TD>
+                    </TR>
+                    <TR class="sqlrow">
+                        <TD class="sqlfield">set_up%2:30:02::</TD><TD class="sqlfield">make ready or suitable or equip in advance for a particular purpose or for some use, event, etc</TD><TD class="sqlfield">7</TD>
+                    </TR>
+                    <TR class="sqlrow">
+                        <TD class="sqlfield">drive%2:35:11::</TD><TD class="sqlfield">cause to move back by force or influence</TD><TD class="sqlfield">7</TD>
+                    </TR>
+                    <TR class="sqlrow">
+                        <TD class="sqlfield">draw%2:35:06::</TD><TD class="sqlfield">direct toward itself or oneself by means of some psychological power or physical attributes</TD><TD class="sqlfield">7</TD>
+                    </TR>
+                    <TR class="sqlrow">
+                        <TD class="sqlfield">repel%2:35:00::</TD><TD class="sqlfield">cause to move back by force or influence</TD><TD class="sqlfield">7</TD>
+                    </TR>
+                    <TR class="sqlrow">
+                        <TD class="sqlfield">teach%2:32:00::</TD><TD class="sqlfield">impart skills or knowledge to</TD><TD class="sqlfield">7</TD>
+                    </TR>
+                    <TR class="sqlrow">
+                        <TD class="sqlfield">pull_in%2:35:00::</TD><TD class="sqlfield">direct toward itself or oneself by means of some psychological power or physical attributes</TD><TD class="sqlfield">7</TD>
+                    </TR>
+                    <TR class="sqlrow">
+                        <TD class="sqlfield">pass%2:38:05::</TD><TD class="sqlfield">move past</TD><TD class="sqlfield">6</TD>
+                    </TR>
+                </TBODY>
+            </TABLE>
+        </DIV>
+        <DIV class="sqlcomment">verb frames for "prepare"</DIV>
+        <DIV class="sqlquery">
+            <DIV class="sqlstatement">SELECT word,synsetid,frame,SUBSTRING(definition FROM 1 FOR 32) FROM senses  INNER JOIN senses_vframes USING (wordid,synsetid)  INNER JOIN vframes USING (frameid)  LEFT JOIN words USING (wordid)  LEFT JOIN synsets USING (synsetid) WHERE word = 'prepare'</DIV>
+            <TABLE class="sqlresultset" border="1">
+                <TBODY>
+                    <TR class="sqlheader">
+                        <TH>word</TH><TH>synsetid</TH><TH>frame</TH><TH>SUBSTRING(definition FROM 1 FOR 32)</TH>
+                    </TR>
+                    <TR class="sqlrow">
+                        <TD class="sqlfield">prepare</TD><TD class="sqlfield">9037</TD><TD class="sqlfield">Somebody ----s</TD><TD class="sqlfield">make ready or suitable or equip </TD>
+                    </TR>
+                    <TR class="sqlrow">
+                        <TD class="sqlfield">prepare</TD><TD class="sqlfield">9037</TD><TD class="sqlfield">Somebody ----s to INFINITIVE</TD><TD class="sqlfield">make ready or suitable or equip </TD>
+                    </TR>
+                    <TR class="sqlrow">
+                        <TD class="sqlfield">prepare</TD><TD class="sqlfield">9037</TD><TD class="sqlfield">Somebody ----s somebody</TD><TD class="sqlfield">make ready or suitable or equip </TD>
+                    </TR>
+                    <TR class="sqlrow">
+                        <TD class="sqlfield">prepare</TD><TD class="sqlfield">9037</TD><TD class="sqlfield">Somebody ----s somebody PP</TD><TD class="sqlfield">make ready or suitable or equip </TD>
+                    </TR>
+                    <TR class="sqlrow">
+                        <TD class="sqlfield">prepare</TD><TD class="sqlfield">9037</TD><TD class="sqlfield">Somebody ----s something</TD><TD class="sqlfield">make ready or suitable or equip </TD>
+                    </TR>
+                    <TR class="sqlrow">
+                        <TD class="sqlfield">prepare</TD><TD class="sqlfield">9037</TD><TD class="sqlfield">Somebody ----s something PP</TD><TD class="sqlfield">make ready or suitable or equip </TD>
+                    </TR>
+                    <TR class="sqlrow">
+                        <TD class="sqlfield">prepare</TD><TD class="sqlfield">9037</TD><TD class="sqlfield">Something ----s somebody</TD><TD class="sqlfield">make ready or suitable or equip </TD>
+                    </TR>
+                    <TR class="sqlrow">
+                        <TD class="sqlfield">prepare</TD><TD class="sqlfield">9037</TD><TD class="sqlfield">Something ----s something</TD><TD class="sqlfield">make ready or suitable or equip </TD>
+                    </TR>
+                    <TR class="sqlrow">
+                        <TD class="sqlfield">prepare</TD><TD class="sqlfield">13002</TD><TD class="sqlfield">Somebody ----s to somebody</TD><TD class="sqlfield">undergo training or instruction </TD>
+                    </TR>
+                    <TR class="sqlrow">
+                        <TD class="sqlfield">prepare</TD><TD class="sqlfield">13009</TD><TD class="sqlfield">Somebody ----s somebody</TD><TD class="sqlfield">create by training and teaching</TD>
+                    </TR>
+                    <TR class="sqlrow">
+                        <TD class="sqlfield">prepare</TD><TD class="sqlfield">29339</TD><TD class="sqlfield">Somebody ----s something</TD><TD class="sqlfield">arrange by systematic planning a</TD>
+                    </TR>
+                    <TR class="sqlrow">
+                        <TD class="sqlfield">prepare</TD><TD class="sqlfield">29530</TD><TD class="sqlfield">Somebody ----s something</TD><TD class="sqlfield">prepare for eating by applying h</TD>
+                    </TR>
+                    <TR class="sqlrow">
+                        <TD class="sqlfield">prepare</TD><TD class="sqlfield">30989</TD><TD class="sqlfield">Somebody ----s something</TD><TD class="sqlfield">to prepare verbally, either for </TD>
+                    </TR>
+                    <TR class="sqlrow">
+                        <TD class="sqlfield">prepare</TD><TD class="sqlfield">37867</TD><TD class="sqlfield">Somebody ----s something</TD><TD class="sqlfield">lead up to and soften by soundin</TD>
+                    </TR>
+                    <TR class="sqlrow">
+                        <TD class="sqlfield">prepare</TD><TD class="sqlfield">41352</TD><TD class="sqlfield">Somebody ----s somebody</TD><TD class="sqlfield">educate for a future role or fun</TD>
+                    </TR>
+                </TBODY>
+            </TABLE>
+        </DIV>
+    </BODY>
+</HTML>

@@ -1,0 +1,749 @@
+<HTML>
+    <HEAD>
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <TITLE>MYSQL</TITLE>
+        <LINK rel="stylesheet" href="style-sql.css" type="text/css">
+    </HEAD>
+    <BODY>
+        <DIV class="sqlsection">WordNet (relations)</DIV>
+        <DIV class="sqlsubsection">relations</DIV>
+        <DIV class="sqlcomment">all relations</DIV>
+        <DIV class="sqlquery">
+            <DIV class="sqlstatement">SELECT * FROM relations ORDER BY relationid</DIV>
+            <TABLE class="sqlresultset" border="1">
+                <TBODY>
+                    <TR class="sqlheader">
+                        <TH>relationid</TH><TH>relation</TH><TH>recurses</TH>
+                    </TR>
+                    <TR class="sqlrow">
+                        <TD class="sqlfield">1</TD><TD class="sqlfield">hypernym</TD><TD class="sqlfield">1</TD>
+                    </TR>
+                    <TR class="sqlrow">
+                        <TD class="sqlfield">2</TD><TD class="sqlfield">hyponym</TD><TD class="sqlfield">1</TD>
+                    </TR>
+                    <TR class="sqlrow">
+                        <TD class="sqlfield">3</TD><TD class="sqlfield">instance hypernym</TD><TD class="sqlfield">1</TD>
+                    </TR>
+                    <TR class="sqlrow">
+                        <TD class="sqlfield">4</TD><TD class="sqlfield">instance hyponym</TD><TD class="sqlfield">1</TD>
+                    </TR>
+                    <TR class="sqlrow">
+                        <TD class="sqlfield">11</TD><TD class="sqlfield">part holonym</TD><TD class="sqlfield">1</TD>
+                    </TR>
+                    <TR class="sqlrow">
+                        <TD class="sqlfield">12</TD><TD class="sqlfield">part meronym</TD><TD class="sqlfield">1</TD>
+                    </TR>
+                    <TR class="sqlrow">
+                        <TD class="sqlfield">13</TD><TD class="sqlfield">member holonym</TD><TD class="sqlfield">1</TD>
+                    </TR>
+                    <TR class="sqlrow">
+                        <TD class="sqlfield">14</TD><TD class="sqlfield">member meronym</TD><TD class="sqlfield">1</TD>
+                    </TR>
+                    <TR class="sqlrow">
+                        <TD class="sqlfield">15</TD><TD class="sqlfield">substance holonym</TD><TD class="sqlfield">1</TD>
+                    </TR>
+                    <TR class="sqlrow">
+                        <TD class="sqlfield">16</TD><TD class="sqlfield">substance meronym</TD><TD class="sqlfield">1</TD>
+                    </TR>
+                    <TR class="sqlrow">
+                        <TD class="sqlfield">21</TD><TD class="sqlfield">entails</TD><TD class="sqlfield">1</TD>
+                    </TR>
+                    <TR class="sqlrow">
+                        <TD class="sqlfield">22</TD><TD class="sqlfield">is entailed by</TD><TD class="sqlfield">1</TD>
+                    </TR>
+                    <TR class="sqlrow">
+                        <TD class="sqlfield">23</TD><TD class="sqlfield">causes</TD><TD class="sqlfield">1</TD>
+                    </TR>
+                    <TR class="sqlrow">
+                        <TD class="sqlfield">24</TD><TD class="sqlfield">is caused by</TD><TD class="sqlfield">1</TD>
+                    </TR>
+                    <TR class="sqlrow">
+                        <TD class="sqlfield">30</TD><TD class="sqlfield">antonym</TD><TD class="sqlfield">0</TD>
+                    </TR>
+                    <TR class="sqlrow">
+                        <TD class="sqlfield">40</TD><TD class="sqlfield">similar</TD><TD class="sqlfield">0</TD>
+                    </TR>
+                    <TR class="sqlrow">
+                        <TD class="sqlfield">50</TD><TD class="sqlfield">also</TD><TD class="sqlfield">0</TD>
+                    </TR>
+                    <TR class="sqlrow">
+                        <TD class="sqlfield">60</TD><TD class="sqlfield">attribute</TD><TD class="sqlfield">0</TD>
+                    </TR>
+                    <TR class="sqlrow">
+                        <TD class="sqlfield">70</TD><TD class="sqlfield">verb group</TD><TD class="sqlfield">0</TD>
+                    </TR>
+                    <TR class="sqlrow">
+                        <TD class="sqlfield">71</TD><TD class="sqlfield">participle</TD><TD class="sqlfield">0</TD>
+                    </TR>
+                    <TR class="sqlrow">
+                        <TD class="sqlfield">80</TD><TD class="sqlfield">pertainym</TD><TD class="sqlfield">0</TD>
+                    </TR>
+                    <TR class="sqlrow">
+                        <TD class="sqlfield">81</TD><TD class="sqlfield">derivation</TD><TD class="sqlfield">0</TD>
+                    </TR>
+                    <TR class="sqlrow">
+                        <TD class="sqlfield">91</TD><TD class="sqlfield">domain topic</TD><TD class="sqlfield">0</TD>
+                    </TR>
+                    <TR class="sqlrow">
+                        <TD class="sqlfield">92</TD><TD class="sqlfield">domain member topic</TD><TD class="sqlfield">0</TD>
+                    </TR>
+                    <TR class="sqlrow">
+                        <TD class="sqlfield">93</TD><TD class="sqlfield">domain region</TD><TD class="sqlfield">0</TD>
+                    </TR>
+                    <TR class="sqlrow">
+                        <TD class="sqlfield">94</TD><TD class="sqlfield">domain member region</TD><TD class="sqlfield">0</TD>
+                    </TR>
+                    <TR class="sqlrow">
+                        <TD class="sqlfield">95</TD><TD class="sqlfield">exemplifies</TD><TD class="sqlfield">0</TD>
+                    </TR>
+                    <TR class="sqlrow">
+                        <TD class="sqlfield">96</TD><TD class="sqlfield">is exemplified by</TD><TD class="sqlfield">0</TD>
+                    </TR>
+                    <TR class="sqlrow">
+                        <TD class="sqlfield">97</TD><TD class="sqlfield">domain</TD><TD class="sqlfield">0</TD>
+                    </TR>
+                    <TR class="sqlrow">
+                        <TD class="sqlfield">98</TD><TD class="sqlfield">member</TD><TD class="sqlfield">0</TD>
+                    </TR>
+                    <TR class="sqlrow">
+                        <TD class="sqlfield">99</TD><TD class="sqlfield">other</TD><TD class="sqlfield">0</TD>
+                    </TR>
+                </TBODY>
+            </TABLE>
+        </DIV>
+        <DIV class="sqlsubsection">semantical relations</DIV>
+        <DIV class="sqlcomment">all semantic relations</DIV>
+        <DIV class="sqlquery">
+            <DIV class="sqlstatement">SELECT relation, COUNT(*) FROM synsets_synsets LEFT JOIN relations USING(relationid) GROUP BY relationid ORDER BY relationid</DIV>
+            <TABLE class="sqlresultset" border="1">
+                <TBODY>
+                    <TR class="sqlheader">
+                        <TH>relation</TH><TH>COUNT(*)</TH>
+                    </TR>
+                    <TR class="sqlrow">
+                        <TD class="sqlfield">hypernym</TD><TD class="sqlfield">91503</TD>
+                    </TR>
+                    <TR class="sqlrow">
+                        <TD class="sqlfield">hyponym</TD><TD class="sqlfield">91503</TD>
+                    </TR>
+                    <TR class="sqlrow">
+                        <TD class="sqlfield">instance hypernym</TD><TD class="sqlfield">8589</TD>
+                    </TR>
+                    <TR class="sqlrow">
+                        <TD class="sqlfield">instance hyponym</TD><TD class="sqlfield">8589</TD>
+                    </TR>
+                    <TR class="sqlrow">
+                        <TD class="sqlfield">part holonym</TD><TD class="sqlfield">9199</TD>
+                    </TR>
+                    <TR class="sqlrow">
+                        <TD class="sqlfield">part meronym</TD><TD class="sqlfield">9199</TD>
+                    </TR>
+                    <TR class="sqlrow">
+                        <TD class="sqlfield">member holonym</TD><TD class="sqlfield">12291</TD>
+                    </TR>
+                    <TR class="sqlrow">
+                        <TD class="sqlfield">member meronym</TD><TD class="sqlfield">12291</TD>
+                    </TR>
+                    <TR class="sqlrow">
+                        <TD class="sqlfield">substance holonym</TD><TD class="sqlfield">830</TD>
+                    </TR>
+                    <TR class="sqlrow">
+                        <TD class="sqlfield">substance meronym</TD><TD class="sqlfield">830</TD>
+                    </TR>
+                    <TR class="sqlrow">
+                        <TD class="sqlfield">entails</TD><TD class="sqlfield">408</TD>
+                    </TR>
+                    <TR class="sqlrow">
+                        <TD class="sqlfield">is entailed by</TD><TD class="sqlfield">408</TD>
+                    </TR>
+                    <TR class="sqlrow">
+                        <TD class="sqlfield">causes</TD><TD class="sqlfield">221</TD>
+                    </TR>
+                    <TR class="sqlrow">
+                        <TD class="sqlfield">is caused by</TD><TD class="sqlfield">221</TD>
+                    </TR>
+                    <TR class="sqlrow">
+                        <TD class="sqlfield">similar</TD><TD class="sqlfield">23192</TD>
+                    </TR>
+                    <TR class="sqlrow">
+                        <TD class="sqlfield">also</TD><TD class="sqlfield">2730</TD>
+                    </TR>
+                    <TR class="sqlrow">
+                        <TD class="sqlfield">attribute</TD><TD class="sqlfield">1278</TD>
+                    </TR>
+                    <TR class="sqlrow">
+                        <TD class="sqlfield">domain topic</TD><TD class="sqlfield">6716</TD>
+                    </TR>
+                    <TR class="sqlrow">
+                        <TD class="sqlfield">domain member topic</TD><TD class="sqlfield">6716</TD>
+                    </TR>
+                    <TR class="sqlrow">
+                        <TD class="sqlfield">domain region</TD><TD class="sqlfield">1353</TD>
+                    </TR>
+                    <TR class="sqlrow">
+                        <TD class="sqlfield">domain member region</TD><TD class="sqlfield">1353</TD>
+                    </TR>
+                    <TR class="sqlrow">
+                        <TD class="sqlfield">exemplifies</TD><TD class="sqlfield">975</TD>
+                    </TR>
+                    <TR class="sqlrow">
+                        <TD class="sqlfield">is exemplified by</TD><TD class="sqlfield">975</TD>
+                    </TR>
+                </TBODY>
+            </TABLE>
+        </DIV>
+        <DIV class="sqlcomment">max synset relations per synset</DIV>
+        <DIV class="sqlquery">
+            <DIV class="sqlstatement">SELECT synset1id, COUNT(*) AS c, definition FROM synsets_synsets LEFT JOIN synsets AS s ON (s.synsetid = synset1id) GROUP BY synset1id ORDER BY c DESC LIMIT 5</DIV>
+            <TABLE class="sqlresultset" border="1">
+                <TBODY>
+                    <TR class="sqlheader">
+                        <TH>synset1id</TH><TH>c</TH><TH>definition</TH>
+                    </TR>
+                    <TR class="sqlrow">
+                        <TD class="sqlfield">81910</TD><TD class="sqlfield">671</TD><TD class="sqlfield">a large and densely populated urban area; may include several independent administrative districts</TD>
+                    </TR>
+                    <TR class="sqlrow">
+                        <TD class="sqlfield">81543</TD><TD class="sqlfield">613</TD><TD class="sqlfield">the collection of rules imposed by authority</TD>
+                    </TR>
+                    <TR class="sqlrow">
+                        <TD class="sqlfield">83436</TD><TD class="sqlfield">528</TD><TD class="sqlfield">a monarchy in northwestern Europe occupying most of the British Isles; divided into England and Scotland and Wales and Northern Ireland; `Great Britain' is often used loosely to refer to the United Kingdom</TD>
+                    </TR>
+                    <TR class="sqlrow">
+                        <TD class="sqlfield">121</TD><TD class="sqlfield">420</TD><TD class="sqlfield">a human being; person, singular, assertive existential pronoun; pronoun, person, singular; quantifier: assertive existential</TD>
+                    </TR>
+                    <TR class="sqlrow">
+                        <TD class="sqlfield">2580</TD><TD class="sqlfield">402</TD><TD class="sqlfield">cause to change; make different; cause a transformation</TD>
+                    </TR>
+                </TBODY>
+            </TABLE>
+        </DIV>
+        <DIV class="sqlcomment">available semantic relations for synset</DIV>
+        <DIV class="sqlquery">
+            <DIV class="sqlstatement">SELECT sy1.synsetid,sy1.definition,relation,COUNT(relation) FROM synsets_synsets LEFT JOIN synsets AS sy1 ON (sy1.synsetid = synset1id) LEFT JOIN relations USING (relationid) WHERE sy1.synsetid = 6 GROUP BY relationid</DIV>
+            <TABLE class="sqlresultset" border="1">
+                <TBODY>
+                    <TR class="sqlheader">
+                        <TH>synsetid</TH><TH>definition</TH><TH>relation</TH><TH>COUNT(relation)</TH>
+                    </TR>
+                    <TR class="sqlrow">
+                        <TD class="sqlfield">6</TD><TD class="sqlfield">an entity that has physical existence</TD><TD class="sqlfield">hypernym</TD><TD class="sqlfield">1</TD>
+                    </TR>
+                    <TR class="sqlrow">
+                        <TD class="sqlfield">6</TD><TD class="sqlfield">an entity that has physical existence</TD><TD class="sqlfield">hyponym</TD><TD class="sqlfield">6</TD>
+                    </TR>
+                </TBODY>
+            </TABLE>
+        </DIV>
+        <DIV class="sqlcomment">semantic relations for "pull"'s synsets)</DIV>
+        <DIV class="sqlquery">
+            <DIV class="sqlstatement">SELECT w1.word,sy1.definition,relation,GROUP_CONCAT(w2.word),sy2.definition FROM synsets_synsets LEFT JOIN synsets AS sy1 ON (sy1.synsetid = synset1id) LEFT JOIN senses AS s1 ON (sy1.synsetid = s1.synsetid) LEFT JOIN words AS w1 ON (s1.wordid = w1.wordid) LEFT JOIN synsets AS sy2 ON (sy2.synsetid = synset2id) LEFT JOIN senses AS s2 ON (sy2.synsetid = s2.synsetid) LEFT JOIN words AS w2 ON (s2.wordid = w2.wordid) LEFT JOIN relations USING(relationid) WHERE w1.word = 'pull' GROUP BY sy1.synsetid,w1.word,sy1.definition,relationid,relation,sy2.synsetid,sy2.synsetid,sy2.definition ORDER BY sy1.synsetid,relationid</DIV>
+            <TABLE class="sqlresultset" border="1">
+                <TBODY>
+                    <TR class="sqlheader">
+                        <TH>word</TH><TH>definition</TH><TH>relation</TH><TH>GROUP_CONCAT(w2.word)</TH><TH>definition</TH>
+                    </TR>
+                    <TR class="sqlrow">
+                        <TD class="sqlfield">pull</TD><TD class="sqlfield">strain abnormally</TD><TD class="sqlfield">hypernym</TD><TD class="sqlfield">injure,wound</TD><TD class="sqlfield">cause injuries or bodily harm to</TD>
+                    </TR>
+                    <TR class="sqlrow">
+                        <TD class="sqlfield">pull</TD><TD class="sqlfield">the act of pulling; applying force to move something toward or with you</TD><TD class="sqlfield">hypernym</TD><TD class="sqlfield">actuation,propulsion</TD><TD class="sqlfield">the act of propelling</TD>
+                    </TR>
+                    <TR class="sqlrow">
+                        <TD class="sqlfield">pull</TD><TD class="sqlfield">the act of pulling; applying force to move something toward or with you</TD><TD class="sqlfield">hyponym</TD><TD class="sqlfield">draw,haul,haulage</TD><TD class="sqlfield">the act of drawing or hauling something</TD>
+                    </TR>
+                    <TR class="sqlrow">
+                        <TD class="sqlfield">pull</TD><TD class="sqlfield">the act of pulling; applying force to move something toward or with you</TD><TD class="sqlfield">hyponym</TD><TD class="sqlfield">drag</TD><TD class="sqlfield">the act of dragging (pulling with force)</TD>
+                    </TR>
+                    <TR class="sqlrow">
+                        <TD class="sqlfield">pull</TD><TD class="sqlfield">the act of pulling; applying force to move something toward or with you</TD><TD class="sqlfield">hyponym</TD><TD class="sqlfield">traction</TD><TD class="sqlfield">(orthopedics) the act of pulling on a bone or limb (as in a fracture) to relieve pressure or align parts in a special way during healing</TD>
+                    </TR>
+                    <TR class="sqlrow">
+                        <TD class="sqlfield">pull</TD><TD class="sqlfield">the act of pulling; applying force to move something toward or with you</TD><TD class="sqlfield">hyponym</TD><TD class="sqlfield">pluck</TD><TD class="sqlfield">the act of pulling and releasing a taut cord</TD>
+                    </TR>
+                    <TR class="sqlrow">
+                        <TD class="sqlfield">pull</TD><TD class="sqlfield">the act of pulling; applying force to move something toward or with you</TD><TD class="sqlfield">hyponym</TD><TD class="sqlfield">deracination,excision,extirpation</TD><TD class="sqlfield">the act of pulling up or out; uprooting; cutting off from existence</TD>
+                    </TR>
+                    <TR class="sqlrow">
+                        <TD class="sqlfield">pull</TD><TD class="sqlfield">the act of pulling; applying force to move something toward or with you</TD><TD class="sqlfield">hyponym</TD><TD class="sqlfield">draft,draught,drawing</TD><TD class="sqlfield">the act of moving a load by drawing or pulling</TD>
+                    </TR>
+                    <TR class="sqlrow">
+                        <TD class="sqlfield">pull</TD><TD class="sqlfield">the act of pulling; applying force to move something toward or with you</TD><TD class="sqlfield">hyponym</TD><TD class="sqlfield">jerk,tug</TD><TD class="sqlfield">a sudden abrupt pull</TD>
+                    </TR>
+                    <TR class="sqlrow">
+                        <TD class="sqlfield">pull</TD><TD class="sqlfield">take away</TD><TD class="sqlfield">hypernym</TD><TD class="sqlfield">remove,take,take away,withdraw</TD><TD class="sqlfield">remove something concrete, as by lifting, pushing, or taking off, or remove something abstract</TD>
+                    </TR>
+                    <TR class="sqlrow">
+                        <TD class="sqlfield">pull</TD><TD class="sqlfield">take away</TD><TD class="sqlfield">similar</TD><TD class="sqlfield">draw,get out,pull,pull out,take out</TD><TD class="sqlfield">bring, take, or pull out of a container or from under a cover</TD>
+                    </TR>
+                    <TR class="sqlrow">
+                        <TD class="sqlfield">pull</TD><TD class="sqlfield">a sustained effort</TD><TD class="sqlfield">hypernym</TD><TD class="sqlfield">effort,elbow grease,exertion,sweat,travail</TD><TD class="sqlfield">use of physical or mental energy; hard work</TD>
+                    </TR>
+                    <TR class="sqlrow">
+                        <TD class="sqlfield">pull</TD><TD class="sqlfield">a slow inhalation (as of tobacco smoke)</TD><TD class="sqlfield">hypernym</TD><TD class="sqlfield">aspiration,breathing in,inhalation,inspiration,intake</TD><TD class="sqlfield">the act of inhaling; the drawing in of air (or other gases) as in breathing</TD>
+                    </TR>
+                    <TR class="sqlrow">
+                        <TD class="sqlfield">pull</TD><TD class="sqlfield">a slow inhalation (as of tobacco smoke)</TD><TD class="sqlfield">hyponym</TD><TD class="sqlfield">toke</TD><TD class="sqlfield">a puff of a marijuana or hashish cigarette</TD>
+                    </TR>
+                    <TR class="sqlrow">
+                        <TD class="sqlfield">pull</TD><TD class="sqlfield">a slow inhalation (as of tobacco smoke)</TD><TD class="sqlfield">part holonym</TD><TD class="sqlfield">smoke,smoking</TD><TD class="sqlfield">the act of smoking tobacco or other substances</TD>
+                    </TR>
+                    <TR class="sqlrow">
+                        <TD class="sqlfield">pull</TD><TD class="sqlfield">take sides with; align oneself with; show strong sympathy for</TD><TD class="sqlfield">hypernym</TD><TD class="sqlfield">side</TD><TD class="sqlfield">take sides for or against</TD>
+                    </TR>
+                    <TR class="sqlrow">
+                        <TD class="sqlfield">pull</TD><TD class="sqlfield">remove, usually with some force or effort; also used in an abstract sense</TD><TD class="sqlfield">hypernym</TD><TD class="sqlfield">remove,take,take away,withdraw</TD><TD class="sqlfield">remove something concrete, as by lifting, pushing, or taking off, or remove something abstract</TD>
+                    </TR>
+                    <TR class="sqlrow">
+                        <TD class="sqlfield">pull</TD><TD class="sqlfield">remove, usually with some force or effort; also used in an abstract sense</TD><TD class="sqlfield">hyponym</TD><TD class="sqlfield">squeeze out,wring out</TD><TD class="sqlfield">extract (liquid) by squeezing or pressing</TD>
+                    </TR>
+                    <TR class="sqlrow">
+                        <TD class="sqlfield">pull</TD><TD class="sqlfield">remove, usually with some force or effort; also used in an abstract sense</TD><TD class="sqlfield">hyponym</TD><TD class="sqlfield">demodulate</TD><TD class="sqlfield">extract information from a modulated carrier wave</TD>
+                    </TR>
+                    <TR class="sqlrow">
+                        <TD class="sqlfield">pull</TD><TD class="sqlfield">remove, usually with some force or effort; also used in an abstract sense</TD><TD class="sqlfield">hyponym</TD><TD class="sqlfield">thread</TD><TD class="sqlfield">remove facial hair by tying a fine string around it and pulling at the string</TD>
+                    </TR>
+                    <TR class="sqlrow">
+                        <TD class="sqlfield">pull</TD><TD class="sqlfield">remove, usually with some force or effort; also used in an abstract sense</TD><TD class="sqlfield">similar</TD><TD class="sqlfield">take out,pull out,draw,get out,pull</TD><TD class="sqlfield">bring, take, or pull out of a container or from under a cover</TD>
+                    </TR>
+                    <TR class="sqlrow">
+                        <TD class="sqlfield">pull</TD><TD class="sqlfield">strip of feathers</TD><TD class="sqlfield">hypernym</TD><TD class="sqlfield">strip</TD><TD class="sqlfield">remove the surface from</TD>
+                    </TR>
+                    <TR class="sqlrow">
+                        <TD class="sqlfield">pull</TD><TD class="sqlfield">hit in the direction that the player is facing when carrying through the swing</TD><TD class="sqlfield">hypernym</TD><TD class="sqlfield">hit</TD><TD class="sqlfield">cause to move by striking</TD>
+                    </TR>
+                    <TR class="sqlrow">
+                        <TD class="sqlfield">pull</TD><TD class="sqlfield">hit in the direction that the player is facing when carrying through the swing</TD><TD class="sqlfield">domain topic</TD><TD class="sqlfield">ball,baseball,baseball game</TD><TD class="sqlfield">a ball game played with a bat and ball between two teams of nine players; teams take turns at bat trying to score runs</TD>
+                    </TR>
+                    <TR class="sqlrow">
+                        <TD class="sqlfield">pull</TD><TD class="sqlfield">cause to move by pulling</TD><TD class="sqlfield">hypernym</TD><TD class="sqlfield">displace,move</TD><TD class="sqlfield">cause to move or shift into a new position or place, both in a concrete and in an abstract sense</TD>
+                    </TR>
+                    <TR class="sqlrow">
+                        <TD class="sqlfield">pull</TD><TD class="sqlfield">cause to move by pulling</TD><TD class="sqlfield">hyponym</TD><TD class="sqlfield">tug</TD><TD class="sqlfield">pull or strain hard at</TD>
+                    </TR>
+                    <TR class="sqlrow">
+                        <TD class="sqlfield">pull</TD><TD class="sqlfield">cause to move by pulling</TD><TD class="sqlfield">hyponym</TD><TD class="sqlfield">pick off,pluck,pull off,tweak</TD><TD class="sqlfield">pull or pull out sharply</TD>
+                    </TR>
+                    <TR class="sqlrow">
+                        <TD class="sqlfield">pull</TD><TD class="sqlfield">cause to move by pulling</TD><TD class="sqlfield">hyponym</TD><TD class="sqlfield">winch</TD><TD class="sqlfield">pull or lift up with or as if with a winch</TD>
+                    </TR>
+                    <TR class="sqlrow">
+                        <TD class="sqlfield">pull</TD><TD class="sqlfield">cause to move by pulling</TD><TD class="sqlfield">hyponym</TD><TD class="sqlfield">jerk,yank</TD><TD class="sqlfield">pull, or move with a sudden movement</TD>
+                    </TR>
+                    <TR class="sqlrow">
+                        <TD class="sqlfield">pull</TD><TD class="sqlfield">cause to move by pulling</TD><TD class="sqlfield">hyponym</TD><TD class="sqlfield">attract,draw,draw in,pull,pull in</TD><TD class="sqlfield">direct toward itself or oneself by means of some psychological power or physical attributes</TD>
+                    </TR>
+                    <TR class="sqlrow">
+                        <TD class="sqlfield">pull</TD><TD class="sqlfield">cause to move by pulling</TD><TD class="sqlfield">hyponym</TD><TD class="sqlfield">cart,drag,hale,haul</TD><TD class="sqlfield">draw slowly or heavily</TD>
+                    </TR>
+                    <TR class="sqlrow">
+                        <TD class="sqlfield">pull</TD><TD class="sqlfield">cause to move by pulling</TD><TD class="sqlfield">hyponym</TD><TD class="sqlfield">drag</TD><TD class="sqlfield">pull, as against a resistance</TD>
+                    </TR>
+                    <TR class="sqlrow">
+                        <TD class="sqlfield">pull</TD><TD class="sqlfield">cause to move by pulling</TD><TD class="sqlfield">hyponym</TD><TD class="sqlfield">pick,pluck,plunk</TD><TD class="sqlfield">pull lightly but sharply with a plucking motion</TD>
+                    </TR>
+                    <TR class="sqlrow">
+                        <TD class="sqlfield">pull</TD><TD class="sqlfield">cause to move by pulling</TD><TD class="sqlfield">hyponym</TD><TD class="sqlfield">stretch</TD><TD class="sqlfield">pull in opposite directions</TD>
+                    </TR>
+                    <TR class="sqlrow">
+                        <TD class="sqlfield">pull</TD><TD class="sqlfield">cause to move by pulling</TD><TD class="sqlfield">hyponym</TD><TD class="sqlfield">abduct</TD><TD class="sqlfield">pull away from the body</TD>
+                    </TR>
+                    <TR class="sqlrow">
+                        <TD class="sqlfield">pull</TD><TD class="sqlfield">cause to move by pulling</TD><TD class="sqlfield">hyponym</TD><TD class="sqlfield">adduct</TD><TD class="sqlfield">draw a limb towards the body</TD>
+                    </TR>
+                    <TR class="sqlrow">
+                        <TD class="sqlfield">pull</TD><TD class="sqlfield">cause to move by pulling</TD><TD class="sqlfield">hyponym</TD><TD class="sqlfield">pull back</TD><TD class="sqlfield">move to a rearward position; pull towards the back</TD>
+                    </TR>
+                    <TR class="sqlrow">
+                        <TD class="sqlfield">pull</TD><TD class="sqlfield">cause to move by pulling</TD><TD class="sqlfield">hyponym</TD><TD class="sqlfield">twitch</TD><TD class="sqlfield">move or pull with a sudden motion</TD>
+                    </TR>
+                    <TR class="sqlrow">
+                        <TD class="sqlfield">pull</TD><TD class="sqlfield">cause to move by pulling</TD><TD class="sqlfield">similar</TD><TD class="sqlfield">pull</TD><TD class="sqlfield">apply force so as to cause motion towards the source of the motion</TD>
+                    </TR>
+                    <TR class="sqlrow">
+                        <TD class="sqlfield">pull</TD><TD class="sqlfield">cause to move by pulling</TD><TD class="sqlfield">similar</TD><TD class="sqlfield">draw,pull</TD><TD class="sqlfield">cause to move in a certain direction by exerting a force upon, either physically or in an abstract sense</TD>
+                    </TR>
+                    <TR class="sqlrow">
+                        <TD class="sqlfield">pull</TD><TD class="sqlfield">direct toward itself or oneself by means of some psychological power or physical attributes</TD><TD class="sqlfield">hypernym</TD><TD class="sqlfield">draw,pull</TD><TD class="sqlfield">cause to move by pulling</TD>
+                    </TR>
+                    <TR class="sqlrow">
+                        <TD class="sqlfield">pull</TD><TD class="sqlfield">direct toward itself or oneself by means of some psychological power or physical attributes</TD><TD class="sqlfield">hyponym</TD><TD class="sqlfield">arrest,catch,get</TD><TD class="sqlfield">attract and fix</TD>
+                    </TR>
+                    <TR class="sqlrow">
+                        <TD class="sqlfield">pull</TD><TD class="sqlfield">direct toward itself or oneself by means of some psychological power or physical attributes</TD><TD class="sqlfield">hyponym</TD><TD class="sqlfield">draw in,retract</TD><TD class="sqlfield">pull inward or towards a center</TD>
+                    </TR>
+                    <TR class="sqlrow">
+                        <TD class="sqlfield">pull</TD><TD class="sqlfield">direct toward itself or oneself by means of some psychological power or physical attributes</TD><TD class="sqlfield">hyponym</TD><TD class="sqlfield">bring</TD><TD class="sqlfield">attract the attention of</TD>
+                    </TR>
+                    <TR class="sqlrow">
+                        <TD class="sqlfield">pull</TD><TD class="sqlfield">direct toward itself or oneself by means of some psychological power or physical attributes</TD><TD class="sqlfield">hyponym</TD><TD class="sqlfield">tug</TD><TD class="sqlfield">pull hard</TD>
+                    </TR>
+                    <TR class="sqlrow">
+                        <TD class="sqlfield">pull</TD><TD class="sqlfield">direct toward itself or oneself by means of some psychological power or physical attributes</TD><TD class="sqlfield">similar</TD><TD class="sqlfield">draw in,retract</TD><TD class="sqlfield">pull inward or towards a center</TD>
+                    </TR>
+                    <TR class="sqlrow">
+                        <TD class="sqlfield">pull</TD><TD class="sqlfield">direct toward itself or oneself by means of some psychological power or physical attributes</TD><TD class="sqlfield">similar</TD><TD class="sqlfield">curl,curl up,draw in</TD><TD class="sqlfield">shape one's body into a curl</TD>
+                    </TR>
+                    <TR class="sqlrow">
+                        <TD class="sqlfield">pull</TD><TD class="sqlfield">tear or be torn violently</TD><TD class="sqlfield">hypernym</TD><TD class="sqlfield">bust,rupture,snap,tear</TD><TD class="sqlfield">separate or cause to separate abruptly</TD>
+                    </TR>
+                    <TR class="sqlrow">
+                        <TD class="sqlfield">pull</TD><TD class="sqlfield">apply force so as to cause motion towards the source of the motion</TD><TD class="sqlfield">hypernym</TD><TD class="sqlfield">force</TD><TD class="sqlfield">do forcibly; exert force</TD>
+                    </TR>
+                    <TR class="sqlrow">
+                        <TD class="sqlfield">pull</TD><TD class="sqlfield">apply force so as to cause motion towards the source of the motion</TD><TD class="sqlfield">hyponym</TD><TD class="sqlfield">hike up,hitch up</TD><TD class="sqlfield">pull up</TD>
+                    </TR>
+                    <TR class="sqlrow">
+                        <TD class="sqlfield">pull</TD><TD class="sqlfield">apply force so as to cause motion towards the source of the motion</TD><TD class="sqlfield">hyponym</TD><TD class="sqlfield">draw close</TD><TD class="sqlfield">pull towards oneself</TD>
+                    </TR>
+                    <TR class="sqlrow">
+                        <TD class="sqlfield">pull</TD><TD class="sqlfield">apply force so as to cause motion towards the source of the motion</TD><TD class="sqlfield">hyponym</TD><TD class="sqlfield">pull back,draw back,retract</TD><TD class="sqlfield">use a surgical instrument to hold open (the edges of a wound or an organ)</TD>
+                    </TR>
+                    <TR class="sqlrow">
+                        <TD class="sqlfield">pull</TD><TD class="sqlfield">apply force so as to cause motion towards the source of the motion</TD><TD class="sqlfield">hyponym</TD><TD class="sqlfield">pick at,pluck at,pull at</TD><TD class="sqlfield">pluck or pull at with the fingers</TD>
+                    </TR>
+                    <TR class="sqlrow">
+                        <TD class="sqlfield">pull</TD><TD class="sqlfield">apply force so as to cause motion towards the source of the motion</TD><TD class="sqlfield">hyponym</TD><TD class="sqlfield">attract</TD><TD class="sqlfield">exert a force on (a body) causing it to approach or prevent it from moving away</TD>
+                    </TR>
+                    <TR class="sqlrow">
+                        <TD class="sqlfield">pull</TD><TD class="sqlfield">apply force so as to cause motion towards the source of the motion</TD><TD class="sqlfield">hyponym</TD><TD class="sqlfield">gather</TD><TD class="sqlfield">draw and bring closer</TD>
+                    </TR>
+                    <TR class="sqlrow">
+                        <TD class="sqlfield">pull</TD><TD class="sqlfield">apply force so as to cause motion towards the source of the motion</TD><TD class="sqlfield">hyponym</TD><TD class="sqlfield">twist,wrench</TD><TD class="sqlfield">twist or pull violently or suddenly, especially so as to remove (something) from that to which it is attached or from where it originates</TD>
+                    </TR>
+                    <TR class="sqlrow">
+                        <TD class="sqlfield">pull</TD><TD class="sqlfield">apply force so as to cause motion towards the source of the motion</TD><TD class="sqlfield">similar</TD><TD class="sqlfield">draw,pull</TD><TD class="sqlfield">cause to move by pulling</TD>
+                    </TR>
+                    <TR class="sqlrow">
+                        <TD class="sqlfield">pull</TD><TD class="sqlfield">rein in to keep from winning a race</TD><TD class="sqlfield">hypernym</TD><TD class="sqlfield">rein in,rein</TD><TD class="sqlfield">stop or check by or as if by a pull at the reins</TD>
+                    </TR>
+                    <TR class="sqlrow">
+                        <TD class="sqlfield">pull</TD><TD class="sqlfield">operate when rowing a boat</TD><TD class="sqlfield">hypernym</TD><TD class="sqlfield">row</TD><TD class="sqlfield">propel with oars</TD>
+                    </TR>
+                    <TR class="sqlrow">
+                        <TD class="sqlfield">pull</TD><TD class="sqlfield">bring, take, or pull out of a container or from under a cover</TD><TD class="sqlfield">hypernym</TD><TD class="sqlfield">withdraw,take away,take,remove</TD><TD class="sqlfield">remove something concrete, as by lifting, pushing, or taking off, or remove something abstract</TD>
+                    </TR>
+                    <TR class="sqlrow">
+                        <TD class="sqlfield">pull</TD><TD class="sqlfield">bring, take, or pull out of a container or from under a cover</TD><TD class="sqlfield">hyponym</TD><TD class="sqlfield">unsheathe</TD><TD class="sqlfield">draw from a sheath or scabbard</TD>
+                    </TR>
+                    <TR class="sqlrow">
+                        <TD class="sqlfield">pull</TD><TD class="sqlfield">bring, take, or pull out of a container or from under a cover</TD><TD class="sqlfield">similar</TD><TD class="sqlfield">pull</TD><TD class="sqlfield">take away</TD>
+                    </TR>
+                    <TR class="sqlrow">
+                        <TD class="sqlfield">pull</TD><TD class="sqlfield">bring, take, or pull out of a container or from under a cover</TD><TD class="sqlfield">similar</TD><TD class="sqlfield">draw,take out</TD><TD class="sqlfield">take liquid out of a container or well</TD>
+                    </TR>
+                    <TR class="sqlrow">
+                        <TD class="sqlfield">pull</TD><TD class="sqlfield">bring, take, or pull out of a container or from under a cover</TD><TD class="sqlfield">similar</TD><TD class="sqlfield">pull out,tear out,take out,rip out,pull up,pull,extract,draw out</TD><TD class="sqlfield">remove, usually with some force or effort; also used in an abstract sense</TD>
+                    </TR>
+                    <TR class="sqlrow">
+                        <TD class="sqlfield">pull</TD><TD class="sqlfield">steer into a certain direction</TD><TD class="sqlfield">hypernym</TD><TD class="sqlfield">drive</TD><TD class="sqlfield">cause someone or something to move by driving</TD>
+                    </TR>
+                    <TR class="sqlrow">
+                        <TD class="sqlfield">pull</TD><TD class="sqlfield">steer into a certain direction</TD><TD class="sqlfield">similar</TD><TD class="sqlfield">pull</TD><TD class="sqlfield">move into a certain direction</TD>
+                    </TR>
+                    <TR class="sqlrow">
+                        <TD class="sqlfield">pull</TD><TD class="sqlfield">move into a certain direction</TD><TD class="sqlfield">hypernym</TD><TD class="sqlfield">drive</TD><TD class="sqlfield">move by being propelled by a force</TD>
+                    </TR>
+                    <TR class="sqlrow">
+                        <TD class="sqlfield">pull</TD><TD class="sqlfield">move into a certain direction</TD><TD class="sqlfield">hyponym</TD><TD class="sqlfield">cut in</TD><TD class="sqlfield">drive in front of another vehicle leaving too little space for that vehicle to maneuver comfortably</TD>
+                    </TR>
+                    <TR class="sqlrow">
+                        <TD class="sqlfield">pull</TD><TD class="sqlfield">move into a certain direction</TD><TD class="sqlfield">similar</TD><TD class="sqlfield">pull</TD><TD class="sqlfield">steer into a certain direction</TD>
+                    </TR>
+                    <TR class="sqlrow">
+                        <TD class="sqlfield">pull</TD><TD class="sqlfield">cause to move in a certain direction by exerting a force upon, either physically or in an abstract sense</TD><TD class="sqlfield">hypernym</TD><TD class="sqlfield">displace,move</TD><TD class="sqlfield">cause to move or shift into a new position or place, both in a concrete and in an abstract sense</TD>
+                    </TR>
+                    <TR class="sqlrow">
+                        <TD class="sqlfield">pull</TD><TD class="sqlfield">cause to move in a certain direction by exerting a force upon, either physically or in an abstract sense</TD><TD class="sqlfield">similar</TD><TD class="sqlfield">draw,pull</TD><TD class="sqlfield">cause to move by pulling</TD>
+                    </TR>
+                    <TR class="sqlrow">
+                        <TD class="sqlfield">pull</TD><TD class="sqlfield">perform an act, usually with a negative connotation</TD><TD class="sqlfield">hypernym</TD><TD class="sqlfield">act,move</TD><TD class="sqlfield">perform an action, or work out or perform (an action)</TD>
+                    </TR>
+                    <TR class="sqlrow">
+                        <TD class="sqlfield">pull</TD><TD class="sqlfield">perform an act, usually with a negative connotation</TD><TD class="sqlfield">hyponym</TD><TD class="sqlfield">make</TD><TD class="sqlfield">carry out or commit</TD>
+                    </TR>
+                    <TR class="sqlrow">
+                        <TD class="sqlfield">pull</TD><TD class="sqlfield">perform an act, usually with a negative connotation</TD><TD class="sqlfield">hyponym</TD><TD class="sqlfield">recommit</TD><TD class="sqlfield">commit once again, as of a crime</TD>
+                    </TR>
+                    <TR class="sqlrow">
+                        <TD class="sqlfield">pull</TD><TD class="sqlfield">a device used for pulling something</TD><TD class="sqlfield">hypernym</TD><TD class="sqlfield">device</TD><TD class="sqlfield">an instrumentality invented for a particular purpose</TD>
+                    </TR>
+                    <TR class="sqlrow">
+                        <TD class="sqlfield">pull</TD><TD class="sqlfield">a device used for pulling something</TD><TD class="sqlfield">hyponym</TD><TD class="sqlfield">bellpull</TD><TD class="sqlfield">a handle or cord that is pulled to ring a doorbell or a servant's bell etc.</TD>
+                    </TR>
+                    <TR class="sqlrow">
+                        <TD class="sqlfield">pull</TD><TD class="sqlfield">a device used for pulling something</TD><TD class="sqlfield">hyponym</TD><TD class="sqlfield">pull chain</TD><TD class="sqlfield">a chain (usually with a handle at the end) that is pulled in order to operate some mechanism (e.g. to flush a toilet)</TD>
+                    </TR>
+                    <TR class="sqlrow">
+                        <TD class="sqlfield">pull</TD><TD class="sqlfield">special advantage or influence</TD><TD class="sqlfield">hypernym</TD><TD class="sqlfield">advantage,vantage</TD><TD class="sqlfield">the quality of having a superior or more favorable position</TD>
+                    </TR>
+                    <TR class="sqlrow">
+                        <TD class="sqlfield">pull</TD><TD class="sqlfield">the force used in pulling</TD><TD class="sqlfield">hypernym</TD><TD class="sqlfield">force</TD><TD class="sqlfield">(physics) the influence that produces a change in a physical quantity</TD>
+                    </TR>
+                    <TR class="sqlrow">
+                        <TD class="sqlfield">pull</TD><TD class="sqlfield">a sharp strain on muscles or ligaments</TD><TD class="sqlfield">hypernym</TD><TD class="sqlfield">harm,hurt,injury,trauma</TD><TD class="sqlfield">any physical damage to the body caused by violence or accident or fracture etc.; the condition of an injury</TD>
+                    </TR>
+                    <TR class="sqlrow">
+                        <TD class="sqlfield">pull</TD><TD class="sqlfield">a sharp strain on muscles or ligaments</TD><TD class="sqlfield">hyponym</TD><TD class="sqlfield">sprain</TD><TD class="sqlfield">a painful injury to a joint caused by a sudden wrenching of its ligaments</TD>
+                    </TR>
+                </TBODY>
+            </TABLE>
+        </DIV>
+        <DIV class="sqlcomment">available semantic relations for "pull"'s synsets)</DIV>
+        <DIV class="sqlquery">
+            <DIV class="sqlstatement">SELECT w1.word,sy1.synsetid,sy1.definition,GROUP_CONCAT(DISTINCT relation) FROM synsets_synsets LEFT JOIN synsets AS sy1 ON (sy1.synsetid = synset1id) LEFT JOIN senses AS s1 ON (sy1.synsetid = s1.synsetid) LEFT JOIN words AS w1 ON (s1.wordid = w1.wordid) LEFT JOIN relations USING (relationid) WHERE w1.word = 'pull' GROUP BY sy1.synsetid ORDER BY sy1.synsetid</DIV>
+            <TABLE class="sqlresultset" border="1">
+                <TBODY>
+                    <TR class="sqlheader">
+                        <TH>word</TH><TH>synsetid</TH><TH>definition</TH><TH>GROUP_CONCAT(DISTINCT relation)</TH>
+                    </TR>
+                    <TR class="sqlrow">
+                        <TD class="sqlfield">pull</TD><TD class="sqlfield">1372</TD><TD class="sqlfield">strain abnormally</TD><TD class="sqlfield">hypernym</TD>
+                    </TR>
+                    <TR class="sqlrow">
+                        <TD class="sqlfield">pull</TD><TD class="sqlfield">2333</TD><TD class="sqlfield">the act of pulling; applying force to move something toward or with you</TD><TD class="sqlfield">hypernym,hyponym</TD>
+                    </TR>
+                    <TR class="sqlrow">
+                        <TD class="sqlfield">pull</TD><TD class="sqlfield">12487</TD><TD class="sqlfield">take away</TD><TD class="sqlfield">hypernym,similar</TD>
+                    </TR>
+                    <TR class="sqlrow">
+                        <TD class="sqlfield">pull</TD><TD class="sqlfield">13361</TD><TD class="sqlfield">a sustained effort</TD><TD class="sqlfield">hypernym</TD>
+                    </TR>
+                    <TR class="sqlrow">
+                        <TD class="sqlfield">pull</TD><TD class="sqlfield">16535</TD><TD class="sqlfield">a slow inhalation (as of tobacco smoke)</TD><TD class="sqlfield">hypernym,hyponym,part holonym</TD>
+                    </TR>
+                    <TR class="sqlrow">
+                        <TD class="sqlfield">pull</TD><TD class="sqlfield">21379</TD><TD class="sqlfield">take sides with; align oneself with; show strong sympathy for</TD><TD class="sqlfield">hypernym</TD>
+                    </TR>
+                    <TR class="sqlrow">
+                        <TD class="sqlfield">pull</TD><TD class="sqlfield">24534</TD><TD class="sqlfield">remove, usually with some force or effort; also used in an abstract sense</TD><TD class="sqlfield">hypernym,hyponym,similar</TD>
+                    </TR>
+                    <TR class="sqlrow">
+                        <TD class="sqlfield">pull</TD><TD class="sqlfield">25070</TD><TD class="sqlfield">strip of feathers</TD><TD class="sqlfield">hypernym</TD>
+                    </TR>
+                    <TR class="sqlrow">
+                        <TD class="sqlfield">pull</TD><TD class="sqlfield">25455</TD><TD class="sqlfield">hit in the direction that the player is facing when carrying through the swing</TD><TD class="sqlfield">domain topic,hypernym</TD>
+                    </TR>
+                    <TR class="sqlrow">
+                        <TD class="sqlfield">pull</TD><TD class="sqlfield">26085</TD><TD class="sqlfield">cause to move by pulling</TD><TD class="sqlfield">hypernym,hyponym,similar</TD>
+                    </TR>
+                    <TR class="sqlrow">
+                        <TD class="sqlfield">pull</TD><TD class="sqlfield">27013</TD><TD class="sqlfield">direct toward itself or oneself by means of some psychological power or physical attributes</TD><TD class="sqlfield">hypernym,hyponym,similar</TD>
+                    </TR>
+                    <TR class="sqlrow">
+                        <TD class="sqlfield">pull</TD><TD class="sqlfield">28063</TD><TD class="sqlfield">tear or be torn violently</TD><TD class="sqlfield">hypernym</TD>
+                    </TR>
+                    <TR class="sqlrow">
+                        <TD class="sqlfield">pull</TD><TD class="sqlfield">28662</TD><TD class="sqlfield">apply force so as to cause motion towards the source of the motion</TD><TD class="sqlfield">hypernym,hyponym,similar</TD>
+                    </TR>
+                    <TR class="sqlrow">
+                        <TD class="sqlfield">pull</TD><TD class="sqlfield">32621</TD><TD class="sqlfield">rein in to keep from winning a race</TD><TD class="sqlfield">hypernym</TD>
+                    </TR>
+                    <TR class="sqlrow">
+                        <TD class="sqlfield">pull</TD><TD class="sqlfield">33982</TD><TD class="sqlfield">operate when rowing a boat</TD><TD class="sqlfield">hypernym</TD>
+                    </TR>
+                    <TR class="sqlrow">
+                        <TD class="sqlfield">pull</TD><TD class="sqlfield">34787</TD><TD class="sqlfield">bring, take, or pull out of a container or from under a cover</TD><TD class="sqlfield">hypernym,hyponym,similar</TD>
+                    </TR>
+                    <TR class="sqlrow">
+                        <TD class="sqlfield">pull</TD><TD class="sqlfield">35823</TD><TD class="sqlfield">steer into a certain direction</TD><TD class="sqlfield">hypernym,similar</TD>
+                    </TR>
+                    <TR class="sqlrow">
+                        <TD class="sqlfield">pull</TD><TD class="sqlfield">35825</TD><TD class="sqlfield">move into a certain direction</TD><TD class="sqlfield">hypernym,hyponym,similar</TD>
+                    </TR>
+                    <TR class="sqlrow">
+                        <TD class="sqlfield">pull</TD><TD class="sqlfield">36582</TD><TD class="sqlfield">cause to move in a certain direction by exerting a force upon, either physically or in an abstract sense</TD><TD class="sqlfield">hypernym,similar</TD>
+                    </TR>
+                    <TR class="sqlrow">
+                        <TD class="sqlfield">pull</TD><TD class="sqlfield">44510</TD><TD class="sqlfield">perform an act, usually with a negative connotation</TD><TD class="sqlfield">hypernym,hyponym</TD>
+                    </TR>
+                    <TR class="sqlrow">
+                        <TD class="sqlfield">pull</TD><TD class="sqlfield">57786</TD><TD class="sqlfield">a device used for pulling something</TD><TD class="sqlfield">hypernym,hyponym</TD>
+                    </TR>
+                    <TR class="sqlrow">
+                        <TD class="sqlfield">pull</TD><TD class="sqlfield">64114</TD><TD class="sqlfield">special advantage or influence</TD><TD class="sqlfield">hypernym</TD>
+                    </TR>
+                    <TR class="sqlrow">
+                        <TD class="sqlfield">pull</TD><TD class="sqlfield">98069</TD><TD class="sqlfield">the force used in pulling</TD><TD class="sqlfield">hypernym</TD>
+                    </TR>
+                    <TR class="sqlrow">
+                        <TD class="sqlfield">pull</TD><TD class="sqlfield">112157</TD><TD class="sqlfield">a sharp strain on muscles or ligaments</TD><TD class="sqlfield">hypernym,hyponym</TD>
+                    </TR>
+                </TBODY>
+            </TABLE>
+        </DIV>
+        <DIV class="sqlsubsection">lexical relations</DIV>
+        <DIV class="sqlcomment">all lexical relations</DIV>
+        <DIV class="sqlquery">
+            <DIV class="sqlstatement">SELECT relation, COUNT(*) FROM senses_senses LEFT JOIN relations USING(relationid) GROUP BY relationid ORDER BY relationid</DIV>
+            <TABLE class="sqlresultset" border="1">
+                <TBODY>
+                    <TR class="sqlheader">
+                        <TH>relation</TH><TH>COUNT(*)</TH>
+                    </TR>
+                    <TR class="sqlrow">
+                        <TD class="sqlfield">antonym</TD><TD class="sqlfield">8000</TD>
+                    </TR>
+                    <TR class="sqlrow">
+                        <TD class="sqlfield">similar</TD><TD class="sqlfield">2</TD>
+                    </TR>
+                    <TR class="sqlrow">
+                        <TD class="sqlfield">also</TD><TD class="sqlfield">1148</TD>
+                    </TR>
+                    <TR class="sqlrow">
+                        <TD class="sqlfield">participle</TD><TD class="sqlfield">73</TD>
+                    </TR>
+                    <TR class="sqlrow">
+                        <TD class="sqlfield">pertainym</TD><TD class="sqlfield">8073</TD>
+                    </TR>
+                    <TR class="sqlrow">
+                        <TD class="sqlfield">derivation</TD><TD class="sqlfield">74687</TD>
+                    </TR>
+                    <TR class="sqlrow">
+                        <TD class="sqlfield">domain topic</TD><TD class="sqlfield">14</TD>
+                    </TR>
+                    <TR class="sqlrow">
+                        <TD class="sqlfield">domain member topic</TD><TD class="sqlfield">14</TD>
+                    </TR>
+                    <TR class="sqlrow">
+                        <TD class="sqlfield">domain region</TD><TD class="sqlfield">158</TD>
+                    </TR>
+                    <TR class="sqlrow">
+                        <TD class="sqlfield">domain member region</TD><TD class="sqlfield">158</TD>
+                    </TR>
+                    <TR class="sqlrow">
+                        <TD class="sqlfield">exemplifies</TD><TD class="sqlfield">404</TD>
+                    </TR>
+                    <TR class="sqlrow">
+                        <TD class="sqlfield">is exemplified by</TD><TD class="sqlfield">404</TD>
+                    </TR>
+                    <TR class="sqlrow">
+                        <TD class="sqlfield">other</TD><TD class="sqlfield">4</TD>
+                    </TR>
+                </TBODY>
+            </TABLE>
+        </DIV>
+        <DIV class="sqlcomment">max sense relations per synset</DIV>
+        <DIV class="sqlquery">
+            <DIV class="sqlstatement">SELECT synset1id, word1id, COUNT(*) AS c,word,GROUP_CONCAT(DISTINCT relation),definition FROM senses_senses LEFT JOIN synsets AS s ON (s.synsetid = synset1id) LEFT JOIN words AS w ON (w.wordid = word1id) LEFT JOIN relations USING(relationid) GROUP BY word1id,synset1id ORDER BY c DESC LIMIT 5</DIV>
+            <TABLE class="sqlresultset" border="1">
+                <TBODY>
+                    <TR class="sqlheader">
+                        <TH>synset1id</TH><TH>word1id</TH><TH>c</TH><TH>word</TH><TH>GROUP_CONCAT(DISTINCT relation)</TH><TH>definition</TH>
+                    </TR>
+                    <TR class="sqlrow">
+                        <TD class="sqlfield">72549</TD><TD class="sqlfield">138491</TD><TD class="sqlfield">298</TD><TD class="sqlfield">trade name</TD><TD class="sqlfield">is exemplified by</TD><TD class="sqlfield">a name given to a product or service</TD>
+                    </TR>
+                    <TR class="sqlrow">
+                        <TD class="sqlfield">83436</TD><TD class="sqlfield">18023</TD><TD class="sqlfield">93</TD><TD class="sqlfield">britain</TD><TD class="sqlfield">derivation,domain member region</TD><TD class="sqlfield">a monarchy in northwestern Europe occupying most of the British Isles; divided into England and Scotland and Wales and Northern Ireland; `Great Britain' is often used loosely to refer to the United Kingdom</TD>
+                    </TR>
+                    <TR class="sqlrow">
+                        <TD class="sqlfield">72551</TD><TD class="sqlfield">138509</TD><TD class="sqlfield">81</TD><TD class="sqlfield">trademark</TD><TD class="sqlfield">domain member topic,is exemplified by</TD><TD class="sqlfield">a formally registered symbol identifying the manufacturer or distributor of a product</TD>
+                    </TR>
+                    <TR class="sqlrow">
+                        <TD class="sqlfield">83255</TD><TD class="sqlfield">20554</TD><TD class="sqlfield">64</TD><TD class="sqlfield">canada</TD><TD class="sqlfield">derivation,domain member region</TD><TD class="sqlfield">a nation in northern North America; the French were the first Europeans to settle in mainland Canada</TD>
+                    </TR>
+                    <TR class="sqlrow">
+                        <TD class="sqlfield">7021</TD><TD class="sqlfield">22024</TD><TD class="sqlfield">15</TD><TD class="sqlfield">carry</TD><TD class="sqlfield">derivation</TD><TD class="sqlfield">the act of carrying something</TD>
+                    </TR>
+                </TBODY>
+            </TABLE>
+        </DIV>
+        <DIV class="sqlcomment">word lexical relations</DIV>
+        <DIV class="sqlquery">
+            <DIV class="sqlstatement">SELECT w1.word,relation,w2.word,s1.definition,s2.definition FROM senses_senses LEFT JOIN synsets AS s1 ON (s1.synsetid = synset1id) LEFT JOIN synsets AS s2 ON (s2.synsetid = synset2id) LEFT JOIN words AS w1 ON (w1.wordid = word1id) LEFT JOIN words AS w2 ON (w2.wordid = word2id) LEFT JOIN relations USING(relationid) WHERE w1.word = 'pull' ORDER BY relationid</DIV>
+            <TABLE class="sqlresultset" border="1">
+                <TBODY>
+                    <TR class="sqlheader">
+                        <TH>word</TH><TH>relation</TH><TH>word</TH><TH>definition</TH><TH>definition</TH>
+                    </TR>
+                    <TR class="sqlrow">
+                        <TD class="sqlfield">pull</TD><TD class="sqlfield">antonym</TD><TD class="sqlfield">push</TD><TD class="sqlfield">cause to move by pulling</TD><TD class="sqlfield">move with force</TD>
+                    </TR>
+                    <TR class="sqlrow">
+                        <TD class="sqlfield">pull</TD><TD class="sqlfield">also</TD><TD class="sqlfield">pull along</TD><TD class="sqlfield">cause to move by pulling</TD><TD class="sqlfield">pull along heavily, like a heavy load against a resistance</TD>
+                    </TR>
+                    <TR class="sqlrow">
+                        <TD class="sqlfield">pull</TD><TD class="sqlfield">also</TD><TD class="sqlfield">pull back</TD><TD class="sqlfield">cause to move by pulling</TD><TD class="sqlfield">move to a rearward position; pull towards the back</TD>
+                    </TR>
+                    <TR class="sqlrow">
+                        <TD class="sqlfield">pull</TD><TD class="sqlfield">also</TD><TD class="sqlfield">pull down</TD><TD class="sqlfield">cause to move by pulling</TD><TD class="sqlfield">tear down so as to make flat with the ground</TD>
+                    </TR>
+                    <TR class="sqlrow">
+                        <TD class="sqlfield">pull</TD><TD class="sqlfield">also</TD><TD class="sqlfield">pull in</TD><TD class="sqlfield">cause to move by pulling</TD><TD class="sqlfield">direct toward itself or oneself by means of some psychological power or physical attributes</TD>
+                    </TR>
+                    <TR class="sqlrow">
+                        <TD class="sqlfield">pull</TD><TD class="sqlfield">also</TD><TD class="sqlfield">pull off</TD><TD class="sqlfield">cause to move by pulling</TD><TD class="sqlfield">pull or pull out sharply</TD>
+                    </TR>
+                    <TR class="sqlrow">
+                        <TD class="sqlfield">pull</TD><TD class="sqlfield">also</TD><TD class="sqlfield">pull out</TD><TD class="sqlfield">cause to move by pulling</TD><TD class="sqlfield">remove, usually with some force or effort; also used in an abstract sense</TD>
+                    </TR>
+                    <TR class="sqlrow">
+                        <TD class="sqlfield">pull</TD><TD class="sqlfield">also</TD><TD class="sqlfield">pull up</TD><TD class="sqlfield">cause to move by pulling</TD><TD class="sqlfield">remove, usually with some force or effort; also used in an abstract sense</TD>
+                    </TR>
+                    <TR class="sqlrow">
+                        <TD class="sqlfield">pull</TD><TD class="sqlfield">derivation</TD><TD class="sqlfield">pull</TD><TD class="sqlfield">apply force so as to cause motion towards the source of the motion</TD><TD class="sqlfield">the act of pulling; applying force to move something toward or with you</TD>
+                    </TR>
+                    <TR class="sqlrow">
+                        <TD class="sqlfield">pull</TD><TD class="sqlfield">derivation</TD><TD class="sqlfield">pulling</TD><TD class="sqlfield">cause to move by pulling</TD><TD class="sqlfield">the act of pulling; applying force to move something toward or with you</TD>
+                    </TR>
+                    <TR class="sqlrow">
+                        <TD class="sqlfield">pull</TD><TD class="sqlfield">derivation</TD><TD class="sqlfield">pull</TD><TD class="sqlfield">apply force so as to cause motion towards the source of the motion</TD><TD class="sqlfield">the force used in pulling</TD>
+                    </TR>
+                    <TR class="sqlrow">
+                        <TD class="sqlfield">pull</TD><TD class="sqlfield">derivation</TD><TD class="sqlfield">puller</TD><TD class="sqlfield">apply force so as to cause motion towards the source of the motion</TD><TD class="sqlfield">someone who applies force so as to cause motion toward herself or himself</TD>
+                    </TR>
+                    <TR class="sqlrow">
+                        <TD class="sqlfield">pull</TD><TD class="sqlfield">derivation</TD><TD class="sqlfield">pulling</TD><TD class="sqlfield">apply force so as to cause motion towards the source of the motion</TD><TD class="sqlfield">the act of pulling; applying force to move something toward or with you</TD>
+                    </TR>
+                    <TR class="sqlrow">
+                        <TD class="sqlfield">pull</TD><TD class="sqlfield">derivation</TD><TD class="sqlfield">pull</TD><TD class="sqlfield">perform an act, usually with a negative connotation</TD><TD class="sqlfield">a sustained effort</TD>
+                    </TR>
+                    <TR class="sqlrow">
+                        <TD class="sqlfield">pull</TD><TD class="sqlfield">derivation</TD><TD class="sqlfield">pull</TD><TD class="sqlfield">a device used for pulling something</TD><TD class="sqlfield">direct toward itself or oneself by means of some psychological power or physical attributes</TD>
+                    </TR>
+                    <TR class="sqlrow">
+                        <TD class="sqlfield">pull</TD><TD class="sqlfield">derivation</TD><TD class="sqlfield">pull</TD><TD class="sqlfield">the force used in pulling</TD><TD class="sqlfield">direct toward itself or oneself by means of some psychological power or physical attributes</TD>
+                    </TR>
+                    <TR class="sqlrow">
+                        <TD class="sqlfield">pull</TD><TD class="sqlfield">derivation</TD><TD class="sqlfield">pull</TD><TD class="sqlfield">the force used in pulling</TD><TD class="sqlfield">apply force so as to cause motion towards the source of the motion</TD>
+                    </TR>
+                    <TR class="sqlrow">
+                        <TD class="sqlfield">pull</TD><TD class="sqlfield">derivation</TD><TD class="sqlfield">pull</TD><TD class="sqlfield">a sharp strain on muscles or ligaments</TD><TD class="sqlfield">strain abnormally</TD>
+                    </TR>
+                    <TR class="sqlrow">
+                        <TD class="sqlfield">pull</TD><TD class="sqlfield">derivation</TD><TD class="sqlfield">pull</TD><TD class="sqlfield">direct toward itself or oneself by means of some psychological power or physical attributes</TD><TD class="sqlfield">the force used in pulling</TD>
+                    </TR>
+                    <TR class="sqlrow">
+                        <TD class="sqlfield">pull</TD><TD class="sqlfield">derivation</TD><TD class="sqlfield">pull</TD><TD class="sqlfield">direct toward itself or oneself by means of some psychological power or physical attributes</TD><TD class="sqlfield">a device used for pulling something</TD>
+                    </TR>
+                    <TR class="sqlrow">
+                        <TD class="sqlfield">pull</TD><TD class="sqlfield">derivation</TD><TD class="sqlfield">pull</TD><TD class="sqlfield">direct toward itself or oneself by means of some psychological power or physical attributes</TD><TD class="sqlfield">the act of pulling; applying force to move something toward or with you</TD>
+                    </TR>
+                    <TR class="sqlrow">
+                        <TD class="sqlfield">pull</TD><TD class="sqlfield">derivation</TD><TD class="sqlfield">pull</TD><TD class="sqlfield">strain abnormally</TD><TD class="sqlfield">a sharp strain on muscles or ligaments</TD>
+                    </TR>
+                    <TR class="sqlrow">
+                        <TD class="sqlfield">pull</TD><TD class="sqlfield">derivation</TD><TD class="sqlfield">puller</TD><TD class="sqlfield">cause to move by pulling</TD><TD class="sqlfield">someone who pulls or tugs or drags in an effort to move something</TD>
+                    </TR>
+                    <TR class="sqlrow">
+                        <TD class="sqlfield">pull</TD><TD class="sqlfield">derivation</TD><TD class="sqlfield">pull</TD><TD class="sqlfield">cause to move by pulling</TD><TD class="sqlfield">the act of pulling; applying force to move something toward or with you</TD>
+                    </TR>
+                    <TR class="sqlrow">
+                        <TD class="sqlfield">pull</TD><TD class="sqlfield">derivation</TD><TD class="sqlfield">pull</TD><TD class="sqlfield">a sustained effort</TD><TD class="sqlfield">perform an act, usually with a negative connotation</TD>
+                    </TR>
+                    <TR class="sqlrow">
+                        <TD class="sqlfield">pull</TD><TD class="sqlfield">derivation</TD><TD class="sqlfield">pull</TD><TD class="sqlfield">the act of pulling; applying force to move something toward or with you</TD><TD class="sqlfield">apply force so as to cause motion towards the source of the motion</TD>
+                    </TR>
+                    <TR class="sqlrow">
+                        <TD class="sqlfield">pull</TD><TD class="sqlfield">derivation</TD><TD class="sqlfield">pull</TD><TD class="sqlfield">the act of pulling; applying force to move something toward or with you</TD><TD class="sqlfield">direct toward itself or oneself by means of some psychological power or physical attributes</TD>
+                    </TR>
+                    <TR class="sqlrow">
+                        <TD class="sqlfield">pull</TD><TD class="sqlfield">derivation</TD><TD class="sqlfield">pull</TD><TD class="sqlfield">the act of pulling; applying force to move something toward or with you</TD><TD class="sqlfield">cause to move by pulling</TD>
+                    </TR>
+                </TBODY>
+            </TABLE>
+        </DIV>
+    </BODY>
+</HTML>
