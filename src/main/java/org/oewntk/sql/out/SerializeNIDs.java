@@ -10,8 +10,11 @@ import org.oewntk.model.Sense;
 import org.oewntk.model.Synset;
 
 import java.io.*;
+import java.util.AbstractMap.SimpleEntry;
 import java.util.Collection;
 import java.util.Map;
+
+import static java.util.stream.Collectors.toMap;
 
 /**
  * Serialize ID to Numeric IDs maps
@@ -19,6 +22,8 @@ import java.util.Map;
 public class SerializeNIDs
 {
 	static final String NID_PREFIX = "nid_";
+
+	private static final String SENSEKEYS_WORDS_SYNSETS_FILE = "sensekeys_words_synsets";
 
 	/**
 	 * Serialize words id-to-nid map
@@ -114,6 +119,23 @@ public class SerializeNIDs
 	}
 
 	/**
+	 * Serialize sensekey to wordnid-synsetnid
+	 *
+	 * @param os    output stream
+	 * @param model model
+	 * @throws IOException io exception
+	 */
+	private static void serializeSensekeysWordsSynsetsNIDs(final OutputStream os, final CoreModel model) throws IOException
+	{
+		Map<String, Integer> wordToNID = Lexes.makeWordNIDs(model.lexes);
+		Map<String, Integer> synsetIdToNID = Synsets.makeSynsetNIDs(model.synsets);
+		var m = model.senses.stream() //
+				.map(s -> new SimpleEntry<>(s.getSensekey(), new SimpleEntry<>(wordToNID.get(s.getLCLemma()), synsetIdToNID.get(s.getSynsetId())))) //
+				.collect(toMap(SimpleEntry::getKey, SimpleEntry::getValue));
+		serialize(os, m);
+	}
+
+	/**
 	 * Serialize all id-to-nid maps
 	 *
 	 * @param model  model
@@ -145,6 +167,10 @@ public class SerializeNIDs
 		try (OutputStream os = new FileOutputStream(new File(outDir, NID_PREFIX + Names.SYNSETS.FILE + ".ser")))
 		{
 			serializeSynsetNIDs(os, model.synsets);
+		}
+		try (OutputStream os = new FileOutputStream(new File(outDir, SENSEKEYS_WORDS_SYNSETS_FILE + ".ser")))
+		{
+			serializeSensekeysWordsSynsetsNIDs(os, model);
 		}
 	}
 }

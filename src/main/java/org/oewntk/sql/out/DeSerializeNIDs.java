@@ -106,6 +106,7 @@ public class DeSerializeNIDs
 		System.out.printf("%s %d%n", Names.CASEDWORDS.FILE, maps.get(Names.CASEDWORDS.FILE).size());
 		System.out.printf("%s %d%n", Names.MORPHS.FILE, maps.get(Names.MORPHS.FILE).size());
 		System.out.printf("%s %d%n", Names.PRONUNCIATIONS.FILE, maps.get(Names.PRONUNCIATIONS.FILE).size());
+		System.out.printf("%s %d%n", Names.SENSES.FILE, maps.get(Names.SENSES.FILE).size());
 		System.out.printf("%s %d%n", Names.SYNSETS.FILE, maps.get(Names.SYNSETS.FILE).size());
 	}
 }
