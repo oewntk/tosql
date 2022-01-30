@@ -4,7 +4,7 @@
 SET @withnum='[a-z]+[0-9]+.*';
 SET SESSION group_concat_max_len = 1000000;
 
-SELECT GROUP_CONCAT(CONCAT('SELECT \'', table_name,'\' table_name,COUNT(*) rows FROM ', table_name) SEPARATOR ' UNION ')
+SELECT GROUP_CONCAT(CONCAT('SELECT \'', table_name,'\' table_name,COUNT(*) `rows` FROM ', table_name) SEPARATOR ' UNION ')
 INTO @sql 
 FROM 
 (
