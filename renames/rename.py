@@ -32,10 +32,10 @@ subs=(
 ("posid","pos"), # lexes_morphs.posid
 ("lexes_pronunciations","pronunciationmaps"), # lexes_pronunciations.table
 ("posid","pos"), # lexes_pronunciations.posid
-("synsets_synsets","semlinks"), # synsets_synsets.table
-("relationid","linkid"), # synsets_synsets.relationid
-("senses_senses","lexlinks"), # senses_senses.table
-("relationid","linkid"), # senses_senses.relationid
+("semrelations","semlinks"), # semrelations.table
+("relationid","linkid"), # semrelations.relationid
+("lexrelations","lexlinks"), # lexrelations.table
+("relationid","linkid"), # lexrelations.relationid
 ("senses_adjpositions","adjpositions"), # senses_adjpositions.table
 ("positionid","position"), # senses_adjpositions.positionid
 ("senses_vframes","vframemaps"), # senses_vframes.table

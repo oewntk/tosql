@@ -24,10 +24,10 @@ lexes_morphs.table lexes_morphs morphmaps
 lexes_morphs.posid posid pos
 lexes_pronunciations.table lexes_pronunciations pronunciationmaps
 lexes_pronunciations.posid posid pos
-synsets_synsets.table synsets_synsets semlinks
-synsets_synsets.relationid relationid linkid
-senses_senses.table senses_senses lexlinks
-senses_senses.relationid relationid linkid
+semrelations.table semrelations semlinks
+semrelations.relationid relationid linkid
+lexrelations.table lexrelations lexlinks
+lexrelations.relationid relationid linkid
 senses_adjpositions.table senses_adjpositions adjpositions
 senses_adjpositions.positionid positionid position
 senses_vframes.table senses_vframes vframemaps

@@ -1,1 +1,1 @@
--- ALTER TABLE `${adjpositions.table}` ADD CONSTRAINT `pk_${adjpositions.table}` PRIMARY KEY (`${adjpositions.positionid}`);
+ALTER TABLE ${adjpositions.table} ADD CONSTRAINT lexrelationspk_@{adjpositions.table}lexrelations PRIMARY KEY (${adjpositions.positionid});

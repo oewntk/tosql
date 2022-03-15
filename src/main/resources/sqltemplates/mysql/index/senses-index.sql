@@ -1,8 +1,8 @@
--- ALTER TABLE  `${senses.table}` ADD CONSTRAINT    `pk_${senses.table}`                                    PRIMARY KEY     (`${senses.senseid}`);
--- ALTER TABLE     `${senses.table}` ADD CONSTRAINT    `uk_${senses.table}_${senses.sensekey}`              UNIQUE KEY      (`${senses.sensekey}`);
-ALTER TABLE     `${senses.table}` ADD CONSTRAINT    `uk_${senses.table}_${senses.luid}_${senses.sensekey}`  UNIQUE KEY      (`${senses.luid}`,`${senses.sensekey}`);
-ALTER TABLE     `${senses.table}` ADD CONSTRAINT    `uk_${senses.table}_${senses.luid}_${senses.synsetid}`  UNIQUE KEY      (`${senses.luid}`,`${senses.synsetid}`);
-ALTER TABLE     `${senses.table}` ADD KEY           `k_${senses.table}_${senses.luid}`                                      (`${senses.luid}`);
-ALTER TABLE     `${senses.table}` ADD KEY           `k_${senses.table}_${senses.wordid}`                                    (`${senses.wordid}`);
-ALTER TABLE     `${senses.table}` ADD KEY           `k_${senses.table}_${senses.casedwordid}`                               (`${senses.casedwordid}`);
-ALTER TABLE     `${senses.table}` ADD KEY           `k_${senses.table}_${senses.synsetid}`                                  (`${senses.synsetid}`);
+-- ALTER TABLE  lexrelations${senses.table}lexrelations ADD CONSTRAINT    lexrelationspk_${senses.table}lexrelations                                    PRIMARY KEY     (lexrelations${senses.senseid}lexrelations);
+-- ALTER TABLE     lexrelations${senses.table}lexrelations ADD CONSTRAINT    lexrelationsuk_${senses.table}_${senses.sensekey}lexrelations              UNIQUE KEY      (lexrelations${senses.sensekey}lexrelations);
+ALTER TABLE     lexrelations${senses.table}lexrelations ADD CONSTRAINT    lexrelationsuk_${senses.table}_${senses.luid}_${senses.sensekey}lexrelations  UNIQUE KEY      (lexrelations${senses.luid}lexrelations,lexrelations${senses.sensekey}lexrelations);
+ALTER TABLE     lexrelations${senses.table}lexrelations ADD CONSTRAINT    lexrelationsuk_${senses.table}_${senses.luid}_${senses.synsetid}lexrelations  UNIQUE KEY      (lexrelations${senses.luid}lexrelations,lexrelations${senses.synsetid}lexrelations);
+ALTER TABLE     lexrelations${senses.table}lexrelations ADD KEY           lexrelationsk_${senses.table}_${senses.luid}lexrelations                                      (lexrelations${senses.luid}lexrelations);
+ALTER TABLE     lexrelations${senses.table}lexrelations ADD KEY           lexrelationsk_${senses.table}_${senses.wordid}lexrelations                                    (lexrelations${senses.wordid}lexrelations);
+ALTER TABLE     lexrelations${senses.table}lexrelations ADD KEY           lexrelationsk_${senses.table}_${senses.casedwordid}lexrelations                               (lexrelations${senses.casedwordid}lexrelations);
+ALTER TABLE     lexrelations${senses.table}lexrelations ADD KEY           lexrelationsk_${senses.table}_${senses.synsetid}lexrelations                                  (lexrelations${senses.synsetid}lexrelations);

@@ -29,8 +29,8 @@ public class Names
 		ADJPOSITIONS.set(bundle);
 		LEXES.set(bundle);
 		SENSES.set(bundle);
-		SYNSETS_SYNSETS.set(bundle);
-		SENSES_SENSES.set(bundle);
+		SEMRELATIONS.set(bundle);
+		LEXRELATIONS.set(bundle);
 		LEXES_MORPHS.set(bundle);
 		LEXES_PRONUNCIATIONS.set(bundle);
 		SENSES_ADJPOSITIONS.set(bundle);
@@ -366,7 +366,7 @@ public class Names
 		}
 	}
 
-	public static class SYNSETS_SYNSETS
+	public static class SEMRELATIONS
 	{
 		public static String FILE;
 		public static String TABLE;
@@ -376,11 +376,11 @@ public class Names
 
 		public static void set(ResourceBundle bundle)
 		{
-			FILE = bundle.getString("synsets_synsets.file");
-			TABLE = bundle.getString("synsets_synsets.table");
-			synset1id = bundle.getString("synsets_synsets.synset1id");
-			synset2id = bundle.getString("synsets_synsets.synset2id");
-			relationid = bundle.getString("synsets_synsets.relationid");
+			FILE = bundle.getString("semrelations.file");
+			TABLE = bundle.getString("semrelations.table");
+			synset1id = bundle.getString("semrelations.synset1id");
+			synset2id = bundle.getString("semrelations.synset2id");
+			relationid = bundle.getString("semrelations.relationid");
 		}
 
 		static
@@ -389,7 +389,7 @@ public class Names
 		}
 	}
 
-	public static class SENSES_SENSES
+	public static class LEXRELATIONS
 	{
 		public static String FILE;
 		public static String TABLE;
@@ -403,15 +403,15 @@ public class Names
 
 		public static void set(ResourceBundle bundle)
 		{
-			FILE = bundle.getString("senses_senses.file");
-			TABLE = bundle.getString("senses_senses.table");
-			synset1id = bundle.getString("senses_senses.synset1id");
-			lu1id = bundle.getString("synsets_synsets.lu1id");
-			word1id = bundle.getString("synsets_synsets.word1id");
-			synset2id = bundle.getString("senses_senses.synset2id");
-			lu2id = bundle.getString("synsets_synsets.lu2id");
-			word2id = bundle.getString("synsets_synsets.word2id");
-			relationid = bundle.getString("senses_senses.relationid");
+			FILE = bundle.getString("lexrelations.file");
+			TABLE = bundle.getString("lexrelations.table");
+			synset1id = bundle.getString("lexrelations.synset1id");
+			lu1id = bundle.getString("semrelations.lu1id");
+			word1id = bundle.getString("semrelations.word1id");
+			synset2id = bundle.getString("lexrelations.synset2id");
+			lu2id = bundle.getString("semrelations.lu2id");
+			word2id = bundle.getString("semrelations.word2id");
+			relationid = bundle.getString("lexrelations.relationid");
 		}
 
 		static

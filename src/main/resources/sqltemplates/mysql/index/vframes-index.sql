@@ -1,2 +1,2 @@
--- ALTER TABLE  `${vframes.table}` ADD CONSTRAINT `pk_${vframes.table}`                     PRIMARY KEY     (`${vframes.frameid}`);
-ALTER TABLE     `${vframes.table}` ADD CONSTRAINT `uk_${vframes.table}_${vframes.frame}`    UNIQUE KEY      (`${vframes.frame}`);
+-- ALTER TABLE  lexrelations${vframes.table}lexrelations ADD CONSTRAINT lexrelationspk_${vframes.table}lexrelations                     PRIMARY KEY     (lexrelations${vframes.frameid}lexrelations);
+ALTER TABLE     lexrelations${vframes.table}lexrelations ADD CONSTRAINT lexrelationsuk_${vframes.table}_${vframes.frame}lexrelations    UNIQUE KEY      (lexrelations${vframes.frame}lexrelations);

@@ -86,7 +86,7 @@ SELECT 'semantical relations' AS subsection;
 
 SELECT 'get words semantically-related to "horse"' AS comment;
 SELECT s.sensenum,sw.word,relation,dw.word AS relatedlemma,SUBSTRING(definition FROM 1 FOR 60)
-FROM synsets_synsets AS l
+FROM semrelations AS l
 LEFT JOIN senses AS s ON (l.synset1id = s.synsetid)
 LEFT JOIN words AS sw ON s.wordid = sw.wordid
 LEFT JOIN synsets AS sy ON (l.synset1id = sy.synsetid)
@@ -98,7 +98,7 @@ ORDER BY relationid,s.sensenum;
 
 SELECT 'get hypernyms for "horse"' AS comment;
 SELECT s.sensenum,sw.word,relation,dw.word AS relatedlemma,SUBSTRING(definition FROM 1 FOR 60)
-FROM synsets_synsets AS l
+FROM semrelations AS l
 LEFT JOIN senses AS s ON (l.synset1id = s.synsetid)
 LEFT JOIN words AS sw ON s.wordid = sw.wordid
 LEFT JOIN synsets AS sy ON (l.synset1id = sy.synsetid)
@@ -110,7 +110,7 @@ ORDER BY relationid,s.sensenum;
 
 SELECT 'get hyponyms for "horse"' AS comment;
 SELECT s.sensenum,sw.word,relation,dw.word AS relatedlemma,SUBSTRING(definition FROM 1 FOR 60)
-FROM synsets_synsets AS l
+FROM semrelations AS l
 LEFT JOIN senses AS s ON (l.synset1id = s.synsetid)
 LEFT JOIN words AS sw ON s.wordid = sw.wordid
 LEFT JOIN synsets AS sy ON (l.synset1id = sy.synsetid)
@@ -122,7 +122,7 @@ ORDER BY relationid,s.sensenum;
 
 SELECT 'get words semantically-related to "horse" grouped by type' AS comment;
 SELECT s.sensenum,sw.word,relation,GROUP_CONCAT(dw.word) AS relatedlemma,SUBSTRING(definition FROM 1 FOR 60)
-FROM synsets_synsets AS l
+FROM semrelations AS l
 LEFT JOIN senses AS s ON (l.synset1id = s.synsetid)
 LEFT JOIN words AS sw ON s.wordid = sw.wordid
 LEFT JOIN synsets AS sy ON (l.synset1id = sy.synsetid)
@@ -137,7 +137,7 @@ SELECT 'lexical relations' AS subsection;
 
 SELECT 'get words lexically-related to "black"' AS comment;
 SELECT s.sensenum,sw.word,sy.posid,relation,dw.word AS relatedlemma,SUBSTRING(definition FROM 1 FOR 60)
-FROM senses_senses AS l
+FROM lexrelations AS l
 LEFT JOIN senses AS s ON (l.synset1id = s.synsetid AND l.word1id = s.wordid)
 LEFT JOIN words AS sw ON s.wordid = sw.wordid
 LEFT JOIN synsets AS sy ON (l.synset1id = sy.synsetid)
@@ -149,7 +149,7 @@ ORDER BY relationid,sy.posid,s.sensenum;
 
 SELECT 'get antonym to adjective "black"' AS comment;
 SELECT s.sensenum,sw.word,sy.posid,relation,dw.word AS relatedlemma,SUBSTRING(definition FROM 1 FOR 60)
-FROM senses_senses AS l
+FROM lexrelations AS l
 LEFT JOIN senses AS s ON (l.synset1id = s.synsetid AND l.word1id = s.wordid)
 LEFT JOIN words AS sw ON s.wordid = sw.wordid
 LEFT JOIN synsets AS sy ON (l.synset1id = sy.synsetid)

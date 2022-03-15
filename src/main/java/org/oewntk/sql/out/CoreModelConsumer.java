@@ -122,7 +122,7 @@ public class CoreModelConsumer implements Consumer<CoreModel>
 		{
 			Synsets.generateSamples(ps, synsets, synsetIdToNID);
 		}
-		try (PrintStream ps = new PrintStream(new FileOutputStream(new File(outDir, makeFilename(Names.SYNSETS_SYNSETS.FILE))), true, StandardCharsets.UTF_8))
+		try (PrintStream ps = new PrintStream(new FileOutputStream(new File(outDir, makeFilename(Names.SEMRELATIONS.FILE))), true, StandardCharsets.UTF_8))
 		{
 			Synsets.generateSynsetRelations(ps, synsets, synsetIdToNID);
 		}
@@ -143,7 +143,7 @@ public class CoreModelConsumer implements Consumer<CoreModel>
 			/* Map<String, Integer> idToNID =*/
 			Senses.generateSenses(ps, senses, synsetIdToNID, lexKeyToNID, wordToNID, casedWordToNID);
 		}
-		try (PrintStream ps = new PrintStream(new FileOutputStream(new File(outDir, makeFilename(Names.SENSES_SENSES.FILE))), true, StandardCharsets.UTF_8))
+		try (PrintStream ps = new PrintStream(new FileOutputStream(new File(outDir, makeFilename(Names.LEXRELATIONS.FILE))), true, StandardCharsets.UTF_8))
 		{
 			Senses.generateSenseRelations(ps, senses, sensesById, synsetIdToNID, lexKeyToNID, wordToNID);
 		}

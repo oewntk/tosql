@@ -1,1 +1,1 @@
--- ALTER TABLE `${synsets.table}` ADD CONSTRAINT `pk_${synsets.table}`     PRIMARY KEY     (`${synsets.synsetid}`);
+-- ALTER TABLE lexrelations${synsets.table}lexrelations ADD CONSTRAINT lexrelationspk_${synsets.table}lexrelations     PRIMARY KEY     (lexrelations${synsets.synsetid}lexrelations);

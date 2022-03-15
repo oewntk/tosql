@@ -1,4 +1,4 @@
--- ALTER TABLE  `${casedwords.table}` ADD CONSTRAINT    `pk_${casedwords.table}`                                                PRIMARY KEY     (`${casedwords.casedwordid}`);
-ALTER TABLE     `${casedwords.table}` ADD CONSTRAINT    `uk_${casedwords.table}_${casedwords.casedword}`                        UNIQUE KEY      (`${casedwords.casedword}`);
-ALTER TABLE     `${casedwords.table}` ADD KEY           `k_${casedwords.table}_${casedwords.wordid}`                                            (`${casedwords.wordid}`);
-ALTER TABLE     `${casedwords.table}` ADD KEY           `k_${casedwords.table}_${casedwords.wordid}_${casedwords.casedwordid}`                  (`${casedwords.wordid}`,`${casedwords.casedwordid}`);
+ALTER TABLE lexrelations${casedwords.table}lexrelations ADD CONSTRAINT    lexrelationspk_${casedwords.table}lexrelations                                                PRIMARY KEY     (lexrelations${casedwords.casedwordid}lexrelations);
+ALTER TABLE     lexrelations${casedwords.table}lexrelations ADD CONSTRAINT    lexrelationsuk_${casedwords.table}_${casedwords.casedword}lexrelations                        UNIQUE KEY      (lexrelations${casedwords.casedword}lexrelations);
+ALTER TABLE     lexrelations${casedwords.table}lexrelations ADD KEY           lexrelationsk_${casedwords.table}_${casedwords.wordid}lexrelations                                            (lexrelations${casedwords.wordid}lexrelations);
+ALTER TABLE     lexrelations${casedwords.table}lexrelations ADD KEY           lexrelationsk_${casedwords.table}_${casedwords.wordid}_${casedwords.casedwordid}lexrelations                  (lexrelations${casedwords.wordid}lexrelations,lexrelations${casedwords.casedwordid}lexrelations);

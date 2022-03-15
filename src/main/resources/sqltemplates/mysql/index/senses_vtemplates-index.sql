@@ -1,4 +1,4 @@
-ALTER TABLE `${senses_vtemplates.table}` ADD KEY `k_${senses_vtemplates.table}_${senses_vtemplates.templateid}` (`${senses_vtemplates.templateid}`);
-ALTER TABLE `${senses_vtemplates.table}` ADD KEY `k_${senses_vtemplates.table}_${senses_vtemplates.synsetid}`   (`${senses_vtemplates.synsetid}`);
-ALTER TABLE `${senses_vtemplates.table}` ADD KEY `k_${senses_vtemplates.table}_${senses_vtemplates.luid}`       (`${senses_vtemplates.luid}`);
-ALTER TABLE `${senses_vtemplates.table}` ADD KEY `k_${senses_vtemplates.table}_${senses_vtemplates.wordid}`     (`${senses_vtemplates.wordid}`);
+ALTER TABLE lexrelations${senses_vtemplates.table}lexrelations ADD KEY lexrelationsk_${senses_vtemplates.table}_${senses_vtemplates.templateid}lexrelations (lexrelations${senses_vtemplates.templateid}lexrelations);
+ALTER TABLE lexrelations${senses_vtemplates.table}lexrelations ADD KEY lexrelationsk_${senses_vtemplates.table}_${senses_vtemplates.synsetid}lexrelations   (lexrelations${senses_vtemplates.synsetid}lexrelations);
+ALTER TABLE lexrelations${senses_vtemplates.table}lexrelations ADD KEY lexrelationsk_${senses_vtemplates.table}_${senses_vtemplates.luid}lexrelations       (lexrelations${senses_vtemplates.luid}lexrelations);
+ALTER TABLE lexrelations${senses_vtemplates.table}lexrelations ADD KEY lexrelationsk_${senses_vtemplates.table}_${senses_vtemplates.wordid}lexrelations     (lexrelations${senses_vtemplates.wordid}lexrelations);

@@ -128,21 +128,21 @@ public class Variables
 		toValue.put("senses.lexid", Names.SENSES.lexid);
 		toValue.put("senses.tagcount", Names.SENSES.tagcount);
 
-		toValue.put("senses_senses.file", Names.SENSES_SENSES.FILE);
-		toValue.put("senses_senses.table", Names.SENSES_SENSES.TABLE);
-		toValue.put("senses_senses.synset1id", Names.SENSES_SENSES.synset1id);
-		toValue.put("senses_senses.lu1id", Names.SENSES_SENSES.lu1id);
-		toValue.put("senses_senses.word1id", Names.SENSES_SENSES.word1id);
-		toValue.put("senses_senses.synset2id", Names.SENSES_SENSES.synset2id);
-		toValue.put("senses_senses.lu2id", Names.SENSES_SENSES.lu2id);
-		toValue.put("senses_senses.word2id", Names.SENSES_SENSES.word2id);
-		toValue.put("senses_senses.relationid", Names.SENSES_SENSES.relationid);
+		toValue.put("lexrelations.file", Names.LEXRELATIONS.FILE);
+		toValue.put("lexrelations.table", Names.LEXRELATIONS.TABLE);
+		toValue.put("lexrelations.synset1id", Names.LEXRELATIONS.synset1id);
+		toValue.put("lexrelations.lu1id", Names.LEXRELATIONS.lu1id);
+		toValue.put("lexrelations.word1id", Names.LEXRELATIONS.word1id);
+		toValue.put("lexrelations.synset2id", Names.LEXRELATIONS.synset2id);
+		toValue.put("lexrelations.lu2id", Names.LEXRELATIONS.lu2id);
+		toValue.put("lexrelations.word2id", Names.LEXRELATIONS.word2id);
+		toValue.put("lexrelations.relationid", Names.LEXRELATIONS.relationid);
 
-		toValue.put("synsets_synsets.file", Names.SYNSETS_SYNSETS.FILE);
-		toValue.put("synsets_synsets.table", Names.SYNSETS_SYNSETS.TABLE);
-		toValue.put("synsets_synsets.synset1id", Names.SYNSETS_SYNSETS.synset1id);
-		toValue.put("synsets_synsets.synset2id", Names.SYNSETS_SYNSETS.synset2id);
-		toValue.put("synsets_synsets.relationid", Names.SYNSETS_SYNSETS.relationid);
+		toValue.put("semrelations.file", Names.SEMRELATIONS.FILE);
+		toValue.put("semrelations.table", Names.SEMRELATIONS.TABLE);
+		toValue.put("semrelations.synset1id", Names.SEMRELATIONS.synset1id);
+		toValue.put("semrelations.synset2id", Names.SEMRELATIONS.synset2id);
+		toValue.put("semrelations.relationid", Names.SEMRELATIONS.relationid);
 
 		toValue.put("senses_adjpositions.file", Names.SENSES_ADJPOSITIONS.FILE);
 		toValue.put("senses_adjpositions.table", Names.SENSES_ADJPOSITIONS.TABLE);

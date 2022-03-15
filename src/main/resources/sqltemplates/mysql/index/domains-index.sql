@@ -1,2 +1,2 @@
--- ALTER TABLE  `${domains.table}` ADD CONSTRAINT `pk_${domains.table}`                                     PRIMARY KEY   (`${poses.posid}`);
-ALTER TABLE     `${domains.table}` ADD CONSTRAINT `uk_${domains.table}_${domains.domain}_${domains.posid}`  UNIQUE KEY    (`${domains.domain}`,`${domains.posid}`);
+-- ALTER TABLE  lexrelations${domains.table}lexrelations ADD CONSTRAINT lexrelationspk_${domains.table}lexrelations                                     PRIMARY KEY   (lexrelations${poses.posid}lexrelations);
+ALTER TABLE     lexrelations${domains.table}lexrelations ADD CONSTRAINT lexrelationsuk_${domains.table}_${domains.domain}_${domains.posid}lexrelations  UNIQUE KEY    (lexrelations${domains.domain}lexrelations,lexrelations${domains.posid}lexrelations);

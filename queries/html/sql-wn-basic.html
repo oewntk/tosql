@@ -451,7 +451,7 @@
         <DIV class="sqlsubsection">semantical relations</DIV>
         <DIV class="sqlcomment">get words semantically-related to "horse"</DIV>
         <DIV class="sqlquery">
-            <DIV class="sqlstatement">SELECT s.sensenum,sw.word,relation,dw.word AS relatedlemma,SUBSTRING(definition FROM 1 FOR 60) FROM synsets_synsets AS l LEFT JOIN senses AS s ON (l.synset1id = s.synsetid) LEFT JOIN words AS sw ON s.wordid = sw.wordid LEFT JOIN synsets AS sy ON (l.synset1id = sy.synsetid) LEFT JOIN senses AS d ON (l.synset2id = d.synsetid) LEFT JOIN words AS dw ON d.wordid = dw.wordid LEFT JOIN relations USING (relationid) WHERE sw.word = 'horse' ORDER BY relationid,s.sensenum</DIV>
+            <DIV class="sqlstatement">SELECT s.sensenum,sw.word,relation,dw.word AS relatedlemma,SUBSTRING(definition FROM 1 FOR 60) FROM semrelations AS l LEFT JOIN senses AS s ON (l.synset1id = s.synsetid) LEFT JOIN words AS sw ON s.wordid = sw.wordid LEFT JOIN synsets AS sy ON (l.synset1id = sy.synsetid) LEFT JOIN senses AS d ON (l.synset2id = d.synsetid) LEFT JOIN words AS dw ON d.wordid = dw.wordid LEFT JOIN relations USING (relationid) WHERE sw.word = 'horse' ORDER BY relationid,s.sensenum</DIV>
             <TABLE class="sqlresultset" border="1">
                 <TBODY>
                     <TR class="sqlheader">
@@ -714,7 +714,7 @@
         </DIV>
         <DIV class="sqlcomment">get hypernyms for "horse"</DIV>
         <DIV class="sqlquery">
-            <DIV class="sqlstatement">SELECT s.sensenum,sw.word,relation,dw.word AS relatedlemma,SUBSTRING(definition FROM 1 FOR 60) FROM synsets_synsets AS l LEFT JOIN senses AS s ON (l.synset1id = s.synsetid) LEFT JOIN words AS sw ON s.wordid = sw.wordid LEFT JOIN synsets AS sy ON (l.synset1id = sy.synsetid) LEFT JOIN senses AS d ON (l.synset2id = d.synsetid) LEFT JOIN words AS dw ON d.wordid = dw.wordid LEFT JOIN relations USING (relationid) WHERE sw.word = 'horse' AND relationid=1 AND sy.posid='n' ORDER BY relationid,s.sensenum</DIV>
+            <DIV class="sqlstatement">SELECT s.sensenum,sw.word,relation,dw.word AS relatedlemma,SUBSTRING(definition FROM 1 FOR 60) FROM semrelations AS l LEFT JOIN senses AS s ON (l.synset1id = s.synsetid) LEFT JOIN words AS sw ON s.wordid = sw.wordid LEFT JOIN synsets AS sy ON (l.synset1id = sy.synsetid) LEFT JOIN senses AS d ON (l.synset2id = d.synsetid) LEFT JOIN words AS dw ON d.wordid = dw.wordid LEFT JOIN relations USING (relationid) WHERE sw.word = 'horse' AND relationid=1 AND sy.posid='n' ORDER BY relationid,s.sensenum</DIV>
             <TABLE class="sqlresultset" border="1">
                 <TBODY>
                     <TR class="sqlheader">
@@ -758,7 +758,7 @@
         </DIV>
         <DIV class="sqlcomment">get hyponyms for "horse"</DIV>
         <DIV class="sqlquery">
-            <DIV class="sqlstatement">SELECT s.sensenum,sw.word,relation,dw.word AS relatedlemma,SUBSTRING(definition FROM 1 FOR 60) FROM synsets_synsets AS l LEFT JOIN senses AS s ON (l.synset1id = s.synsetid) LEFT JOIN words AS sw ON s.wordid = sw.wordid LEFT JOIN synsets AS sy ON (l.synset1id = sy.synsetid) LEFT JOIN senses AS d ON (l.synset2id = d.synsetid) LEFT JOIN words AS dw ON d.wordid = dw.wordid LEFT JOIN relations USING (relationid) WHERE sw.word = 'horse' AND relationid=2 AND sy.posid='n' ORDER BY relationid,s.sensenum</DIV>
+            <DIV class="sqlstatement">SELECT s.sensenum,sw.word,relation,dw.word AS relatedlemma,SUBSTRING(definition FROM 1 FOR 60) FROM semrelations AS l LEFT JOIN senses AS s ON (l.synset1id = s.synsetid) LEFT JOIN words AS sw ON s.wordid = sw.wordid LEFT JOIN synsets AS sy ON (l.synset1id = sy.synsetid) LEFT JOIN senses AS d ON (l.synset2id = d.synsetid) LEFT JOIN words AS dw ON d.wordid = dw.wordid LEFT JOIN relations USING (relationid) WHERE sw.word = 'horse' AND relationid=2 AND sy.posid='n' ORDER BY relationid,s.sensenum</DIV>
             <TABLE class="sqlresultset" border="1">
                 <TBODY>
                     <TR class="sqlheader">
@@ -913,7 +913,7 @@
         </DIV>
         <DIV class="sqlcomment">get words semantically-related to "horse" grouped by type</DIV>
         <DIV class="sqlquery">
-            <DIV class="sqlstatement">SELECT s.sensenum,sw.word,relation,GROUP_CONCAT(dw.word) AS relatedlemma,SUBSTRING(definition FROM 1 FOR 60) FROM synsets_synsets AS l LEFT JOIN senses AS s ON (l.synset1id = s.synsetid) LEFT JOIN words AS sw ON s.wordid = sw.wordid LEFT JOIN synsets AS sy ON (l.synset1id = sy.synsetid) LEFT JOIN senses AS d ON (l.synset2id = d.synsetid) LEFT JOIN words AS dw ON d.wordid = dw.wordid LEFT JOIN relations USING (relationid) WHERE sw.word = 'horse' GROUP BY relationid, relation, s.sensenum, sw.word, definition ORDER BY relationid,s.sensenum</DIV>
+            <DIV class="sqlstatement">SELECT s.sensenum,sw.word,relation,GROUP_CONCAT(dw.word) AS relatedlemma,SUBSTRING(definition FROM 1 FOR 60) FROM semrelations AS l LEFT JOIN senses AS s ON (l.synset1id = s.synsetid) LEFT JOIN words AS sw ON s.wordid = sw.wordid LEFT JOIN synsets AS sy ON (l.synset1id = sy.synsetid) LEFT JOIN senses AS d ON (l.synset2id = d.synsetid) LEFT JOIN words AS dw ON d.wordid = dw.wordid LEFT JOIN relations USING (relationid) WHERE sw.word = 'horse' GROUP BY relationid, relation, s.sensenum, sw.word, definition ORDER BY relationid,s.sensenum</DIV>
             <TABLE class="sqlresultset" border="1">
                 <TBODY>
                     <TR class="sqlheader">
@@ -973,7 +973,7 @@
         <DIV class="sqlsubsection">lexical relations</DIV>
         <DIV class="sqlcomment">get words lexically-related to "black"</DIV>
         <DIV class="sqlquery">
-            <DIV class="sqlstatement">SELECT s.sensenum,sw.word,sy.posid,relation,dw.word AS relatedlemma,SUBSTRING(definition FROM 1 FOR 60) FROM senses_senses AS l LEFT JOIN senses AS s ON (l.synset1id = s.synsetid AND l.word1id = s.wordid) LEFT JOIN words AS sw ON s.wordid = sw.wordid LEFT JOIN synsets AS sy ON (l.synset1id = sy.synsetid) LEFT JOIN senses AS d ON (l.synset2id = d.synsetid AND l.word2id = d.wordid) LEFT JOIN words AS dw ON d.wordid = dw.wordid LEFT JOIN relations USING (relationid) WHERE sw.word = 'black' ORDER BY relationid,sy.posid,s.sensenum</DIV>
+            <DIV class="sqlstatement">SELECT s.sensenum,sw.word,sy.posid,relation,dw.word AS relatedlemma,SUBSTRING(definition FROM 1 FOR 60) FROM lexrelations AS l LEFT JOIN senses AS s ON (l.synset1id = s.synsetid AND l.word1id = s.wordid) LEFT JOIN words AS sw ON s.wordid = sw.wordid LEFT JOIN synsets AS sy ON (l.synset1id = sy.synsetid) LEFT JOIN senses AS d ON (l.synset2id = d.synsetid AND l.word2id = d.wordid) LEFT JOIN words AS dw ON d.wordid = dw.wordid LEFT JOIN relations USING (relationid) WHERE sw.word = 'black' ORDER BY relationid,sy.posid,s.sensenum</DIV>
             <TABLE class="sqlresultset" border="1">
                 <TBODY>
                     <TR class="sqlheader">
@@ -1014,7 +1014,7 @@
         </DIV>
         <DIV class="sqlcomment">get antonym to adjective "black"</DIV>
         <DIV class="sqlquery">
-            <DIV class="sqlstatement">SELECT s.sensenum,sw.word,sy.posid,relation,dw.word AS relatedlemma,SUBSTRING(definition FROM 1 FOR 60) FROM senses_senses AS l LEFT JOIN senses AS s ON (l.synset1id = s.synsetid AND l.word1id = s.wordid) LEFT JOIN words AS sw ON s.wordid = sw.wordid LEFT JOIN synsets AS sy ON (l.synset1id = sy.synsetid) LEFT JOIN senses AS d ON (l.synset2id = d.synsetid AND l.word2id = d.wordid) LEFT JOIN words AS dw ON d.wordid = dw.wordid LEFT JOIN relations USING (relationid) WHERE sw.word = 'black' AND relationid=30 AND sy.posid='a' ORDER BY relationid,s.sensenum</DIV>
+            <DIV class="sqlstatement">SELECT s.sensenum,sw.word,sy.posid,relation,dw.word AS relatedlemma,SUBSTRING(definition FROM 1 FOR 60) FROM lexrelations AS l LEFT JOIN senses AS s ON (l.synset1id = s.synsetid AND l.word1id = s.wordid) LEFT JOIN words AS sw ON s.wordid = sw.wordid LEFT JOIN synsets AS sy ON (l.synset1id = sy.synsetid) LEFT JOIN senses AS d ON (l.synset2id = d.synsetid AND l.word2id = d.wordid) LEFT JOIN words AS dw ON d.wordid = dw.wordid LEFT JOIN relations USING (relationid) WHERE sw.word = 'black' AND relationid=30 AND sy.posid='a' ORDER BY relationid,s.sensenum</DIV>
             <TABLE class="sqlresultset" border="1">
                 <TBODY>
                     <TR class="sqlheader">

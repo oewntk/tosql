@@ -124,7 +124,7 @@ public class Senses
 				.sorted(Comparator.comparing(Sense::getSensekey));
 
 		// insert map
-		final String columns = String.join(",", Names.SENSES_SENSES.synset1id, Names.SENSES_SENSES.lu1id, Names.SENSES_SENSES.word1id, Names.SENSES_SENSES.synset2id, Names.SENSES_SENSES.lu2id, Names.SENSES_SENSES.word2id, Names.SENSES_SENSES.relationid);
+		final String columns = String.join(",", Names.LEXRELATIONS.synset1id, Names.LEXRELATIONS.lu1id, Names.LEXRELATIONS.word1id, Names.LEXRELATIONS.synset2id, Names.LEXRELATIONS.lu2id, Names.LEXRELATIONS.word2id, Names.LEXRELATIONS.relationid);
 		Function<Sense, List<String>> toString = (sense) -> {
 
 			var strings = new ArrayList<String>();
@@ -159,7 +159,7 @@ public class Senses
 		};
 		if (!Printers.withComment)
 		{
-			Printers.printInserts(ps, Names.SENSES_SENSES.TABLE, columns, senseStream, toString, false);
+			Printers.printInserts(ps, Names.LEXRELATIONS.TABLE, columns, senseStream, toString, false);
 		}
 		else
 		{
@@ -189,7 +189,7 @@ public class Senses
 				}
 				return stringWithComments;
 			};
-			Printers.printInsertsWithComment(ps, Names.SENSES_SENSES.TABLE, columns, senseStream, toStrings, false);
+			Printers.printInsertsWithComment(ps, Names.LEXRELATIONS.TABLE, columns, senseStream, toStrings, false);
 
 		}
 	}

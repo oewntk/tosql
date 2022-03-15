@@ -1,4 +1,4 @@
-ALTER TABLE     `${senses_adjpositions.table}`  ADD KEY `k_${senses_adjpositions.synsetid}`   (`${senses_adjpositions.synsetid}`);
-ALTER TABLE     `${senses_adjpositions.table}`  ADD KEY `k_${senses_adjpositions.luid}`       (`${senses_adjpositions.luid}`);
-ALTER TABLE     `${senses_adjpositions.table}`  ADD KEY `k_${senses_adjpositions.wordid}`     (`${senses_adjpositions.wordid}`);
--- ALTER TABLE  `${senses_adjpositions.table}`  ADD KEY `k_${senses_adjpositions.positionid}` (`${senses_adjpositions.positionid}`);
+ALTER TABLE     lexrelations${senses_adjpositions.table}lexrelations  ADD KEY lexrelationsk_${senses_adjpositions.synsetid}lexrelations   (lexrelations${senses_adjpositions.synsetid}lexrelations);
+ALTER TABLE     lexrelations${senses_adjpositions.table}lexrelations  ADD KEY lexrelationsk_${senses_adjpositions.luid}lexrelations       (lexrelations${senses_adjpositions.luid}lexrelations);
+ALTER TABLE     lexrelations${senses_adjpositions.table}lexrelations  ADD KEY lexrelationsk_${senses_adjpositions.wordid}lexrelations     (lexrelations${senses_adjpositions.wordid}lexrelations);
+-- ALTER TABLE  lexrelations${senses_adjpositions.table}lexrelations  ADD KEY lexrelationsk_${senses_adjpositions.positionid}lexrelations (lexrelations${senses_adjpositions.positionid}lexrelations);

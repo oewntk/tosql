@@ -27,7 +27,7 @@ outfile=${htmldir}/stats-${db}-${dbtag}.html
 
 # O U T P U T
 
-tables="words casedwords lexes senses synsets relations synsets_synsets senses_senses poses domains morphs pronunciations samples vframes vtemplates adjpositions lexes_morphs lexes_pronunciations senses_vframes senses_vtemplates senses_adjpositions"
+tables="words casedwords lexes senses synsets relations semrelations lexrelations poses domains morphs pronunciations samples vframes vtemplates adjpositions lexes_morphs lexes_pronunciations senses_vframes senses_vtemplates senses_adjpositions"
 
 # M A I N
 
@@ -62,7 +62,7 @@ echo "<h1>Relations</h1>" >> ${outfile}
 echo "<h2>Semantic</h2>" >> ${outfile}
 mysql ${creds} ${db} --html >> ${outfile} <<EOF
 SELECT relationid, relation, s1.posid, s2.posid, COUNT(*) 
-FROM synsets_synsets AS l 
+FROM semrelations AS l
 INNER JOIN synsets AS s1 ON l.synset1id = s1.synsetid 
 INNER JOIN synsets AS s2 ON l.synset2id = s2.synsetid 
 INNER JOIN relations USING (relationid)
@@ -72,7 +72,7 @@ EOF
 echo "<h2>Lexical</h2>" >> ${outfile}
 mysql ${creds} ${db} --html >> ${outfile} <<EOF
 SELECT relationid, relation, s1.posid, s2.posid, COUNT(*) 
-FROM senses_senses AS l 
+FROM lexrelations AS l
 INNER JOIN words AS w1 ON l.word1id = w1.wordid 
 INNER JOIN words AS w2 ON l.word2id = w2.wordid 
 INNER JOIN synsets AS s1 ON l.synset1id = s1.synsetid 

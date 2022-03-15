@@ -92,7 +92,7 @@ public class Synsets
 				.sorted(Comparator.comparing(Synset::getSynsetId));
 
 		// insert
-		final String columns = String.join(",", Names.SYNSETS_SYNSETS.synset1id, Names.SYNSETS_SYNSETS.synset2id, Names.SYNSETS_SYNSETS.relationid);
+		final String columns = String.join(",", Names.SEMRELATIONS.synset1id, Names.SEMRELATIONS.synset2id, Names.SEMRELATIONS.relationid);
 		Function<Synset, List<String>> toString = (synset) -> {
 
 			var strings = new ArrayList<String>();
@@ -116,7 +116,7 @@ public class Synsets
 		};
 		if (!Printers.withComment)
 		{
-			Printers.printInserts(ps, Names.SYNSETS_SYNSETS.TABLE, columns, synsetStream, toString, false);
+			Printers.printInserts(ps, Names.SEMRELATIONS.TABLE, columns, synsetStream, toString, false);
 		}
 		else
 		{
@@ -139,7 +139,7 @@ public class Synsets
 				}
 				return stringsWithComment;
 			};
-			Printers.printInsertsWithComment(ps, Names.SYNSETS_SYNSETS.TABLE, columns, synsetStream, toStrings, false);
+			Printers.printInsertsWithComment(ps, Names.SEMRELATIONS.TABLE, columns, synsetStream, toStrings, false);
 		}
 	}
 

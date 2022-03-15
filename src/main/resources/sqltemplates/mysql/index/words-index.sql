@@ -1,2 +1,2 @@
--- ALTER TABLE `${words.table}` ADD CONSTRAINT `pk_${words.table}`                 PRIMARY KEY      (`${words.wordid}`);
-ALTER TABLE    `${words.table}` ADD CONSTRAINT `uk_${words.table}_${words.word}`   UNIQUE KEY       (`${words.word}`);
+-- ALTER TABLE lexrelations${words.table}lexrelations ADD CONSTRAINT lexrelationspk_${words.table}lexrelations                 PRIMARY KEY      (lexrelations${words.wordid}lexrelations);
+ALTER TABLE    lexrelations${words.table}lexrelations ADD CONSTRAINT lexrelationsuk_${words.table}_${words.word}lexrelations   UNIQUE KEY       (lexrelations${words.word}lexrelations);

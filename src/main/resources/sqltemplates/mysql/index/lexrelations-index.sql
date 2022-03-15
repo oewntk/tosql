@@ -1,0 +1,12 @@
+ALTER TABLE ${lexrelations.table} ADD CONSTRAINT lexrelationspk_@{lexrelations.table}lexrelations PRIMARY KEY                                      (${lexrelations.synset1id},${lexrelations.lu1id},${lexrelations.lu2id},${lexrelations.synset2id},${lexrelations.relationid});
+ALTER TABLE ${lexrelations.table} ADD KEY        lexrelationsk_@{lexrelations.table}_@{lexrelations.relationid}lexrelations                        (${lexrelations.relationid});
+ALTER TABLE ${lexrelations.table} ADD KEY        lexrelationsk_@{lexrelations.table}_@{lexrelations.synset1id}lexrelations                         (${lexrelations.synset1id});
+ALTER TABLE ${lexrelations.table} ADD KEY        lexrelationsk_@{lexrelations.table}_@{lexrelations.lu1id}lexrelations                             (${lexrelations.lu1id});
+ALTER TABLE ${lexrelations.table} ADD KEY        lexrelationsk_@{lexrelations.table}_@{lexrelations.word1id}lexrelations                           (${lexrelations.word1id});
+ALTER TABLE ${lexrelations.table} ADD KEY        lexrelationsk_@{lexrelations.table}_@{lexrelations.synset2id}lexrelations                         (${lexrelations.synset2id});
+ALTER TABLE ${lexrelations.table} ADD KEY        lexrelationsk_@{lexrelations.table}_@{lexrelations.lu2id}lexrelations                             (${lexrelations.lu2id});
+ALTER TABLE ${lexrelations.table} ADD KEY        lexrelationsk_@{lexrelations.table}_@{lexrelations.word2id}lexrelations                           (${lexrelations.word2id});
+ALTER TABLE ${lexrelations.table} ADD KEY        lexrelationsk_@{lexrelations.table}_@{lexrelations.word1id}_${lexrelations.synset1id}lexrelations (${lexrelations.word1id},${lexrelations.synset1id});
+ALTER TABLE ${lexrelations.table} ADD KEY        lexrelationsk_@{lexrelations.table}_@{lexrelations.lu1id}_${lexrelations.synset1id}lexrelations   (${lexrelations.lu1id},${lexrelations.synset1id});
+ALTER TABLE ${lexrelations.table} ADD KEY        lexrelationsk_@{lexrelations.table}_@{lexrelations.word2id}_${lexrelations.synset2id}lexrelations (${lexrelations.word2id},${lexrelations.synset2id});
+ALTER TABLE ${lexrelations.table} ADD KEY        lexrelationsk_@{lexrelations.table}_@{lexrelations.lu2id}_${lexrelations.synset2id}lexrelations   (${lexrelations.lu2id},${lexrelations.synset2id});

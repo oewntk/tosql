@@ -1,2 +1,2 @@
--- ALTER TABLE  `${morphs.table}` ADD CONSTRAINT `pk_${morphs.table}`                   PRIMARY KEY     (`${morphs.morphid}`);
-ALTER TABLE     `${morphs.table}` ADD CONSTRAINT `uk_${morphs.table}_${morphs.morph}`   UNIQUE KEY      (`${morphs.morph}`);
+-- ALTER TABLE  lexrelations${morphs.table}lexrelations ADD CONSTRAINT lexrelationspk_${morphs.table}lexrelations                   PRIMARY KEY     (lexrelations${morphs.morphid}lexrelations);
+ALTER TABLE     lexrelations${morphs.table}lexrelations ADD CONSTRAINT lexrelationsuk_${morphs.table}_${morphs.morph}lexrelations   UNIQUE KEY      (lexrelations${morphs.morph}lexrelations);
