@@ -1,2 +1,0 @@
--- ALTER TABLE  lexrelations${relations.table}lexrelations ADD CONSTRAINT lexrelationspk_${relations.table}lexrelations                         PRIMARY KEY     (lexrelations${relations.relationid}lexrelations);
-ALTER TABLE     lexrelations${relations.table}lexrelations ADD CONSTRAINT lexrelationsuk_${relations.table}_${relations.relation}lexrelations   UNIQUE INDEX    (lexrelations${relations.relation}lexrelations);

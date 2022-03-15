@@ -1,3 +1,0 @@
-ALTER TABLE lexrelations${lexes_pronunciations.table}lexrelations ADD KEY lexrelationsk_${lexes_pronunciations.table}_${lexes_pronunciations.pronunciationid}lexrelations   (lexrelations${lexes_pronunciations.pronunciationid}lexrelations);
-ALTER TABLE lexrelations${lexes_pronunciations.table}lexrelations ADD KEY lexrelationsk_${lexes_pronunciations.table}_${lexes_pronunciations.luid}lexrelations              (lexrelations${lexes_pronunciations.luid}lexrelations);
-ALTER TABLE lexrelations${lexes_pronunciations.table}lexrelations ADD KEY lexrelationsk_${lexes_pronunciations.table}_${lexes_pronunciations.wordid}lexrelations            (lexrelations${lexes_pronunciations.wordid}lexrelations);

@@ -1,2 +1,0 @@
--- ALTER TABLE  lexrelations${samples.table}lexrelations ADD CONSTRAINT   lexrelationspk_${samples.table}lexrelations                       PRIMARY KEY     (lexrelations${samples.synsetid}lexrelations,lexrelations${samples.sampleid}lexrelations);
-ALTER TABLE     lexrelations${samples.table}lexrelations ADD KEY          lexrelationsk_${samples.table}_${samples.synsetid}lexrelations                    (lexrelations${samples.synsetid}lexrelations);

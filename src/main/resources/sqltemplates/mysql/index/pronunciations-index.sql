@@ -1,2 +1,0 @@
--- ALTER TABLE  lexrelations${pronunciations.table}lexrelations ADD CONSTRAINT lexrelationspk_${pronunciations.table}lexrelations                                   PRIMARY KEY     (lexrelations${pronunciations.pronunciationid}lexrelations);
-ALTER TABLE     lexrelations${pronunciations.table}lexrelations ADD CONSTRAINT lexrelationsuk_${pronunciations.table}_${pronunciations.pronunciation}lexrelations   UNIQUE KEY      (lexrelations${pronunciations.pronunciation}lexrelations);

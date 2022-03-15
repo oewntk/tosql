@@ -1,4 +1,0 @@
-ALTER TABLE lexrelations${senses_vframes.table}lexrelations ADD KEY lexrelationsk_${senses_vframes.table}_${senses_vframes.frameid}lexrelations     (lexrelations${senses_vframes.frameid}lexrelations);
-ALTER TABLE lexrelations${senses_vframes.table}lexrelations ADD KEY lexrelationsk_${senses_vframes.table}_${senses_vframes.synsetid}lexrelations    (lexrelations${senses_vframes.synsetid}lexrelations);
-ALTER TABLE lexrelations${senses_vframes.table}lexrelations ADD KEY lexrelationsk_${senses_vframes.table}_${senses_vframes.luid}lexrelations        (lexrelations${senses_vframes.luid}lexrelations);
-ALTER TABLE lexrelations${senses_vframes.table}lexrelations ADD KEY lexrelationsk_${senses_vframes.table}_${senses_vframes.wordid}lexrelations      (lexrelations${senses_vframes.wordid}lexrelations);

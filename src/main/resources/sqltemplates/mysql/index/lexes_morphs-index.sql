@@ -1,4 +1,0 @@
--- ALTER TABLE  lexrelations${lexes_morphs.table}lexrelations ADD CONSTRAINT  lexrelationspk_${lexes_morphs.table}lexrelations                          PRIMARY KEY     (lexrelations${lexes_morphs.morphid}lexrelations,lexrelations${lexes_morphs.luid}lexrelations,lexrelations${lexes_morphs.posid}lexrelations);
-ALTER TABLE     lexrelations${lexes_morphs.table}lexrelations ADD KEY         lexrelationsk_${lexes_morphs.table}_${lexes_morphs.morphid}lexrelations                   (lexrelations${lexes_morphs.morphid}lexrelations);
-ALTER TABLE     lexrelations${lexes_morphs.table}lexrelations ADD KEY         lexrelationsk_${lexes_morphs.table}_${lexes_morphs.luid}lexrelations                      (lexrelations${lexes_morphs.luid}lexrelations);
-ALTER TABLE     lexrelations${lexes_morphs.table}lexrelations ADD KEY         lexrelationsk_${lexes_morphs.table}_${lexes_morphs.wordid}lexrelations                    (lexrelations${lexes_morphs.wordid}lexrelations);

@@ -1,0 +1,4 @@
+ALTER TABLE ${senses_vtemplates.table} ADD CONSTRAINT `fk_@{senses_vtemplates.table}_@{senses_vtemplates.synsetid}`   FOREIGN KEY (${senses_vtemplates.synsetid})   REFERENCES ${synsets.table}    (${synsets.synsetid});
+ALTER TABLE ${senses_vtemplates.table} ADD CONSTRAINT `fk_@{senses_vtemplates.table}_@{senses_vtemplates.luid}`       FOREIGN KEY (${senses_vtemplates.luid})       REFERENCES ${lexes.table}      (${lexes.luid});
+ALTER TABLE ${senses_vtemplates.table} ADD CONSTRAINT `fk_@{senses_vtemplates.table}_@{senses_vtemplates.wordid}`     FOREIGN KEY (${senses_vtemplates.wordid})     REFERENCES ${words.table}      (${words.wordid});
+ALTER TABLE ${senses_vtemplates.table} ADD CONSTRAINT `fk_@{senses_vtemplates.table}_@{senses_vtemplates.templateid}` FOREIGN KEY (${senses_vtemplates.templateid}) REFERENCES ${vtemplates.table} (${vtemplates.templateid});

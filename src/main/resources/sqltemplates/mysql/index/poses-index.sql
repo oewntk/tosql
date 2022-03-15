@@ -1,1 +1,0 @@
--- ALTER TABLE lexrelations${poses.table}lexrelations ADD CONSTRAINT lexrelationspk_${poses.table}lexrelations PRIMARY KEY (lexrelations${poses.posid}lexrelations);

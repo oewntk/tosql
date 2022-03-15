@@ -1,1 +1,0 @@
--- ALTER TABLE lexrelations${synsets.table}lexrelations ADD CONSTRAINT lexrelationspk_${synsets.table}lexrelations     PRIMARY KEY     (lexrelations${synsets.synsetid}lexrelations);

@@ -1,2 +1,0 @@
--- ALTER TABLE  lexrelations${vtemplates.table}lexrelations ADD CONSTRAINT lexrelationspk_${vtemplates.table}lexrelations                           PRIMARY KEY     (lexrelations${vtemplates.templateid}lexrelations);
-ALTER TABLE     lexrelations${vtemplates.table}lexrelations ADD CONSTRAINT lexrelationsuk_${vtemplates.table}_${vtemplates.template}lexrelations    UNIQUE KEY      (lexrelations${vtemplates.template}lexrelations (64));

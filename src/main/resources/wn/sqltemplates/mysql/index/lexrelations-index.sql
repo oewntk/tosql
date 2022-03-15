@@ -1,0 +1,12 @@
+ALTER TABLE ${lexrelations.table} ADD CONSTRAINT `pk_@{lexrelations.table}` PRIMARY KEY                                      (${lexrelations.synset1id},${lexrelations.lu1id},${lexrelations.lu2id},${lexrelations.synset2id},${lexrelations.relationid});
+ALTER TABLE ${lexrelations.table} ADD KEY        `k_@{lexrelations.table}_@{lexrelations.relationid}`                        (${lexrelations.relationid});
+ALTER TABLE ${lexrelations.table} ADD KEY        `k_@{lexrelations.table}_@{lexrelations.synset1id}`                         (${lexrelations.synset1id});
+ALTER TABLE ${lexrelations.table} ADD KEY        `k_@{lexrelations.table}_@{lexrelations.lu1id}`                             (${lexrelations.lu1id});
+ALTER TABLE ${lexrelations.table} ADD KEY        `k_@{lexrelations.table}_@{lexrelations.word1id}`                           (${lexrelations.word1id});
+ALTER TABLE ${lexrelations.table} ADD KEY        `k_@{lexrelations.table}_@{lexrelations.synset2id}`                         (${lexrelations.synset2id});
+ALTER TABLE ${lexrelations.table} ADD KEY        `k_@{lexrelations.table}_@{lexrelations.lu2id}`                             (${lexrelations.lu2id});
+ALTER TABLE ${lexrelations.table} ADD KEY        `k_@{lexrelations.table}_@{lexrelations.word2id}`                           (${lexrelations.word2id});
+ALTER TABLE ${lexrelations.table} ADD KEY        `k_@{lexrelations.table}_@{lexrelations.word1id}_@{lexrelations.synset1id}` (${lexrelations.word1id},${lexrelations.synset1id});
+ALTER TABLE ${lexrelations.table} ADD KEY        `k_@{lexrelations.table}_@{lexrelations.lu1id}_@{lexrelations.synset1id}`   (${lexrelations.lu1id},${lexrelations.synset1id});
+ALTER TABLE ${lexrelations.table} ADD KEY        `k_@{lexrelations.table}_@{lexrelations.word2id}_@{lexrelations.synset2id}` (${lexrelations.word2id},${lexrelations.synset2id});
+ALTER TABLE ${lexrelations.table} ADD KEY        `k_@{lexrelations.table}_@{lexrelations.lu2id}_@{lexrelations.synset2id}`   (${lexrelations.lu2id},${lexrelations.synset2id});
