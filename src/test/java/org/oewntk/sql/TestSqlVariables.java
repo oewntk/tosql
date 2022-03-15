@@ -4,11 +4,13 @@
 
 package org.oewntk.sql;
 
+import org.junit.BeforeClass;
 import org.junit.Test;
 import org.oewntk.model.Tracing;
 import org.oewntk.sql.out.Variables;
 
 import java.io.PrintStream;
+import java.util.ResourceBundle;
 
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.fail;
@@ -27,6 +29,15 @@ public class TestSqlVariables
 			"${senses.file} c ${senses._file_} ", //
 	};
 
+	static Variables variables;
+
+	@BeforeClass
+	public static void init()
+	{
+		ResourceBundle bundle = ResourceBundle.getBundle("Names");
+		variables = new Variables(bundle);
+	}
+
 	@Test
 	public void wellFormedVarSubstitution()
 	{
@@ -35,7 +46,7 @@ public class TestSqlVariables
 			assertNotNull(input);
 			try
 			{
-				String output = Variables.varSubstitution(input);
+				String output = variables.varSubstitution(input, false);
 				ps.println(output);
 			}
 			catch (IllegalArgumentException e)
@@ -53,7 +64,7 @@ public class TestSqlVariables
 			assertNotNull(input);
 			try
 			{
-				String output = Variables.varSubstitution(input);
+				String output = variables.varSubstitution(input, false);
 				fail("Not expected to succeed " + input + " yields " + output);
 			}
 			catch (IllegalArgumentException e)

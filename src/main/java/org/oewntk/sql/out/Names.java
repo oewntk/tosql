@@ -11,7 +11,7 @@ import java.util.ResourceBundle;
  */
 public class Names
 {
-	static final ResourceBundle bundle = ResourceBundle.getBundle("Names");
+	static final ResourceBundle bundle = ResourceBundle.getBundle("wn/Names");
 
 	static void set(ResourceBundle bundle)
 	{

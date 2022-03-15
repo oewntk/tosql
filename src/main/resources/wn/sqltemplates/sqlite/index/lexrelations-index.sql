@@ -1,0 +1,12 @@
+CREATE UNIQUE INDEX `pk_@{lexrelations.table}` ON ${lexrelations.table} (${lexrelations.synset1id},${lexrelations.lu1id},${lexrelations.lu2id},${lexrelations.synset2id},${lexrelations.relationid});
+CREATE INDEX `k_@{lexrelations.table}_@{lexrelations.relationid}` ON ${lexrelations.table} (${lexrelations.relationid});
+CREATE INDEX `k_@{lexrelations.table}_@{lexrelations.synset1id}` ON ${lexrelations.table} (${lexrelations.synset1id});
+CREATE INDEX `k_@{lexrelations.table}_@{lexrelations.lu1id}` ON ${lexrelations.table} (${lexrelations.lu1id});
+CREATE INDEX `k_@{lexrelations.table}_@{lexrelations.word1id}` ON ${lexrelations.table} (${lexrelations.word1id});
+CREATE INDEX `k_@{lexrelations.table}_@{lexrelations.synset2id}` ON ${lexrelations.table} (${lexrelations.synset2id});
+CREATE INDEX `k_@{lexrelations.table}_@{lexrelations.lu2id}` ON ${lexrelations.table} (${lexrelations.lu2id});
+CREATE INDEX `k_@{lexrelations.table}_@{lexrelations.word2id}` ON ${lexrelations.table} (${lexrelations.word2id});
+CREATE INDEX `k_@{lexrelations.table}_@{lexrelations.word1id}_@{lexrelations.synset1id}` ON ${lexrelations.table} (${lexrelations.word1id},${lexrelations.synset1id});
+CREATE INDEX `k_@{lexrelations.table}_@{lexrelations.lu1id}_@{lexrelations.synset1id}` ON ${lexrelations.table} (${lexrelations.lu1id},${lexrelations.synset1id});
+CREATE INDEX `k_@{lexrelations.table}_@{lexrelations.word2id}_@{lexrelations.synset2id}` ON ${lexrelations.table} (${lexrelations.word2id},${lexrelations.synset2id});
+CREATE INDEX `k_@{lexrelations.table}_@{lexrelations.lu2id}_@{lexrelations.synset2id}` ON ${lexrelations.table} (${lexrelations.lu2id},${lexrelations.synset2id});

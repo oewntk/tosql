@@ -42,7 +42,7 @@ public class SourcesGenerator
 			//noinspection ResultOfMethodCallIgnored
 			outdir.mkdirs();
 		}
-		final URL url = SourcesGenerator.class.getResource("/sqltemplates/data/sources.sql");
+		final URL url = SourcesGenerator.class.getResource("/wn/sqltemplates/data/sources.sql");
 		assert url != null;
 		try (InputStream is = url.openStream(); OutputStream os = new FileOutputStream(new File(outdir, "sources.sql")))
 		{

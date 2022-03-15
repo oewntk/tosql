@@ -56,13 +56,12 @@ public class TestSqlBundle
 	@Test
 	public void testCompat()
 	{
-		Variables.set(bundleCompat);
-		assertEquals("vframesentences", Variables.varSubstitution("${vtemplates.table}"));
+		var v = new Variables(bundle);
+		var vc = new Variables(bundleCompat);
 
-		Variables.set(bundle);
-		assertEquals("vtemplates", Variables.varSubstitution("${vtemplates.table}"));
-
-		Variables.set(bundleCompat);
-		assertEquals("vframesentences", Variables.varSubstitution("${vtemplates.table}"));
+		assertEquals("vframesentences", vc.varSubstitution("${vtemplates.table}", false));
+		assertEquals("vtemplates", v.varSubstitution("${vtemplates.table}", false));
+		assertEquals("`vframesentences`", vc.varSubstitution("${vtemplates.table}", true));
+		assertEquals("`vtemplates`", v.varSubstitution("${vtemplates.table}", true));
 	}
 }
