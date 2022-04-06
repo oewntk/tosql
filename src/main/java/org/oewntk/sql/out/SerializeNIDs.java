@@ -131,7 +131,7 @@ public class SerializeNIDs
 		Map<String, Integer> synsetIdToNID = Synsets.makeSynsetNIDs(model.synsets);
 		var m = model.senses.stream() //
 				.map(s -> new SimpleEntry<>(s.getSensekey(), new SimpleEntry<>(wordToNID.get(s.getLCLemma()), synsetIdToNID.get(s.getSynsetId())))) //
-				.collect(toMap(SimpleEntry::getKey, SimpleEntry::getValue));
+				.collect(toMap(SimpleEntry::getKey, SimpleEntry::getValue, (e,n)->{if (!e.equals(n)) System.err.printf("existing %s -> new %s%n", e, n); return e;}));
 		serialize(os, m);
 	}
 
