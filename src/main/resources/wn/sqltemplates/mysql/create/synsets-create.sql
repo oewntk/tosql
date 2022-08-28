@@ -4,4 +4,4 @@ ${synsets.posid}      ENUM('n','v','a','r','s') NOT NULL,
 ${synsets.domainid}   INT                       NOT NULL,
 ${synsets.definition} MEDIUMTEXT                NOT NULL
  )
-DEFAULT CHARSET=utf8mb3;
+DEFAULT CHARSET=utf8mb4;

@@ -14,7 +14,7 @@ c_cs2=r''
 c_bc1=r'COLLATE\s+utf8_bin\s*'
 c_bc2=r''
 
-c_dcs1=r'DEFAULT\s+CHARSET=utf8mb3'
+c_dcs1=r'DEFAULT\s+CHARSET=utf8mb4'
 c_dcs2=r''
 
 c_uk1=r'UNIQUE\s+KEY\s'
