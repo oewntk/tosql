@@ -1,12 +1,12 @@
 CREATE TABLE ${senses.table} (
-${senses.senseid}     INT                                                           NOT NULL,
-${senses.sensekey}    VARCHAR(100) CHARACTER SET utf8 COLLATE utf8mb4_0900_as_cs    DEFAULT NULL,
-${senses.synsetid}    INT                                                           NOT NULL,
-${senses.luid}        INT                                                           NOT NULL,
-${senses.wordid}      INT                                                           NOT NULL,
-${senses.casedwordid} INT                                                           DEFAULT NULL,
-${senses.lexid}       INT                                                           NOT NULL,
-${senses.sensenum}    INT                                                           DEFAULT NULL,
-${senses.tagcount}    INT                                                           DEFAULT NULL
+${senses.senseid}     INT                                                    NOT NULL,
+${senses.sensekey}    VARCHAR(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin DEFAULT NULL,
+${senses.synsetid}    INT                                                    NOT NULL,
+${senses.luid}        INT                                                    NOT NULL,
+${senses.wordid}      INT                                                    NOT NULL,
+${senses.casedwordid} INT                                                    DEFAULT NULL,
+${senses.lexid}       INT                                                    NOT NULL,
+${senses.sensenum}    INT                                                    DEFAULT NULL,
+${senses.tagcount}    INT                                                    DEFAULT NULL
 )
 DEFAULT CHARSET=utf8mb4;
