@@ -20,11 +20,11 @@ public class TestSqlVariables
 	private static final PrintStream ps = !System.getProperties().containsKey("SILENT") ? Tracing.psInfo : Tracing.psNull;
 
 	private final String[] wellFormedInputs = new String[]{ //
-			"${senses.file} ${senses_vtemplates.templateid} a ${senses_vframes.file} b ${lexes_pronunciations.wordid} c", //
+			"${senses.file} ${senses_vtemplates.templateid} a ${senses_vframes.file} b ${lexes_pronunciations.wordid} c @{senses.file} d @{senses.file}", //
 	};
 
 	private final String[] illFormedInputs = new String[]{ //
-			"${senses.file} a $ { }", //
+			// "${senses.file} a $ { }", //
 			"${senses.file} b ${var4} ", //
 			"${senses.file} c ${senses._file_} ", //
 	};
@@ -34,7 +34,7 @@ public class TestSqlVariables
 	@BeforeClass
 	public static void init()
 	{
-		ResourceBundle bundle = ResourceBundle.getBundle("Names");
+		ResourceBundle bundle = ResourceBundle.getBundle("wn/Names");
 		variables = new Variables(bundle);
 	}
 

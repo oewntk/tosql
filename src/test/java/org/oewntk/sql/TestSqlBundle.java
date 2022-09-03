@@ -27,8 +27,8 @@ public class TestSqlBundle
 	@BeforeClass
 	public static void init()
 	{
-		bundle = ResourceBundle.getBundle("Names");
-		bundleCompat = ResourceBundle.getBundle("NamesCompat");
+		bundle = ResourceBundle.getBundle("wn/Names");
+		bundleCompat = ResourceBundle.getBundle("wn/NamesCompat");
 	}
 
 	@Test
