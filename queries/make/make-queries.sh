@@ -26,6 +26,10 @@ export M='\u001b[35m'
 export C='\u001b[36m'
 export Z='\u001b[0m'
 
+# I N I T
+
+init="--init-command=\"SET sql_mode=(SELECT REPLACE(@@sql_mode,'ONLY_FULL_GROUP_BY',''));\""
+
 # C R E D E N T I A L S
 
 source define_user.sh
@@ -49,7 +53,7 @@ mkdir -p ${htmldir}
 
 if [ ! -z "${createviews}" ]; then
 	echo -e "${M}create views${Z}"
-	mysql ${creds} ${db} < ${sqldir}/mysql-views.sql
+	mysql ${creds} ${init} ${db} < ${sqldir}/mysql-views.sql
 	echo "created"
 fi
 
@@ -65,7 +69,7 @@ if [ ! -z "${oneoutput}" ]; then
 		fi
 		cat $f
 	done \
-	| mysql ${creds} -X ${db} \
+	| mysql ${creds} ${init} -X ${db} \
 	| tee ${xmldir}/sql-all.xml \
 	| ./filter-xml2html.sh - > ${htmldir}/sql-all.html
 else
@@ -78,11 +82,10 @@ else
 			continue
 		fi
 		cat $f \
-		| mysql ${creds} -X ${db} \
+		| mysql ${creds} ${init} -X ${db} \
 		| tee ${xmldir}/sql-${s}.xml \
 		| ./filter-xml2html.sh - > ${htmldir}/sql-${s}.html
 	done \
 fi
 
 rm -Rf ${xmldir}
-
