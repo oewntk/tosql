@@ -28,7 +28,7 @@ export Z='\u001b[0m'
 
 # I N I T
 
-init="--init-command=\"SET sql_mode=(SELECT REPLACE(@@sql_mode,'ONLY_FULL_GROUP_BY',''));\""
+init=--init-command=\"SET sql_mode=(SELECT REPLACE(@@sql_mode,'ONLY_FULL_GROUP_BY',''));\"
 
 # C R E D E N T I A L S
 

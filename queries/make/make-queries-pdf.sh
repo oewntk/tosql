@@ -30,29 +30,29 @@ export Z='\u001b[0m'
 # make pdfs from html
 
 for f in ${htmldir}/*.html; do
-	#echo ${f}
-	b=`basename ${f%.*}`
-	echo -e "${M}${b}.pdf${Z}"
-	wkhtmltopdf --page-size A4 --orientation Landscape ${f} ${pdfdir}/${b}.pdf
+  #echo ${f}
+  b=$(basename ${f%.*})
+  echo -e "${M}${b}.pdf${Z}"
+  wkhtmltopdf --enable-local-file-access --page-size A4 --orientation Landscape ${f} ${pdfdir}/${b}.pdf
 done
 
-pushd ${pdfdir} > /dev/null
+pushd ${pdfdir} >/dev/null
 
 # rotate pdfs from html
 
 echo -e "${M}rotate pdfs${Z}"
 rm *rotated.pdf
 
-wnfiles=`ls sql-wn*.pdf`
+wnfiles=$(ls sql-wn*.pdf)
 allpdfs="${wnfiles}"
 
 allpdfs2=
-for f in ${allpdfs}; do 
-	echo "rotate ${f}"
-	b=`basename ${f%.*}`
-	#pdf90 --suffix 'rotated' --batch ${f} > /dev/null 2> /dev/null
-	pdftk ${f} rotate 1-endwest output ${b}-rotated.pdf # > /dev/null 2> /dev/null
-	allpdfs2="${allpdfs2} ${b}-rotated.pdf"
+for f in ${allpdfs}; do
+  echo "rotate ${f}"
+  b=$(basename ${f%.*})
+  #pdf90 --suffix 'rotated' --batch ${f} > /dev/null 2> /dev/null
+  pdftk ${f} rotate 1-endwest output ${b}-rotated.pdf # > /dev/null 2> /dev/null
+  allpdfs2="${allpdfs2} ${b}-rotated.pdf"
 done
 
 # bind
@@ -66,5 +66,4 @@ pdfjam ${params} --outfile ${docdir}/oewn-queries.pdf ${p1} ${allpdfs2}
 
 rm ${allpdfs2}
 
-popd  > /dev/null
-
+popd >/dev/null
