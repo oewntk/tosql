@@ -54,9 +54,10 @@ public class Variables
 	/**
 	 * Substitute values to variables in file
 	 *
-	 * @param file     input file
-	 * @param ps       print stream
-	 * @param compress whether to compress spaces to single space
+	 * @param file         input file
+	 * @param ps           print stream
+	 * @param useBackticks surround with back-ticks
+	 * @param compress     whether to compress spaces to single space
 	 * @throws IOException io exception
 	 */
 	public void varSubstitutionInFile(final File file, final PrintStream ps, boolean useBackticks, final boolean compress) throws IOException
@@ -76,9 +77,10 @@ public class Variables
 	/**
 	 * Substitute values to variables in input stream
 	 *
-	 * @param is       input stream
-	 * @param ps       print stream
-	 * @param compress whether to compress spaces to single space
+	 * @param is           input stream
+	 * @param ps           print stream
+	 * @param useBackticks surround with back-ticks
+	 * @param compress     whether to compress spaces to single space
 	 * @throws IOException io exception
 	 */
 	public void varSubstitutionInIS(final InputStream is, final PrintStream ps, boolean useBackticks, final boolean compress) throws IOException
@@ -113,7 +115,8 @@ public class Variables
 	/**
 	 * Substitute values to variables in string
 	 *
-	 * @param input input string
+	 * @param input        input string
+	 * @param useBackticks surround with back-ticks
 	 * @return string with values substituted fir variable name
 	 */
 	public String varSubstitution(String input, boolean useBackticks)
