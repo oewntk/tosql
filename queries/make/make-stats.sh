@@ -2,7 +2,7 @@
 # 1313ou@gmail.com
 
 db=oewn
-dbtag=2021
+dbtag=2022
 
 # C O L O R S
 
@@ -22,14 +22,12 @@ source define_user.sh
 
 thisdir=$(dirname $(readlink -m $0))
 parentdir=$(readlink -m "${thisdir}/..")
-
-# out
-htmldir=${parentdir}/html
-mkdir -p ${htmldir}
+outdir=${parentdir}/html
+mkdir -p "${parentdir}"
 
 # O U T P U T
 
-outfile=${htmldir}/stats-${db}-${dbtag}.html
+outfile="${outdir}/${db}-${dbtag}-stats.html"
 
 # O U T P U T
 
@@ -89,4 +87,6 @@ ORDER BY relationid, s1.posid, s2.posid;
 EOF
 
 echo "</body></html>" >> ${outfile}
+
+echo -e "${G}${outfile}${Z}" 
 

@@ -36,7 +36,7 @@ for f in ${htmldir}/*.html; do
   wkhtmltopdf --enable-local-file-access --page-size A4 --orientation Landscape ${f} ${pdfdir}/${b}.pdf
 done
 
-pushd ${pdfdir} >/dev/null
+pushd ${pdfdir} > /dev/null
 
 # rotate pdfs from html
 
@@ -60,9 +60,12 @@ done
 echo -e "${M}assemble oewn-queries.pdf${Z}"
 echo "pdfs2=${allpdfs2}"
 
-p1=${thisdir}/oewn-frontpage-queries.pdf
+p1=${thisdir}/oewn-front-queries.pdf
 param="--pdftitle 'OEWN Queries' --pdfauthor 'Bernard Bou' --paper A4 --twoside --no-landscape --rotateoversize 'false'"
-pdfjam ${params} --outfile ${docdir}/oewn-queries.pdf ${p1} ${allpdfs2}
+outfile="${docdir}/oewn-queries.pdf"
+pdfjam ${params} --outfile ${outfile} ${p1} ${allpdfs2}
+
+echo -e "${G}${outfile}${Z}" 
 
 rm ${allpdfs2}
 
