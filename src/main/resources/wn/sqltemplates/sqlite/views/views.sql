@@ -1,0 +1,2 @@
+DROP VIEW IF EXISTS `samplesets`; CREATE VIEW IF NOT EXISTS `samplesets` AS SELECT ${samples.synsetid},GROUP_CONCAT(DISTINCT ${samples.sample}) AS `sampleset` FROM ${samples.table} GROUP BY ${samples.synsetid};
+DROP VIEW IF EXISTS `dict`; CREATE VIEW IF NOT EXISTS `dict` AS SELECT * FROM ${words.table} w LEFT JOIN ${senses.table} s USING (${words.wordid}) LEFT JOIN ${casedwords.table} c USING (${words.wordid},${casedwords.casedwordid}) LEFT JOIN ${synsets.table} y USING (${synsets.synsetid}) LEFT JOIN `samplesets` USING (${synsets.synsetid});

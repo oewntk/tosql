@@ -1,0 +1,2 @@
+CREATE OR REPLACE VIEW `samplesets` AS SELECT ${samples.synsetid},GROUP_CONCAT(DISTINCT ${samples.sample} ORDER BY ${samples.sampleid} SEPARATOR '|') AS `sampleset` FROM ${samples.table} GROUP BY ${samples.synsetid};
+CREATE OR REPLACE VIEW `dict` AS SELECT * FROM ${words.table} w LEFT JOIN ${senses.table} s USING (${words.wordid}) LEFT JOIN ${casedwords.table} c USING (${words.wordid},${casedwords.casedwordid}) LEFT JOIN ${synsets.table} y USING (${synsets.synsetid}) LEFT JOIN `samplesets` USING (${synsets.synsetid});
