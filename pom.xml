@@ -10,7 +10,7 @@
 
 	<groupId>io.github.oewntk</groupId>
 	<artifactId>tosql</artifactId>
-	<version>1.0.1</version>
+	<version>1.0.2</version>
 	<name>to_sql</name>
 	<description>Export Wordnet model to SQL files.</description>
 	<url>https://github.com/oewntk/tosql</url>
@@ -25,7 +25,7 @@
 		<dependency>
 			<groupId>io.github.oewntk</groupId>
 			<artifactId>model</artifactId>
-			<version>1.0.1</version>
+			<version>1.0.2</version>
 		</dependency>
 		<dependency>
 			<groupId>junit</groupId>
