@@ -30,7 +30,7 @@ public class Synsets
 	{
 		// stream of synsetIds
 		Stream<String> synsetIdStream = synsets.stream() //
-				.map(Synset::getSynsetId);
+				.map(s -> s.synsetId);
 		return Utils.makeNIDMap(synsetIdStream);
 	}
 
@@ -58,7 +58,7 @@ public class Synsets
 		};
 		if (!Printers.withComment)
 		{
-			Printers.printInsert(ps, Names.SYNSETS.TABLE, columns, synsets, Synset::getSynsetId, synsetIdToNID, toString);
+			Printers.printInsert(ps, Names.SYNSETS.TABLE, columns, synsets, s -> s.synsetId, synsetIdToNID, toString);
 		}
 		else
 		{
@@ -69,7 +69,7 @@ public class Synsets
 				stringsWithComment[1] = synset.synsetId;
 				return stringsWithComment;
 			};
-			Printers.printInsertWithComment(ps, Names.SYNSETS.TABLE, columns, synsets, Synset::getSynsetId, synsetIdToNID, toStrings);
+			Printers.printInsertWithComment(ps, Names.SYNSETS.TABLE, columns, synsets, s -> s.synsetId, synsetIdToNID, toStrings);
 		}
 		return synsetIdToNID;
 	}
@@ -89,7 +89,7 @@ public class Synsets
 					var relations = synset.getRelations();
 					return relations != null && relations.size() > 0;
 				}) //
-				.sorted(Comparator.comparing(Synset::getSynsetId));
+				.sorted(Comparator.comparing(s -> s.synsetId));
 
 		// insert
 		final String columns = String.join(",", Names.SEMRELATIONS.synset1id, Names.SEMRELATIONS.synset2id, Names.SEMRELATIONS.relationid);
@@ -158,7 +158,7 @@ public class Synsets
 					var examples = synset.examples;
 					return examples != null && examples.length > 0;
 				}) //
-				.sorted(Comparator.comparing(Synset::getSynsetId));
+				.sorted(Comparator.comparing(s -> s.synsetId));
 
 		// insert
 		final String columns = String.join(",", Names.SAMPLES.sampleid, Names.SAMPLES.synsetid, Names.SAMPLES.sample);

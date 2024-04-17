@@ -146,7 +146,7 @@ public class Lexes
 		// stream of cased words
 		Stream<String> casedWordStream = lexes.stream() //
 				.filter(Lex::isCased) //
-				.map(Lex::getLemma).distinct();
+				.map(lex -> lex.lemma).distinct();
 
 		// make casedword-to-nid map
 		var map = Utils.makeNIDMap(casedWordStream);
@@ -190,7 +190,7 @@ public class Lexes
 		// stream of lexes
 		Stream<Lex> lexStream = lexes.stream() //
 				.filter(lex -> lex.getForms() != null && lex.getForms().length > 0) //
-				.sorted(Comparator.comparing(Lex::getLemma));
+				.sorted(Comparator.comparing(lex -> lex.lemma));
 
 		// insert map
 		final String columns = String.join(",", Names.LEXES_MORPHS.morphid, Names.LEXES_MORPHS.luid, Names.LEXES_MORPHS.wordid, Names.LEXES_MORPHS.posid);
@@ -289,7 +289,7 @@ public class Lexes
 		// stream of lexes
 		Stream<Lex> lexStream = lexes.stream() //
 				.filter(lex -> lex.getPronunciations() != null && lex.getPronunciations().length > 0) //
-				.sorted(Comparator.comparing(Lex::getLemma));
+				.sorted(Comparator.comparing(lex -> lex.lemma));
 
 		// insert map
 		final String columns = String.join(",", Names.LEXES_PRONUNCIATIONS.pronunciationid, Names.LEXES_PRONUNCIATIONS.variety, Names.LEXES_PRONUNCIATIONS.luid, Names.LEXES_PRONUNCIATIONS.wordid, Names.LEXES_PRONUNCIATIONS.posid);
@@ -349,7 +349,7 @@ public class Lexes
 		Stream<String> pronunciationValueStream = lexes.stream() //
 				.filter(lex -> lex.getPronunciations() != null && lex.getPronunciations().length > 0) //
 				.flatMap(lex -> Arrays.stream(lex.getPronunciations())) //
-				.map(Pronunciation::getValue) //
+				.map(p -> p.value) //
 				.sorted() //
 				.distinct();
 

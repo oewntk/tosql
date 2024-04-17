@@ -26,7 +26,7 @@ public class Senses
 	/**
 	 * Make id function, this adds the case-sensitive lemma to make it unique
 	 */
-	private static final Function<Sense, String> makeId = sense -> sense.getSensekey() + ' ' + sense.lex.lemma.replace(' ', '_');
+	private static final Function<Sense, String> makeId = sense -> sense.getSenseKey() + ' ' + sense.lex.lemma.replace(' ', '_');
 
 	/**
 	 * Make sense id-to-nid map
@@ -71,7 +71,7 @@ public class Senses
 			String casedWord = lex.lemma;
 			String word = lex.getLCLemma();
 			String synsetId = sense.synsetId;
-			String sensekey = sense.getSensekey();
+			String sensekey = sense.getSenseKey();
 			int senseNum = sense.getLexIndex() + 1;
 			int lexid = sense.findLexid();
 			TagCount tagCount = sense.getTagCount();
@@ -93,7 +93,7 @@ public class Senses
 				Lex lex = sense.lex;
 				String casedWord = lex.lemma;
 				String synsetId = sense.synsetId;
-				String sensekey = sense.getSensekey();
+				String sensekey = sense.getSenseKey();
 				return new String[]{ //
 						toString.apply(sense), //
 						String.format("%s %s '%s'", sensekey, synsetId, casedWord),};
@@ -121,7 +121,7 @@ public class Senses
 					var relations = s.getRelations();
 					return relations != null && relations.size() > 0;
 				}) //
-				.sorted(Comparator.comparing(Sense::getSensekey));
+				.sorted(Comparator.comparing(Sense::getSenseKey));
 
 		// insert map
 		final String columns = String.join(",", Names.LEXRELATIONS.synset1id, Names.LEXRELATIONS.lu1id, Names.LEXRELATIONS.word1id, Names.LEXRELATIONS.synset2id, Names.LEXRELATIONS.lu2id, Names.LEXRELATIONS.word2id, Names.LEXRELATIONS.relationid);
@@ -211,7 +211,7 @@ public class Senses
 					var adjPosition = s.adjPosition;
 					return adjPosition != null;
 				}) //
-				.sorted(Comparator.comparing(Sense::getSensekey));
+				.sorted(Comparator.comparing(Sense::getSenseKey));
 
 		// insert map
 		final String columns = String.join(",", Names.SENSES_ADJPOSITIONS.synsetid, Names.SENSES_ADJPOSITIONS.luid, Names.SENSES_ADJPOSITIONS.wordid, Names.SENSES_ADJPOSITIONS.positionid);
@@ -233,7 +233,7 @@ public class Senses
 		{
 			Function<Sense, String[]> toStrings = (sense) -> new String[]{ //
 					toString.apply(sense), //
-					sense.getSensekey()};
+					sense.getSenseKey()};
 			Printers.printInsertWithComment(ps, Names.SENSES_ADJPOSITIONS.TABLE, columns, senseStream, toStrings, false);
 		}
 	}
@@ -255,7 +255,7 @@ public class Senses
 					var frames = s.verbFrames;
 					return frames != null && frames.length > 0;
 				}) //
-				.sorted(Comparator.comparing(Sense::getSensekey));
+				.sorted(Comparator.comparing(Sense::getSenseKey));
 
 		// insert map
 		final String columns = String.join(",", Names.SENSES_VFRAMES.synsetid, Names.SENSES_VFRAMES.luid, Names.SENSES_VFRAMES.wordid, Names.SENSES_VFRAMES.frameid);
@@ -286,7 +286,7 @@ public class Senses
 
 				var strings = toString.apply(sense);
 				var stringsWithComment = new ArrayList<String[]>();
-				String sensekey = sense.getSensekey();
+				String sensekey = sense.getSenseKey();
 				for (int i = 0; i < sense.verbFrames.length; i++)
 				{
 					stringsWithComment.add(new String[]{ //
@@ -317,7 +317,7 @@ public class Senses
 					var templates = s.getVerbTemplates();
 					return templates != null && templates.length > 0;
 				}) //
-				.sorted(Comparator.comparing(Sense::getSensekey));
+				.sorted(Comparator.comparing(Sense::getSenseKey));
 
 		// insert map
 		final String columns = String.join(",", Names.SENSES_VTEMPLATES.synsetid, Names.SENSES_VTEMPLATES.luid, Names.SENSES_VTEMPLATES.wordid, Names.SENSES_VTEMPLATES.templateid);
@@ -347,7 +347,7 @@ public class Senses
 
 				var strings = toString.apply(sense);
 				var stringsWithComment = new ArrayList<String[]>();
-				String sensekey = sense.getSensekey();
+				String sensekey = sense.getSenseKey();
 				for (int i = 0; i < sense.getVerbTemplates().length; i++)
 				{
 					stringsWithComment.add(new String[]{ //
