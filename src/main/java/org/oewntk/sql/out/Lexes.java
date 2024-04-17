@@ -48,8 +48,8 @@ public class Lexes
 
 			String word = lex.getLCLemma();
 			int wordNID = NIDMaps.lookupLC(wordToNID, word);
-			String casedWordNID = NIDMaps.lookupNullable(casedwordToNID, lex.getLemma());
-			char type = lex.getType();
+			String casedWordNID = NIDMaps.lookupNullable(casedwordToNID, lex.lemma);
+			char type = lex.type;
 			return String.format("'%c',%d,%s", type, wordNID, casedWordNID);
 		};
 		if (!Printers.withComment)
@@ -60,8 +60,8 @@ public class Lexes
 		{
 			final Function<Lex, String[]> toStrings = lex -> {
 
-				String casedWord = lex.getLemma();
-				char type = lex.getType();
+				String casedWord = lex.lemma;
+				char type = lex.type;
 				return new String[]{ //
 						toString.apply(lex), //
 						String.format("%c '%s'", type, casedWord), //
@@ -200,7 +200,7 @@ public class Lexes
 			String word = lex.getLCLemma();
 			int wordNID = NIDMaps.lookupLC(wordToNID, word);
 			int lexNID = NIDMaps.lookup(lexKeyToNID, KeyF.F_W_P_A.Mono.of_t(lex));
-			char type = lex.getType();
+			char type = lex.type;
 			for (String morph : lex.getForms())
 			{
 				int morphNID = NIDMaps.lookup(morphToNID, morph);
@@ -218,8 +218,8 @@ public class Lexes
 
 				var strings = toString.apply(lex);
 				var stringsWithComment = new ArrayList<String[]>();
-				String casedWord = lex.getLemma();
-				char type = lex.getType();
+				String casedWord = lex.lemma;
+				char type = lex.type;
 				int i = 0;
 				for (String morph : lex.getForms())
 				{
@@ -299,11 +299,11 @@ public class Lexes
 			String word = lex.getLCLemma();
 			int wordNID = NIDMaps.lookupLC(wordToNID, word);
 			int lexNID = NIDMaps.lookup(lexKeyToNID, KeyF.F_W_P_A.Mono.of_t(lex));
-			char type = lex.getType();
+			char type = lex.type;
 			for (Pronunciation pronunciation : lex.getPronunciations())
 			{
-				String variety = pronunciation.getVariety();
-				String value = pronunciation.getValue();
+				String variety = pronunciation.variety;
+				String value = pronunciation.value;
 				int pronunciationNID = NIDMaps.lookup(pronunciationToNID, value);
 				strings.add(String.format("%d,%s,%d,%d,'%c'", pronunciationNID, variety == null ? "NULL" : "'" + variety + "'", lexNID, wordNID, type));
 			}
@@ -319,13 +319,13 @@ public class Lexes
 
 				var strings = toString.apply(lex);
 				var stringsWithComment = new ArrayList<String[]>();
-				String casedWord = lex.getLemma();
-				char type = lex.getType();
+				String casedWord = lex.lemma;
+				char type = lex.type;
 				int i = 0;
 				for (Pronunciation pronunciation : lex.getPronunciations())
 				{
-					String variety = pronunciation.getVariety();
-					String value = pronunciation.getValue();
+					String variety = pronunciation.variety;
+					String value = pronunciation.value;
 					stringsWithComment.add(new String[]{ //
 							strings.get(i), //
 							String.format("%s%s '%s' %c", value, variety == null ? "" : " [" + variety + "]", casedWord, type),});

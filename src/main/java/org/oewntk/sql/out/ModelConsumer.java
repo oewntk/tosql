@@ -104,7 +104,7 @@ public class ModelConsumer implements Consumer<Model>
 			Senses.generateSensesVerbTemplates(ps, sensesById, coreConsumer.synsetIdToNID, coreConsumer.lexKeyToNID, coreConsumer.wordToNID);
 		}
 
-		final Function<Map.Entry<Integer, VerbTemplate>, String> toString = entry -> String.format("%d, '%s'", entry.getKey(), Utils.escape(entry.getValue().getTemplate()));
+		final Function<Map.Entry<Integer, VerbTemplate>, String> toString = entry -> String.format("%d, '%s'", entry.getKey(), Utils.escape(entry.getValue().template));
 		try (PrintStream ps = new PrintStream(new FileOutputStream(new File(outDir, CoreModelConsumer.makeFilename(Names.VTEMPLATES.FILE))), true, StandardCharsets.UTF_8))
 		{
 			Utils.generateTable(ps, Names.VTEMPLATES.TABLE, String.join(",", Names.VTEMPLATES.templateid, Names.VTEMPLATES.template), verbTemplatesById, toString);

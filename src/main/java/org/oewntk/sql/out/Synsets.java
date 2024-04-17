@@ -50,7 +50,7 @@ public class Synsets
 		final String columns = String.join(",", Names.SYNSETS.synsetid, Names.SYNSETS.posid, Names.SYNSETS.domainid, Names.SYNSETS.definition);
 		Function<Synset, String> toString = synset -> {
 
-			char type = synset.getType();
+			char type = synset.type;
 			String definition = synset.getDefinition();
 			String domain = synset.getLexfile();
 			int lexdomainId = BuiltIn.LEXFILE_NIDS.get(domain);
@@ -66,7 +66,7 @@ public class Synsets
 
 				var stringsWithComment = new String[2];
 				stringsWithComment[0] = toString.apply(synset);
-				stringsWithComment[1] = synset.getSynsetId();
+				stringsWithComment[1] = synset.synsetId;
 				return stringsWithComment;
 			};
 			Printers.printInsertWithComment(ps, Names.SYNSETS.TABLE, columns, synsets, Synset::getSynsetId, synsetIdToNID, toStrings);
@@ -96,7 +96,7 @@ public class Synsets
 		Function<Synset, List<String>> toString = (synset) -> {
 
 			var strings = new ArrayList<String>();
-			String synset1Id = synset.getSynsetId();
+			String synset1Id = synset.synsetId;
 			int synset1NID = NIDMaps.lookup(synsetIdToNIDMap, synset1Id);
 			var relations = synset.getRelations();
 			for (String relation : relations.keySet())
@@ -124,7 +124,7 @@ public class Synsets
 
 				var strings = toString.apply(synset);
 				var stringsWithComment = new ArrayList<String[]>();
-				String synset1Id = synset.getSynsetId();
+				String synset1Id = synset.synsetId;
 				var relations = synset.getRelations();
 				int i = 0;
 				for (String relation : relations.keySet())
@@ -155,7 +155,7 @@ public class Synsets
 		// stream of synsets
 		Stream<Synset> synsetStream = synsets.stream() //
 				.filter(synset -> {
-					var examples = synset.getExamples();
+					var examples = synset.examples;
 					return examples != null && examples.length > 0;
 				}) //
 				.sorted(Comparator.comparing(Synset::getSynsetId));
@@ -165,9 +165,9 @@ public class Synsets
 		Function<Synset, List<String>> toString = (synset) -> {
 
 			var strings = new ArrayList<String>();
-			String synsetId1 = synset.getSynsetId();
+			String synsetId1 = synset.synsetId;
 			int synsetNID1 = NIDMaps.lookup(synsetIdToNIDMap, synsetId1);
-			var examples = synset.getExamples();
+			var examples = synset.examples;
 			for (String example : examples)
 			{
 				strings.add(String.format("%d,'%s'", synsetNID1, Utils.escape(example)));

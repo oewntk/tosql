@@ -77,7 +77,7 @@ public class VerbFrames
 	 */
 	private static int getNID(VerbFrame vf, int index)
 	{
-		String id = vf.getId();
+		String id = vf.id;
 		Integer nid = VERB_FRAME_ID_TO_NIDS.get(id);
 		if (nid != null)
 		{
@@ -97,7 +97,7 @@ public class VerbFrames
 		int[] i = {0};
 		var table = verbFrames.stream() //
 				.peek(vf -> ++i[0]) //
-				.map(vf -> new SimpleEntry<>(vf.getFrame(), getNID(vf, i[0]))) //
+				.map(vf -> new SimpleEntry<>(vf.frame, getNID(vf, i[0]))) //
 				.collect(Collectors.toMap(SimpleEntry::getKey, SimpleEntry::getValue));
 
 		Printers.printInsert(ps, Names.VFRAMES.TABLE, String.join(",", Names.VFRAMES.frameid, Names.VFRAMES.frame), "%n(%d,'%s')", table);

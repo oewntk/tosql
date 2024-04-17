@@ -130,7 +130,7 @@ public class SerializeNIDs
 		Map<String, Integer> wordToNID = Lexes.makeWordNIDs(model.lexes);
 		Map<String, Integer> synsetIdToNID = Synsets.makeSynsetNIDs(model.synsets);
 		var m = model.senses.stream() //
-				.map(s -> new SimpleEntry<>(s.getSensekey(), new SimpleEntry<>(wordToNID.get(s.getLCLemma()), synsetIdToNID.get(s.getSynsetId())))) //
+				.map(s -> new SimpleEntry<>(s.getSensekey(), new SimpleEntry<>(wordToNID.get(s.getLCLemma()), synsetIdToNID.get(s.synsetId)))) //
 				.collect(toMap(SimpleEntry::getKey, SimpleEntry::getValue, (e,n)->{if (!e.equals(n)) System.err.printf("existing %s -> new %s%n", e, n); return e;}));
 		serialize(os, m);
 	}

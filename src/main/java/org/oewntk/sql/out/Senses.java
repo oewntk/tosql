@@ -26,7 +26,7 @@ public class Senses
 	/**
 	 * Make id function, this adds the case-sensitive lemma to make it unique
 	 */
-	private static final Function<Sense, String> makeId = sense -> sense.getSensekey() + ' ' + sense.getLex().getLemma().replace(' ', '_');
+	private static final Function<Sense, String> makeId = sense -> sense.getSensekey() + ' ' + sense.lex.lemma.replace(' ', '_');
 
 	/**
 	 * Make sense id-to-nid map
@@ -67,10 +67,10 @@ public class Senses
 		final String columns = String.join(",", Names.SENSES.senseid, Names.SENSES.sensekey, Names.SENSES.sensenum, Names.SENSES.synsetid, Names.SENSES.luid, Names.SENSES.wordid, Names.SENSES.casedwordid, Names.SENSES.lexid, Names.SENSES.tagcount);
 		final Function<Sense, String> toString = sense -> {
 
-			Lex lex = sense.getLex();
-			String casedWord = lex.getLemma();
+			Lex lex = sense.lex;
+			String casedWord = lex.lemma;
 			String word = lex.getLCLemma();
-			String synsetId = sense.getSynsetId();
+			String synsetId = sense.synsetId;
 			String sensekey = sense.getSensekey();
 			int senseNum = sense.getLexIndex() + 1;
 			int lexid = sense.findLexid();
@@ -79,7 +79,7 @@ public class Senses
 			int synsetNID = NIDMaps.lookup(synsetIdToNIDMap, synsetId);
 			int lexNID = NIDMaps.lookup(lexKeyToNIDMap, Key.W_P_A.of_t(lex));
 			String casedWordNID = NIDMaps.lookupNullable(casedWordIdToNIDMap, casedWord);
-			String tagCnt = tagCount == null ? "NULL" : Integer.toString(tagCount.getCount());
+			String tagCnt = tagCount == null ? "NULL" : Integer.toString(tagCount.count);
 			return String.format("'%s',%d,%d,%d,%d,%s,%s,%s", Utils.escape(sensekey), senseNum, synsetNID, lexNID, wordNID, casedWordNID, lexid, tagCnt);
 		};
 		if (!Printers.withComment)
@@ -90,9 +90,9 @@ public class Senses
 		{
 			final Function<Sense, String[]> toStringWithComment = sense -> {
 
-				Lex lex = sense.getLex();
-				String casedWord = lex.getLemma();
-				String synsetId = sense.getSynsetId();
+				Lex lex = sense.lex;
+				String casedWord = lex.lemma;
+				String synsetId = sense.synsetId;
 				String sensekey = sense.getSensekey();
 				return new String[]{ //
 						toString.apply(sense), //
@@ -128,8 +128,8 @@ public class Senses
 		Function<Sense, List<String>> toString = (sense) -> {
 
 			var strings = new ArrayList<String>();
-			String synsetId1 = sense.getSynsetId();
-			Lex lex1 = sense.getLex();
+			String synsetId1 = sense.synsetId;
+			Lex lex1 = sense.lex;
 			String word1 = lex1.getLCLemma();
 			int lu1NID = NIDMaps.lookup(lexKeyToNIDMap, Key.W_P_A.of_t(lex1));
 			int wordNID1 = NIDMaps.lookupLC(wordIdToNIDMap, word1);
@@ -145,8 +145,8 @@ public class Senses
 				for (String senseId2 : relations.get(relation))
 				{
 					Sense sense2 = sensesById.get(senseId2);
-					String synsetId2 = sense2.getSynsetId();
-					Lex lex2 = sense2.getLex();
+					String synsetId2 = sense2.synsetId;
+					Lex lex2 = sense2.lex;
 					String word2 = lex2.getLCLemma();
 
 					int lu2NID = NIDMaps.lookup(lexKeyToNIDMap, Key.W_P_A.of_t(lex2));
@@ -167,9 +167,9 @@ public class Senses
 
 				var strings = toString.apply(sense);
 				var stringWithComments = new ArrayList<String[]>();
-				String synsetId1 = sense.getSynsetId();
-				Lex lex1 = sense.getLex();
-				String casedword1 = lex1.getLemma();
+				String synsetId1 = sense.synsetId;
+				Lex lex1 = sense.lex;
+				String casedword1 = lex1.lemma;
 				var relations = sense.getRelations();
 				int i = 0;
 				for (String relation : relations.keySet())
@@ -177,9 +177,9 @@ public class Senses
 					for (String senseId2 : relations.get(relation))
 					{
 						Sense sense2 = sensesById.get(senseId2);
-						String synsetId2 = sense2.getSynsetId();
-						Lex lex2 = sense2.getLex();
-						String casedword2 = lex2.getLemma();
+						String synsetId2 = sense2.synsetId;
+						Lex lex2 = sense2.lex;
+						String casedword2 = lex2.lemma;
 						stringWithComments.add(new String[]{ //
 								strings.get(i), //
 								String.format("%s '%s' -%s-> %s '%s'", synsetId1, casedword1, relation, synsetId2, casedword2), //
@@ -208,7 +208,7 @@ public class Senses
 		// stream of senses
 		Stream<Sense> senseStream = senses.stream() //
 				.filter(s -> {
-					var adjPosition = s.getAdjPosition();
+					var adjPosition = s.adjPosition;
 					return adjPosition != null;
 				}) //
 				.sorted(Comparator.comparing(Sense::getSensekey));
@@ -217,13 +217,13 @@ public class Senses
 		final String columns = String.join(",", Names.SENSES_ADJPOSITIONS.synsetid, Names.SENSES_ADJPOSITIONS.luid, Names.SENSES_ADJPOSITIONS.wordid, Names.SENSES_ADJPOSITIONS.positionid);
 		Function<Sense, String> toString = (sense) -> {
 
-			String synsetId = sense.getSynsetId();
-			Lex lex = sense.getLex();
+			String synsetId = sense.synsetId;
+			Lex lex = sense.lex;
 			String word = lex.getLCLemma();
 			int synsetNID = NIDMaps.lookup(synsetIdToNIDMap, synsetId);
 			int luNID = NIDMaps.lookup(lexKeyToNIDMap, Key.W_P_A.of_t(lex));
 			int wordNID = NIDMaps.lookupLC(wordIdToNIDMap, word);
-			return String.format("%d,%d,%d,'%s'", synsetNID, luNID, wordNID, sense.getAdjPosition());
+			return String.format("%d,%d,%d,'%s'", synsetNID, luNID, wordNID, sense.adjPosition);
 		};
 		if (!Printers.withComment)
 		{
@@ -252,7 +252,7 @@ public class Senses
 		// stream of senses
 		Stream<Sense> senseStream = senses.stream() //
 				.filter(s -> {
-					var frames = s.getVerbFrames();
+					var frames = s.verbFrames;
 					return frames != null && frames.length > 0;
 				}) //
 				.sorted(Comparator.comparing(Sense::getSensekey));
@@ -262,14 +262,14 @@ public class Senses
 		Function<Sense, List<String>> toString = (sense) -> {
 
 			var strings = new ArrayList<String>();
-			String synsetId = sense.getSynsetId();
+			String synsetId = sense.synsetId;
 			String word = sense.getLCLemma();
 			int synsetNID = NIDMaps.lookup(synsetIdToNIDMap, synsetId);
 			int wordNID = NIDMaps.lookupLC(wordIdToNIDMap, word);
-			Lex lex = sense.getLex();
+			Lex lex = sense.lex;
 			int luNID = NIDMaps.lookup(lexKeyToNIDMap, Key.W_P_A.of_t(lex));
 
-			for (var frameId : sense.getVerbFrames())
+			for (var frameId : sense.verbFrames)
 			{
 				int frameNID = VerbFrames.VERB_FRAME_ID_TO_NIDS.get(frameId);
 				strings.add(String.format("%d,%d,%d,%d", synsetNID, luNID, wordNID, frameNID));
@@ -287,7 +287,7 @@ public class Senses
 				var strings = toString.apply(sense);
 				var stringsWithComment = new ArrayList<String[]>();
 				String sensekey = sense.getSensekey();
-				for (int i = 0; i < sense.getVerbFrames().length; i++)
+				for (int i = 0; i < sense.verbFrames.length; i++)
 				{
 					stringsWithComment.add(new String[]{ //
 							strings.get(i), //
@@ -324,11 +324,11 @@ public class Senses
 		Function<Sense, List<String>> toString = (sense) -> {
 
 			var strings = new ArrayList<String>();
-			String synsetId = sense.getSynsetId();
+			String synsetId = sense.synsetId;
 			String word = sense.getLCLemma();
 			int synsetNID = NIDMaps.lookup(synsetIdToNIDMap, synsetId);
 			int wordNID = NIDMaps.lookupLC(wordIdToNIDMap, word);
-			Lex lex = sense.getLex();
+			Lex lex = sense.lex;
 			int luNID = NIDMaps.lookup(lexKeyToNIDMap, Key.W_P_A.of_t(lex));
 
 			for (var templateId : sense.getVerbTemplates())
