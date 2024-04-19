@@ -221,7 +221,7 @@ object Lexes {
 			val strings = ArrayList<String>()
 			val word = lex.lCLemma
 			val wordNID = NIDMaps.lookupLC(wordToNID, word)
-			val lexNID = NIDMaps.lookup(lexKeyToNID, KeyF.F_W_P_A.Mono.of_t(lex))
+			val lexNID = NIDMaps.lookup(lexKeyToNID, KeyF.F_W_P_A.Mono.of(Lex::lemma, Lex::type, lex))
 			val type = lex.type
 			for (morph in lex.forms!!) {
 				val morphNID = NIDMaps.lookup(morphToNID, morph)
@@ -329,7 +329,7 @@ object Lexes {
 			val strings = ArrayList<String>()
 			val word = lex.lCLemma
 			val wordNID = NIDMaps.lookupLC(wordToNID, word)
-			val lexNID = NIDMaps.lookup(lexKeyToNID, KeyF.F_W_P_A.Mono.of_t(lex))
+			val lexNID = NIDMaps.lookup(lexKeyToNID, KeyF.F_W_P_A.Mono.of(Lex::lemma, Lex::type, lex))
 			val type = lex.type
 			for (pronunciation in lex.pronunciations!!) {
 				val variety = pronunciation.variety
