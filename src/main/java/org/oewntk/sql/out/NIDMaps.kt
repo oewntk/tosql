@@ -25,7 +25,7 @@ object NIDMaps {
 	 * @param <K> type of key
 	 * @return nid
 	</K> */
-	fun <K> lookup(map: Map<K, Int?>, key: K): Int {
+	fun <K> lookup(map: Map<K, Int>, key: K): Int {
 		try {
 			val nid = map[key]!!
 			assert(nid != 0)
@@ -43,7 +43,7 @@ object NIDMaps {
 	 * @param key key
 	 * @return nid
 	 */
-	fun lookup(map: Map<out Key?, Int?>, key: Key?): Int {
+	fun lookup(map: Map<out Key, Int>, key: Key): Int {
 		try {
 			val nid = map[key]!!
 			assert(nid != 0)
@@ -61,7 +61,7 @@ object NIDMaps {
 	 * @param key key, already lower-cased
 	 * @return nid
 	 */
-	fun lookupLC(map: Map<String, Int?>, key: String): Int {
+	fun lookupLC(map: Map<String, Int>, key: String): Int {
 		assert(key == key.lowercase())
 		return lookup(map, key)
 	}
@@ -74,19 +74,20 @@ object NIDMaps {
 	 * @param <K> type of key
 	 * @return nid or "NULL"
 	</K> */
-	fun <K> lookupNullable(map: Map<K, Int?>, key: K): String {
+	fun <K> lookupNullable(map: Map<K, Int>, key: K): String {
 		val value = map[key] ?: return "NULL"
 		return value.toString()
 	}
 
 	// P R I N T
+
 	/**
 	 * Print words id-to-nid map
 	 *
 	 * @param ps    print stream
 	 * @param lexes lexes
 	 */
-	fun printWords(ps: PrintStream, lexes: Collection<Lex>) {
+	private fun printWords(ps: PrintStream, lexes: Collection<Lex>) {
 		val wordToNID = makeWordNIDs(lexes)
 		print(ps, wordToNID)
 	}
@@ -97,7 +98,7 @@ object NIDMaps {
 	 * @param ps    print stream
 	 * @param lexes lexes
 	 */
-	fun printCasedWords(ps: PrintStream, lexes: Collection<Lex>) {
+	private fun printCasedWords(ps: PrintStream, lexes: Collection<Lex>) {
 		val casedToNID = makeCasedWordNIDs(lexes)
 		print(ps, casedToNID)
 	}
@@ -108,7 +109,7 @@ object NIDMaps {
 	 * @param ps    print stream
 	 * @param lexes lexes
 	 */
-	fun printMorphs(ps: PrintStream, lexes: Collection<Lex>) {
+	private fun printMorphs(ps: PrintStream, lexes: Collection<Lex>) {
 		val morphToNID = makeMorphNIDs(lexes)
 		print(ps, morphToNID)
 	}
@@ -119,7 +120,7 @@ object NIDMaps {
 	 * @param ps    print stream
 	 * @param lexes lexes
 	 */
-	fun printPronunciations(ps: PrintStream, lexes: Collection<Lex>) {
+	private fun printPronunciations(ps: PrintStream, lexes: Collection<Lex>) {
 		val pronunciationValueToNID = makePronunciationNIDs(lexes)
 		print(ps, pronunciationValueToNID)
 	}
@@ -130,7 +131,7 @@ object NIDMaps {
 	 * @param ps      print stream
 	 * @param synsets synsets
 	 */
-	fun printSynsets(ps: PrintStream, synsets: Collection<Synset>) {
+	private fun printSynsets(ps: PrintStream, synsets: Collection<Synset>) {
 		val synsetIdToNID = makeSynsetNIDs(synsets)
 		print(ps, synsetIdToNID)
 	}

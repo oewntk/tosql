@@ -17,7 +17,7 @@ object GrindBuiltIn {
 	/**
 	 * Main entry point
 	 *
-	 * @param args command-line arguments yamlDir [outputDir]
+	 * @param args command-line arguments: "yamlDir [outputDir]"
 	 * @throws IOException io exception
 	 */
 	@Throws(IOException::class)

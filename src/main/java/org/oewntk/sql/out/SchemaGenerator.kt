@@ -58,7 +58,7 @@ class SchemaGenerator
 			if (outputFileOrDir == null) System.out else PrintStream(outputFileOrDir).use { ps ->
 				processTemplates(module, inputSubdir, inputs) { `is`: InputStream, _: String ->
 					try {
-						variables.varSubstitutionInIS(`is`, ps, true, true)
+						variables.varSubstitutionInIS(`is`, ps, useBackticks = true, compress = true)
 					} catch (e: IOException) {
 						e.printStackTrace()
 					}
@@ -71,7 +71,7 @@ class SchemaGenerator
 				val output2 = File(dir, name)
 				try {
 					PrintStream(output2).use { ps ->
-						variables.varSubstitutionInIS(`is`, ps, true, true)
+						variables.varSubstitutionInIS(`is`, ps, useBackticks = true, compress = true)
 					}
 				} catch (e: IOException) {
 					e.printStackTrace()

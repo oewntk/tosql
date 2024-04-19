@@ -66,7 +66,7 @@ object BuiltIn {
 		arrayOf("adjs.ppl", "a", "adj.ppl", 44),
 	)
 
-	val LEXFILE_NIDS = Stream.of(*domainsArray)
+	val LEXFILE_NIDS: Map<String, Int> = Stream.of(*domainsArray)
 		.collect(
 			Collectors.toMap({ it[2] as String }, { it[3] as Int })
 		)
@@ -136,7 +136,7 @@ object BuiltIn {
 				{ it[3] as Int })
 		)
 
-	val OEWN_RELATION_TYPES = Stream.of(*relationTypesArray)
+	val OEWN_RELATION_TYPES: Map<String, Int> = Stream.of(*relationTypesArray)
 		.collect(
 			Collectors.toMap(
 				{ it[0] as String },

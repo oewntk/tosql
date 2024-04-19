@@ -190,7 +190,7 @@ object Names {
 	}
 
 	object DOMAINS {
-		lateinit var FILE: String
+		private lateinit var FILE: String
 		lateinit var TABLE: String
 		lateinit var domainid: String
 		lateinit var domain: String
