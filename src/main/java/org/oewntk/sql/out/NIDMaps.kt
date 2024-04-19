@@ -1,29 +1,22 @@
-/*
- * Copyright (c) $originalComment.match("Copyright \(c\) (\d+)", 1, "-")2021. Bernard Bou.
- */
+package org.oewntk.sql.out
 
-package org.oewntk.sql.out;
-
-import org.oewntk.model.*;
-
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.PrintStream;
-import java.nio.charset.StandardCharsets;
-import java.util.Collection;
-import java.util.Locale;
-import java.util.Map;
+import org.oewntk.model.*
+import org.oewntk.sql.out.Lexes.makeCasedWordNIDs
+import org.oewntk.sql.out.Lexes.makeMorphNIDs
+import org.oewntk.sql.out.Lexes.makePronunciationNIDs
+import org.oewntk.sql.out.Lexes.makeWordNIDs
+import org.oewntk.sql.out.Senses.makeSenseNIDs
+import org.oewntk.sql.out.Synsets.makeSynsetNIDs
+import java.io.File
+import java.io.FileOutputStream
+import java.io.IOException
+import java.io.PrintStream
+import java.nio.charset.StandardCharsets
 
 /**
  * Lookup of ID/KEY-to-NID maps and printing them
  */
-public class NIDMaps
-{
-	private NIDMaps()
-	{
-	}
-
+object NIDMaps {
 	/**
 	 * Lookup of id of type K
 	 *
@@ -31,19 +24,15 @@ public class NIDMaps
 	 * @param key key
 	 * @param <K> type of key
 	 * @return nid
-	 */
-	static <K> int lookup(final Map<K, Integer> map, K key)
-	{
-		try
-		{
-			int nid = map.get(key);
-			assert nid != 0;
-			return nid;
-		}
-		catch (Exception e)
-		{
-			Tracing.psErr.printf("lookup of <%s> failed%n", key);
-			throw e;
+	</K> */
+	fun <K> lookup(map: Map<K, Int?>, key: K): Int {
+		try {
+			val nid = map[key]!!
+			assert(nid != 0)
+			return nid
+		} catch (e: Exception) {
+			Tracing.psErr.printf("lookup of <%s> failed%n", key)
+			throw e
 		}
 	}
 
@@ -54,18 +43,14 @@ public class NIDMaps
 	 * @param key key
 	 * @return nid
 	 */
-	public static int lookup(final Map<Key, Integer> map, final Key key)
-	{
-		try
-		{
-			int nid = map.get(key);
-			assert nid != 0;
-			return nid;
-		}
-		catch (Exception e)
-		{
-			Tracing.psErr.printf("lookup of <%s> failed%n", key);
-			throw e;
+	fun lookup(map: Map<out Key?, Int?>, key: Key?): Int {
+		try {
+			val nid = map[key]!!
+			assert(nid != 0)
+			return nid
+		} catch (e: Exception) {
+			Tracing.psErr.printf("lookup of <%s> failed%n", key)
+			throw e
 		}
 	}
 
@@ -76,10 +61,9 @@ public class NIDMaps
 	 * @param key key, already lower-cased
 	 * @return nid
 	 */
-	static int lookupLC(Map<String, Integer> map, String key)
-	{
-		assert key.equals(key.toLowerCase(Locale.ENGLISH));
-		return lookup(map, key);
+	fun lookupLC(map: Map<String, Int?>, key: String): Int {
+		assert(key == key.lowercase())
+		return lookup(map, key)
 	}
 
 	/**
@@ -89,29 +73,22 @@ public class NIDMaps
 	 * @param key key
 	 * @param <K> type of key
 	 * @return nid or "NULL"
-	 */
-	static <K> String lookupNullable(Map<K, Integer> map, K key)
-	{
-		Integer value = map.get(key);
-		if (value == null)
-		{
-			return "NULL";
-		}
-		return value.toString();
+	</K> */
+	fun <K> lookupNullable(map: Map<K, Int?>, key: K): String {
+		val value = map[key] ?: return "NULL"
+		return value.toString()
 	}
 
 	// P R I N T
-
 	/**
 	 * Print words id-to-nid map
 	 *
 	 * @param ps    print stream
 	 * @param lexes lexes
 	 */
-	public static void printWords(final PrintStream ps, final Collection<Lex> lexes)
-	{
-		Map<String, Integer> wordToNID = Lexes.makeWordNIDs(lexes);
-		print(ps, wordToNID);
+	fun printWords(ps: PrintStream, lexes: Collection<Lex>) {
+		val wordToNID = makeWordNIDs(lexes)
+		print(ps, wordToNID)
 	}
 
 	/**
@@ -120,10 +97,9 @@ public class NIDMaps
 	 * @param ps    print stream
 	 * @param lexes lexes
 	 */
-	public static void printCasedWords(final PrintStream ps, final Collection<Lex> lexes)
-	{
-		Map<String, Integer> casedToNID = Lexes.makeCasedWordNIDs(lexes);
-		print(ps, casedToNID);
+	fun printCasedWords(ps: PrintStream, lexes: Collection<Lex>) {
+		val casedToNID = makeCasedWordNIDs(lexes)
+		print(ps, casedToNID)
 	}
 
 	/**
@@ -132,10 +108,9 @@ public class NIDMaps
 	 * @param ps    print stream
 	 * @param lexes lexes
 	 */
-	public static void printMorphs(final PrintStream ps, final Collection<Lex> lexes)
-	{
-		Map<String, Integer> morphToNID = Lexes.makeMorphNIDs(lexes);
-		print(ps, morphToNID);
+	fun printMorphs(ps: PrintStream, lexes: Collection<Lex>) {
+		val morphToNID = makeMorphNIDs(lexes)
+		print(ps, morphToNID)
 	}
 
 	/**
@@ -144,10 +119,9 @@ public class NIDMaps
 	 * @param ps    print stream
 	 * @param lexes lexes
 	 */
-	public static void printPronunciations(final PrintStream ps, final Collection<Lex> lexes)
-	{
-		Map<String, Integer> pronunciationValueToNID = Lexes.makePronunciationNIDs(lexes);
-		print(ps, pronunciationValueToNID);
+	fun printPronunciations(ps: PrintStream, lexes: Collection<Lex>) {
+		val pronunciationValueToNID = makePronunciationNIDs(lexes)
+		print(ps, pronunciationValueToNID)
 	}
 
 	/**
@@ -156,10 +130,9 @@ public class NIDMaps
 	 * @param ps      print stream
 	 * @param synsets synsets
 	 */
-	public static void printSynsets(final PrintStream ps, final Collection<Synset> synsets)
-	{
-		Map<String, Integer> synsetIdToNID = Synsets.makeSynsetNIDs(synsets);
-		print(ps, synsetIdToNID);
+	fun printSynsets(ps: PrintStream, synsets: Collection<Synset>) {
+		val synsetIdToNID = makeSynsetNIDs(synsets)
+		print(ps, synsetIdToNID)
 	}
 
 	/**
@@ -168,10 +141,9 @@ public class NIDMaps
 	 * @param ps     print stream
 	 * @param senses senses
 	 */
-	private static void printSenses(final PrintStream ps, final Collection<Sense> senses)
-	{
-		Map<String, Integer> synsetIdToNID = Senses.makeSenseNIDs(senses);
-		print(ps, synsetIdToNID);
+	private fun printSenses(ps: PrintStream, senses: Collection<Sense>) {
+		val synsetIdToNID = makeSenseNIDs(senses)
+		print(ps, synsetIdToNID)
 	}
 
 	/**
@@ -180,9 +152,8 @@ public class NIDMaps
 	 * @param ps    print stream
 	 * @param toNID od-to-nid map
 	 */
-	private static void print(final PrintStream ps, final Map<String, Integer> toNID)
-	{
-		toNID.keySet().stream().sorted().forEach(k -> ps.printf("%s %d%n", k, toNID.get(k)));
+	private fun print(ps: PrintStream, toNID: Map<String, Int>) {
+		toNID.keys.stream().sorted().forEach { k: String -> ps.printf("%s %d%n", k, toNID[k]) }
 	}
 
 	/**
@@ -192,31 +163,25 @@ public class NIDMaps
 	 * @param outDir out dir
 	 * @throws IOException io exception
 	 */
-	public static void printMaps(final CoreModel model, final File outDir) throws IOException
-	{
-		try (PrintStream ps = new PrintStream(new FileOutputStream(new File(outDir, Names.WORDS.FILE)), true, StandardCharsets.UTF_8))
-		{
-			NIDMaps.printWords(ps, model.lexes);
+	@Throws(IOException::class)
+	fun printMaps(model: CoreModel, outDir: File) {
+		PrintStream(FileOutputStream(File(outDir, Names.WORDS.FILE)), true, StandardCharsets.UTF_8).use { ps ->
+			printWords(ps, model.lexes)
 		}
-		try (PrintStream ps = new PrintStream(new FileOutputStream(new File(outDir, Names.CASEDWORDS.FILE)), true, StandardCharsets.UTF_8))
-		{
-			NIDMaps.printCasedWords(ps, model.lexes);
+		PrintStream(FileOutputStream(File(outDir, Names.CASEDWORDS.FILE)), true, StandardCharsets.UTF_8).use { ps ->
+			printCasedWords(ps, model.lexes)
 		}
-		try (PrintStream ps = new PrintStream(new FileOutputStream(new File(outDir, Names.MORPHS.FILE)), true, StandardCharsets.UTF_8))
-		{
-			NIDMaps.printMorphs(ps, model.lexes);
+		PrintStream(FileOutputStream(File(outDir, Names.MORPHS.FILE)), true, StandardCharsets.UTF_8).use { ps ->
+			printMorphs(ps, model.lexes)
 		}
-		try (PrintStream ps = new PrintStream(new FileOutputStream(new File(outDir, Names.PRONUNCIATIONS.FILE)), true, StandardCharsets.UTF_8))
-		{
-			NIDMaps.printPronunciations(ps, model.lexes);
+		PrintStream(FileOutputStream(File(outDir, Names.PRONUNCIATIONS.FILE)), true, StandardCharsets.UTF_8).use { ps ->
+			printPronunciations(ps, model.lexes)
 		}
-		try (PrintStream ps = new PrintStream(new FileOutputStream(new File(outDir, Names.SYNSETS.FILE)), true, StandardCharsets.UTF_8))
-		{
-			NIDMaps.printSynsets(ps, model.synsets);
+		PrintStream(FileOutputStream(File(outDir, Names.SYNSETS.FILE)), true, StandardCharsets.UTF_8).use { ps ->
+			printSynsets(ps, model.synsets)
 		}
-		try (PrintStream ps = new PrintStream(new FileOutputStream(new File(outDir, Names.SENSES.FILE)), true, StandardCharsets.UTF_8))
-		{
-			NIDMaps.printSenses(ps, model.senses);
+		PrintStream(FileOutputStream(File(outDir, Names.SENSES.FILE)), true, StandardCharsets.UTF_8).use { ps ->
+			printSenses(ps, model.senses)
 		}
 	}
 }

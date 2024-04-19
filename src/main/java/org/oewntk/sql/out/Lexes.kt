@@ -1,27 +1,21 @@
 /*
  * Copyright (c) $originalComment.match("Copyright \(c\) (\d+)", 1, "-")2021. Bernard Bou.
  */
+package org.oewntk.sql.out
 
-package org.oewntk.sql.out;
-
-import org.oewntk.model.Key;
-import org.oewntk.model.KeyF;
-import org.oewntk.model.Lex;
-import org.oewntk.model.Pronunciation;
-
-import java.io.PrintStream;
-import java.util.*;
-import java.util.function.Function;
-import java.util.stream.Stream;
+import org.oewntk.model.Key
+import org.oewntk.model.Key.W_P_A.Companion.of_t
+import org.oewntk.model.KeyF
+import org.oewntk.model.Lex
+import org.oewntk.model.Pronunciation
+import java.io.PrintStream
+import java.util.*
+import java.util.function.Function
 
 /**
  * Process lexes
  */
-public class Lexes
-{
-	private Lexes()
-	{
-	}
+object Lexes {
 
 	// lexes
 
@@ -34,46 +28,47 @@ public class Lexes
 	 * @param casedwordToNID id-to-nid map for cased words
 	 * @return lex_key-to-nid map
 	 */
-	public static Map<Key, Integer> generateLexes(final PrintStream ps, final Collection<Lex> lexes, final Map<String, Integer> wordToNID, final Map<String, Integer> casedwordToNID)
-	{
+	@JvmStatic
+	fun generateLexes(
+		ps: PrintStream,
+		lexes: Collection<Lex>,
+		wordToNID: Map<String, Int>,
+		casedwordToNID: Map<String, Int>
+	): Map<out Key, Int> {
+
 		// stream of lex key
-		Stream<Key> lexKeyStream = lexes.stream().map(Key.W_P_A::of_t);
+		val lexKeyStream = lexes.stream().map { of_t(it) }
 
 		// make lex key-to-nid map
-		Map<Key, Integer> lexKeyToNID = Utils.makeNIDMap(lexKeyStream);
+		val lexKeyToNID = Utils.makeNIDMap(lexKeyStream)
 
 		// insert map
-		final String columns = String.join(",", Names.LEXES.luid, Names.LEXES.posid, Names.LEXES.wordid, Names.LEXES.casedwordid);
-		final Function<Lex, String> toString = lex -> {
-
-			String word = lex.getLCLemma();
-			int wordNID = NIDMaps.lookupLC(wordToNID, word);
-			String casedWordNID = NIDMaps.lookupNullable(casedwordToNID, lex.lemma);
-			char type = lex.type;
-			return String.format("'%c',%d,%s", type, wordNID, casedWordNID);
-		};
-		if (!Printers.withComment)
-		{
-			Printers.printInsert(ps, Names.LEXES.TABLE, columns, lexes, lexKeyToNID, toString);
+		val columns =
+			java.lang.String.join(",", Names.LEXES.luid, Names.LEXES.posid, Names.LEXES.wordid, Names.LEXES.casedwordid)
+		val toString = { lex: Lex ->
+			val word = lex.lCLemma
+			val wordNID = NIDMaps.lookupLC(wordToNID, word)
+			val casedWordNID = NIDMaps.lookupNullable(casedwordToNID, lex.lemma)
+			val type = lex.type
+			String.format("'%c',%d,%s", type, wordNID, casedWordNID)
 		}
-		else
-		{
-			final Function<Lex, String[]> toStrings = lex -> {
-
-				String casedWord = lex.lemma;
-				char type = lex.type;
-				return new String[]{ //
-						toString.apply(lex), //
-						String.format("%c '%s'", type, casedWord), //
-				};
-			};
-			Printers.printInsertWithComment(ps, Names.LEXES.TABLE, columns, lexes, lexKeyToNID, toStrings);
+		if (!Printers.WITH_COMMENT) {
+			Printers.printInsert(ps, Names.LEXES.TABLE, columns, lexes, lexKeyToNID, toString)
+		} else {
+			val toStrings = { lex: Lex ->
+				val casedWord = lex.lemma
+				val type = lex.type
+				arrayOf(
+					toString.invoke(lex),
+					String.format("%c '%s'", type, casedWord),
+				)
+			}
+			Printers.printInsertWithComment(ps, Names.LEXES.TABLE, columns, lexes, lexKeyToNID, toStrings)
 		}
-		return lexKeyToNID;
+		return lexKeyToNID
 	}
 
 	// words
-
 	/**
 	 * Generate words table
 	 *
@@ -81,17 +76,17 @@ public class Lexes
 	 * @param lexes lexes
 	 * @return word-to-nid map
 	 */
-	public static Map<String, Integer> generateWords(final PrintStream ps, final Collection<Lex> lexes)
-	{
+	@JvmStatic
+	fun generateWords(ps: PrintStream, lexes: Collection<Lex>): Map<String, Int> {
 		// make word-to-nid map
-		Map<String, Integer> wordToNID = makeWordNIDs(lexes);
+		val wordToNID = makeWordNIDs(lexes)
 
 		// insert map
-		final String columns = String.join(",", Names.WORDS.wordid, Names.WORDS.word);
-		final Function<String, String> toString = word -> String.format("'%s'", Utils.escape(word));
-		Printers.printInsert(ps, Names.WORDS.TABLE, columns, wordToNID, toString);
+		val columns = java.lang.String.join(",", Names.WORDS.wordid, Names.WORDS.word)
+		val toString = { word: String -> String.format("'%s'", Utils.escape(word)) }
+		Printers.printInsert(ps, Names.WORDS.TABLE, columns, wordToNID, toString)
 
-		return wordToNID;
+		return wordToNID
 	}
 
 	/**
@@ -100,20 +95,19 @@ public class Lexes
 	 * @param lexes lexes
 	 * @return word-to-nid map
 	 */
-	public static Map<String, Integer> makeWordNIDs(final Collection<Lex> lexes)
-	{
+	@JvmStatic
+	fun makeWordNIDs(lexes: Collection<Lex>): Map<String, Int> {
 		// stream of words
-		Stream<String> wordStream = lexes.stream() //
-				.map(Lex::getLCLemma).distinct();
+		val wordStream = lexes.stream()
+			.map(Lex::lCLemma).distinct()
 
 		// make word-to-nid map
-		var map = Utils.makeNIDMap(wordStream);
-		assert map.values().stream().noneMatch(i -> i == 0);
-		return map;
+		val map = Utils.makeNIDMap(wordStream)
+		assert(map.values.stream().noneMatch { i: Int -> i == 0 })
+		return map
 	}
 
 	// cased words
-
 	/**
 	 * Generate cased word table
 	 *
@@ -122,17 +116,33 @@ public class Lexes
 	 * @param wordIdToNID word-to-nid map
 	 * @return cased_word-to-nid map
 	 */
-	public static Map<String, Integer> generateCasedWords(final PrintStream ps, final Collection<Lex> lexes, final Map<String, Integer> wordIdToNID)
-	{
+	@JvmStatic
+	fun generateCasedWords(
+		ps: PrintStream,
+		lexes: Collection<Lex>,
+		wordIdToNID: Map<String, Int>
+	): Map<String, Int> {
+
 		// make casedword-to-nid map
-		Map<String, Integer> casedWordToNID = makeCasedWordNIDs(lexes);
+		val casedWordToNID = makeCasedWordNIDs(lexes)
 
 		// insert map
-		final String columns = String.join(",", Names.CASEDWORDS.casedwordid, Names.CASEDWORDS.casedword, Names.CASEDWORDS.wordid);
-		final Function<String, String> toString = casedWord -> String.format("'%s',%d", Utils.escape(casedWord), NIDMaps.lookupLC(wordIdToNID, casedWord.toLowerCase(Locale.ENGLISH)));
-		Printers.printInsert(ps, Names.CASEDWORDS.TABLE, columns, casedWordToNID, toString);
+		val columns = java.lang.String.join(
+			",",
+			Names.CASEDWORDS.casedwordid,
+			Names.CASEDWORDS.casedword,
+			Names.CASEDWORDS.wordid
+		)
+		val toString = Function { casedWord: String ->
+			String.format(
+				"'%s',%d",
+				Utils.escape(casedWord),
+				NIDMaps.lookupLC(wordIdToNID, casedWord.lowercase())
+			)
+		}
+		Printers.printInsert(ps, Names.CASEDWORDS.TABLE, columns, casedWordToNID, toString)
 
-		return casedWordToNID;
+		return casedWordToNID
 	}
 
 	/**
@@ -141,21 +151,21 @@ public class Lexes
 	 * @param lexes lexes
 	 * @return cased_word-to-nid map
 	 */
-	public static Map<String, Integer> makeCasedWordNIDs(final Collection<Lex> lexes)
-	{
+	@JvmStatic
+	fun makeCasedWordNIDs(lexes: Collection<Lex>): Map<String, Int> {
+
 		// stream of cased words
-		Stream<String> casedWordStream = lexes.stream() //
-				.filter(Lex::isCased) //
-				.map(lex -> lex.lemma).distinct();
+		val casedWordStream = lexes.stream()
+			.filter(Lex::isCased)
+			.map { lex: Lex -> lex.lemma }.distinct()
 
 		// make casedword-to-nid map
-		var map = Utils.makeNIDMap(casedWordStream);
-		assert map.values().stream().noneMatch(i -> i == 0);
-		return map;
+		val map = Utils.makeNIDMap(casedWordStream)
+		assert(map.values.stream().noneMatch { i: Int -> i == 0 })
+		return map
 	}
 
 	// morphs
-
 	/**
 	 * Generate morphs table
 	 *
@@ -163,17 +173,18 @@ public class Lexes
 	 * @param lexes lexes
 	 * @return morph-to-nid map
 	 */
-	public static Map<String, Integer> generateMorphs(final PrintStream ps, final Collection<Lex> lexes)
-	{
+	@JvmStatic
+	fun generateMorphs(ps: PrintStream, lexes: Collection<Lex>): Map<String, Int> {
+
 		// make morph-to-nid map
-		Map<String, Integer> morphToNID = makeMorphNIDs(lexes);
+		val morphToNID = makeMorphNIDs(lexes)
 
 		// insert map
-		final String columns = String.join(",", Names.MORPHS.morphid, Names.MORPHS.morph);
-		final Function<String, String> toString = morph -> String.format("'%s'", Utils.escape(morph));
-		Printers.printInsert(ps, Names.MORPHS.TABLE, columns, morphToNID, toString);
+		val columns = java.lang.String.join(",", Names.MORPHS.morphid, Names.MORPHS.morph)
+		val toString = { morph: String -> String.format("'%s'", Utils.escape(morph)) }
+		Printers.printInsert(ps, Names.MORPHS.TABLE, columns, morphToNID, toString)
 
-		return morphToNID;
+		return morphToNID
 	}
 
 	/**
@@ -185,52 +196,58 @@ public class Lexes
 	 * @param wordToNID   word-to-nid map
 	 * @param morphToNID  morph-to-nid map
 	 */
-	public static void generateLexesMorphs(final PrintStream ps, final Collection<Lex> lexes, final Map<Key, Integer> lexKeyToNID, final Map<String, Integer> wordToNID, final Map<String, Integer> morphToNID)
-	{
+	@JvmStatic
+	fun generateLexesMorphs(
+		ps: PrintStream,
+		lexes: Collection<Lex>,
+		lexKeyToNID: Map<out Key, Int>,
+		wordToNID: Map<String, Int>,
+		morphToNID: Map<String, Int>
+	) {
 		// stream of lexes
-		Stream<Lex> lexStream = lexes.stream() //
-				.filter(lex -> lex.getForms() != null && lex.getForms().length > 0) //
-				.sorted(Comparator.comparing(lex -> lex.lemma));
+		val lexStream = lexes.stream()
+			.filter { lex: Lex -> lex.forms != null && lex.forms!!.isNotEmpty() }
+			.sorted(Comparator.comparing { lex: Lex -> lex.lemma })
 
 		// insert map
-		final String columns = String.join(",", Names.LEXES_MORPHS.morphid, Names.LEXES_MORPHS.luid, Names.LEXES_MORPHS.wordid, Names.LEXES_MORPHS.posid);
-		final Function<Lex, List<String>> toString = lex -> {
-
-			var strings = new ArrayList<String>();
-			String word = lex.getLCLemma();
-			int wordNID = NIDMaps.lookupLC(wordToNID, word);
-			int lexNID = NIDMaps.lookup(lexKeyToNID, KeyF.F_W_P_A.Mono.of_t(lex));
-			char type = lex.type;
-			for (String morph : lex.getForms())
-			{
-				int morphNID = NIDMaps.lookup(morphToNID, morph);
-				strings.add(String.format("%d,%d,%d,'%c'", morphNID, lexNID, wordNID, type));
+		val columns = java.lang.String.join(
+			",",
+			Names.LEXES_MORPHS.morphid,
+			Names.LEXES_MORPHS.luid,
+			Names.LEXES_MORPHS.wordid,
+			Names.LEXES_MORPHS.posid
+		)
+		val toString = { lex: Lex ->
+			val strings = ArrayList<String>()
+			val word = lex.lCLemma
+			val wordNID = NIDMaps.lookupLC(wordToNID, word)
+			val lexNID = NIDMaps.lookup(lexKeyToNID, KeyF.F_W_P_A.Mono.of_t(lex))
+			val type = lex.type
+			for (morph in lex.forms!!) {
+				val morphNID = NIDMaps.lookup(morphToNID, morph)
+				strings.add(String.format("%d,%d,%d,'%c'", morphNID, lexNID, wordNID, type))
 			}
-			return strings;
-		};
-		if (!Printers.withComment)
-		{
-			Printers.printInserts(ps, Names.LEXES_MORPHS.TABLE, columns, lexStream, toString, false);
+			strings
 		}
-		else
-		{
-			final Function<Lex, List<String[]>> toStrings = lex -> {
-
-				var strings = toString.apply(lex);
-				var stringsWithComment = new ArrayList<String[]>();
-				String casedWord = lex.lemma;
-				char type = lex.type;
-				int i = 0;
-				for (String morph : lex.getForms())
-				{
-					stringsWithComment.add(new String[]{ //
-							strings.get(i), //
-							String.format("'%s' '%s' %c", morph, casedWord, type)});
-					i++;
+		if (!Printers.WITH_COMMENT) {
+			Printers.printInserts(ps, Names.LEXES_MORPHS.TABLE, columns, lexStream, toString, false)
+		} else {
+			val toStrings = { lex: Lex ->
+				val strings = toString.invoke(lex)
+				val stringsWithComment = ArrayList<Array<String>>()
+				val casedWord = lex.lemma
+				val type = lex.type
+				for ((i, morph) in lex.forms!!.withIndex()) {
+					stringsWithComment.add(
+						arrayOf(
+							strings[i],
+							String.format("'%s' '%s' %c", morph, casedWord, type)
+						)
+					)
 				}
-				return stringsWithComment;
-			};
-			Printers.printInsertsWithComment(ps, Names.LEXES_MORPHS.TABLE, columns, lexStream, toStrings, false);
+				stringsWithComment
+			}
+			Printers.printInsertsWithComment(ps, Names.LEXES_MORPHS.TABLE, columns, lexStream, toStrings, false)
 		}
 	}
 
@@ -240,17 +257,17 @@ public class Lexes
 	 * @param lexes lexes
 	 * @return morph-to-nid map
 	 */
-	public static Map<String, Integer> makeMorphNIDs(final Collection<Lex> lexes)
-	{
+	@JvmStatic
+	fun makeMorphNIDs(lexes: Collection<Lex>): Map<String, Int> {
 		// stream of morphs
-		Stream<String> morphStream = lexes.stream() //
-				.filter(lex -> lex.getForms() != null && lex.getForms().length > 0) //
-				.flatMap(lex -> Arrays.stream(lex.getForms())) //
-				.sorted() //
-				.distinct();
+		val morphStream = lexes.stream()
+			.filter { lex: Lex -> lex.forms != null && lex.forms!!.isNotEmpty() }
+			.flatMap { lex: Lex -> Arrays.stream(lex.forms) }
+			.sorted()
+			.distinct()
 
 		// make morph-to-nid map
-		return Utils.makeNIDMap(morphStream);
+		return Utils.makeNIDMap(morphStream)
 	}
 
 	// pronunciations
@@ -262,17 +279,19 @@ public class Lexes
 	 * @param lexes lexes
 	 * @return pronunciation-to-nid
 	 */
-	public static Map<String, Integer> generatePronunciations(final PrintStream ps, final Collection<Lex> lexes)
-	{
+	@JvmStatic
+	fun generatePronunciations(ps: PrintStream, lexes: Collection<Lex>): Map<String, Int> {
+
 		// make pronunciation_value-to-nid map
-		Map<String, Integer> pronunciationValueToNID = makePronunciationNIDs(lexes);
+		val pronunciationValueToNID = makePronunciationNIDs(lexes)
 
 		// insert map
-		final String columns = String.join(",", Names.PRONUNCIATIONS.pronunciationid, Names.PRONUNCIATIONS.pronunciation);
-		final Function<String, String> toString = pronunciationValue -> String.format("'%s'", Utils.escape(pronunciationValue));
-		Printers.printInsert(ps, Names.PRONUNCIATIONS.TABLE, columns, pronunciationValueToNID, toString);
+		val columns =
+			java.lang.String.join(",", Names.PRONUNCIATIONS.pronunciationid, Names.PRONUNCIATIONS.pronunciation)
+		val toString = { pronunciationValue: String -> String.format("'%s'", Utils.escape(pronunciationValue)) }
+		Printers.printInsert(ps, Names.PRONUNCIATIONS.TABLE, columns, pronunciationValueToNID, toString)
 
-		return pronunciationValueToNID;
+		return pronunciationValueToNID
 	}
 
 	/**
@@ -284,56 +303,78 @@ public class Lexes
 	 * @param wordToNID          word-to-nid map
 	 * @param pronunciationToNID pronunciation-to-nid
 	 */
-	public static void generateLexesPronunciations(final PrintStream ps, final Collection<Lex> lexes, final Map<Key, Integer> lexKeyToNID, final Map<String, Integer> wordToNID, final Map<String, Integer> pronunciationToNID)
-	{
+	@JvmStatic
+	fun generateLexesPronunciations(
+		ps: PrintStream,
+		lexes: Collection<Lex>,
+		lexKeyToNID: Map<out Key, Int>,
+		wordToNID: Map<String, Int>,
+		pronunciationToNID: Map<String, Int>
+	) {
 		// stream of lexes
-		Stream<Lex> lexStream = lexes.stream() //
-				.filter(lex -> lex.getPronunciations() != null && lex.getPronunciations().length > 0) //
-				.sorted(Comparator.comparing(lex -> lex.lemma));
+		val lexStream = lexes.stream()
+			.filter { lex: Lex -> lex.pronunciations != null && lex.pronunciations!!.isNotEmpty() }
+			.sorted(Comparator.comparing { lex: Lex -> lex.lemma })
 
 		// insert map
-		final String columns = String.join(",", Names.LEXES_PRONUNCIATIONS.pronunciationid, Names.LEXES_PRONUNCIATIONS.variety, Names.LEXES_PRONUNCIATIONS.luid, Names.LEXES_PRONUNCIATIONS.wordid, Names.LEXES_PRONUNCIATIONS.posid);
-		final Function<Lex, List<String>> toString = lex -> {
-
-			var strings = new ArrayList<String>();
-			String word = lex.getLCLemma();
-			int wordNID = NIDMaps.lookupLC(wordToNID, word);
-			int lexNID = NIDMaps.lookup(lexKeyToNID, KeyF.F_W_P_A.Mono.of_t(lex));
-			char type = lex.type;
-			for (Pronunciation pronunciation : lex.getPronunciations())
-			{
-				String variety = pronunciation.variety;
-				String value = pronunciation.value;
-				int pronunciationNID = NIDMaps.lookup(pronunciationToNID, value);
-				strings.add(String.format("%d,%s,%d,%d,'%c'", pronunciationNID, variety == null ? "NULL" : "'" + variety + "'", lexNID, wordNID, type));
+		val columns = java.lang.String.join(
+			",",
+			Names.LEXES_PRONUNCIATIONS.pronunciationid,
+			Names.LEXES_PRONUNCIATIONS.variety,
+			Names.LEXES_PRONUNCIATIONS.luid,
+			Names.LEXES_PRONUNCIATIONS.wordid,
+			Names.LEXES_PRONUNCIATIONS.posid
+		)
+		val toString = { lex: Lex ->
+			val strings = ArrayList<String>()
+			val word = lex.lCLemma
+			val wordNID = NIDMaps.lookupLC(wordToNID, word)
+			val lexNID = NIDMaps.lookup(lexKeyToNID, KeyF.F_W_P_A.Mono.of_t(lex))
+			val type = lex.type
+			for (pronunciation in lex.pronunciations!!) {
+				val variety = pronunciation.variety
+				val value = pronunciation.value
+				val pronunciationNID = NIDMaps.lookup(pronunciationToNID, value)
+				strings.add(
+					String.format(
+						"%d,%s,%d,%d,'%c'",
+						pronunciationNID,
+						if (variety == null) "NULL" else "'$variety'",
+						lexNID,
+						wordNID,
+						type
+					)
+				)
 			}
-			return strings;
-		};
-		if (!Printers.withComment)
-		{
-			Printers.printInserts(ps, Names.LEXES_PRONUNCIATIONS.TABLE, columns, lexStream, toString, false);
+			strings
 		}
-		else
-		{
-			final Function<Lex, List<String[]>> toStrings = lex -> {
-
-				var strings = toString.apply(lex);
-				var stringsWithComment = new ArrayList<String[]>();
-				String casedWord = lex.lemma;
-				char type = lex.type;
-				int i = 0;
-				for (Pronunciation pronunciation : lex.getPronunciations())
-				{
-					String variety = pronunciation.variety;
-					String value = pronunciation.value;
-					stringsWithComment.add(new String[]{ //
-							strings.get(i), //
-							String.format("%s%s '%s' %c", value, variety == null ? "" : " [" + variety + "]", casedWord, type),});
-					i++;
+		if (!Printers.WITH_COMMENT) {
+			Printers.printInserts(ps, Names.LEXES_PRONUNCIATIONS.TABLE, columns, lexStream, toString, false)
+		} else {
+			val toStrings = { lex: Lex ->
+				val strings = toString.invoke(lex)
+				val stringsWithComment = ArrayList<Array<String>>()
+				val casedWord = lex.lemma
+				val type = lex.type
+				for ((i, pronunciation) in lex.pronunciations!!.withIndex()) {
+					val variety = pronunciation.variety
+					val value = pronunciation.value
+					stringsWithComment.add(
+						arrayOf(
+							strings[i],
+							String.format(
+								"%s%s '%s' %c",
+								value,
+								if (variety == null) "" else " [$variety]",
+								casedWord,
+								type
+							),
+						)
+					)
 				}
-				return stringsWithComment;
-			};
-			Printers.printInsertsWithComment(ps, Names.LEXES_PRONUNCIATIONS.TABLE, columns, lexStream, toStrings, false);
+				stringsWithComment
+			}
+			Printers.printInsertsWithComment(ps, Names.LEXES_PRONUNCIATIONS.TABLE, columns, lexStream, toStrings, false)
 		}
 	}
 
@@ -343,17 +384,17 @@ public class Lexes
 	 * @param lexes lexes
 	 * @return pronunciation-to-nid map
 	 */
-	public static Map<String, Integer> makePronunciationNIDs(final Collection<Lex> lexes)
-	{
+	@JvmStatic
+	fun makePronunciationNIDs(lexes: Collection<Lex>): Map<String, Int> {
 		// stream of pronunciation values
-		Stream<String> pronunciationValueStream = lexes.stream() //
-				.filter(lex -> lex.getPronunciations() != null && lex.getPronunciations().length > 0) //
-				.flatMap(lex -> Arrays.stream(lex.getPronunciations())) //
-				.map(p -> p.value) //
-				.sorted() //
-				.distinct();
+		val pronunciationValueStream = lexes.stream()
+			.filter { lex: Lex -> lex.pronunciations != null && lex.pronunciations!!.isNotEmpty() }
+			.flatMap { lex: Lex -> Arrays.stream(lex.pronunciations) }
+			.map { p: Pronunciation -> p.value }
+			.sorted()
+			.distinct()
 
 		// make pronunciation_value-to-nid map
-		return Utils.makeNIDMap(pronunciationValueStream);
+		return Utils.makeNIDMap(pronunciationValueStream)
 	}
 }

@@ -1,38 +1,37 @@
 /*
  * Copyright (c) 2021-2021. Bernard Bou.
  */
+package org.oewntk.sql.out
 
-package org.oewntk.sql.out;
-
-import java.io.File;
-import java.io.IOException;
+import org.oewntk.sql.out.CoreModelConsumer.Companion.builtins
+import java.io.File
+import java.io.IOException
 
 /**
  * Main class that generates the WN database in the WNDB format as per wndb(5WN)
  *
  * @author Bernard Bou
  */
-public class GrindBuiltIn
-{
+object GrindBuiltIn {
+
 	/**
 	 * Main entry point
 	 *
 	 * @param args command-line arguments yamlDir [outputDir]
-	 * @throws IOException io
+	 * @throws IOException io exception
 	 */
-	public static void main(String[] args) throws IOException
-	{
+	@Throws(IOException::class)
+	@JvmStatic
+	fun main(args: Array<String>) {
 		// Output
-		File outDir = new File(args[0]);
-		if (!outDir.exists())
-		{
-			//noinspection ResultOfMethodCallIgnored
-			outDir.mkdirs();
+		val outDir = File(args[0])
+		if (!outDir.exists()) {
+			outDir.mkdirs()
 		}
 
-		System.out.println("[Output] " + outDir.getAbsolutePath());
+		println("[Output] " + outDir.absolutePath)
 
 		// Process
-		CoreModelConsumer.builtins(outDir);
+		builtins(outDir)
 	}
 }

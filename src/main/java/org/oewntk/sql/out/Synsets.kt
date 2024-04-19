@@ -1,24 +1,21 @@
 /*
  * Copyright (c) $originalComment.match("Copyright \(c\) (\d+)", 1, "-")2021. Bernard Bou.
  */
+package org.oewntk.sql.out
 
-package org.oewntk.sql.out;
-
-import org.oewntk.model.Synset;
-
-import java.io.PrintStream;
-import java.util.*;
-import java.util.function.Function;
-import java.util.stream.Stream;
+import org.oewntk.model.Synset
+import org.oewntk.sql.out.Printers.printInsert
+import org.oewntk.sql.out.Printers.printInsertWithComment
+import org.oewntk.sql.out.Printers.printInserts
+import org.oewntk.sql.out.Printers.printInsertsWithComment
+import org.oewntk.sql.out.Utils.escape
+import org.oewntk.sql.out.Utils.makeNIDMap
+import java.io.PrintStream
 
 /**
  * Process synsets
  */
-public class Synsets
-{
-	private Synsets()
-	{
-	}
+object Synsets {
 
 	/**
 	 * Make synset id-to-nid map
@@ -26,12 +23,12 @@ public class Synsets
 	 * @param synsets synsets
 	 * @return id-to-nid map
 	 */
-	public static Map<String, Integer> makeSynsetNIDs(final Collection<Synset> synsets)
-	{
+	@JvmStatic
+	fun makeSynsetNIDs(synsets: Collection<Synset>): Map<String, Int> {
 		// stream of synsetIds
-		Stream<String> synsetIdStream = synsets.stream() //
-				.map(s -> s.synsetId);
-		return Utils.makeNIDMap(synsetIdStream);
+		val synsetIdStream = synsets.stream()
+			.map { s: Synset -> s.synsetId }
+		return makeNIDMap(synsetIdStream)
 	}
 
 	/**
@@ -41,37 +38,43 @@ public class Synsets
 	 * @param synsets synsets
 	 * @return synsets id-to-nid map
 	 */
-	public static Map<String, Integer> generateSynsets(final PrintStream ps, final Collection<Synset> synsets)
-	{
+	@JvmStatic
+	fun generateSynsets(ps: PrintStream, synsets: Collection<Synset>): Map<String, Int> {
 		// make synsetId-to-nid map
-		Map<String, Integer> synsetIdToNID = makeSynsetNIDs(synsets);
+		val synsetIdToNID = makeSynsetNIDs(synsets)
 
 		// insert map
-		final String columns = String.join(",", Names.SYNSETS.synsetid, Names.SYNSETS.posid, Names.SYNSETS.domainid, Names.SYNSETS.definition);
-		Function<Synset, String> toString = synset -> {
-
-			char type = synset.type;
-			String definition = synset.getDefinition();
-			String domain = synset.getLexfile();
-			int lexdomainId = BuiltIn.LEXFILE_NIDS.get(domain);
-			return String.format("'%c',%d,'%s'", type, lexdomainId, Utils.escape(definition));
-		};
-		if (!Printers.withComment)
-		{
-			Printers.printInsert(ps, Names.SYNSETS.TABLE, columns, synsets, s -> s.synsetId, synsetIdToNID, toString);
+		val columns = java.lang.String.join(
+			",",
+			Names.SYNSETS.synsetid,
+			Names.SYNSETS.posid,
+			Names.SYNSETS.domainid,
+			Names.SYNSETS.definition
+		)
+		val toString = { synset: Synset ->
+			val type = synset.type
+			val definition = synset.definition
+			val domain = synset.lexfile
+			val lexdomainId = BuiltIn.LEXFILE_NIDS[domain]!!
+			String.format("'%c',%d,'%s'", type, lexdomainId, escape(definition!!))
 		}
-		else
-		{
-			Function<Synset, String[]> toStrings = (synset) -> {
-
-				var stringsWithComment = new String[2];
-				stringsWithComment[0] = toString.apply(synset);
-				stringsWithComment[1] = synset.synsetId;
-				return stringsWithComment;
-			};
-			Printers.printInsertWithComment(ps, Names.SYNSETS.TABLE, columns, synsets, s -> s.synsetId, synsetIdToNID, toStrings);
+		if (!Printers.WITH_COMMENT) {
+			printInsert(ps, Names.SYNSETS.TABLE, columns, synsets, { it.synsetId }, synsetIdToNID, toString)
+		} else {
+			val toStrings = { synset: Synset ->
+				arrayOf(toString.invoke(synset), synset.synsetId)
+			}
+			printInsertWithComment(
+				ps,
+				Names.SYNSETS.TABLE,
+				columns,
+				synsets,
+				{ it.synsetId },
+				synsetIdToNID,
+				toStrings
+			)
 		}
-		return synsetIdToNID;
+		return synsetIdToNID
 	}
 
 	/**
@@ -81,65 +84,58 @@ public class Synsets
 	 * @param synsets          synsets
 	 * @param synsetIdToNIDMap id-to-nid map
 	 */
-	public static void generateSynsetRelations(final PrintStream ps, final Collection<Synset> synsets, final Map<String, Integer> synsetIdToNIDMap)
-	{
+	@JvmStatic
+	fun generateSynsetRelations(ps: PrintStream, synsets: Collection<Synset>, synsetIdToNIDMap: Map<String, Int>) {
 		// synset stream
-		Stream<Synset> synsetStream = synsets.stream() //
-				.filter(synset -> {
-					var relations = synset.getRelations();
-					return relations != null && relations.size() > 0;
-				}) //
-				.sorted(Comparator.comparing(s -> s.synsetId));
+		val synsetStream = synsets.stream()
+			.filter { !it.relations.isNullOrEmpty() }
+			.sorted(Comparator.comparing { it.synsetId })
 
 		// insert
-		final String columns = String.join(",", Names.SEMRELATIONS.synset1id, Names.SEMRELATIONS.synset2id, Names.SEMRELATIONS.relationid);
-		Function<Synset, List<String>> toString = (synset) -> {
-
-			var strings = new ArrayList<String>();
-			String synset1Id = synset.synsetId;
-			int synset1NID = NIDMaps.lookup(synsetIdToNIDMap, synset1Id);
-			var relations = synset.getRelations();
-			for (String relation : relations.keySet())
-			{
-				if (!BuiltIn.OEWN_RELATION_TYPES.containsKey(relation))
-				{
-					throw new IllegalArgumentException(relation);
-				}
-				int relationId = BuiltIn.OEWN_RELATION_TYPES.get(relation);
-				for (String synset2Id : relations.get(relation))
-				{
-					int synset2NID = NIDMaps.lookup(synsetIdToNIDMap, synset2Id);
-					strings.add(String.format("%d,%d,%d", synset1NID, synset2NID, relationId));
+		val columns = java.lang.String.join(
+			",",
+			Names.SEMRELATIONS.synset1id,
+			Names.SEMRELATIONS.synset2id,
+			Names.SEMRELATIONS.relationid
+		)
+		val toString = { synset: Synset ->
+			val strings = ArrayList<String>()
+			val synset1Id = synset.synsetId
+			val synset1NID = NIDMaps.lookup(synsetIdToNIDMap, synset1Id)
+			val relations: Map<String, Set<String>>? = synset.relations
+			for (relation in relations!!.keys) {
+				require(BuiltIn.OEWN_RELATION_TYPES.containsKey(relation)) { relation }
+				val relationId = BuiltIn.OEWN_RELATION_TYPES[relation]!!
+				for (synset2Id in relations[relation]!!) {
+					val synset2NID = NIDMaps.lookup(synsetIdToNIDMap, synset2Id)
+					strings.add(String.format("%d,%d,%d", synset1NID, synset2NID, relationId))
 				}
 			}
-			return strings;
-		};
-		if (!Printers.withComment)
-		{
-			Printers.printInserts(ps, Names.SEMRELATIONS.TABLE, columns, synsetStream, toString, false);
+			strings
 		}
-		else
-		{
-			Function<Synset, List<String[]>> toStrings = (synset) -> {
-
-				var strings = toString.apply(synset);
-				var stringsWithComment = new ArrayList<String[]>();
-				String synset1Id = synset.synsetId;
-				var relations = synset.getRelations();
-				int i = 0;
-				for (String relation : relations.keySet())
-				{
-					for (String synsetId2 : relations.get(relation))
-					{
-						stringsWithComment.add(new String[]{ //
-								strings.get(i), //
-								String.format("%s -%s-> %s", synset1Id, relation, synsetId2),});
-						i++;
+		if (!Printers.WITH_COMMENT) {
+			printInserts(ps, Names.SEMRELATIONS.TABLE, columns, synsetStream, toString, false)
+		} else {
+			val toStrings = { synset: Synset ->
+				val strings = toString.invoke(synset)
+				val stringsWithComment = ArrayList<Array<String>>()
+				val synset1Id = synset.synsetId
+				val relations: Map<String, Set<String>>? = synset.relations
+				var i = 0
+				for (relation in relations!!.keys) {
+					for (synsetId2 in relations[relation]!!) {
+						stringsWithComment.add(
+							arrayOf(
+								strings[i],
+								String.format("%s -%s-> %s", synset1Id, relation, synsetId2),
+							)
+						)
+						i++
 					}
 				}
-				return stringsWithComment;
-			};
-			Printers.printInsertsWithComment(ps, Names.SEMRELATIONS.TABLE, columns, synsetStream, toStrings, false);
+				stringsWithComment
+			}
+			printInsertsWithComment(ps, Names.SEMRELATIONS.TABLE, columns, synsetStream, toStrings, false)
 		}
 	}
 
@@ -150,30 +146,25 @@ public class Synsets
 	 * @param synsets          synsets
 	 * @param synsetIdToNIDMap id-to-nid map
 	 */
-	public static void generateSamples(final PrintStream ps, final Collection<Synset> synsets, final Map<String, Integer> synsetIdToNIDMap)
-	{
+	@JvmStatic
+	fun generateSamples(ps: PrintStream, synsets: Collection<Synset>, synsetIdToNIDMap: Map<String, Int>) {
 		// stream of synsets
-		Stream<Synset> synsetStream = synsets.stream() //
-				.filter(synset -> {
-					var examples = synset.examples;
-					return examples != null && examples.length > 0;
-				}) //
-				.sorted(Comparator.comparing(s -> s.synsetId));
+		val synsetStream = synsets.stream()
+			.filter { !it.examples.isNullOrEmpty() }
+			.sorted(Comparator.comparing { it.synsetId })
 
 		// insert
-		final String columns = String.join(",", Names.SAMPLES.sampleid, Names.SAMPLES.synsetid, Names.SAMPLES.sample);
-		Function<Synset, List<String>> toString = (synset) -> {
-
-			var strings = new ArrayList<String>();
-			String synsetId1 = synset.synsetId;
-			int synsetNID1 = NIDMaps.lookup(synsetIdToNIDMap, synsetId1);
-			var examples = synset.examples;
-			for (String example : examples)
-			{
-				strings.add(String.format("%d,'%s'", synsetNID1, Utils.escape(example)));
+		val columns = java.lang.String.join(",", Names.SAMPLES.sampleid, Names.SAMPLES.synsetid, Names.SAMPLES.sample)
+		val toString = { synset: Synset ->
+			val strings = ArrayList<String>()
+			val synsetId1 = synset.synsetId
+			val synsetNID1 = NIDMaps.lookup(synsetIdToNIDMap, synsetId1)
+			val examples = synset.examples
+			for (example in examples!!) {
+				strings.add(String.format("%d,'%s'", synsetNID1, escape(example)))
 			}
-			return strings;
-		};
-		Printers.printInserts(ps, Names.SAMPLES.TABLE, columns, synsetStream, toString, true);
+			strings
+		}
+		printInserts(ps, Names.SAMPLES.TABLE, columns, synsetStream, toString, true)
 	}
 }

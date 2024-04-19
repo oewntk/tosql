@@ -1,549 +1,483 @@
 /*
  * Copyright (c) $originalComment.match("Copyright \(c\) (\d+)", 1, "-")2021. Bernard Bou.
  */
+package org.oewntk.sql.out
 
-package org.oewntk.sql.out;
-
-import java.util.ResourceBundle;
+import java.util.*
 
 /**
  * Names from resources
  */
-public class Names
-{
-	static final ResourceBundle bundle = ResourceBundle.getBundle("wn/Names");
+object Names {
+	val bundle: ResourceBundle = ResourceBundle.getBundle("wn/Names")
 
-	static void set(ResourceBundle bundle)
-	{
-		WORDS.set(bundle);
-		CASEDWORDS.set(bundle);
-		PRONUNCIATIONS.set(bundle);
-		MORPHS.set(bundle);
-		SYNSETS.set(bundle);
-		POSES.set(bundle);
-		RELS.set(bundle);
-		SAMPLES.set(bundle);
-		DOMAINS.set(bundle);
-		VFRAMES.set(bundle);
-		VTEMPLATES.set(bundle);
-		ADJPOSITIONS.set(bundle);
-		LEXES.set(bundle);
-		SENSES.set(bundle);
-		SEMRELATIONS.set(bundle);
-		LEXRELATIONS.set(bundle);
-		LEXES_MORPHS.set(bundle);
-		LEXES_PRONUNCIATIONS.set(bundle);
-		SENSES_ADJPOSITIONS.set(bundle);
-		SENSES_VFRAMES.set(bundle);
-		SENSES_VTEMPLATES.set(bundle);
+	fun set(bundle: ResourceBundle) {
+		WORDS.set(bundle)
+		CASEDWORDS.set(bundle)
+		PRONUNCIATIONS.set(bundle)
+		MORPHS.set(bundle)
+		SYNSETS.set(bundle)
+		POSES.set(bundle)
+		RELS.set(bundle)
+		SAMPLES.set(bundle)
+		DOMAINS.set(bundle)
+		VFRAMES.set(bundle)
+		VTEMPLATES.set(bundle)
+		ADJPOSITIONS.set(bundle)
+		LEXES.set(bundle)
+		SENSES.set(bundle)
+		SEMRELATIONS.set(bundle)
+		LEXRELATIONS.set(bundle)
+		LEXES_MORPHS.set(bundle)
+		LEXES_PRONUNCIATIONS.set(bundle)
+		SENSES_ADJPOSITIONS.set(bundle)
+		SENSES_VFRAMES.set(bundle)
+		SENSES_VTEMPLATES.set(bundle)
 	}
 
-	public static class WORDS
-	{
-		public static String FILE;
-		public static String TABLE;
-		public static String wordid;
-		public static String word;
+	object WORDS {
+		lateinit var FILE: String
+		lateinit var TABLE: String
+		lateinit var wordid: String
+		lateinit var word: String
 
-		public static void set(ResourceBundle bundle)
-		{
-			FILE = bundle.getString("words.file");
-			TABLE = bundle.getString("words.table");
-			wordid = bundle.getString("words.wordid");
-			word = bundle.getString("words.word");
+		fun set(bundle: ResourceBundle) {
+			FILE = bundle.getString("words.file")
+			TABLE = bundle.getString("words.table")
+			wordid = bundle.getString("words.wordid")
+			word = bundle.getString("words.word")
 		}
 
-		static
-		{
-			set(bundle);
+		init {
+			set(bundle)
 		}
 	}
 
-	public static class CASEDWORDS
-	{
-		public static String FILE;
-		public static String TABLE;
-		public static String casedwordid;
-		public static String casedword;
-		public static String wordid;
+	object CASEDWORDS {
+		lateinit var FILE: String
+		lateinit var TABLE: String
+		lateinit var casedwordid: String
+		lateinit var casedword: String
+		lateinit var wordid: String
 
-		public static void set(ResourceBundle bundle)
-		{
-			FILE = bundle.getString("casedwords.file");
-			TABLE = bundle.getString("casedwords.table");
-			casedwordid = bundle.getString("casedwords.casedwordid");
-			casedword = bundle.getString("casedwords.casedword");
-			wordid = bundle.getString("casedwords.wordid");
+		fun set(bundle: ResourceBundle) {
+			FILE = bundle.getString("casedwords.file")
+			TABLE = bundle.getString("casedwords.table")
+			casedwordid = bundle.getString("casedwords.casedwordid")
+			casedword = bundle.getString("casedwords.casedword")
+			wordid = bundle.getString("casedwords.wordid")
 		}
 
-		static
-		{
-			set(bundle);
+		init {
+			set(bundle)
 		}
 	}
 
-	public static class PRONUNCIATIONS
-	{
-		public static String FILE;
-		public static String TABLE;
-		public static String pronunciationid;
-		public static String pronunciation;
+	object PRONUNCIATIONS {
+		lateinit var FILE: String
+		lateinit var TABLE: String
+		lateinit var pronunciationid: String
+		lateinit var pronunciation: String
 
-		public static void set(ResourceBundle bundle)
-		{
-			FILE = bundle.getString("pronunciations.file");
-			TABLE = bundle.getString("pronunciations.table");
-			pronunciationid = bundle.getString("pronunciations.pronunciationid");
-			pronunciation = bundle.getString("pronunciations.pronunciation");
+		fun set(bundle: ResourceBundle) {
+			FILE = bundle.getString("pronunciations.file")
+			TABLE = bundle.getString("pronunciations.table")
+			pronunciationid = bundle.getString("pronunciations.pronunciationid")
+			pronunciation = bundle.getString("pronunciations.pronunciation")
 		}
 
-		static
-		{
-			set(bundle);
+		init {
+			set(bundle)
 		}
 	}
 
-	public static class MORPHS
-	{
-		public static String FILE;
-		public static String TABLE;
-		public static String morphid;
-		public static String morph;
+	object MORPHS {
+		lateinit var FILE: String
+		lateinit var TABLE: String
+		lateinit var morphid: String
+		lateinit var morph: String
 
-		public static void set(ResourceBundle bundle)
-		{
-			FILE = bundle.getString("morphs.file");
-			TABLE = bundle.getString("morphs.table");
-			morphid = bundle.getString("morphs.morphid");
-			morph = bundle.getString("morphs.morph");
+		fun set(bundle: ResourceBundle) {
+			FILE = bundle.getString("morphs.file")
+			TABLE = bundle.getString("morphs.table")
+			morphid = bundle.getString("morphs.morphid")
+			morph = bundle.getString("morphs.morph")
 		}
 
-		static
-		{
-			set(bundle);
+		init {
+			set(bundle)
 		}
 	}
 
-	public static class SYNSETS
-	{
-		public static String FILE;
-		public static String TABLE;
-		public static String synsetid;
-		public static String posid;
-		public static String domainid;
-		public static String definition;
+	object SYNSETS {
+		lateinit var FILE: String
+		lateinit var TABLE: String
+		lateinit var synsetid: String
+		lateinit var posid: String
+		lateinit var domainid: String
+		lateinit var definition: String
 
-		public static void set(ResourceBundle bundle)
-		{
-			FILE = bundle.getString("synsets.file");
-			TABLE = bundle.getString("synsets.table");
-			synsetid = bundle.getString("synsets.synsetid");
-			posid = bundle.getString("synsets.posid");
-			domainid = bundle.getString("synsets.domainid");
-			definition = bundle.getString("synsets.definition");
+		fun set(bundle: ResourceBundle) {
+			FILE = bundle.getString("synsets.file")
+			TABLE = bundle.getString("synsets.table")
+			synsetid = bundle.getString("synsets.synsetid")
+			posid = bundle.getString("synsets.posid")
+			domainid = bundle.getString("synsets.domainid")
+			definition = bundle.getString("synsets.definition")
 		}
 
-		static
-		{
-			set(bundle);
+		init {
+			set(bundle)
 		}
 	}
 
-	public static class POSES
-	{
-		public static String FILE;
-		public static String TABLE;
-		public static String posid;
-		public static String pos;
+	object POSES {
+		lateinit var FILE: String
+		lateinit var TABLE: String
+		lateinit var posid: String
+		lateinit var pos: String
 
-		public static void set(ResourceBundle bundle)
-		{
-			FILE = bundle.getString("poses.file");
-			TABLE = bundle.getString("poses.table");
-			posid = bundle.getString("poses.posid");
-			pos = bundle.getString("poses.pos");
+		fun set(bundle: ResourceBundle) {
+			FILE = bundle.getString("poses.file")
+			TABLE = bundle.getString("poses.table")
+			posid = bundle.getString("poses.posid")
+			pos = bundle.getString("poses.pos")
 		}
 
-		static
-		{
-			set(bundle);
+		init {
+			set(bundle)
 		}
 	}
 
-	public static class RELS
-	{
-		public static String FILE;
-		public static String TABLE;
-		public static String relationid;
-		public static String relation;
-		public static String recurses;
+	object RELS {
+		lateinit var FILE: String
+		lateinit var TABLE: String
+		lateinit var relationid: String
+		lateinit var relation: String
+		lateinit var recurses: String
 
-		public static void set(ResourceBundle bundle)
-		{
-			FILE = bundle.getString("relations.file");
-			TABLE = bundle.getString("relations.table");
-			relationid = bundle.getString("relations.relationid");
-			relation = bundle.getString("relations.relation");
-			recurses = bundle.getString("relations.recurses");
+		fun set(bundle: ResourceBundle) {
+			FILE = bundle.getString("relations.file")
+			TABLE = bundle.getString("relations.table")
+			relationid = bundle.getString("relations.relationid")
+			relation = bundle.getString("relations.relation")
+			recurses = bundle.getString("relations.recurses")
 		}
 
-		static
-		{
-			set(bundle);
+		init {
+			set(bundle)
 		}
 	}
 
-	public static class SAMPLES
-	{
-		public static String FILE;
-		public static String TABLE;
-		public static String sampleid;
-		public static String sample;
-		public static String synsetid;
+	object SAMPLES {
+		lateinit var FILE: String
+		lateinit var TABLE: String
+		lateinit var sampleid: String
+		lateinit var sample: String
+		lateinit var synsetid: String
 
-		public static void set(ResourceBundle bundle)
-		{
-			FILE = bundle.getString("samples.file");
-			TABLE = bundle.getString("samples.table");
-			sampleid = bundle.getString("samples.sampleid");
-			sample = bundle.getString("samples.sample");
-			synsetid = bundle.getString("samples.synsetid");
+		fun set(bundle: ResourceBundle) {
+			FILE = bundle.getString("samples.file")
+			TABLE = bundle.getString("samples.table")
+			sampleid = bundle.getString("samples.sampleid")
+			sample = bundle.getString("samples.sample")
+			synsetid = bundle.getString("samples.synsetid")
 		}
 
-		static
-		{
-			set(bundle);
+		init {
+			set(bundle)
 		}
 	}
 
-	public static class DOMAINS
-	{
-		public static String FILE;
-		public static String TABLE;
-		public static String domainid;
-		public static String domain;
-		public static String domainname;
-		public static String posid;
+	object DOMAINS {
+		lateinit var FILE: String
+		lateinit var TABLE: String
+		lateinit var domainid: String
+		lateinit var domain: String
+		lateinit var domainname: String
+		lateinit var posid: String
 
-		public static void set(ResourceBundle bundle)
-		{
-			FILE = bundle.getString("domains.file");
-			TABLE = bundle.getString("domains.table");
-			domainid = bundle.getString("domains.domainid");
-			domain = bundle.getString("domains.domain");
-			domainname = bundle.getString("domains.domainname");
-			posid = bundle.getString("domains.posid");
+		fun set(bundle: ResourceBundle) {
+			FILE = bundle.getString("domains.file")
+			TABLE = bundle.getString("domains.table")
+			domainid = bundle.getString("domains.domainid")
+			domain = bundle.getString("domains.domain")
+			domainname = bundle.getString("domains.domainname")
+			posid = bundle.getString("domains.posid")
 		}
 
-		static
-		{
-			set(bundle);
+		init {
+			set(bundle)
 		}
 	}
 
-	public static class VFRAMES
-	{
-		public static String FILE;
-		public static String TABLE;
-		public static String frameid;
-		public static String frame;
+	object VFRAMES {
+		lateinit var FILE: String
+		lateinit var TABLE: String
+		lateinit var frameid: String
+		lateinit var frame: String
 
-		public static void set(ResourceBundle bundle)
-		{
-			FILE = bundle.getString("vframes.file");
-			TABLE = bundle.getString("vframes.table");
-			frameid = bundle.getString("vframes.frameid");
-			frame = bundle.getString("vframes.frame");
+		fun set(bundle: ResourceBundle) {
+			FILE = bundle.getString("vframes.file")
+			TABLE = bundle.getString("vframes.table")
+			frameid = bundle.getString("vframes.frameid")
+			frame = bundle.getString("vframes.frame")
 		}
 
-		static
-		{
-			set(bundle);
+		init {
+			set(bundle)
 		}
 	}
 
-	public static class VTEMPLATES
-	{
-		public static String FILE;
-		public static String TABLE;
-		public static String templateid;
-		public static String template;
+	object VTEMPLATES {
+		lateinit var FILE: String
+		lateinit var TABLE: String
+		lateinit var templateid: String
+		lateinit var template: String
 
-		public static void set(ResourceBundle bundle)
-		{
-			FILE = bundle.getString("vtemplates.file");
-			TABLE = bundle.getString("vtemplates.table");
-			templateid = bundle.getString("vtemplates.templateid");
-			template = bundle.getString("vtemplates.template");
+		fun set(bundle: ResourceBundle) {
+			FILE = bundle.getString("vtemplates.file")
+			TABLE = bundle.getString("vtemplates.table")
+			templateid = bundle.getString("vtemplates.templateid")
+			template = bundle.getString("vtemplates.template")
 		}
 
-		static
-		{
-			set(bundle);
+		init {
+			set(bundle)
 		}
 	}
 
-	public static class ADJPOSITIONS
-	{
-		public static String FILE;
-		public static String TABLE;
-		public static String positionid;
-		public static String position;
+	object ADJPOSITIONS {
+		lateinit var FILE: String
+		lateinit var TABLE: String
+		lateinit var positionid: String
+		lateinit var position: String
 
-		public static void set(ResourceBundle bundle)
-		{
-			FILE = bundle.getString("adjpositions.file");
-			TABLE = bundle.getString("adjpositions.table");
-			positionid = bundle.getString("adjpositions.positionid");
-			position = bundle.getString("adjpositions.position");
+		fun set(bundle: ResourceBundle) {
+			FILE = bundle.getString("adjpositions.file")
+			TABLE = bundle.getString("adjpositions.table")
+			positionid = bundle.getString("adjpositions.positionid")
+			position = bundle.getString("adjpositions.position")
 		}
 
-		static
-		{
-			set(bundle);
+		init {
+			set(bundle)
 		}
 	}
 
-	// maps
+	// word - casedword - pronunciations - morphs
+	object LEXES {
+		lateinit var FILE: String
+		lateinit var TABLE: String
+		lateinit var luid: String
+		lateinit var posid: String
+		lateinit var wordid: String
+		lateinit var casedwordid: String
 
-	public static class LEXES // word - casedword - pronunciations - morphs
-	{
-		public static String FILE;
-		public static String TABLE;
-		public static String luid;
-		public static String posid;
-		public static String wordid;
-		public static String casedwordid;
-
-		public static void set(ResourceBundle bundle)
-		{
-			FILE = bundle.getString("lexes.file");
-			TABLE = bundle.getString("lexes.table");
-			luid = bundle.getString("lexes.luid");
-			posid = bundle.getString("lexes.posid");
-			wordid = bundle.getString("lexes.wordid");
-			casedwordid = bundle.getString("lexes.casedwordid");
+		fun set(bundle: ResourceBundle) {
+			FILE = bundle.getString("lexes.file")
+			TABLE = bundle.getString("lexes.table")
+			luid = bundle.getString("lexes.luid")
+			posid = bundle.getString("lexes.posid")
+			wordid = bundle.getString("lexes.wordid")
+			casedwordid = bundle.getString("lexes.casedwordid")
 		}
 
-		static
-		{
-			set(bundle);
+		init {
+			set(bundle)
 		}
 	}
 
-	public static class SENSES // word - casedword - synset
+	object SENSES // word - casedword - synset
 	{
-		public static String FILE;
-		public static String TABLE;
-		public static String senseid;
-		public static String sensekey;
-		public static String luid;
-		public static String wordid;
-		public static String casedwordid;
-		public static String synsetid;
-		public static String sensenum;
-		public static String lexid;
-		public static String tagcount;
+		lateinit var FILE: String
+		lateinit var TABLE: String
+		lateinit var senseid: String
+		lateinit var sensekey: String
+		lateinit var luid: String
+		lateinit var wordid: String
+		lateinit var casedwordid: String
+		lateinit var synsetid: String
+		lateinit var sensenum: String
+		lateinit var lexid: String
+		lateinit var tagcount: String
 
-		public static void set(ResourceBundle bundle)
-		{
-			FILE = bundle.getString("senses.file");
-			TABLE = bundle.getString("senses.table");
-			senseid = bundle.getString("senses.senseid");
-			sensekey = bundle.getString("senses.sensekey");
-			luid = bundle.getString("senses.luid");
-			wordid = bundle.getString("senses.wordid");
-			casedwordid = bundle.getString("senses.casedwordid");
-			synsetid = bundle.getString("senses.synsetid");
-			sensenum = bundle.getString("senses.sensenum");
-			lexid = bundle.getString("senses.lexid");
-			tagcount = bundle.getString("senses.tagcount");
+		fun set(bundle: ResourceBundle) {
+			FILE = bundle.getString("senses.file")
+			TABLE = bundle.getString("senses.table")
+			senseid = bundle.getString("senses.senseid")
+			sensekey = bundle.getString("senses.sensekey")
+			luid = bundle.getString("senses.luid")
+			wordid = bundle.getString("senses.wordid")
+			casedwordid = bundle.getString("senses.casedwordid")
+			synsetid = bundle.getString("senses.synsetid")
+			sensenum = bundle.getString("senses.sensenum")
+			lexid = bundle.getString("senses.lexid")
+			tagcount = bundle.getString("senses.tagcount")
 		}
 
-		static
-		{
-			set(bundle);
+		init {
+			set(bundle)
 		}
 	}
 
-	public static class SEMRELATIONS
-	{
-		public static String FILE;
-		public static String TABLE;
-		public static String synset1id;
-		public static String synset2id;
-		public static String relationid;
+	object SEMRELATIONS {
+		lateinit var FILE: String
+		lateinit var TABLE: String
+		lateinit var synset1id: String
+		lateinit var synset2id: String
+		lateinit var relationid: String
 
-		public static void set(ResourceBundle bundle)
-		{
-			FILE = bundle.getString("semrelations.file");
-			TABLE = bundle.getString("semrelations.table");
-			synset1id = bundle.getString("semrelations.synset1id");
-			synset2id = bundle.getString("semrelations.synset2id");
-			relationid = bundle.getString("semrelations.relationid");
+		fun set(bundle: ResourceBundle) {
+			FILE = bundle.getString("semrelations.file")
+			TABLE = bundle.getString("semrelations.table")
+			synset1id = bundle.getString("semrelations.synset1id")
+			synset2id = bundle.getString("semrelations.synset2id")
+			relationid = bundle.getString("semrelations.relationid")
 		}
 
-		static
-		{
-			set(bundle);
+		init {
+			set(bundle)
 		}
 	}
 
-	public static class LEXRELATIONS
-	{
-		public static String FILE;
-		public static String TABLE;
-		public static String synset1id;
-		public static String lu1id;
-		public static String word1id;
-		public static String synset2id;
-		public static String lu2id;
-		public static String word2id;
-		public static String relationid;
+	object LEXRELATIONS {
+		lateinit var FILE: String
+		lateinit var TABLE: String
+		lateinit var synset1id: String
+		lateinit var lu1id: String
+		lateinit var word1id: String
+		lateinit var synset2id: String
+		lateinit var lu2id: String
+		lateinit var word2id: String
+		lateinit var relationid: String
 
-		public static void set(ResourceBundle bundle)
-		{
-			FILE = bundle.getString("lexrelations.file");
-			TABLE = bundle.getString("lexrelations.table");
-			synset1id = bundle.getString("lexrelations.synset1id");
-			lu1id = bundle.getString("semrelations.lu1id");
-			word1id = bundle.getString("semrelations.word1id");
-			synset2id = bundle.getString("lexrelations.synset2id");
-			lu2id = bundle.getString("semrelations.lu2id");
-			word2id = bundle.getString("semrelations.word2id");
-			relationid = bundle.getString("lexrelations.relationid");
+		fun set(bundle: ResourceBundle) {
+			FILE = bundle.getString("lexrelations.file")
+			TABLE = bundle.getString("lexrelations.table")
+			synset1id = bundle.getString("lexrelations.synset1id")
+			lu1id = bundle.getString("semrelations.lu1id")
+			word1id = bundle.getString("semrelations.word1id")
+			synset2id = bundle.getString("lexrelations.synset2id")
+			lu2id = bundle.getString("semrelations.lu2id")
+			word2id = bundle.getString("semrelations.word2id")
+			relationid = bundle.getString("lexrelations.relationid")
 		}
 
-		static
-		{
-			set(bundle);
+		init {
+			set(bundle)
 		}
 	}
 
-	public static class LEXES_MORPHS
-	{
-		public static String FILE;
-		public static String TABLE;
-		public static String luid;
-		public static String wordid;
-		public static String posid;
-		public static String morphid;
+	object LEXES_MORPHS {
+		lateinit var FILE: String
+		lateinit var TABLE: String
+		lateinit var luid: String
+		lateinit var wordid: String
+		lateinit var posid: String
+		lateinit var morphid: String
 
-		public static void set(ResourceBundle bundle)
-		{
-			FILE = bundle.getString("lexes_morphs.file");
-			TABLE = bundle.getString("lexes_morphs.table");
-			luid = bundle.getString("lexes_morphs.luid");
-			wordid = bundle.getString("lexes_morphs.wordid");
-			posid = bundle.getString("lexes_morphs.posid");
-			morphid = bundle.getString("lexes_morphs.morphid");
+		fun set(bundle: ResourceBundle) {
+			FILE = bundle.getString("lexes_morphs.file")
+			TABLE = bundle.getString("lexes_morphs.table")
+			luid = bundle.getString("lexes_morphs.luid")
+			wordid = bundle.getString("lexes_morphs.wordid")
+			posid = bundle.getString("lexes_morphs.posid")
+			morphid = bundle.getString("lexes_morphs.morphid")
 		}
 
-		static
-		{
-			set(bundle);
+		init {
+			set(bundle)
 		}
 	}
 
-	public static class LEXES_PRONUNCIATIONS
-	{
-		public static String FILE;
-		public static String TABLE;
-		public static String luid;
-		public static String wordid;
-		public static String posid;
-		public static String pronunciationid;
-		public static String variety;
+	object LEXES_PRONUNCIATIONS {
+		lateinit var FILE: String
+		lateinit var TABLE: String
+		lateinit var luid: String
+		lateinit var wordid: String
+		lateinit var posid: String
+		lateinit var pronunciationid: String
+		lateinit var variety: String
 
-		public static void set(ResourceBundle bundle)
-		{
-			FILE = bundle.getString("lexes_pronunciations.file");
-			TABLE = bundle.getString("lexes_pronunciations.file");
-			luid = bundle.getString("lexes_pronunciations.luid");
-			wordid = bundle.getString("lexes_pronunciations.wordid");
-			posid = bundle.getString("lexes_pronunciations.posid");
-			pronunciationid = bundle.getString("lexes_pronunciations.pronunciationid");
-			variety = bundle.getString("lexes_pronunciations.variety");
+		fun set(bundle: ResourceBundle) {
+			FILE = bundle.getString("lexes_pronunciations.file")
+			TABLE = bundle.getString("lexes_pronunciations.file")
+			luid = bundle.getString("lexes_pronunciations.luid")
+			wordid = bundle.getString("lexes_pronunciations.wordid")
+			posid = bundle.getString("lexes_pronunciations.posid")
+			pronunciationid = bundle.getString("lexes_pronunciations.pronunciationid")
+			variety = bundle.getString("lexes_pronunciations.variety")
 		}
 
-		static
-		{
-			set(bundle);
+		init {
+			set(bundle)
 		}
 	}
 
-	public static class SENSES_ADJPOSITIONS
-	{
-		public static String FILE;
-		public static String TABLE;
-		public static String synsetid;
-		public static String luid;
-		public static String wordid;
-		public static String positionid;
+	object SENSES_ADJPOSITIONS {
+		lateinit var FILE: String
+		lateinit var TABLE: String
+		lateinit var synsetid: String
+		lateinit var luid: String
+		lateinit var wordid: String
+		lateinit var positionid: String
 
-		public static void set(ResourceBundle bundle)
-		{
-			FILE = bundle.getString("senses_adjpositions.file");
-			TABLE = bundle.getString("senses_adjpositions.file");
-			synsetid = bundle.getString("senses_adjpositions.synsetid");
-			luid = bundle.getString("senses_adjpositions.luid");
-			wordid = bundle.getString("senses_adjpositions.wordid");
-			positionid = bundle.getString("senses_adjpositions.positionid");
+		fun set(bundle: ResourceBundle) {
+			FILE = bundle.getString("senses_adjpositions.file")
+			TABLE = bundle.getString("senses_adjpositions.file")
+			synsetid = bundle.getString("senses_adjpositions.synsetid")
+			luid = bundle.getString("senses_adjpositions.luid")
+			wordid = bundle.getString("senses_adjpositions.wordid")
+			positionid = bundle.getString("senses_adjpositions.positionid")
 		}
 
-		static
-		{
-			set(bundle);
+		init {
+			set(bundle)
 		}
 	}
 
-	public static class SENSES_VFRAMES
-	{
-		public static String FILE;
-		public static String TABLE;
-		public static String synsetid;
-		public static String luid;
-		public static String wordid;
-		public static String frameid;
+	object SENSES_VFRAMES {
+		lateinit var FILE: String
+		lateinit var TABLE: String
+		lateinit var synsetid: String
+		lateinit var luid: String
+		lateinit var wordid: String
+		lateinit var frameid: String
 
-		public static void set(ResourceBundle bundle)
-		{
-			FILE = bundle.getString("senses_vframes.file");
-			TABLE = bundle.getString("senses_vframes.table");
-			synsetid = bundle.getString("senses_vframes.synsetid");
-			luid = bundle.getString("senses_vframes.luid");
-			wordid = bundle.getString("senses_vframes.wordid");
-			frameid = bundle.getString("senses_vframes.frameid");
+		fun set(bundle: ResourceBundle) {
+			FILE = bundle.getString("senses_vframes.file")
+			TABLE = bundle.getString("senses_vframes.table")
+			synsetid = bundle.getString("senses_vframes.synsetid")
+			luid = bundle.getString("senses_vframes.luid")
+			wordid = bundle.getString("senses_vframes.wordid")
+			frameid = bundle.getString("senses_vframes.frameid")
 		}
 
-		static
-		{
-			set(bundle);
+		init {
+			set(bundle)
 		}
 	}
 
-	public static class SENSES_VTEMPLATES
-	{
-		public static String FILE;
-		public static String TABLE;
-		public static String luid;
-		public static String wordid;
-		public static String synsetid;
-		public static String templateid;
+	object SENSES_VTEMPLATES {
+		lateinit var FILE: String
+		lateinit var TABLE: String
+		lateinit var luid: String
+		lateinit var wordid: String
+		lateinit var synsetid: String
+		lateinit var templateid: String
 
-		public static void set(ResourceBundle bundle)
-		{
-			FILE = bundle.getString("senses_vtemplates.file");
-			TABLE = bundle.getString("senses_vtemplates.table");
-			luid = bundle.getString("senses_vtemplates.luid");
-			wordid = bundle.getString("senses_vtemplates.wordid");
-			synsetid = bundle.getString("senses_vtemplates.synsetid");
-			templateid = bundle.getString("senses_vtemplates.templateid");
+		fun set(bundle: ResourceBundle) {
+			FILE = bundle.getString("senses_vtemplates.file")
+			TABLE = bundle.getString("senses_vtemplates.table")
+			luid = bundle.getString("senses_vtemplates.luid")
+			wordid = bundle.getString("senses_vtemplates.wordid")
+			synsetid = bundle.getString("senses_vtemplates.synsetid")
+			templateid = bundle.getString("senses_vtemplates.templateid")
 		}
 
-		static
-		{
-			set(bundle);
+		init {
+			set(bundle)
 		}
 	}
 }

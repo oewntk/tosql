@@ -1,186 +1,246 @@
 /*
  * Copyright (c) $originalComment.match("Copyright \(c\) (\d+)", 1, "-")2021. Bernard Bou.
  */
+package org.oewntk.sql.out
 
-package org.oewntk.sql.out;
-
-import java.io.PrintStream;
-import java.util.Map;
-import java.util.stream.Stream;
-
-import static java.util.stream.Collectors.toMap;
+import org.oewntk.sql.out.Printers.printInsert
+import org.oewntk.sql.out.Printers.printInsert2
+import org.oewntk.sql.out.Printers.printInsert3
+import org.oewntk.sql.out.Utils.escape
+import java.io.PrintStream
+import java.util.stream.Collectors
+import java.util.stream.Stream
 
 /**
  * Builtins
  */
-public class BuiltIn
-{
-    // lexdomain, lexdomainid
-    private static final Object[][] domainsArray = new Object[][]{ //
-            {"adjs", "a", "adj.all", 0}, //
-            {"adjs.pert", "a", "adj.pert", 1}, //
-            {"advs", "r", "adv.all", 2}, //
-            {"tops", "n", "noun.Tops", 3}, //
-            {"act", "n", "noun.act", 4}, //
-            {"animal", "n", "noun.animal", 5}, //
-            {"artifact", "n", "noun.artifact", 6}, //
-            {"attribute", "n", "noun.attribute", 7}, //
-            {"body", "n", "noun.body", 8}, //
-            {"cognition", "n", "noun.cognition", 9}, //
-            {"communication", "n", "noun.communication", 10}, //
-            {"event", "n", "noun.event", 11}, //
-            {"feeling", "n", "noun.feeling", 12}, //
-            {"food", "n", "noun.food", 13}, //
-            {"group", "n", "noun.group", 14}, //
-            {"location", "n", "noun.location", 15}, //
-            {"motive", "n", "noun.motive", 16}, //
-            {"object", "n", "noun.object", 17}, //
-            {"person", "n", "noun.person", 18}, //
-            {"phenomenon", "n", "noun.phenomenon", 19}, //
-            {"plant", "n", "noun.plant", 20}, //
-            {"possession", "n", "noun.possession", 21}, //
-            {"process", "n", "noun.process", 22}, //
-            {"quantity", "n", "noun.quantity", 23}, //
-            {"relation", "n", "noun.relation", 24}, //
-            {"shape", "n", "noun.shape", 25}, //
-            {"state", "n", "noun.state", 26}, //
-            {"substance", "n", "noun.substance", 27}, //
-            {"time", "n", "noun.time", 28}, //
-            {"body", "v", "verb.body", 29}, //
-            {"change", "v", "verb.change", 30}, //
-            {"cognition", "v", "verb.cognition", 31}, //
-            {"communication", "v", "verb.communication", 32}, //
-            {"competition", "v", "verb.competition", 33}, //
-            {"consumption", "v", "verb.consumption", 34}, //
-            {"contact", "v", "verb.contact", 35}, //
-            {"creation", "v", "verb.creation", 36}, //
-            {"emotion", "v", "verb.emotion", 37}, // //
-            {"motion", "v", "verb.motion", 38}, //
-            {"perception", "v", "verb.perception", 39}, //
-            {"possession", "v", "verb.possession", 40}, //
-            {"social", "v", "verb.social", 41}, //
-            {"stative", "v", "verb.stative", 42}, //
-            {"weather", "v", "verb.weather", 43}, //
-            {"adjs.ppl", "a", "adj.ppl", 44}, //
-    };
+object BuiltIn {
 
-    public static final Map<String, Integer> LEXFILE_NIDS = Stream.of(domainsArray).collect(toMap(data -> (String) data[2], data -> (Integer) data[3]));
+	// lexdomain, lexdomainid
 
-    private static final Map<Object[], Integer> DOMAIN_TO_NIDS = Stream.of(domainsArray).collect(toMap(data -> new String[]{Utils.escape((String) data[0]), Utils.escape((String) data[1]), Utils.escape((String) data[2])}, data -> (Integer) data[3]));
+	private val domainsArray = arrayOf(
+		arrayOf("adjs", "a", "adj.all", 0),
+		arrayOf("adjs.pert", "a", "adj.pert", 1),
+		arrayOf("advs", "r", "adv.all", 2),
+		arrayOf("tops", "n", "noun.Tops", 3),
+		arrayOf("act", "n", "noun.act", 4),
+		arrayOf("animal", "n", "noun.animal", 5),
+		arrayOf("artifact", "n", "noun.artifact", 6),
+		arrayOf("attribute", "n", "noun.attribute", 7),
+		arrayOf("body", "n", "noun.body", 8),
+		arrayOf("cognition", "n", "noun.cognition", 9),
+		arrayOf("communication", "n", "noun.communication", 10),
+		arrayOf("event", "n", "noun.event", 11),
+		arrayOf("feeling", "n", "noun.feeling", 12),
+		arrayOf("food", "n", "noun.food", 13),
+		arrayOf("group", "n", "noun.group", 14),
+		arrayOf("location", "n", "noun.location", 15),
+		arrayOf("motive", "n", "noun.motive", 16),
+		arrayOf("object", "n", "noun.object", 17),
+		arrayOf("person", "n", "noun.person", 18),
+		arrayOf("phenomenon", "n", "noun.phenomenon", 19),
+		arrayOf("plant", "n", "noun.plant", 20),
+		arrayOf("possession", "n", "noun.possession", 21),
+		arrayOf("process", "n", "noun.process", 22),
+		arrayOf("quantity", "n", "noun.quantity", 23),
+		arrayOf("relation", "n", "noun.relation", 24),
+		arrayOf("shape", "n", "noun.shape", 25),
+		arrayOf("state", "n", "noun.state", 26),
+		arrayOf("substance", "n", "noun.substance", 27),
+		arrayOf("time", "n", "noun.time", 28),
+		arrayOf("body", "v", "verb.body", 29),
+		arrayOf("change", "v", "verb.change", 30),
+		arrayOf("cognition", "v", "verb.cognition", 31),
+		arrayOf("communication", "v", "verb.communication", 32),
+		arrayOf("competition", "v", "verb.competition", 33),
+		arrayOf("consumption", "v", "verb.consumption", 34),
+		arrayOf("contact", "v", "verb.contact", 35),
+		arrayOf("creation", "v", "verb.creation", 36),
+		arrayOf("emotion", "v", "verb.emotion", 37),  //
+		arrayOf("motion", "v", "verb.motion", 38),
+		arrayOf("perception", "v", "verb.perception", 39),
+		arrayOf("possession", "v", "verb.possession", 40),
+		arrayOf("social", "v", "verb.social", 41),
+		arrayOf("stative", "v", "verb.stative", 42),
+		arrayOf("weather", "v", "verb.weather", 43),
+		arrayOf("adjs.ppl", "a", "adj.ppl", 44),
+	)
 
-    // link, recurses, linkid
-    private static final Object[][] relationTypesArray = new Object[][]{ //
-            {"hypernym", "hypernym", 1, 1}, //
-            {"hyponym", "hyponym", 1, 2}, //
-            {"instance_hypernym", "instance hypernym", 1, 3}, //
-            {"instance_hyponym", "instance hyponym", 1, 4}, //
-            {"holo_part", "part holonym", 1, 11}, //
-            {"mero_part", "part meronym", 1, 12}, //
-            {"holo_member", "member holonym", 1, 13}, //
-            {"mero_member", "member meronym", 1, 14}, //
-            {"holo_substance", "substance holonym", 1, 15}, //
-            {"mero_substance", "substance meronym", 1, 16}, //
-            {"entails", "entails", 1, 21}, //
-            {"is_entailed_by", "is entailed by", 1, 22}, //
-            {"causes", "causes", 1, 23}, //
-            {"is_caused_by", "is caused by", 1, 24}, //
-            {"antonym", "antonym", 0, 30}, //
-            {"similar", "similar", 0, 40}, //
-            {"also", "also", 0, 50}, //
-            {"attribute", "attribute", 0, 60}, //
-            {"verb_group", "verb group", 0, 70}, //
-            {"participle", "participle", 0, 71}, //
-            {"pertainym", "pertainym", 0, 80}, //
-            {"derivation", "derivation", 0, 81}, //
-            {"domain_topic", "domain topic", 0, 91}, //
-            {"has_domain_topic", "has domain topic", 0, 92}, //
-            {"domain_region", "domain region", 0, 93}, //
-            {"has_domain_region", "has domain region", 0, 94}, //
-            {"exemplifies", "exemplifies", 0, 95}, // domain usage
-            {"is_exemplified_by", "is exemplified by", 0, 96}, // domain member usage
-            {"domain", "domain", 0, 97}, //
-            {"member", "member", 0, 98}, //
-            {"other", "other", 0, 99}, //
+	val LEXFILE_NIDS = Stream.of(*domainsArray)
+		.collect(
+			Collectors.toMap({ it[2] as String }, { it[3] as Int })
+		)
 
-            {"state", "state", 0, 100}, //
-            {"result", "result", 0, 101}, //
-            {"event", "event", 0, 102}, //
-            {"property", "property", 0, 110}, //
-            {"location", "location", 0, 120}, //
-            {"destination", "destination", 0, 121}, //
-            {"agent", "agent", 0, 130}, //
-            {"undergoer", "undergoer", 0, 131}, //
-            {"uses", "uses", 0, 140}, //
-            {"instrument", "instrument", 0, 141}, //
-            {"by_means_of", "by means of", 0, 142}, //
-            {"material", "material", 0, 150}, //
-            {"vehicle", "vehicle", 0, 160}, //,
-            {"body_part", "body part", 0, 170}, //
-    };
+	private val DOMAIN_TO_NIDS = Stream.of(*domainsArray)
+		.collect(
+			Collectors.toMap(
+				{ arrayOf(escape(it[0] as String), escape(it[1] as String), escape(it[2] as String)) },
+				{ it[3] as Int })
+		)
 
-    // public static final Map<String, Integer> RELATION_TYPES = Stream.of(relationTypesArray).collect(toMap(data -> (String) data[1], data -> (Integer) data[3]));
+	// link, recurses, linkid
 
-    private static final Map<Object[], Integer> RELATION_TO_NIDS = Stream.of(relationTypesArray).collect(toMap(data -> new Object[]{Utils.escape((String) data[1]), data[2]}, data -> (Integer) data[3]));
+	private val relationTypesArray = arrayOf(
+		arrayOf("hypernym", "hypernym", 1, 1),
+		arrayOf("hyponym", "hyponym", 1, 2),
+		arrayOf("instance_hypernym", "instance hypernym", 1, 3),
+		arrayOf("instance_hyponym", "instance hyponym", 1, 4),
+		arrayOf("holo_part", "part holonym", 1, 11),
+		arrayOf("mero_part", "part meronym", 1, 12),
+		arrayOf("holo_member", "member holonym", 1, 13),
+		arrayOf("mero_member", "member meronym", 1, 14),
+		arrayOf("holo_substance", "substance holonym", 1, 15),
+		arrayOf("mero_substance", "substance meronym", 1, 16),
+		arrayOf("entails", "entails", 1, 21),
+		arrayOf("is_entailed_by", "is entailed by", 1, 22),
+		arrayOf("causes", "causes", 1, 23),
+		arrayOf("is_caused_by", "is caused by", 1, 24),
+		arrayOf("antonym", "antonym", 0, 30),
+		arrayOf("similar", "similar", 0, 40),
+		arrayOf("also", "also", 0, 50),
+		arrayOf("attribute", "attribute", 0, 60),
+		arrayOf("verb_group", "verb group", 0, 70),
+		arrayOf("participle", "participle", 0, 71),
+		arrayOf("pertainym", "pertainym", 0, 80),
+		arrayOf("derivation", "derivation", 0, 81),
+		arrayOf("domain_topic", "domain topic", 0, 91),
+		arrayOf("has_domain_topic", "has domain topic", 0, 92),
+		arrayOf("domain_region", "domain region", 0, 93),
+		arrayOf("has_domain_region", "has domain region", 0, 94),
+		arrayOf("exemplifies", "exemplifies", 0, 95),  // domain usage
+		arrayOf("is_exemplified_by", "is exemplified by", 0, 96),  // domain member usage
+		arrayOf("domain", "domain", 0, 97),
+		arrayOf("member", "member", 0, 98),
+		arrayOf("other", "other", 0, 99),
 
-    public static final Map<String, Integer> OEWN_RELATION_TYPES = Stream.of(relationTypesArray).collect(toMap(data -> (String) data[0], data -> (Integer) data[3]));
+		arrayOf("state", "state", 0, 100),
+		arrayOf("result", "result", 0, 101),
+		arrayOf("event", "event", 0, 102),
+		arrayOf("property", "property", 0, 110),
+		arrayOf("location", "location", 0, 120),
+		arrayOf("destination", "destination", 0, 121),
+		arrayOf("agent", "agent", 0, 130),
+		arrayOf("undergoer", "undergoer", 0, 131),
+		arrayOf("uses", "uses", 0, 140),
+		arrayOf("instrument", "instrument", 0, 141),
+		arrayOf("by_means_of", "by means of", 0, 142),
+		arrayOf("material", "material", 0, 150),
+		arrayOf("vehicle", "vehicle", 0, 160),  //,
+		arrayOf("body_part", "body part", 0, 170),
+	)
 
-    // positionname, position
-    private static final Object[][] adjPositionTypesArray = new Object[][]{ //
-            {"predicate", "p"}, //
-            {"attributive", "a"}, //
-            {"immediately postnominal", "ip"}, //
-    };
+	private val RELATION_TO_NIDS = Stream.of(*relationTypesArray)
+		.collect(
+			Collectors.toMap(
+				{ arrayOf(escape(it[1] as String), it[2]) },
+				{ it[3] as Int })
+		)
 
-    private static final Map<String, String> ADJPOSITION_TYPES = Stream.of(adjPositionTypesArray).collect(toMap(data -> (String) data[0], data -> (String) data[1]));
+	val OEWN_RELATION_TYPES = Stream.of(*relationTypesArray)
+		.collect(
+			Collectors.toMap(
+				{ it[0] as String },
+				{ it[3] as Int })
+		)
 
-    // posname, pos
-    private static final Object[][] posArray = new Object[][]{ //
-            {"noun", "n"}, //
-            {"verb", "v"}, //
-            {"adjective", "a"}, //
-            {"adverb", "r"}, //
-            {"adjective satellite", "s"}, //
-    };
+	// positionname, position
 
-    private static final Map<String, String> POS_TYPES = Stream.of(posArray).collect(toMap(data -> (String) data[0], data -> (String) data[1]));
+	private val adjPositionTypesArray = arrayOf(
+		arrayOf("predicate", "p"),
+		arrayOf("attributive", "a"),
+		arrayOf("immediately postnominal", "ip"),
+	)
 
-    /**
-     * Generate pos types table
-     *
-     * @param ps print stream
-     */
-    public static void generatePosTypes(final PrintStream ps)
-    {
-        Printers.printInsert(ps, Names.POSES.TABLE, String.join(",", Names.POSES.posid, Names.POSES.pos), "%n('%s','%s')", BuiltIn.POS_TYPES);
-    }
+	private val ADJPOSITION_TYPES = Stream.of(*adjPositionTypesArray)
+		.collect(
+			Collectors.toMap(
+				{ it[0] },
+				{ it[1] })
+		)
 
-    /**
-     * Generate adjective position types table
-     *
-     * @param ps print stream
-     */
-    public static void generateAdjectivePositionTypes(final PrintStream ps)
-    {
-        Printers.printInsert(ps, Names.ADJPOSITIONS.TABLE, String.join(",", Names.ADJPOSITIONS.positionid, Names.ADJPOSITIONS.position), "%n('%s','%s')", BuiltIn.ADJPOSITION_TYPES);
-    }
+	// posname, pos
+	private val posArray = arrayOf(
+		arrayOf("noun", "n"),
+		arrayOf("verb", "v"),
+		arrayOf("adjective", "a"),
+		arrayOf("adverb", "r"),
+		arrayOf("adjective satellite", "s"),
+	)
 
-    /**
-     * Generate relation types table
-     *
-     * @param ps print stream
-     */
-    public static void generateRelationTypes(final PrintStream ps)
-    {
-        Printers.printInsert2(ps, Names.RELS.TABLE, String.join(",", Names.RELS.relationid, Names.RELS.relation, Names.RELS.recurses), "%n(%d,'%s', %d)", BuiltIn.RELATION_TO_NIDS);
-    }
+	private val POS_TYPES = Stream.of(*posArray)
+		.collect(
+			Collectors.toMap(
+				{ it[0] },
+				{ it[1] })
+		)
 
-    /**
-     * Generate domains table
-     *
-     * @param ps print stream
-     */
-    public static void generateDomains(final PrintStream ps)
-    {
-        Printers.printInsert3(ps, Names.DOMAINS.TABLE, String.join(",", Names.DOMAINS.domainid, Names.DOMAINS.domain, Names.DOMAINS.posid, Names.DOMAINS.domainname), "%n(%d,'%s','%s','%s')", BuiltIn.DOMAIN_TO_NIDS);
-    }
+	/**
+	 * Generate pos types table
+	 *
+	 * @param ps print stream
+	 */
+	@JvmStatic
+	fun generatePosTypes(ps: PrintStream) {
+		printInsert<String>(
+			ps,
+			Names.POSES.TABLE,
+			java.lang.String.join(",", Names.POSES.posid, Names.POSES.pos),
+			"%n('%s','%s')",
+			POS_TYPES
+		)
+	}
+
+	/**
+	 * Generate adjective position types table
+	 *
+	 * @param ps print stream
+	 */
+	@JvmStatic
+	fun generateAdjectivePositionTypes(ps: PrintStream) {
+		printInsert<String>(
+			ps,
+			Names.ADJPOSITIONS.TABLE,
+			java.lang.String.join(",", Names.ADJPOSITIONS.positionid, Names.ADJPOSITIONS.position),
+			"%n('%s','%s')",
+			ADJPOSITION_TYPES
+		)
+	}
+
+	/**
+	 * Generate relation types table
+	 *
+	 * @param ps print stream
+	 */
+	@JvmStatic
+	fun generateRelationTypes(ps: PrintStream) {
+		printInsert2(
+			ps,
+			Names.RELS.TABLE,
+			java.lang.String.join(",", Names.RELS.relationid, Names.RELS.relation, Names.RELS.recurses),
+			"%n(%d,'%s', %d)",
+			RELATION_TO_NIDS
+		)
+	}
+
+	/**
+	 * Generate domains table
+	 *
+	 * @param ps print stream
+	 */
+	@JvmStatic
+	fun generateDomains(ps: PrintStream?) {
+		printInsert3(
+			ps!!,
+			Names.DOMAINS.TABLE,
+			java.lang.String.join(
+				",",
+				Names.DOMAINS.domainid,
+				Names.DOMAINS.domain,
+				Names.DOMAINS.posid,
+				Names.DOMAINS.domainname
+			),
+			"%n(%d,'%s','%s','%s')",
+			DOMAIN_TO_NIDS
+		)
+	}
 }

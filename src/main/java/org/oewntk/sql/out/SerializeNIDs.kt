@@ -1,29 +1,28 @@
 /*
  * Copyright (c) $originalComment.match("Copyright \(c\) (\d+)", 1, "-")2021. Bernard Bou.
  */
+package org.oewntk.sql.out
 
-package org.oewntk.sql.out;
-
-import org.oewntk.model.CoreModel;
-import org.oewntk.model.Lex;
-import org.oewntk.model.Sense;
-import org.oewntk.model.Synset;
-
-import java.io.*;
-import java.util.AbstractMap.SimpleEntry;
-import java.util.Collection;
-import java.util.Map;
-
-import static java.util.stream.Collectors.toMap;
+import org.oewntk.model.CoreModel
+import org.oewntk.model.Lex
+import org.oewntk.model.Sense
+import org.oewntk.model.Synset
+import org.oewntk.sql.out.Lexes.makeCasedWordNIDs
+import org.oewntk.sql.out.Lexes.makeMorphNIDs
+import org.oewntk.sql.out.Lexes.makeWordNIDs
+import org.oewntk.sql.out.Senses.makeSenseNIDs
+import org.oewntk.sql.out.Synsets.makeSynsetNIDs
+import java.io.*
+import java.util.AbstractMap.SimpleEntry
+import java.util.stream.Collectors
 
 /**
  * Serialize ID to Numeric IDs maps
  */
-public class SerializeNIDs
-{
-	static final String NID_PREFIX = "nid_";
+object SerializeNIDs {
+	const val NID_PREFIX: String = "nid_"
 
-	private static final String SENSEKEYS_WORDS_SYNSETS_FILE = "sensekeys_words_synsets";
+	private const val SENSEKEYS_WORDS_SYNSETS_FILE = "sensekeys_words_synsets"
 
 	/**
 	 * Serialize words id-to-nid map
@@ -32,10 +31,10 @@ public class SerializeNIDs
 	 * @param lexes lexes
 	 * @throws IOException io exception
 	 */
-	public static void serializeWordNIDs(final OutputStream os, final Collection<Lex> lexes) throws IOException
-	{
-		Map<String, Integer> wordToNID = Lexes.makeWordNIDs(lexes);
-		serialize(os, wordToNID);
+	@Throws(IOException::class)
+	fun serializeWordNIDs(os: OutputStream, lexes: Collection<Lex>) {
+		val wordToNID = makeWordNIDs(lexes)
+		serialize(os, wordToNID)
 	}
 
 	/**
@@ -45,10 +44,10 @@ public class SerializeNIDs
 	 * @param lexes lexes
 	 * @throws IOException io exception
 	 */
-	public static void serializeCasedWordNIDs(final OutputStream os, final Collection<Lex> lexes) throws IOException
-	{
-		Map<String, Integer> casedToNID = Lexes.makeCasedWordNIDs(lexes);
-		serialize(os, casedToNID);
+	@Throws(IOException::class)
+	fun serializeCasedWordNIDs(os: OutputStream, lexes: Collection<Lex>) {
+		val casedToNID = makeCasedWordNIDs(lexes)
+		serialize(os, casedToNID)
 	}
 
 	/**
@@ -58,10 +57,10 @@ public class SerializeNIDs
 	 * @param lexes lexes
 	 * @throws IOException io exception
 	 */
-	public static void serializeMorphNIDs(final OutputStream os, final Collection<Lex> lexes) throws IOException
-	{
-		Map<String, Integer> morphToNID = Lexes.makeMorphNIDs(lexes);
-		serialize(os, morphToNID);
+	@Throws(IOException::class)
+	fun serializeMorphNIDs(os: OutputStream, lexes: Collection<Lex>) {
+		val morphToNID = makeMorphNIDs(lexes)
+		serialize(os, morphToNID)
 	}
 
 	/**
@@ -71,10 +70,10 @@ public class SerializeNIDs
 	 * @param lexes lexes
 	 * @throws IOException io exception
 	 */
-	public static void serializePronunciationNIDs(final OutputStream os, final Collection<Lex> lexes) throws IOException
-	{
-		Map<String, Integer> pronunciationValueToNID = Lexes.makeMorphNIDs(lexes);
-		serialize(os, pronunciationValueToNID);
+	@Throws(IOException::class)
+	fun serializePronunciationNIDs(os: OutputStream, lexes: Collection<Lex>) {
+		val pronunciationValueToNID = makeMorphNIDs(lexes)
+		serialize(os, pronunciationValueToNID)
 	}
 
 	/**
@@ -84,10 +83,10 @@ public class SerializeNIDs
 	 * @param senses senses
 	 * @throws IOException io exception
 	 */
-	private static void serializeSensesNIDs(final OutputStream os, final Collection<Sense> senses) throws IOException
-	{
-		Map<String, Integer> senseToNID = Senses.makeSenseNIDs(senses);
-		serialize(os, senseToNID);
+	@Throws(IOException::class)
+	private fun serializeSensesNIDs(os: OutputStream, senses: Collection<Sense>) {
+		val senseToNID = makeSenseNIDs(senses)
+		serialize(os, senseToNID)
 	}
 
 	/**
@@ -97,10 +96,10 @@ public class SerializeNIDs
 	 * @param synsets synsets
 	 * @throws IOException io exception
 	 */
-	public static void serializeSynsetNIDs(final OutputStream os, final Collection<Synset> synsets) throws IOException
-	{
-		Map<String, Integer> synsetIdToNID = Synsets.makeSynsetNIDs(synsets);
-		serialize(os, synsetIdToNID);
+	@Throws(IOException::class)
+	fun serializeSynsetNIDs(os: OutputStream, synsets: Collection<Synset>) {
+		val synsetIdToNID = makeSynsetNIDs(synsets)
+		serialize(os, synsetIdToNID)
 	}
 
 	/**
@@ -110,12 +109,9 @@ public class SerializeNIDs
 	 * @param object object
 	 * @throws IOException io exception
 	 */
-	private static void serialize(final OutputStream os, final Object object) throws IOException
-	{
-		try (ObjectOutputStream oos = new ObjectOutputStream(os))
-		{
-			oos.writeObject(object);
-		}
+	@Throws(IOException::class)
+	private fun serialize(os: OutputStream, `object`: Any) {
+		ObjectOutputStream(os).use { it.writeObject(`object`) }
 	}
 
 	/**
@@ -125,14 +121,23 @@ public class SerializeNIDs
 	 * @param model model
 	 * @throws IOException io exception
 	 */
-	private static void serializeSensekeysWordsSynsetsNIDs(final OutputStream os, final CoreModel model) throws IOException
-	{
-		Map<String, Integer> wordToNID = Lexes.makeWordNIDs(model.lexes);
-		Map<String, Integer> synsetIdToNID = Synsets.makeSynsetNIDs(model.synsets);
-		var m = model.senses.stream() //
-				.map(s -> new SimpleEntry<>(s.getSenseKey(), new SimpleEntry<>(wordToNID.get(s.getLCLemma()), synsetIdToNID.get(s.synsetId)))) //
-				.collect(toMap(SimpleEntry::getKey, SimpleEntry::getValue, (e,n)->{if (!e.equals(n)) System.err.printf("existing %s -> new %s%n", e, n); return e;}));
-		serialize(os, m);
+	@Throws(IOException::class)
+	private fun serializeSensekeysWordsSynsetsNIDs(os: OutputStream, model: CoreModel) {
+		val wordToNID = makeWordNIDs(model.lexes)
+		val synsetIdToNID = makeSynsetNIDs(model.synsets)
+		val m = model.senses.stream()
+			.map { SimpleEntry(it.senseKey, SimpleEntry(wordToNID[it.lCLemma], synsetIdToNID[it.synsetId])) }
+			.collect(
+				Collectors.toMap(
+					{ it.key },
+					{ it.value },
+					{ e, n ->
+						if (e != n) System.err.println("existing $e -> $n")
+						e
+					})
+
+			)
+		serialize(os, m)
 	}
 
 	/**
@@ -142,35 +147,28 @@ public class SerializeNIDs
 	 * @param outDir output dir
 	 * @throws IOException io exception
 	 */
-	static public void serializeNIDs(final CoreModel model, final File outDir) throws IOException
-	{
-		try (OutputStream os = new FileOutputStream(new File(outDir, NID_PREFIX + Names.WORDS.FILE + ".ser")))
-		{
-			serializeWordNIDs(os, model.lexes);
+	@Throws(IOException::class)
+	fun serializeNIDs(model: CoreModel, outDir: File?) {
+		FileOutputStream(File(outDir, "$NID_PREFIX${Names.WORDS.FILE}.ser")).use {
+			serializeWordNIDs(it, model.lexes)
 		}
-		try (OutputStream os = new FileOutputStream(new File(outDir, NID_PREFIX + Names.CASEDWORDS.FILE + ".ser")))
-		{
-			serializeCasedWordNIDs(os, model.lexes);
+		FileOutputStream(File(outDir, "$NID_PREFIX${Names.CASEDWORDS.FILE}.ser")).use {
+			serializeCasedWordNIDs(it, model.lexes)
 		}
-		try (OutputStream os = new FileOutputStream(new File(outDir, NID_PREFIX + Names.MORPHS.FILE + ".ser")))
-		{
-			serializeMorphNIDs(os, model.lexes);
+		FileOutputStream(File(outDir, "$NID_PREFIX${Names.MORPHS.FILE}.ser")).use {
+			serializeMorphNIDs(it, model.lexes)
 		}
-		try (OutputStream os = new FileOutputStream(new File(outDir, NID_PREFIX + Names.PRONUNCIATIONS.FILE + ".ser")))
-		{
-			serializePronunciationNIDs(os, model.lexes);
+		FileOutputStream(File(outDir, "$NID_PREFIX${Names.PRONUNCIATIONS.FILE}.ser")).use {
+			serializePronunciationNIDs(it, model.lexes)
 		}
-		try (OutputStream os = new FileOutputStream(new File(outDir, NID_PREFIX + Names.SENSES.FILE + ".ser")))
-		{
-			serializeSensesNIDs(os, model.senses);
+		FileOutputStream(File(outDir, "$NID_PREFIX${Names.SENSES.FILE}.ser")).use {
+			serializeSensesNIDs(it, model.senses)
 		}
-		try (OutputStream os = new FileOutputStream(new File(outDir, NID_PREFIX + Names.SYNSETS.FILE + ".ser")))
-		{
-			serializeSynsetNIDs(os, model.synsets);
+		FileOutputStream(File(outDir, "$NID_PREFIX${Names.SYNSETS.FILE}.ser")).use {
+			serializeSynsetNIDs(it, model.synsets)
 		}
-		try (OutputStream os = new FileOutputStream(new File(outDir, SENSEKEYS_WORDS_SYNSETS_FILE + ".ser")))
-		{
-			serializeSensekeysWordsSynsetsNIDs(os, model);
+		FileOutputStream(File(outDir, "$SENSEKEYS_WORDS_SYNSETS_FILE.ser")).use {
+			serializeSensekeysWordsSynsetsNIDs(it, model)
 		}
 	}
 }

@@ -1,18 +1,15 @@
 /*
  * Copyright (c) 2021. Bernard Bou.
  */
+package org.oewntk.sql.out
 
-package org.oewntk.sql.out;
-
-import java.io.*;
-import java.util.HashMap;
-import java.util.Map;
+import java.io.*
+import kotlin.system.exitProcess
 
 /**
  * Deserialize ID to Numeric IDs maps
  */
-public class DeSerializeNIDs
-{
+object DeSerializeNIDs {
 	/**
 	 * Deserialize id-to_nid maps
 	 *
@@ -21,40 +18,34 @@ public class DeSerializeNIDs
 	 * @throws IOException            io exception
 	 * @throws ClassNotFoundException class not found exception
 	 */
-	public static Map<String, Map<String, Integer>> deserializeNIDs(final File inDir) throws IOException, ClassNotFoundException
-	{
-		Map<String, Map<String, Integer>> maps = new HashMap<>();
-		try (InputStream is = new FileInputStream(new File(inDir, SerializeNIDs.NID_PREFIX + Names.WORDS.FILE)))
-		{
-			var m = DeSerializeNIDs.deSerializeNIDs(is);
-			maps.put(Names.WORDS.FILE, m);
+	@Throws(IOException::class, ClassNotFoundException::class)
+	fun deserializeNIDs(inDir: File?): Map<String?, Map<String, Int>> {
+		val maps: MutableMap<String?, Map<String, Int>> = HashMap()
+		FileInputStream(File(inDir, SerializeNIDs.NID_PREFIX + Names.WORDS.FILE)).use { `is` ->
+			val m = deSerializeNIDs(`is`)
+			maps.put(Names.WORDS.FILE, m)
 		}
-		try (InputStream is = new FileInputStream(new File(inDir, SerializeNIDs.NID_PREFIX + Names.CASEDWORDS.FILE)))
-		{
-			var m = DeSerializeNIDs.deSerializeNIDs(is);
-			maps.put(Names.CASEDWORDS.FILE, m);
+		FileInputStream(File(inDir, SerializeNIDs.NID_PREFIX + Names.CASEDWORDS.FILE)).use { `is` ->
+			val m = deSerializeNIDs(`is`)
+			maps.put(Names.CASEDWORDS.FILE, m)
 		}
-		try (InputStream is = new FileInputStream(new File(inDir, SerializeNIDs.NID_PREFIX + Names.MORPHS.FILE)))
-		{
-			var m = DeSerializeNIDs.deSerializeNIDs(is);
-			maps.put(Names.MORPHS.FILE, m);
+		FileInputStream(File(inDir, SerializeNIDs.NID_PREFIX + Names.MORPHS.FILE)).use { `is` ->
+			val m = deSerializeNIDs(`is`)
+			maps.put(Names.MORPHS.FILE, m)
 		}
-		try (InputStream is = new FileInputStream(new File(inDir, SerializeNIDs.NID_PREFIX + Names.PRONUNCIATIONS.FILE)))
-		{
-			var m = DeSerializeNIDs.deSerializeNIDs(is);
-			maps.put(Names.PRONUNCIATIONS.FILE, m);
+		FileInputStream(File(inDir, SerializeNIDs.NID_PREFIX + Names.PRONUNCIATIONS.FILE)).use { `is` ->
+			val m = deSerializeNIDs(`is`)
+			maps.put(Names.PRONUNCIATIONS.FILE, m)
 		}
-		try (InputStream is = new FileInputStream(new File(inDir, SerializeNIDs.NID_PREFIX + Names.SENSES.FILE)))
-		{
-			var m = DeSerializeNIDs.deSerializeNIDs(is);
-			maps.put(Names.SENSES.FILE, m);
+		FileInputStream(File(inDir, SerializeNIDs.NID_PREFIX + Names.SENSES.FILE)).use { `is` ->
+			val m = deSerializeNIDs(`is`)
+			maps.put(Names.SENSES.FILE, m)
 		}
-		try (InputStream is = new FileInputStream(new File(inDir, SerializeNIDs.NID_PREFIX + Names.SYNSETS.FILE)))
-		{
-			var m = DeSerializeNIDs.deSerializeNIDs(is);
-			maps.put(Names.SYNSETS.FILE, m);
+		FileInputStream(File(inDir, SerializeNIDs.NID_PREFIX + Names.SYNSETS.FILE)).use { `is` ->
+			val m = deSerializeNIDs(`is`)
+			maps.put(Names.SYNSETS.FILE, m)
 		}
-		return maps;
+		return maps
 	}
 
 	/**
@@ -65,9 +56,9 @@ public class DeSerializeNIDs
 	 * @throws IOException            io exception
 	 * @throws ClassNotFoundException class not found exception
 	 */
-	public static Map<String, Integer> deSerializeNIDs(final InputStream is) throws IOException, ClassNotFoundException
-	{
-		return (Map<String, Integer>) deSerialize(is);
+	@Throws(IOException::class, ClassNotFoundException::class)
+	fun deSerializeNIDs(`is`: InputStream): Map<String, Int> {
+		return deSerialize(`is`) as Map<String, Int>
 	}
 
 	/**
@@ -78,12 +69,9 @@ public class DeSerializeNIDs
 	 * @throws IOException            io exception
 	 * @throws ClassNotFoundException class not found exception
 	 */
-	private static Object deSerialize(final InputStream is) throws IOException, ClassNotFoundException
-	{
-		try (ObjectInputStream ois = new ObjectInputStream(is))
-		{
-			return ois.readObject();
-		}
+	@Throws(IOException::class, ClassNotFoundException::class)
+	private fun deSerialize(`is`: InputStream): Any {
+		ObjectInputStream(`is`).use { return it.readObject() }
 	}
 
 	/**
@@ -93,20 +81,20 @@ public class DeSerializeNIDs
 	 * @throws IOException            io exception
 	 * @throws ClassNotFoundException class not found exception
 	 */
-	static public void main(String[] args) throws IOException, ClassNotFoundException
-	{
-		File inDir = new File(args[0]);
-		if (!inDir.isDirectory())
-		{
-			System.exit(1);
+	@Throws(IOException::class, ClassNotFoundException::class)
+	@JvmStatic
+	fun main(args: Array<String>) {
+		val inDir = File(args[0])
+		if (!inDir.isDirectory) {
+			exitProcess(1)
 		}
 
-		Map<String, Map<String, Integer>> maps = deserializeNIDs(inDir);
-		System.out.printf("%s %d%n", Names.WORDS.FILE, maps.get(Names.WORDS.FILE).size());
-		System.out.printf("%s %d%n", Names.CASEDWORDS.FILE, maps.get(Names.CASEDWORDS.FILE).size());
-		System.out.printf("%s %d%n", Names.MORPHS.FILE, maps.get(Names.MORPHS.FILE).size());
-		System.out.printf("%s %d%n", Names.PRONUNCIATIONS.FILE, maps.get(Names.PRONUNCIATIONS.FILE).size());
-		System.out.printf("%s %d%n", Names.SENSES.FILE, maps.get(Names.SENSES.FILE).size());
-		System.out.printf("%s %d%n", Names.SYNSETS.FILE, maps.get(Names.SYNSETS.FILE).size());
+		val maps = deserializeNIDs(inDir)
+		println("${Names.WORDS.FILE} ${maps[Names.WORDS.FILE]!!.size}")
+		println("${Names.CASEDWORDS.FILE} ${maps[Names.CASEDWORDS.FILE]!!.size}")
+		println("${Names.MORPHS.FILE} ${maps[Names.MORPHS.FILE]!!.size}")
+		println("${Names.PRONUNCIATIONS.FILE} ${maps[Names.PRONUNCIATIONS.FILE]!!.size}")
+		println("${Names.SENSES.FILE} ${maps[Names.SENSES.FILE]!!.size}")
+		println("${Names.SYNSETS.FILE} ${maps[Names.SYNSETS.FILE]!!.size}")
 	}
 }

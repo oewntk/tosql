@@ -1,41 +1,32 @@
 /*
  * Copyright (c) $originalComment.match("Copyright \(c\) (\d+)", 1, "-")2021. Bernard Bou.
  */
+package org.oewntk.sql.out
 
-package org.oewntk.sql.out;
-
-import java.io.*;
-import java.nio.charset.Charset;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.ResourceBundle;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+import java.io.*
+import java.nio.charset.Charset
+import java.util.*
+import java.util.regex.MatchResult
+import java.util.regex.Pattern
 
 /**
  * Variable substitution
+ *
+ * @param bundle resource bundle
  */
-public class Variables
-{
-	private static final Pattern DOLLAR_PATTERN = Pattern.compile("\\$\\{([a-zA-Z0-9_.]+)}");
-
-	private static final Pattern AT_PATTERN = Pattern.compile("@\\{([a-zA-Z0-9_.]+)}");
+class Variables(bundle: ResourceBundle) {
 
 	/**
 	 * Variable-value map
 	 */
-	public final Map<String, String> toValue = new HashMap<>();
+	private val toValue: MutableMap<String, String> = HashMap()
 
 	/**
 	 * Set values in map from resource bundle
-	 *
-	 * @param bundle resource bundle
 	 */
-	public Variables(final ResourceBundle bundle)
-	{
-		for (String k : bundle.keySet())
-		{
-			toValue.put(k, bundle.getString(k));
+	init {
+		for (k in bundle.keySet()) {
+			toValue[k] = bundle.getString(k)
 		}
 	}
 
@@ -46,9 +37,8 @@ public class Variables
 	 * @param value value
 	 * @return old value if present, null otherwise
 	 */
-	public String put(final String key, final String value)
-	{
-		return toValue.put(key, value);
+	fun put(key: String, value: String): String? {
+		return toValue.put(key, value)
 	}
 
 	/**
@@ -60,17 +50,16 @@ public class Variables
 	 * @param compress     whether to compress spaces to single space
 	 * @throws IOException io exception
 	 */
-	public void varSubstitutionInFile(final File file, final PrintStream ps, boolean useBackticks, final boolean compress) throws IOException
-	{
+	@Throws(IOException::class)
+	fun varSubstitutionInFile(file: File, ps: PrintStream, useBackticks: Boolean, compress: Boolean) {
 		// iterate on lines
-		try (InputStream is = new FileInputStream(file))
-		{
-			varSubstitutionInIS(is, ps, useBackticks, compress);
-		}
-		catch (IllegalArgumentException iae)
-		{
-			System.err.printf("At %s%n%s%n", file, iae.getMessage());
-			throw iae;
+		try {
+			FileInputStream(file).use { `is` ->
+				varSubstitutionInIS(`is`, ps, useBackticks, compress)
+			}
+		} catch (iae: IllegalArgumentException) {
+			System.err.printf("At %s%n%s%n", file, iae.message)
+			throw iae
 		}
 	}
 
@@ -83,31 +72,25 @@ public class Variables
 	 * @param compress     whether to compress spaces to single space
 	 * @throws IOException io exception
 	 */
-	public void varSubstitutionInIS(final InputStream is, final PrintStream ps, boolean useBackticks, final boolean compress) throws IOException
-	{
+	@Throws(IOException::class)
+	fun varSubstitutionInIS(`is`: InputStream, ps: PrintStream, useBackticks: Boolean, compress: Boolean) {
 		// iterate on lines
-		try (BufferedReader reader = new BufferedReader(new InputStreamReader(is, Charset.defaultCharset())))
-		{
-			int lineNum = 0;
-			String line;
-			while ((line = reader.readLine()) != null)
-			{
-				lineNum++;
-				try
-				{
+		BufferedReader(InputStreamReader(`is`, Charset.defaultCharset())).use { reader ->
+			var lineNum = 0
+			var line: String
+			while ((reader.readLine().also { line = it }) != null) {
+				lineNum++
+				try {
 					//initVars(line);
-					line = varSubstitution(line, useBackticks);
+					line = varSubstitution(line, useBackticks)
+				} catch (iae: IllegalArgumentException) {
+					System.err.printf("At line %d content: [%s]%n", lineNum, line)
+					throw iae
 				}
-				catch (IllegalArgumentException iae)
-				{
-					System.err.printf("At line %d content: [%s]%n", lineNum, line);
-					throw iae;
+				if (compress) {
+					line = line.replace("\\s+".toRegex(), " ")
 				}
-				if (compress)
-				{
-					line = line.replaceAll("\\s+", " ");
-				}
-				ps.println(line);
+				ps.println(line)
 			}
 		}
 	}
@@ -119,9 +102,8 @@ public class Variables
 	 * @param useBackticks surround with back-ticks
 	 * @return string with values substituted fir variable name
 	 */
-	public String varSubstitution(String input, boolean useBackticks)
-	{
-		return varSubstitution(varSubstitution(input, AT_PATTERN, false), DOLLAR_PATTERN, useBackticks);
+	fun varSubstitution(input: String, useBackticks: Boolean): String {
+		return varSubstitution(varSubstitution(input, AT_PATTERN, false), DOLLAR_PATTERN, useBackticks)
 	}
 
 	/**
@@ -132,42 +114,42 @@ public class Variables
 	 * @param useBackticks whether to surround substitution result with back ticks
 	 * @return string with values substituted for variable name
 	 */
-	public String varSubstitution(final String input, final Pattern p, boolean useBackticks)
-	{
-		Matcher m = p.matcher(input);
-		if (m.find())
-		{
-			var output = m.replaceAll(r -> {
-				String varName = r.group(1);
-				if (!toValue.containsKey(varName))
-				{
-					throw new IllegalArgumentException(varName);
-				}
-				var val = toValue.get(varName);
-				return useBackticks ? "`" + val + '`' : val;
-			});
-			if (output.contains(p.pattern().substring(0, 1)))
-			{
-				throw new IllegalArgumentException(p.pattern().charAt(0) + ",{,} used in '" + input + "'");
+	private fun varSubstitution(input: String, p: Pattern, useBackticks: Boolean): String {
+		val m = p.matcher(input)
+		if (m.find()) {
+			val output = m.replaceAll { r: MatchResult ->
+				val varName = r.group(1)
+				require(toValue.containsKey(varName)) { varName }
+				val `val` = toValue[varName]
+				if (useBackticks) "`$`val``" else `val`
 			}
-			return output;
+			require(
+				!output.contains(
+					p.pattern().substring(0, 1)
+				)
+			) { p.pattern()[0].toString() + ",{,} used in '" + input + "'" }
+			return output
 		}
-		return input;
+		return input
 	}
 
-	/**
-	 * Scan input and produces list on stderr with same value
-	 *
-	 * @param input input
-	 */
-	public static void dumpVars(String input)
-	{
-		Pattern p = Pattern.compile("\\$\\{([a-zA-Z0-9_.]+)}");
-		Matcher m = p.matcher(input);
-		if (m.find())
-		{
-			String varName = m.group(1);
-			System.err.printf("%s=%s%n", varName, varName);
+	companion object {
+		private val DOLLAR_PATTERN: Pattern = Pattern.compile("\\$\\{([a-zA-Z0-9_.]+)}")
+
+		private val AT_PATTERN: Pattern = Pattern.compile("@\\{([a-zA-Z0-9_.]+)}")
+
+		/**
+		 * Scan input and produces list on stderr with same value
+		 *
+		 * @param input input
+		 */
+		fun dumpVars(input: String) {
+			val p = Pattern.compile("\\$\\{([a-zA-Z0-9_.]+)}")
+			val m = p.matcher(input)
+			if (m.find()) {
+				val varName = m.group(1)
+				System.err.printf("%s=%s%n", varName, varName)
+			}
 		}
 	}
 }

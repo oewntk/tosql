@@ -1,66 +1,80 @@
 /*
  * Copyright (c) 2021-2021. Bernard Bou.
  */
+package org.oewntk.sql.out
 
-package org.oewntk.sql.out;
-
-import org.oewntk.model.*;
-
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.PrintStream;
-import java.nio.charset.StandardCharsets;
-import java.util.Collection;
-import java.util.Map;
-import java.util.function.Consumer;
+import org.oewntk.model.*
+import org.oewntk.sql.out.BuiltIn.generateAdjectivePositionTypes
+import org.oewntk.sql.out.BuiltIn.generateDomains
+import org.oewntk.sql.out.BuiltIn.generatePosTypes
+import org.oewntk.sql.out.BuiltIn.generateRelationTypes
+import org.oewntk.sql.out.Lexes.generateCasedWords
+import org.oewntk.sql.out.Lexes.generateLexes
+import org.oewntk.sql.out.Lexes.generateLexesMorphs
+import org.oewntk.sql.out.Lexes.generateLexesPronunciations
+import org.oewntk.sql.out.Lexes.generateMorphs
+import org.oewntk.sql.out.Lexes.generatePronunciations
+import org.oewntk.sql.out.Lexes.generateWords
+import org.oewntk.sql.out.Senses.generateSenseRelations
+import org.oewntk.sql.out.Senses.generateSenses
+import org.oewntk.sql.out.Senses.generateSensesAdjPositions
+import org.oewntk.sql.out.Senses.generateSensesVerbFrames
+import org.oewntk.sql.out.Synsets.generateSamples
+import org.oewntk.sql.out.Synsets.generateSynsetRelations
+import org.oewntk.sql.out.Synsets.generateSynsets
+import java.io.File
+import java.io.FileNotFoundException
+import java.io.FileOutputStream
+import java.io.PrintStream
+import java.nio.charset.StandardCharsets
+import java.util.function.Consumer
 
 /**
  * Main class that generates the core WN database in the SQL format
  *
+ * @property outDir output directory
+ *
  * @author Bernard Bou
  * @see "https://sqlunet.sourceforge.net/schema.html"
  */
-public class CoreModelConsumer implements Consumer<CoreModel>
-{
-	/**
-	 * Output dir
-	 */
-	protected final File outDir;
+class CoreModelConsumer(
+	private val outDir: File
+) : Consumer<CoreModel> {
 
 	/**
 	 * NID maps
 	 */
-	protected Map<Key, Integer> lexKeyToNID = null;
-	protected Map<String, Integer> wordToNID = null;
-	protected Map<String, Integer> casedWordToNID = null;
-	protected Map<String, Integer> synsetIdToNID = null;
+	@JvmField
+	var lexKeyToNID: Map<out Key, Int>? = null
 
 	/**
-	 * Constructor
-	 *
-	 * @param outDir output directory
+	 * Word to NID map
 	 */
-	public CoreModelConsumer(final File outDir)
-	{
-		this.outDir = outDir;
-	}
+	@JvmField
+	var wordToNID: Map<String, Int>? = null
 
-	@Override
-	public void accept(final CoreModel model)
-	{
-		Tracing.psInfo.printf("[CoreModel] %s%n", model.getSource());
+	/**
+	 * Cased word to NID map
+	 */
+	@JvmField
+	var casedWordToNID: Map<String, Int>? = null
 
-		try
-		{
-			lexes(outDir, model.lexes);
-			synsets(outDir, model.synsets);
-			senses(outDir, model.senses, model.getSensesById());
-			builtins(outDir);
-		}
-		catch (FileNotFoundException e)
-		{
-			e.printStackTrace(Tracing.psErr);
+	/**
+	 * Synset to NID map
+	 */
+	@JvmField
+	var synsetIdToNID: Map<String, Int>? = null
+
+	override fun accept(model: CoreModel) {
+		Tracing.psInfo.printf("[CoreModel] %s%n", model.source)
+
+		try {
+			lexes(outDir, model.lexes)
+			synsets(outDir, model.synsets)
+			senses(outDir, model.senses, model.sensesById)
+			builtins(outDir)
+		} catch (e: FileNotFoundException) {
+			e.printStackTrace(Tracing.psErr)
 		}
 	}
 
@@ -71,37 +85,58 @@ public class CoreModelConsumer implements Consumer<CoreModel>
 	 * @param lexes  lexes
 	 * @throws FileNotFoundException file not found exception
 	 */
-	private void lexes(final File outDir, final Collection<Lex> lexes) throws FileNotFoundException
-	{
-		try (PrintStream ps = new PrintStream(new FileOutputStream(new File(outDir, makeFilename(Names.WORDS.FILE))), true, StandardCharsets.UTF_8))
-		{
-			wordToNID = Lexes.generateWords(ps, lexes);
+	@Throws(FileNotFoundException::class)
+	private fun lexes(outDir: File, lexes: Collection<Lex>) {
+		PrintStream(
+			FileOutputStream(File(outDir, makeFilename(Names.WORDS.FILE))),
+			true,
+			StandardCharsets.UTF_8
+		).use { ps ->
+			wordToNID = generateWords(ps, lexes)
 		}
-		try (PrintStream ps = new PrintStream(new FileOutputStream(new File(outDir, makeFilename(Names.CASEDWORDS.FILE))), true, StandardCharsets.UTF_8))
-		{
-			casedWordToNID = Lexes.generateCasedWords(ps, lexes, wordToNID);
+		PrintStream(
+			FileOutputStream(File(outDir, makeFilename(Names.CASEDWORDS.FILE))),
+			true,
+			StandardCharsets.UTF_8
+		).use { ps ->
+			casedWordToNID = generateCasedWords(ps, lexes, wordToNID!!)
 		}
-		try (PrintStream ps = new PrintStream(new FileOutputStream(new File(outDir, makeFilename(Names.LEXES.FILE))), true, StandardCharsets.UTF_8))
-		{
-			lexKeyToNID = Lexes.generateLexes(ps, lexes, wordToNID, casedWordToNID);
+		PrintStream(
+			FileOutputStream(File(outDir, makeFilename(Names.LEXES.FILE))),
+			true,
+			StandardCharsets.UTF_8
+		).use { ps ->
+			lexKeyToNID = generateLexes(ps, lexes, wordToNID!!, casedWordToNID!!)
 		}
-		Map<String, Integer> morphToNID;
-		try (PrintStream ps = new PrintStream(new FileOutputStream(new File(outDir, makeFilename(Names.MORPHS.FILE))), true, StandardCharsets.UTF_8))
-		{
-			morphToNID = Lexes.generateMorphs(ps, lexes);
+		var morphToNID: Map<String, Int>
+		PrintStream(
+			FileOutputStream(File(outDir, makeFilename(Names.MORPHS.FILE))),
+			true,
+			StandardCharsets.UTF_8
+		).use { ps ->
+			morphToNID = generateMorphs(ps, lexes)
 		}
-		try (PrintStream ps = new PrintStream(new FileOutputStream(new File(outDir, makeFilename(Names.LEXES_MORPHS.FILE))), true, StandardCharsets.UTF_8))
-		{
-			Lexes.generateLexesMorphs(ps, lexes, lexKeyToNID, wordToNID, morphToNID);
+		PrintStream(
+			FileOutputStream(File(outDir, makeFilename(Names.LEXES_MORPHS.FILE))),
+			true,
+			StandardCharsets.UTF_8
+		).use { ps ->
+			generateLexesMorphs(ps, lexes, lexKeyToNID!!, wordToNID!!, morphToNID)
 		}
-		Map<String, Integer> pronunciationToNID;
-		try (PrintStream ps = new PrintStream(new FileOutputStream(new File(outDir, makeFilename(Names.PRONUNCIATIONS.FILE))), true, StandardCharsets.UTF_8))
-		{
-			pronunciationToNID = Lexes.generatePronunciations(ps, lexes);
+		var pronunciationToNID: Map<String, Int>
+		PrintStream(
+			FileOutputStream(File(outDir, makeFilename(Names.PRONUNCIATIONS.FILE))),
+			true,
+			StandardCharsets.UTF_8
+		).use { ps ->
+			pronunciationToNID = generatePronunciations(ps, lexes)
 		}
-		try (PrintStream ps = new PrintStream(new FileOutputStream(new File(outDir, makeFilename(Names.LEXES_PRONUNCIATIONS.FILE))), true, StandardCharsets.UTF_8))
-		{
-			Lexes.generateLexesPronunciations(ps, lexes, lexKeyToNID, wordToNID, pronunciationToNID);
+		PrintStream(
+			FileOutputStream(File(outDir, makeFilename(Names.LEXES_PRONUNCIATIONS.FILE))),
+			true,
+			StandardCharsets.UTF_8
+		).use { ps ->
+			generateLexesPronunciations(ps, lexes, lexKeyToNID!!, wordToNID!!, pronunciationToNID)
 		}
 	}
 
@@ -112,19 +147,28 @@ public class CoreModelConsumer implements Consumer<CoreModel>
 	 * @param synsets synsets
 	 * @throws FileNotFoundException file not found exception
 	 */
-	private void synsets(final File outDir, final Collection<Synset> synsets) throws FileNotFoundException
-	{
-		try (PrintStream ps = new PrintStream(new FileOutputStream(new File(outDir, makeFilename(Names.SYNSETS.FILE))), true, StandardCharsets.UTF_8))
-		{
-			synsetIdToNID = Synsets.generateSynsets(ps, synsets);
+	@Throws(FileNotFoundException::class)
+	private fun synsets(outDir: File, synsets: Collection<Synset>) {
+		PrintStream(
+			FileOutputStream(File(outDir, makeFilename(Names.SYNSETS.FILE))),
+			true,
+			StandardCharsets.UTF_8
+		).use { ps ->
+			synsetIdToNID = generateSynsets(ps, synsets)
 		}
-		try (PrintStream ps = new PrintStream(new FileOutputStream(new File(outDir, makeFilename(Names.SAMPLES.FILE))), true, StandardCharsets.UTF_8))
-		{
-			Synsets.generateSamples(ps, synsets, synsetIdToNID);
+		PrintStream(
+			FileOutputStream(File(outDir, makeFilename(Names.SAMPLES.FILE))),
+			true,
+			StandardCharsets.UTF_8
+		).use { ps ->
+			generateSamples(ps, synsets, synsetIdToNID!!)
 		}
-		try (PrintStream ps = new PrintStream(new FileOutputStream(new File(outDir, makeFilename(Names.SEMRELATIONS.FILE))), true, StandardCharsets.UTF_8))
-		{
-			Synsets.generateSynsetRelations(ps, synsets, synsetIdToNID);
+		PrintStream(
+			FileOutputStream(File(outDir, makeFilename(Names.SEMRELATIONS.FILE))),
+			true,
+			StandardCharsets.UTF_8
+		).use { ps ->
+			generateSynsetRelations(ps, synsets, synsetIdToNID!!)
 		}
 	}
 
@@ -136,63 +180,90 @@ public class CoreModelConsumer implements Consumer<CoreModel>
 	 * @param sensesById senses mapped by sensekeys
 	 * @throws FileNotFoundException file not found exception
 	 */
-	private void senses(final File outDir, final Collection<Sense> senses, final Map<String, Sense> sensesById) throws FileNotFoundException
-	{
-		try (PrintStream ps = new PrintStream(new FileOutputStream(new File(outDir, makeFilename(Names.SENSES.FILE))), true, StandardCharsets.UTF_8))
-		{
+	@Throws(FileNotFoundException::class)
+	private fun senses(outDir: File, senses: Collection<Sense>, sensesById: Map<String, Sense>?) {
+		PrintStream(
+			FileOutputStream(File(outDir, makeFilename(Names.SENSES.FILE))),
+			true,
+			StandardCharsets.UTF_8
+		).use { ps ->
 			/* Map<String, Integer> idToNID =*/
-			Senses.generateSenses(ps, senses, synsetIdToNID, lexKeyToNID, wordToNID, casedWordToNID);
+			generateSenses(ps, senses, synsetIdToNID!!, lexKeyToNID!!, wordToNID!!, casedWordToNID!!)
 		}
-		try (PrintStream ps = new PrintStream(new FileOutputStream(new File(outDir, makeFilename(Names.LEXRELATIONS.FILE))), true, StandardCharsets.UTF_8))
-		{
-			Senses.generateSenseRelations(ps, senses, sensesById, synsetIdToNID, lexKeyToNID, wordToNID);
+		PrintStream(
+			FileOutputStream(File(outDir, makeFilename(Names.LEXRELATIONS.FILE))),
+			true,
+			StandardCharsets.UTF_8
+		).use { ps ->
+			generateSenseRelations(ps, senses, sensesById!!, synsetIdToNID!!, lexKeyToNID!!, wordToNID!!)
 		}
-		try (PrintStream ps = new PrintStream(new FileOutputStream(new File(outDir, makeFilename(Names.SENSES_VFRAMES.FILE))), true, StandardCharsets.UTF_8))
-		{
-			Senses.generateSensesVerbFrames(ps, senses, synsetIdToNID, lexKeyToNID, wordToNID);
+		PrintStream(
+			FileOutputStream(File(outDir, makeFilename(Names.SENSES_VFRAMES.FILE))),
+			true,
+			StandardCharsets.UTF_8
+		).use { ps ->
+			generateSensesVerbFrames(ps, senses, synsetIdToNID!!, lexKeyToNID!!, wordToNID!!)
 		}
-		try (PrintStream ps = new PrintStream(new FileOutputStream(new File(outDir, makeFilename(Names.SENSES_ADJPOSITIONS.FILE))), true, StandardCharsets.UTF_8))
-		{
-			Senses.generateSensesAdjPositions(ps, senses, synsetIdToNID, lexKeyToNID, wordToNID);
-		}
-	}
-
-	/**
-	 * Consume builtins
-	 *
-	 * @param outDir out dir
-	 * @throws FileNotFoundException file not found exception
-	 */
-	public static void builtins(final File outDir) throws FileNotFoundException
-	{
-		try (PrintStream ps = new PrintStream(new FileOutputStream(new File(outDir, makeFilename(Names.DOMAINS.TABLE))), true, StandardCharsets.UTF_8))
-		{
-			BuiltIn.generateDomains(ps);
-		}
-		try (PrintStream ps = new PrintStream(new FileOutputStream(new File(outDir, makeFilename(Names.POSES.FILE))), true, StandardCharsets.UTF_8))
-		{
-			BuiltIn.generatePosTypes(ps);
-		}
-		try (PrintStream ps = new PrintStream(new FileOutputStream(new File(outDir, makeFilename(Names.ADJPOSITIONS.FILE))), true, StandardCharsets.UTF_8))
-		{
-			BuiltIn.generateAdjectivePositionTypes(ps);
-		}
-		try (PrintStream ps = new PrintStream(new FileOutputStream(new File(outDir, makeFilename(Names.RELS.FILE))), true, StandardCharsets.UTF_8))
-		{
-			BuiltIn.generateRelationTypes(ps);
+		PrintStream(
+			FileOutputStream(File(outDir, makeFilename(Names.SENSES_ADJPOSITIONS.FILE))),
+			true,
+			StandardCharsets.UTF_8
+		).use { ps ->
+			generateSensesAdjPositions(ps, senses, synsetIdToNID!!, lexKeyToNID!!, wordToNID!!)
 		}
 	}
 
-	/**
-	 * Make SQL filename
-	 *
-	 * @param name name
-	 * @return filename
-	 */
-	static protected String makeFilename(String name)
-	{
-		String fileName = name + ".sql";
-		Tracing.psInfo.println(fileName);
-		return fileName;
+	companion object {
+		/**
+		 * Consume builtins
+		 *
+		 * @param outDir out dir
+		 * @throws FileNotFoundException file not found exception
+		 */
+		@JvmStatic
+		@Throws(FileNotFoundException::class)
+		fun builtins(outDir: File?) {
+			PrintStream(
+				FileOutputStream(File(outDir, makeFilename(Names.DOMAINS.TABLE))),
+				true,
+				StandardCharsets.UTF_8
+			).use { ps ->
+				generateDomains(ps)
+			}
+			PrintStream(
+				FileOutputStream(File(outDir, makeFilename(Names.POSES.FILE))),
+				true,
+				StandardCharsets.UTF_8
+			).use { ps ->
+				generatePosTypes(ps)
+			}
+			PrintStream(
+				FileOutputStream(File(outDir, makeFilename(Names.ADJPOSITIONS.FILE))),
+				true,
+				StandardCharsets.UTF_8
+			).use { ps ->
+				generateAdjectivePositionTypes(ps)
+			}
+			PrintStream(
+				FileOutputStream(File(outDir, makeFilename(Names.RELS.FILE))),
+				true,
+				StandardCharsets.UTF_8
+			).use { ps ->
+				generateRelationTypes(ps)
+			}
+		}
+
+		/**
+		 * Make SQL filename
+		 *
+		 * @param name name
+		 * @return filename
+		 */
+		@JvmStatic
+		fun makeFilename(name: String): String {
+			val fileName = "$name.sql"
+			Tracing.psInfo.println(fileName)
+			return fileName
+		}
 	}
 }

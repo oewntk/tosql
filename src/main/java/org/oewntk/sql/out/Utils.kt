@@ -1,47 +1,36 @@
 /*
  * Copyright (c) $originalComment.match("Copyright \(c\) (\d+)", 1, "-")2021. Bernard Bou.
  */
+package org.oewntk.sql.out
 
-package org.oewntk.sql.out;
-
-import java.io.PrintStream;
-import java.util.AbstractMap.SimpleEntry;
-import java.util.Comparator;
-import java.util.Map;
-import java.util.Map.Entry;
-import java.util.TreeMap;
-import java.util.function.BinaryOperator;
-import java.util.function.Function;
-import java.util.stream.Stream;
-
-import static java.util.stream.Collectors.toMap;
+import org.oewntk.sql.out.Printers.printInsert
+import java.io.PrintStream
+import java.util.*
+import java.util.AbstractMap.SimpleEntry
+import java.util.function.BinaryOperator
+import java.util.stream.Collectors
+import java.util.stream.Stream
 
 /**
  * Utilities
  */
-public class Utils
-{
+object Utils {
+
 	/**
 	 * Merging function, keep existing element against replacement
 	 */
-	private static final BinaryOperator<Integer> mergingKeepFunction = (existing, replacement) -> {
-		if (existing.equals(replacement))
-		{
-			throw new IllegalArgumentException(existing + "," + replacement);
-		}
-		return existing;
-	};
+	private val mergingKeepFunction = BinaryOperator { existing: Int, replacement: Int ->
+		require(existing != replacement) { "$existing,$replacement" }
+		existing
+	}
 
 	/**
 	 * Merging function, keep replacement element against replacement
 	 */
-	private static final BinaryOperator<Integer> mergingReplaceFunction = (existing, replacement) -> {
-		if (existing.equals(replacement))
-		{
-			throw new IllegalArgumentException(existing + "," + replacement);
-		}
-		return replacement;
-	};
+	private val mergingReplaceFunction = BinaryOperator { existing: Int, replacement: Int ->
+		require(existing != replacement) { "$existing,$replacement" }
+		replacement
+	}
 
 	// map factory
 
@@ -50,22 +39,26 @@ public class Utils
 	 * To be used with objects that support equal and comparable
 	 *
 	 * @param stream must be distinct
-	 * @param <T>    type of stream elements
+	 * @param T type of stream elements
 	 * @return map if object-to-NID pairs
 	 */
-	public static <T> Map<T, Integer> makeNIDMap(final Stream<T> stream)
-	{
-		//final AtomicInteger index = new AtomicInteger();
-		//index.set(0);
-		final int[] i = {0};
-		return stream //
-				.sequential() //
-				.sorted() //
-				.peek(e -> ++i[0]) //
-				.map(item -> new SimpleEntry<>(item, i[0] /* index.addAndGet(1) */)) //
-				.collect(toMap(SimpleEntry::getKey, SimpleEntry::getValue, (existing, replacement) -> {
-					throw new IllegalArgumentException(existing + "," + replacement);
-				}, TreeMap::new));
+	@JvmStatic
+	fun <T> makeNIDMap(stream: Stream<T>): Map<T, Int> {
+		// val index = AtomicInteger()
+		// index.set(0);
+		var i = 0
+		return stream
+			.sequential()
+			.sorted()
+			.peek { ++i }
+			.map { SimpleEntry(it, i /* index.addAndGet(1) */) }
+			.collect(
+				Collectors.toMap(
+					{ it.key },
+					{ it.value },
+					{ existing, replacement -> throw IllegalArgumentException("$existing,$replacement") },
+					{ TreeMap() })
+			)
 	}
 
 	/**
@@ -76,16 +69,22 @@ public class Utils
 	 * @param columns  column name
 	 * @param byNid    nid-to-value map, values mapped by nid
 	 * @param toString nid-to-value pair stringifier
-	 * @param <T>      type of values
+	 * @param T        type of values
 	 */
-	public static <T> void generateTable(final PrintStream ps, final String table, final String columns, final Map<Integer, T> byNid, final Function<Entry<Integer, T>, String> toString)
-	{
+	fun <T> generateTable(
+		ps: PrintStream,
+		table: String,
+		columns: String,
+		byNid: Map<Int, T>,
+		toString: (Map.Entry<Int, T>) -> String
+	) {
+
 		// make object-to-nid map
-		Stream<Entry<Integer, T>> stream = byNid.entrySet().stream() //
-				.sorted(Comparator.comparingInt(Entry::getKey));
+		val stream = byNid.entries.stream()
+			.sorted(Comparator.comparingInt { it.key })
 
 		// insert map
-		Printers.printInsert(ps, table, columns, stream, toString, false);
+		printInsert(ps, table, columns, stream, toString, false)
 	}
 
 	// escape
@@ -96,8 +95,8 @@ public class Utils
 	 * @param str string
 	 * @return SQL escaped string
 	 */
-	public static String escape(final String str)
-	{
-		return str.replace("'", "''");
+	@JvmStatic
+	fun escape(str: String): String {
+		return str.replace("'", "''")
 	}
 }
