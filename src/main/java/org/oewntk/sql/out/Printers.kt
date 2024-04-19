@@ -7,10 +7,10 @@ import org.oewntk.model.Key
 import org.oewntk.model.KeyF
 import org.oewntk.model.Lex
 import java.io.PrintStream
-import java.util.AbstractMap.SimpleEntry
 import java.util.function.Consumer
 import java.util.function.Function
 import java.util.stream.Stream
+import kotlin.streams.toList
 
 /**
  * Insert printers
@@ -82,14 +82,15 @@ object Printers {
 			ps.printf("INSERT INTO %s (%s) VALUES", table, columns)
 			val i = intArrayOf(1) // used as a final int holder
 			objects.stream()
-				.map { SimpleEntry(it, NIDMaps.lookup(objectIdToNID, toId.invoke(it))) }
-				.sorted(java.util.Map.Entry.comparingByValue())
+				.map { it to NIDMaps.lookup(objectIdToNID, toId.invoke(it)) }
+				.toList()
+				.sortedBy { (_, value) -> value }
 				.forEach {
 					if ((i[0]++) > 1) {
 						ps.print(',')
 					}
-					val s = toString.invoke(it.key)
-					ps.printf("%n(%d,%s)", it.value, s)
+					val s = toString.invoke(it.first)
+					ps.printf("%n(%d,%s)", it.second, s)
 				}
 			ps.println(";")
 		}
@@ -122,14 +123,15 @@ object Printers {
 			ps.printf("INSERT INTO %s (%s) VALUES", table, columns)
 			val i = intArrayOf(1) // used as a final int holder
 			objects.stream()
-				.map { SimpleEntry(it, NIDMaps.lookup(objectIdToNID, toId.invoke(it))) }
-				.sorted(java.util.Map.Entry.comparingByValue())
+				.map { it to NIDMaps.lookup(objectIdToNID, toId.invoke(it)) }
+				.toList()
+				.sortedBy { (_, value) -> value }
 				.forEach {
 					if (i[0]++ != 1) {
 						ps.print(',')
 					}
-					val s = toStringWithComments.invoke(it.key)
-					ps.printf("%n(%d,%s) /* %s */", it.value, s[0], s[1])
+					val s = toStringWithComments.invoke(it.first)
+					ps.printf("%n(%d,%s) /* %s */", it.second, s[0], s[1])
 				}
 			ps.println(";")
 		}
@@ -161,19 +163,15 @@ object Printers {
 			ps.printf("INSERT INTO %s (%s) VALUES", table, columns)
 			val i = intArrayOf(1) // used as a final int holder
 			lexes.stream()
-				.map { lex ->
-					SimpleEntry(
-						lex,
-						NIDMaps.lookup(lexKeyToNID, KeyF.F_W_P_A.Mono.of(Lex::lemma, Lex::type, lex))
-					)
-				}
-				.sorted(java.util.Map.Entry.comparingByValue())
-				.forEach { e: SimpleEntry<Lex, Int> ->
+				.map { it to NIDMaps.lookup(lexKeyToNID, KeyF.F_W_P_A.Mono.of(Lex::lemma, Lex::type, it)) }
+				.toList()
+				.sortedBy { (_, value) -> value }
+				.forEach {
 					if (i[0]++ != 1) {
 						ps.print(',')
 					}
-					val lex = e.key
-					val v = e.value
+					val lex = it.first
+					val v = it.second
 					val s = toString.invoke(lex)
 					ps.printf("%n(%d,%s)", v, s)
 				}
@@ -205,19 +203,15 @@ object Printers {
 			ps.printf("INSERT INTO %s (%s) VALUES", table, columns)
 			val i = intArrayOf(1) // used as a final int holder
 			lexes.stream()
-				.map { lex: Lex ->
-					SimpleEntry(
-						lex,
-						NIDMaps.lookup(lexKeyToNID, KeyF.F_W_P_A.Mono.of(Lex::lemma, Lex::type, lex))
-					)
-				}
-				.sorted(java.util.Map.Entry.comparingByValue())
+				.map { it to NIDMaps.lookup(lexKeyToNID, KeyF.F_W_P_A.Mono.of(Lex::lemma, Lex::type, it)) }
+				.toList()
+				.sortedBy { (_, value) -> value }
 				.forEach {
 					if (i[0]++ != 1) {
 						ps.print(',')
 					}
-					val lex = it.key
-					val v = it.value
+					val lex = it.first
+					val v = it.second
 					val s = toStringWithComments.invoke(lex)
 					ps.printf("%n(%d,%s) /* %s */", v, s[0], s[1])
 				}
@@ -406,7 +400,8 @@ object Printers {
 
 		val i = intArrayOf(1) // used only as an int holder
 		mapper.entries.stream()
-			.sorted(java.util.Map.Entry.comparingByValue())
+			.toList()
+			.sortedBy { (_, value) -> value }
 			.forEach {
 				if (i[0]++ != 1) {
 					ps.print(',')
@@ -439,7 +434,8 @@ object Printers {
 
 		val i = intArrayOf(1) // used it only as an int holder
 		mapper.entries.stream()
-			.sorted(java.util.Map.Entry.comparingByValue())
+			.toList()
+			.sortedBy { (_, value) -> value }
 			.forEach {
 				if (i[0]++ != 1) {
 					ps.print(',')
@@ -472,7 +468,8 @@ object Printers {
 
 		val i = intArrayOf(1) // used it only as an int holder
 		mapper.entries.stream()
-			.sorted(java.util.Map.Entry.comparingByValue())
+			.toList()
+			.sortedBy { (_, value) -> value }
 			.forEach {
 				if (i[0]++ != 1) {
 					ps.print(',')

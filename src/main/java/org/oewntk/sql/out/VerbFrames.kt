@@ -6,7 +6,6 @@ package org.oewntk.sql.out
 import org.oewntk.model.VerbFrame
 import org.oewntk.sql.out.Printers.printInsert
 import java.io.PrintStream
-import java.util.AbstractMap.SimpleEntry
 import java.util.stream.Collectors
 import java.util.stream.Stream
 
@@ -62,10 +61,11 @@ object VerbFrames {
 	 * Map frame id (via, ...) to numeric id
 	 */
 	val VERB_FRAME_ID_TO_NIDS: Map<String, Int> = Stream.of(*VERBFRAME_VALUES)
-		.collect(Collectors.toMap(
-		    { it[0] as String },
-			{ it[1] as Int })
-	)
+		.collect(
+			Collectors.toMap(
+				{ it[0] as String },
+				{ it[1] as Int })
+		)
 
 	/**
 	 * Get nid
@@ -93,13 +93,12 @@ object VerbFrames {
 		val i = intArrayOf(0)
 		val table = verbFrames.stream()
 			.peek { ++i[0] }
-			.map { vf: VerbFrame -> SimpleEntry(vf.frame, getNID(vf, i[0])) }
+			.map { vf: VerbFrame -> vf.frame to getNID(vf, i[0]) }
 			.collect(
 				Collectors.toMap(
-					{ it.key },
-					{ it.value })
+					{ it.first },
+					{ it.second })
 			)
-
 		printInsert<Int>(
 			ps,
 			Names.VFRAMES.TABLE,

@@ -99,12 +99,8 @@ class ModelConsumer(
 				coreConsumer.wordToNID!!
 			)
 		}
-		val toString = { entry: Map.Entry<Int, VerbTemplate> ->
-			String.format(
-				"%d, '%s'",
-				entry.key,
-				escape(entry.value.template)
-			)
+		val toString = { entry: Pair<Int, VerbTemplate> ->
+			"${entry.first}, '${escape(entry.second.template)}'"
 		}
 		PrintStream(
 			FileOutputStream(File(outDir, makeFilename(Names.VTEMPLATES.FILE))),

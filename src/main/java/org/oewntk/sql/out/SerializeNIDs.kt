@@ -13,7 +13,6 @@ import org.oewntk.sql.out.Lexes.makeWordNIDs
 import org.oewntk.sql.out.Senses.makeSenseNIDs
 import org.oewntk.sql.out.Synsets.makeSynsetNIDs
 import java.io.*
-import java.util.AbstractMap.SimpleEntry
 import java.util.stream.Collectors
 
 /**
@@ -126,16 +125,15 @@ object SerializeNIDs {
 		val wordToNID = makeWordNIDs(model.lexes)
 		val synsetIdToNID = makeSynsetNIDs(model.synsets)
 		val m = model.senses.stream()
-			.map { SimpleEntry(it.senseKey, SimpleEntry(wordToNID[it.lCLemma], synsetIdToNID[it.synsetId])) }
+			.map { it.senseKey to (wordToNID[it.lCLemma] to synsetIdToNID[it.synsetId]) }
 			.collect(
 				Collectors.toMap(
-					{ it.key },
-					{ it.value },
+					{ it.first },
+					{ it.second },
 					{ e, n ->
 						if (e != n) System.err.println("existing $e -> $n")
 						e
 					})
-
 			)
 		serialize(os, m)
 	}

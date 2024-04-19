@@ -6,7 +6,6 @@ package org.oewntk.sql.out
 import org.oewntk.sql.out.Printers.printInsert
 import java.io.PrintStream
 import java.util.*
-import java.util.AbstractMap.SimpleEntry
 import java.util.function.BinaryOperator
 import java.util.stream.Collectors
 import java.util.stream.Stream
@@ -51,11 +50,11 @@ object Utils {
 			.sequential()
 			.sorted()
 			.peek { ++i }
-			.map { SimpleEntry(it, i /* index.addAndGet(1) */) }
+			.map { Pair(it, i /* index.addAndGet(1) */) }
 			.collect(
 				Collectors.toMap(
-					{ it.key },
-					{ it.value },
+					{ it.first },
+					{ it.second },
 					{ existing, replacement -> throw IllegalArgumentException("$existing,$replacement") },
 					{ TreeMap() })
 			)
@@ -76,12 +75,13 @@ object Utils {
 		table: String,
 		columns: String,
 		byNid: Map<Int, T>,
-		toString: (Map.Entry<Int, T>) -> String
+		toString: (Pair<Int, T>) -> String
 	) {
 
 		// make object-to-nid map
 		val stream = byNid.entries.stream()
-			.sorted(Comparator.comparingInt { it.key })
+			.map { Pair(it.key, it.value) }
+			.sorted(Comparator.comparingInt { it.first })
 
 		// insert map
 		printInsert(ps, table, columns, stream, toString, false)
