@@ -17,18 +17,18 @@ object GrindBuiltIn {
 	/**
 	 * Main entry point
 	 *
-	 * @param args command-line arguments: "yamlDir [outputDir]"
+	 * @param args command-line arguments"
 	 * @throws IOException io exception
 	 */
 	@Throws(IOException::class)
 	@JvmStatic
 	fun main(args: Array<String>) {
+
 		// Output
 		val outDir = File(args[0])
 		if (!outDir.exists()) {
 			outDir.mkdirs()
 		}
-
 		println("[Output] " + outDir.absolutePath)
 
 		// Process
