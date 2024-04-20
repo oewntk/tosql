@@ -84,7 +84,7 @@ object Printers {
 			objects.stream()
 				.map { it to NIDMaps.lookup(objectIdToNID, toId.invoke(it)) }
 				.toList()
-				.sortedBy { (_, value) -> value }
+				.sortedBy { it.second }
 				.forEach {
 					if ((i[0]++) > 1) {
 						ps.print(',')
@@ -125,7 +125,7 @@ object Printers {
 			objects.stream()
 				.map { it to NIDMaps.lookup(objectIdToNID, toId.invoke(it)) }
 				.toList()
-				.sortedBy { (_, value) -> value }
+				.sortedBy { it.second }
 				.forEach {
 					if (i[0]++ != 1) {
 						ps.print(',')
@@ -165,7 +165,7 @@ object Printers {
 			lexes.stream()
 				.map { it to NIDMaps.lookup(lexKeyToNID, KeyF.F_W_P_A.Mono.of(Lex::lemma, Lex::type, it)) }
 				.toList()
-				.sortedBy { (_, value) -> value }
+				.sortedBy { it.second }
 				.forEach {
 					if (i[0]++ != 1) {
 						ps.print(',')
@@ -205,7 +205,7 @@ object Printers {
 			lexes.stream()
 				.map { it to NIDMaps.lookup(lexKeyToNID, KeyF.F_W_P_A.Mono.of(Lex::lemma, Lex::type, it)) }
 				.toList()
-				.sortedBy { (_, value) -> value }
+				.sortedBy { it.second }
 				.forEach {
 					if (i[0]++ != 1) {
 						ps.print(',')
@@ -401,7 +401,7 @@ object Printers {
 		val i = intArrayOf(1) // used only as an int holder
 		mapper.entries.stream()
 			.toList()
-			.sortedBy { (_, value) -> value }
+			.sortedBy { it.value }
 			.forEach {
 				if (i[0]++ != 1) {
 					ps.print(',')
@@ -435,7 +435,7 @@ object Printers {
 		val i = intArrayOf(1) // used it only as an int holder
 		mapper.entries.stream()
 			.toList()
-			.sortedBy { (_, value) -> value }
+			.sortedBy { it.value }
 			.forEach {
 				if (i[0]++ != 1) {
 					ps.print(',')
@@ -467,9 +467,9 @@ object Printers {
 		ps.printf("INSERT INTO %s (%s) VALUES", table, columns)
 
 		val i = intArrayOf(1) // used it only as an int holder
-		mapper.entries.stream()
+		mapper.entries
 			.toList()
-			.sortedBy { (_, value) -> value }
+			.sortedBy { it.value }
 			.forEach {
 				if (i[0]++ != 1) {
 					ps.print(',')
