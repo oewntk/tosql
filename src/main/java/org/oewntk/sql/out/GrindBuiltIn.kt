@@ -17,7 +17,7 @@ object GrindBuiltIn {
 	/**
 	 * Main entry point
 	 *
-	 * @param args command-line arguments"
+	 * @param args command-line arguments
 	 * @throws IOException io exception
 	 */
 	@Throws(IOException::class)
