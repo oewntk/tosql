@@ -165,6 +165,7 @@ object NIDMaps {
 	 * @throws IOException io exception
 	 */
 	@Throws(IOException::class)
+	@JvmStatic
 	fun printMaps(model: CoreModel, outDir: File) {
 		PrintStream(FileOutputStream(File(outDir, Names.WORDS.FILE)), true, StandardCharsets.UTF_8).use { ps ->
 			printWords(ps, model.lexes)

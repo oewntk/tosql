@@ -146,6 +146,7 @@ object SerializeNIDs {
 	 * @throws IOException io exception
 	 */
 	@Throws(IOException::class)
+	@JvmStatic
 	fun serializeNIDs(model: CoreModel, outDir: File?) {
 		FileOutputStream(File(outDir, "$NID_PREFIX${Names.WORDS.FILE}.ser")).use {
 			serializeWordNIDs(it, model.lexes)
