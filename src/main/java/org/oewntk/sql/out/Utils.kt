@@ -5,60 +5,12 @@ package org.oewntk.sql.out
 
 import org.oewntk.sql.out.Printers.printInsert
 import java.io.PrintStream
-import java.util.*
-import java.util.function.BinaryOperator
-import java.util.stream.Collectors
-import java.util.stream.Stream
 
 /**
  * Utilities
  */
 object Utils {
 
-	/**
-	 * Merging function, keep existing element against replacement
-	 */
-	private val mergingKeepFunction = BinaryOperator { existing: Int, replacement: Int ->
-		require(existing != replacement) { "$existing,$replacement" }
-		existing
-	}
-
-	/**
-	 * Merging function, keep replacement element against replacement
-	 */
-	private val mergingReplaceFunction = BinaryOperator { existing: Int, replacement: Int ->
-		require(existing != replacement) { "$existing,$replacement" }
-		replacement
-	}
-
-	// map factory
-
-	/**
-	 * Make NID
-	 * To be used with objects that support equal and comparable
-	 *
-	 * @param stream must be distinct
-	 * @param T type of stream elements
-	 * @return map if object-to-NID pairs
-	 */
-	@JvmStatic
-	fun <T> makeNIDMap(stream: Stream<T>): Map<T, Int> {
-		// val index = AtomicInteger()
-		// index.set(0);
-		var i = 0
-		return stream
-			.sequential()
-			.sorted()
-			.peek { ++i }
-			.map { Pair(it, i /* index.addAndGet(1) */) }
-			.collect(
-				Collectors.toMap(
-					{ it.first },
-					{ it.second },
-					{ existing, replacement -> throw IllegalArgumentException("$existing,$replacement") },
-					{ TreeMap() })
-			)
-	}
 
 	/**
 	 * Generate table
@@ -79,12 +31,12 @@ object Utils {
 	) {
 
 		// make object-to-nid map
-		val stream = byNid.entries.stream()
+		val seq = byNid.entries.asSequence()
 			.map { Pair(it.key, it.value) }
-			.sorted(Comparator.comparingInt { it.first })
+			.sortedBy { it.first }
 
 		// insert map
-		printInsert(ps, table, columns, stream, toString, false)
+		printInsert(ps, table, columns, seq, toString, false)
 	}
 
 	// escape

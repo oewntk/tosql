@@ -7,9 +7,7 @@ import org.oewntk.model.Key
 import org.oewntk.model.Key.W_P_A.Companion.of_t
 import org.oewntk.model.KeyF
 import org.oewntk.model.Lex
-import org.oewntk.model.Pronunciation
 import java.io.PrintStream
-import java.util.*
 import java.util.function.Function
 
 /**
@@ -36,11 +34,11 @@ object Lexes {
 		casedwordToNID: Map<String, Int>
 	): Map<out Key, Int> {
 
-		// stream of lex key
-		val lexKeyStream = lexes.stream().map { of_t(it) }
-
-		// make lex key-to-nid map
-		val lexKeyToNID = Utils.makeNIDMap(lexKeyStream)
+		// lex key to NID
+		val lexKeyToNID = lexes.asSequence()
+			.map { of_t(it) }
+			.withIndex()
+			.associate { it.value to it.index }
 
 		// insert map
 		val columns =
@@ -98,12 +96,12 @@ object Lexes {
 	@JvmStatic
 	fun makeWordNIDs(lexes: Collection<Lex>): Map<String, Int> {
 		// stream of words
-		val wordStream = lexes.stream()
-			.map(Lex::lCLemma).distinct()
-
-		// make word-to-nid map
-		val map = Utils.makeNIDMap(wordStream)
-		assert(map.values.stream().noneMatch { i: Int -> i == 0 })
+		val map = lexes.asSequence()
+			.map(Lex::lCLemma)
+			.distinct()
+			.withIndex()
+			.associate { it.value to it.index }
+		assert(map.values.none { it == 0 })
 		return map
 	}
 
@@ -153,15 +151,13 @@ object Lexes {
 	 */
 	@JvmStatic
 	fun makeCasedWordNIDs(lexes: Collection<Lex>): Map<String, Int> {
-
-		// stream of cased words
-		val casedWordStream = lexes.stream()
+		val map = lexes.asSequence()
 			.filter(Lex::isCased)
-			.map { lex: Lex -> lex.lemma }.distinct()
-
-		// make casedword-to-nid map
-		val map = Utils.makeNIDMap(casedWordStream)
-		assert(map.values.stream().noneMatch { i: Int -> i == 0 })
+			.map { it.lemma }
+			.distinct()
+			.withIndex()
+			.associate { it.value to it.index }
+		assert(map.values.none { it == 0 })
 		return map
 	}
 
@@ -259,15 +255,13 @@ object Lexes {
 	 */
 	@JvmStatic
 	fun makeMorphNIDs(lexes: Collection<Lex>): Map<String, Int> {
-		// stream of morphs
-		val morphStream = lexes.stream()
-			.filter { lex: Lex -> lex.forms != null && lex.forms!!.isNotEmpty() }
-			.flatMap { lex: Lex -> Arrays.stream(lex.forms) }
+		return lexes.asSequence()
+			.filter { it.forms != null && it.forms!!.isNotEmpty() }
+			.flatMap { it.forms!!.asSequence() }
 			.sorted()
 			.distinct()
-
-		// make morph-to-nid map
-		return Utils.makeNIDMap(morphStream)
+			.withIndex()
+			.associate { it.value to it.index }
 	}
 
 	// pronunciations
@@ -387,14 +381,13 @@ object Lexes {
 	@JvmStatic
 	fun makePronunciationNIDs(lexes: Collection<Lex>): Map<String, Int> {
 		// stream of pronunciation values
-		val pronunciationValueStream = lexes.stream()
-			.filter { lex: Lex -> lex.pronunciations != null && lex.pronunciations!!.isNotEmpty() }
-			.flatMap { lex: Lex -> Arrays.stream(lex.pronunciations) }
-			.map { p: Pronunciation -> p.value }
+		return lexes.asSequence()
+			.filter { it.pronunciations != null && it.pronunciations!!.isNotEmpty() }
+			.flatMap { it.pronunciations!!.asSequence() }
+			.map { it.value }
 			.sorted()
 			.distinct()
-
-		// make pronunciation_value-to-nid map
-		return Utils.makeNIDMap(pronunciationValueStream)
+			.withIndex()
+			.associate { it.value to it.index }
 	}
 }

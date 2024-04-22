@@ -11,7 +11,6 @@ import org.oewntk.sql.out.Printers.printInsertWithComment
 import org.oewntk.sql.out.Printers.printInserts
 import org.oewntk.sql.out.Printers.printInsertsWithComment
 import org.oewntk.sql.out.Utils.escape
-import org.oewntk.sql.out.Utils.makeNIDMap
 import java.io.PrintStream
 
 /**
@@ -32,14 +31,12 @@ object Senses {
 	 */
 	@JvmStatic
 	fun makeSenseNIDs(senses: Collection<Sense>): Map<String, Int> {
-		// stream of sensekey␣lemma
-		val idStream = senses.stream()
+		return senses.asSequence()
 			.map(makeId)
 			.distinct()
 			.sorted()
-
-		// make sensekey␣lemma-to-nid map
-		return makeNIDMap(idStream)
+			.withIndex()
+			.associate { it.value to it.index }
 	}
 
 	/**

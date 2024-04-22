@@ -219,7 +219,48 @@ object Printers {
 		}
 	}
 
+	// from sequences
+
+	/**
+	 * Print inserts from stream
+	 *
+	 * @param ps         print stream
+	 * @param table      table name
+	 * @param columns    column names
+	 * @param stream     stream of objects
+	 * @param toString   stringifier of objects
+	 * @param withNumber whether to number objects
+	 * @param <T>        type of objects in stream
+	 */
+	@JvmStatic
+	fun <T> printInsert(
+		ps: PrintStream,
+		table: String,
+		columns: String,
+		seq: Sequence<T>,
+		toString: (T) -> String,
+		withNumber: Boolean
+	) {
+		val i = intArrayOf(1) // used as a final int holder
+		seq.forEach {
+			if (i[0] == 1) {
+				ps.printf("INSERT INTO %s (%s) VALUES", table, columns)
+			} else {
+				ps.print(',')
+			}
+			val s = toString.invoke(it)
+			if (withNumber) {
+				ps.printf("%n(%d,%s)", i[0], s)
+			} else {
+				ps.printf("%n(%s)", s)
+			}
+			i[0]++
+		}
+		ps.println(";")
+	}
+
 	// from streams
+
 	/**
 	 * Print inserts from stream
 	 *

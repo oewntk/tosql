@@ -9,7 +9,6 @@ import org.oewntk.sql.out.Printers.printInsertWithComment
 import org.oewntk.sql.out.Printers.printInserts
 import org.oewntk.sql.out.Printers.printInsertsWithComment
 import org.oewntk.sql.out.Utils.escape
-import org.oewntk.sql.out.Utils.makeNIDMap
 import java.io.PrintStream
 
 /**
@@ -25,10 +24,10 @@ object Synsets {
 	 */
 	@JvmStatic
 	fun makeSynsetNIDs(synsets: Collection<Synset>): Map<String, Int> {
-		// stream of synsetIds
-		val synsetIdStream = synsets.stream()
+		return synsets.asSequence()
 			.map { s: Synset -> s.synsetId }
-		return makeNIDMap(synsetIdStream)
+			.withIndex()
+			.associate { it.value to it.index }
 	}
 
 	/**
