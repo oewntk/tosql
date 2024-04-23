@@ -13,7 +13,6 @@ import org.oewntk.sql.out.Lexes.makeWordNIDs
 import org.oewntk.sql.out.Senses.makeSenseNIDs
 import org.oewntk.sql.out.Synsets.makeSynsetNIDs
 import java.io.*
-import java.util.stream.Collectors
 
 /**
  * Serialize ID to Numeric IDs maps
@@ -124,17 +123,17 @@ object SerializeNIDs {
 	private fun serializeSensekeysWordsSynsetsNIDs(os: OutputStream, model: CoreModel) {
 		val wordToNID = makeWordNIDs(model.lexes)
 		val synsetIdToNID = makeSynsetNIDs(model.synsets)
-		val m = model.senses.stream()
+		val m = model.senses
+			.asSequence()
 			.map { it.senseKey to (wordToNID[it.lCLemma] to synsetIdToNID[it.synsetId]) }
-			.collect(
-				Collectors.toMap(
-					{ it.first },
-					{ it.second },
-					{ e, n ->
+			.groupBy { it.first }
+			.mapValues { (_, values) ->
+				values
+					.reduce { e, n ->
 						if (e != n) System.err.println("existing $e -> $n")
 						e
-					})
-			)
+					}
+			}
 		serialize(os, m)
 	}
 

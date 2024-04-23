@@ -9,8 +9,6 @@ import org.oewntk.model.Lex
 import java.io.PrintStream
 import java.util.function.Consumer
 import java.util.function.Function
-import java.util.stream.Stream
-import kotlin.streams.toList
 
 /**
  * Insert printers
@@ -81,7 +79,8 @@ object Printers {
 		} else {
 			ps.printf("INSERT INTO %s (%s) VALUES", table, columns)
 			val i = intArrayOf(1) // used as a final int holder
-			objects.stream()
+			objects
+				.asSequence()
 				.map { it to NIDMaps.lookup(objectIdToNID, toId.invoke(it)) }
 				.toList()
 				.sortedBy { it.second }
@@ -122,7 +121,7 @@ object Printers {
 		} else {
 			ps.printf("INSERT INTO %s (%s) VALUES", table, columns)
 			val i = intArrayOf(1) // used as a final int holder
-			objects.stream()
+			objects.asSequence()
 				.map { it to NIDMaps.lookup(objectIdToNID, toId.invoke(it)) }
 				.toList()
 				.sortedBy { it.second }
@@ -162,7 +161,7 @@ object Printers {
 		} else {
 			ps.printf("INSERT INTO %s (%s) VALUES", table, columns)
 			val i = intArrayOf(1) // used as a final int holder
-			lexes.stream()
+			lexes.asSequence()
 				.map { it to NIDMaps.lookup(lexKeyToNID, KeyF.F_W_P_A.Mono.of(Lex::lemma, Lex::type, it)) }
 				.toList()
 				.sortedBy { it.second }
@@ -202,7 +201,7 @@ object Printers {
 		} else {
 			ps.printf("INSERT INTO %s (%s) VALUES", table, columns)
 			val i = intArrayOf(1) // used as a final int holder
-			lexes.stream()
+			lexes.asSequence()
 				.map { it to NIDMaps.lookup(lexKeyToNID, KeyF.F_W_P_A.Mono.of(Lex::lemma, Lex::type, it)) }
 				.toList()
 				.sortedBy { it.second }
@@ -227,7 +226,7 @@ object Printers {
 	 * @param ps         print stream
 	 * @param table      table name
 	 * @param columns    column names
-	 * @param stream     stream of objects
+	 * @param seq        sequence of objects
 	 * @param toString   stringifier of objects
 	 * @param withNumber whether to number objects
 	 * @param <T>        type of objects in stream
@@ -259,53 +258,13 @@ object Printers {
 		ps.println(";")
 	}
 
-	// from streams
-
-	/**
-	 * Print inserts from stream
-	 *
-	 * @param ps         print stream
-	 * @param table      table name
-	 * @param columns    column names
-	 * @param stream     stream of objects
-	 * @param toString   stringifier of objects
-	 * @param withNumber whether to number objects
-	 * @param <T>        type of objects in stream
-	 */
-	@JvmStatic
-	fun <T> printInsert(
-		ps: PrintStream,
-		table: String,
-		columns: String,
-		stream: Stream<T>,
-		toString: (T) -> String,
-		withNumber: Boolean
-	) {
-		val i = intArrayOf(1) // used as a final int holder
-		stream.forEach {
-			if (i[0] == 1) {
-				ps.printf("INSERT INTO %s (%s) VALUES", table, columns)
-			} else {
-				ps.print(',')
-			}
-			val s = toString.invoke(it)
-			if (withNumber) {
-				ps.printf("%n(%d,%s)", i[0], s)
-			} else {
-				ps.printf("%n(%s)", s)
-			}
-			i[0]++
-		}
-		ps.println(";")
-	}
-
 	/**
 	 * Print inserts from stream with comments
 	 *
 	 * @param ps                  print stream
 	 * @param table               table name
 	 * @param columns             column names
-	 * @param stream              stream of objects
+	 * @param seq                 sequence of objects
 	 * @param toStringWithComment double stringifier of objects, two strings are produced: [0] insert values , [1] comment
 	 * @param withNumber          whether to number objects
 	 * @param <T>                 type of objects in stream
@@ -315,12 +274,12 @@ object Printers {
 		ps: PrintStream,
 		table: String,
 		columns: String,
-		stream: Stream<T>,
+		seq: Sequence<T>,
 		toStringWithComment: (T) -> Array<String>,
 		withNumber: Boolean
 	) {
 		val i = intArrayOf(1) // used as a final int holder
-		stream.forEach {
+		seq.forEach {
 			if (i[0] == 1) {
 				ps.printf("INSERT INTO %s (%s) VALUES", table, columns)
 			} else {
@@ -343,7 +302,7 @@ object Printers {
 	 * @param ps         print stream
 	 * @param table      table name
 	 * @param columns    column names
-	 * @param stream     stream of objects
+	 * @param seq        sequence of objects
 	 * @param toStrings  stringifier for multiple values
 	 * @param withNumber whether to number objects
 	 * @param <T>        type of objects in stream
@@ -353,12 +312,12 @@ object Printers {
 		ps: PrintStream,
 		table: String,
 		columns: String,
-		stream: Stream<T>,
+		seq: Sequence<T>,
 		toStrings: (T) -> List<String>,
 		withNumber: Boolean
 	) {
 		val i = intArrayOf(1) // used as a final int holder
-		stream.forEach {
+		seq.forEach {
 			val ss = toStrings.invoke(it)
 			for (s in ss) {
 				if (i[0] == 1) {
@@ -383,7 +342,7 @@ object Printers {
 	 * @param ps                    print stream
 	 * @param table                 table name
 	 * @param columns               column names
-	 * @param stream                stream of objects
+	 * @param seq                   sequence of objects
 	 * @param toStringsWithComments double stringifier of objects, two strings are produced: [0] insert values , [1] comment
 	 * @param withNumber            whether to number objects
 	 * @param <T>                   type of objects in stream
@@ -393,12 +352,12 @@ object Printers {
 		ps: PrintStream,
 		table: String,
 		columns: String,
-		stream: Stream<T>,
+		seq: Sequence<T>,
 		toStringsWithComments: (T) -> List<Array<String>>,
 		withNumber: Boolean
 	) {
 		val i = intArrayOf(1) // used as a final int holder
-		stream.forEach {
+		seq.forEach {
 			val ss = toStringsWithComments.invoke(it)
 			for (s in ss) {
 				if (i[0] == 1) {
@@ -440,8 +399,8 @@ object Printers {
 		ps.printf("INSERT INTO %s (%s) VALUES", table, columns)
 
 		val i = intArrayOf(1) // used only as an int holder
-		mapper.entries.stream()
-			.toList()
+		mapper.entries
+			.asSequence()
 			.sortedBy { it.value }
 			.forEach {
 				if (i[0]++ != 1) {
@@ -474,7 +433,7 @@ object Printers {
 		ps.printf("INSERT INTO %s (%s) VALUES", table, columns)
 
 		val i = intArrayOf(1) // used it only as an int holder
-		mapper.entries.stream()
+		mapper.entries
 			.toList()
 			.sortedBy { it.value }
 			.forEach {

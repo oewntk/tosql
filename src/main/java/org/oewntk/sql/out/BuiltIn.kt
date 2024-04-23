@@ -8,8 +8,6 @@ import org.oewntk.sql.out.Printers.printInsert2
 import org.oewntk.sql.out.Printers.printInsert3
 import org.oewntk.sql.out.Utils.escape
 import java.io.PrintStream
-import java.util.stream.Collectors
-import java.util.stream.Stream
 
 /**
  * Builtins
@@ -66,17 +64,13 @@ object BuiltIn {
 		arrayOf("adjs.ppl", "a", "adj.ppl", 44),
 	)
 
-	val LEXFILE_NIDS: Map<String, Int> = Stream.of(*domainsArray)
-		.collect(
-			Collectors.toMap({ it[2] as String }, { it[3] as Int })
-		)
+	val LEXFILE_NIDS: Map<String, Int> = sequenceOf(*domainsArray)
+		.map { it[2] as String to it[3] as Int }
+		.toMap()
 
-	private val DOMAIN_TO_NIDS = Stream.of(*domainsArray)
-		.collect(
-			Collectors.toMap(
-				{ arrayOf(escape(it[0] as String), escape(it[1] as String), escape(it[2] as String)) },
-				{ it[3] as Int })
-		)
+	private val DOMAIN_TO_NIDS = sequenceOf(*domainsArray)
+		.map { arrayOf(escape(it[0] as String), escape(it[1] as String), escape(it[2] as String)) to it[3] as Int }
+		.toMap()
 
 	// link, recurses, linkid
 
@@ -129,19 +123,13 @@ object BuiltIn {
 		arrayOf("body_part", "body part", 0, 170),
 	)
 
-	private val RELATION_TO_NIDS = Stream.of(*relationTypesArray)
-		.collect(
-			Collectors.toMap(
-				{ arrayOf(escape(it[1] as String), it[2]) },
-				{ it[3] as Int })
-		)
+	private val RELATION_TO_NIDS = sequenceOf(*relationTypesArray)
+		.map { arrayOf(escape(it[1] as String), it[2]) to it[3] as Int }
+		.toMap()
 
-	val OEWN_RELATION_TYPES: Map<String, Int> = Stream.of(*relationTypesArray)
-		.collect(
-			Collectors.toMap(
-				{ it[0] as String },
-				{ it[3] as Int })
-		)
+	val OEWN_RELATION_TYPES: Map<String, Int> = sequenceOf(*relationTypesArray)
+		.map { it[0] as String to it[3] as Int }
+		.toMap()
 
 	// positionname, position
 
@@ -151,12 +139,9 @@ object BuiltIn {
 		arrayOf("immediately postnominal", "ip"),
 	)
 
-	private val ADJPOSITION_TYPES = Stream.of(*adjPositionTypesArray)
-		.collect(
-			Collectors.toMap(
-				{ it[0] },
-				{ it[1] })
-		)
+	private val ADJPOSITION_TYPES = sequenceOf(*adjPositionTypesArray)
+		.map { it[0] to it[1] }
+		.toMap()
 
 	// posname, pos
 	private val posArray = arrayOf(
@@ -167,12 +152,9 @@ object BuiltIn {
 		arrayOf("adjective satellite", "s"),
 	)
 
-	private val POS_TYPES = Stream.of(*posArray)
-		.collect(
-			Collectors.toMap(
-				{ it[0] },
-				{ it[1] })
-		)
+	private val POS_TYPES = sequenceOf(*posArray)
+		.map { it[0] to it[1] }
+		.toMap()
 
 	/**
 	 * Generate pos types table
@@ -181,7 +163,7 @@ object BuiltIn {
 	 */
 	@JvmStatic
 	fun generatePosTypes(ps: PrintStream) {
-		printInsert<String>(
+		printInsert(
 			ps,
 			Names.POSES.TABLE,
 			java.lang.String.join(",", Names.POSES.posid, Names.POSES.pos),
@@ -197,7 +179,7 @@ object BuiltIn {
 	 */
 	@JvmStatic
 	fun generateAdjectivePositionTypes(ps: PrintStream) {
-		printInsert<String>(
+		printInsert(
 			ps,
 			Names.ADJPOSITIONS.TABLE,
 			java.lang.String.join(",", Names.ADJPOSITIONS.positionid, Names.ADJPOSITIONS.position),

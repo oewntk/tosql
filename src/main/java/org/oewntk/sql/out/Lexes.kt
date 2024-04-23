@@ -201,9 +201,10 @@ object Lexes {
 		morphToNID: Map<String, Int>
 	) {
 		// stream of lexes
-		val lexStream = lexes.stream()
+		val lexSeq = lexes
+			.asSequence()
 			.filter { lex: Lex -> lex.forms != null && lex.forms!!.isNotEmpty() }
-			.sorted(Comparator.comparing { lex: Lex -> lex.lemma })
+			.sortedBy { it.lemma }
 
 		// insert map
 		val columns = java.lang.String.join(
@@ -226,7 +227,7 @@ object Lexes {
 			strings
 		}
 		if (!Printers.WITH_COMMENT) {
-			Printers.printInserts(ps, Names.LEXES_MORPHS.TABLE, columns, lexStream, toString, false)
+			Printers.printInserts(ps, Names.LEXES_MORPHS.TABLE, columns, lexSeq, toString, false)
 		} else {
 			val toStrings = { lex: Lex ->
 				val strings = toString.invoke(lex)
@@ -243,7 +244,7 @@ object Lexes {
 				}
 				stringsWithComment
 			}
-			Printers.printInsertsWithComment(ps, Names.LEXES_MORPHS.TABLE, columns, lexStream, toStrings, false)
+			Printers.printInsertsWithComment(ps, Names.LEXES_MORPHS.TABLE, columns, lexSeq, toStrings, false)
 		}
 	}
 
@@ -306,9 +307,9 @@ object Lexes {
 		pronunciationToNID: Map<String, Int>
 	) {
 		// stream of lexes
-		val lexStream = lexes.stream()
-			.filter { lex: Lex -> lex.pronunciations != null && lex.pronunciations!!.isNotEmpty() }
-			.sorted(Comparator.comparing { lex: Lex -> lex.lemma })
+		val lexSeq = lexes.asSequence()
+			.filter { it.pronunciations != null && it.pronunciations!!.isNotEmpty() }
+			.sortedBy { it.lemma }
 
 		// insert map
 		val columns = java.lang.String.join(
@@ -343,7 +344,7 @@ object Lexes {
 			strings
 		}
 		if (!Printers.WITH_COMMENT) {
-			Printers.printInserts(ps, Names.LEXES_PRONUNCIATIONS.TABLE, columns, lexStream, toString, false)
+			Printers.printInserts(ps, Names.LEXES_PRONUNCIATIONS.TABLE, columns, lexSeq, toString, false)
 		} else {
 			val toStrings = { lex: Lex ->
 				val strings = toString.invoke(lex)
@@ -368,7 +369,7 @@ object Lexes {
 				}
 				stringsWithComment
 			}
-			Printers.printInsertsWithComment(ps, Names.LEXES_PRONUNCIATIONS.TABLE, columns, lexStream, toStrings, false)
+			Printers.printInsertsWithComment(ps, Names.LEXES_PRONUNCIATIONS.TABLE, columns, lexSeq, toStrings, false)
 		}
 	}
 

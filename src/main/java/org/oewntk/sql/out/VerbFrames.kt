@@ -6,8 +6,6 @@ package org.oewntk.sql.out
 import org.oewntk.model.VerbFrame
 import org.oewntk.sql.out.Printers.printInsert
 import java.io.PrintStream
-import java.util.stream.Collectors
-import java.util.stream.Stream
 
 /**
  * Process verb frames
@@ -86,16 +84,10 @@ object VerbFrames {
 	 * @param verbFrames verb frames
 	 */
 	fun generateVerbFrames(ps: PrintStream, verbFrames: Collection<VerbFrame>) {
-		val i = intArrayOf(0)
-		val table = verbFrames.stream()
-			.peek { ++i[0] }
-			.map { vf: VerbFrame -> vf.frame to getNID(vf, i[0]) }
-			.collect(
-				Collectors.toMap(
-					{ it.first },
-					{ it.second })
-			)
-		printInsert<Int>(
+		val table = verbFrames
+			.withIndex()
+			.associate { it.value.frame to getNID(it.value, it.index) }
+		printInsert(
 			ps,
 			Names.VFRAMES.TABLE,
 			java.lang.String.join(",", Names.VFRAMES.frameid, Names.VFRAMES.frame),

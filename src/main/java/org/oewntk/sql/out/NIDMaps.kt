@@ -154,7 +154,9 @@ object NIDMaps {
 	 * @param toNID od-to-nid map
 	 */
 	private fun print(ps: PrintStream, toNID: Map<String, Int>) {
-		toNID.keys.stream().sorted().forEach { k: String -> ps.printf("%s %d%n", k, toNID[k]) }
+		toNID.keys
+			.sorted()
+			.forEach { ps.printf("%s %d%n", it, toNID[it]) }
 	}
 
 	/**

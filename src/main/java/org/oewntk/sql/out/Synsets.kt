@@ -85,10 +85,12 @@ object Synsets {
 	 */
 	@JvmStatic
 	fun generateSynsetRelations(ps: PrintStream, synsets: Collection<Synset>, synsetIdToNIDMap: Map<String, Int>) {
-		// synset stream
-		val synsetStream = synsets.stream()
+
+		// synset sequence
+		val synsetSeq = synsets
+			.asSequence()
 			.filter { !it.relations.isNullOrEmpty() }
-			.sorted(Comparator.comparing { it.synsetId })
+			.sortedBy(Synset::synsetId)
 
 		// insert
 		val columns = java.lang.String.join(
@@ -113,7 +115,7 @@ object Synsets {
 			strings
 		}
 		if (!Printers.WITH_COMMENT) {
-			printInserts(ps, Names.SEMRELATIONS.TABLE, columns, synsetStream, toString, false)
+			printInserts(ps, Names.SEMRELATIONS.TABLE, columns, synsetSeq, toString, false)
 		} else {
 			val toStrings = { synset: Synset ->
 				val strings = toString.invoke(synset)
@@ -134,7 +136,7 @@ object Synsets {
 				}
 				stringsWithComment
 			}
-			printInsertsWithComment(ps, Names.SEMRELATIONS.TABLE, columns, synsetStream, toStrings, false)
+			printInsertsWithComment(ps, Names.SEMRELATIONS.TABLE, columns, synsetSeq, toStrings, false)
 		}
 	}
 
@@ -147,10 +149,12 @@ object Synsets {
 	 */
 	@JvmStatic
 	fun generateSamples(ps: PrintStream, synsets: Collection<Synset>, synsetIdToNIDMap: Map<String, Int>) {
-		// stream of synsets
-		val synsetStream = synsets.stream()
+
+		// sequence of synsets
+		val synsetSeq = synsets
+			.asSequence()
 			.filter { !it.examples.isNullOrEmpty() }
-			.sorted(Comparator.comparing { it.synsetId })
+			.sortedBy(Synset::synsetId)
 
 		// insert
 		val columns = java.lang.String.join(",", Names.SAMPLES.sampleid, Names.SAMPLES.synsetid, Names.SAMPLES.sample)
@@ -164,6 +168,6 @@ object Synsets {
 			}
 			strings
 		}
-		printInserts(ps, Names.SAMPLES.TABLE, columns, synsetStream, toString, true)
+		printInserts(ps, Names.SAMPLES.TABLE, columns, synsetSeq, toString, true)
 	}
 }

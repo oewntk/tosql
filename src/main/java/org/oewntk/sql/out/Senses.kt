@@ -139,13 +139,11 @@ object Senses {
 		lexKeyToNIDMap: Map<out Key, Int>,
 		wordIdToNIDMap: Map<String, Int>
 	) {
-		// stream of senses
-		val senseStream = senses.stream()
-			.filter { s: Sense ->
-				val relations: Map<String, Set<String>>? = s.relations
-				!relations.isNullOrEmpty()
-			}
-			.sorted(Comparator.comparing(Sense::senseKey))
+		// sequence of senses
+		val senseSeq = senses
+			.asSequence()
+			.filter { !it.relations.isNullOrEmpty() }
+			.sortedBy(Sense::senseKey)
 
 		// insert map
 		val columns = java.lang.String.join(
@@ -196,7 +194,7 @@ object Senses {
 			strings
 		}
 		if (!Printers.WITH_COMMENT) {
-			printInserts(ps, Names.LEXRELATIONS.TABLE, columns, senseStream, toString, false)
+			printInserts(ps, Names.LEXRELATIONS.TABLE, columns, senseSeq, toString, false)
 		} else {
 			val toStrings = { sense: Sense ->
 				val strings = toString.invoke(sense)
@@ -230,7 +228,7 @@ object Senses {
 				}
 				stringWithComments
 			}
-			printInsertsWithComment(ps, Names.LEXRELATIONS.TABLE, columns, senseStream, toStrings, false)
+			printInsertsWithComment(ps, Names.LEXRELATIONS.TABLE, columns, senseSeq, toStrings, false)
 		}
 	}
 
@@ -251,13 +249,11 @@ object Senses {
 		lexKeyToNIDMap: Map<out Key, Int>,
 		wordIdToNIDMap: Map<String, Int>
 	) {
-		// stream of senses
-		val senseStream = senses.stream()
-			.filter { s: Sense ->
-				val adjPosition = s.adjPosition
-				adjPosition != null
-			}
-			.sorted(Comparator.comparing(Sense::senseKey))
+		// sequence of senses
+		val senseSeq = senses
+			.asSequence()
+			.filter { it.adjPosition != null }
+			.sortedBy(Sense::senseKey)
 
 		// insert map
 		val columns = java.lang.String.join(
@@ -277,7 +273,7 @@ object Senses {
 			String.format("%d,%d,%d,'%s'", synsetNID, luNID, wordNID, sense.adjPosition)
 		}
 		if (!Printers.WITH_COMMENT) {
-			printInsert(ps, Names.SENSES_ADJPOSITIONS.TABLE, columns, senseStream, toString, false)
+			printInsert(ps, Names.SENSES_ADJPOSITIONS.TABLE, columns, senseSeq, toString, false)
 		} else {
 			val toStrings = { sense: Sense ->
 				arrayOf(
@@ -285,7 +281,7 @@ object Senses {
 					sense.senseKey
 				)
 			}
-			printInsertWithComment(ps, Names.SENSES_ADJPOSITIONS.TABLE, columns, senseStream, toStrings, false)
+			printInsertWithComment(ps, Names.SENSES_ADJPOSITIONS.TABLE, columns, senseSeq, toStrings, false)
 		}
 	}
 
@@ -306,13 +302,11 @@ object Senses {
 		lexKeyToNIDMap: Map<out Key, Int>,
 		wordIdToNIDMap: Map<String, Int>
 	) {
-		// stream of senses
-		val senseStream = senses.stream()
-			.filter { s: Sense ->
-				val frames = s.verbFrames
-				!frames.isNullOrEmpty()
-			}
-			.sorted(Comparator.comparing(Sense::senseKey))
+		// sequence of senses
+		val senseSeq = senses
+			.asSequence()
+			.filter { !it.verbFrames.isNullOrEmpty() }
+			.sortedBy(Sense::senseKey)
 
 		// insert map
 		val columns = java.lang.String.join(
@@ -338,7 +332,7 @@ object Senses {
 			strings
 		}
 		if (!Printers.WITH_COMMENT) {
-			printInserts(ps, Names.SENSES_VFRAMES.TABLE, columns, senseStream, toString, false)
+			printInserts(ps, Names.SENSES_VFRAMES.TABLE, columns, senseSeq, toString, false)
 		} else {
 			val toStrings = { sense: Sense ->
 				val strings = toString.invoke(sense)
@@ -354,7 +348,7 @@ object Senses {
 				}
 				stringsWithComment
 			}
-			printInsertsWithComment(ps, Names.SENSES_VFRAMES.TABLE, columns, senseStream, toStrings, false)
+			printInsertsWithComment(ps, Names.SENSES_VFRAMES.TABLE, columns, senseSeq, toStrings, false)
 		}
 	}
 
@@ -375,14 +369,11 @@ object Senses {
 		lexKeyToNIDMap: Map<out Key, Int>,
 		wordIdToNIDMap: Map<String, Int>
 	) {
-		// stream of senses
-		val senseStream = sensesById.values
-			.stream()
-			.filter { s: Sense ->
-				val templates = s.verbTemplates
-				!templates.isNullOrEmpty()
-			}
-			.sorted(Comparator.comparing(Sense::senseKey))
+		// sequence of senses
+		val senseSeq = sensesById.values
+			.asSequence()
+			.filter { !it.verbTemplates.isNullOrEmpty() }
+			.sortedBy(Sense::senseKey)
 
 		// insert map
 		val columns = java.lang.String.join(
@@ -407,7 +398,7 @@ object Senses {
 			strings
 		}
 		if (!Printers.WITH_COMMENT) {
-			printInserts(ps, Names.SENSES_VTEMPLATES.TABLE, columns, senseStream, toString, false)
+			printInserts(ps, Names.SENSES_VTEMPLATES.TABLE, columns, senseSeq, toString, false)
 		} else {
 			val toStrings = { sense: Sense ->
 				val strings = toString.invoke(sense)
@@ -423,7 +414,7 @@ object Senses {
 				}
 				stringsWithComment
 			}
-			printInsertsWithComment(ps, Names.SENSES_VTEMPLATES.TABLE, columns, senseStream, toStrings, false)
+			printInsertsWithComment(ps, Names.SENSES_VTEMPLATES.TABLE, columns, senseSeq, toStrings, false)
 		}
 	}
 }
