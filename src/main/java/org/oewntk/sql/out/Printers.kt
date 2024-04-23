@@ -7,8 +7,6 @@ import org.oewntk.model.Key
 import org.oewntk.model.KeyF
 import org.oewntk.model.Lex
 import java.io.PrintStream
-import java.util.function.Consumer
-import java.util.function.Function
 
 /**
  * Insert printers
@@ -33,21 +31,22 @@ object Printers {
 		table: String,
 		columns: String,
 		objectToNID: Map<T, Int>,
-		toString: Function<T, String>
+		toString: (T) -> String
 	) {
 		if (objectToNID.isEmpty()) {
 			ps.print("-- NONE")
 		} else {
 			ps.printf("INSERT INTO %s (%s) VALUES", table, columns)
-			val i = intArrayOf(1) // used as a final int holder
-			objectToNID.keys.forEach(Consumer { k: T ->
-				val s = toString.apply(k)
-				if (i[0]++ != 1) {
-					ps.print(',')
+			objectToNID.keys
+				.withIndex()
+				.forEach { (index, key) ->
+					val s = toString.invoke(key)
+					if (index > 0) {
+						ps.print(',')
+					}
+					val nid = NIDMaps.lookup(objectToNID, key)
+					ps.printf("%n(%d,%s)", nid, s)
 				}
-				val nid = NIDMaps.lookup(objectToNID, k)
-				ps.printf("%n(%d,%s)", nid, s)
-			})
 			ps.println(";")
 		}
 	}
@@ -78,18 +77,18 @@ object Printers {
 			ps.print("-- NONE")
 		} else {
 			ps.printf("INSERT INTO %s (%s) VALUES", table, columns)
-			val i = intArrayOf(1) // used as a final int holder
 			objects
 				.asSequence()
 				.map { it to NIDMaps.lookup(objectIdToNID, toId.invoke(it)) }
 				.toList()
 				.sortedBy { it.second }
-				.forEach {
-					if ((i[0]++) > 1) {
+				.withIndex()
+				.forEach { (index, pair) ->
+					if (index > 0) {
 						ps.print(',')
 					}
-					val s = toString.invoke(it.first)
-					ps.printf("%n(%d,%s)", it.second, s)
+					val s = toString.invoke(pair.first)
+					ps.printf("%n(%d,%s)", pair.second, s)
 				}
 			ps.println(";")
 		}
@@ -120,17 +119,17 @@ object Printers {
 			ps.print("-- NONE")
 		} else {
 			ps.printf("INSERT INTO %s (%s) VALUES", table, columns)
-			val i = intArrayOf(1) // used as a final int holder
 			objects.asSequence()
 				.map { it to NIDMaps.lookup(objectIdToNID, toId.invoke(it)) }
 				.toList()
 				.sortedBy { it.second }
-				.forEach {
-					if (i[0]++ != 1) {
+				.withIndex()
+				.forEach { (index, pair) ->
+					if (index > 0) {
 						ps.print(',')
 					}
-					val s = toStringWithComments.invoke(it.first)
-					ps.printf("%n(%d,%s) /* %s */", it.second, s[0], s[1])
+					val s = toStringWithComments.invoke(pair.first)
+					ps.printf("%n(%d,%s) /* %s */", pair.second, s[0], s[1])
 				}
 			ps.println(";")
 		}
@@ -160,17 +159,18 @@ object Printers {
 			ps.print("-- NONE")
 		} else {
 			ps.printf("INSERT INTO %s (%s) VALUES", table, columns)
-			val i = intArrayOf(1) // used as a final int holder
-			lexes.asSequence()
+			lexes
+				.asSequence()
 				.map { it to NIDMaps.lookup(lexKeyToNID, KeyF.F_W_P_A.Mono.of(Lex::lemma, Lex::type, it)) }
 				.toList()
 				.sortedBy { it.second }
-				.forEach {
-					if (i[0]++ != 1) {
+				.withIndex()
+				.forEach { (index, pair) ->
+					if (index > 0) {
 						ps.print(',')
 					}
-					val lex = it.first
-					val v = it.second
+					val lex = pair.first
+					val v = pair.second
 					val s = toString.invoke(lex)
 					ps.printf("%n(%d,%s)", v, s)
 				}
@@ -200,17 +200,17 @@ object Printers {
 			ps.print("-- NONE")
 		} else {
 			ps.printf("INSERT INTO %s (%s) VALUES", table, columns)
-			val i = intArrayOf(1) // used as a final int holder
 			lexes.asSequence()
 				.map { it to NIDMaps.lookup(lexKeyToNID, KeyF.F_W_P_A.Mono.of(Lex::lemma, Lex::type, it)) }
 				.toList()
 				.sortedBy { it.second }
-				.forEach {
-					if (i[0]++ != 1) {
+				.withIndex()
+				.forEach { (index, pair) ->
+					if (index > 0) {
 						ps.print(',')
 					}
-					val lex = it.first
-					val v = it.second
+					val lex = pair.first
+					val v = pair.second
 					val s = toStringWithComments.invoke(lex)
 					ps.printf("%n(%d,%s) /* %s */", v, s[0], s[1])
 				}
@@ -240,21 +240,21 @@ object Printers {
 		toString: (T) -> String,
 		withNumber: Boolean
 	) {
-		val i = intArrayOf(1) // used as a final int holder
-		seq.forEach {
-			if (i[0] == 1) {
-				ps.printf("INSERT INTO %s (%s) VALUES", table, columns)
-			} else {
-				ps.print(',')
+		seq
+			.withIndex()
+			.forEach { (index, thing) ->
+				if (index == 0) {
+					ps.printf("INSERT INTO %s (%s) VALUES", table, columns)
+				} else {
+					ps.print(',')
+				}
+				val s = toString.invoke(thing)
+				if (withNumber) {
+					ps.printf("%n(%d,%s)", index + 1, s)
+				} else {
+					ps.printf("%n(%s)", s)
+				}
 			}
-			val s = toString.invoke(it)
-			if (withNumber) {
-				ps.printf("%n(%d,%s)", i[0], s)
-			} else {
-				ps.printf("%n(%s)", s)
-			}
-			i[0]++
-		}
 		ps.println(";")
 	}
 
@@ -278,21 +278,21 @@ object Printers {
 		toStringWithComment: (T) -> Array<String>,
 		withNumber: Boolean
 	) {
-		val i = intArrayOf(1) // used as a final int holder
-		seq.forEach {
-			if (i[0] == 1) {
-				ps.printf("INSERT INTO %s (%s) VALUES", table, columns)
-			} else {
-				ps.print(',')
+		seq
+			.withIndex()
+			.forEach { (index, thing) ->
+				if (index == 0) {
+					ps.printf("INSERT INTO %s (%s) VALUES", table, columns)
+				} else {
+					ps.print(',')
+				}
+				val s = toStringWithComment.invoke(thing)
+				if (withNumber) {
+					ps.printf("%n(%d,%s) /* %s */", index + 1, s[0], s[1])
+				} else {
+					ps.printf("%n(%s) /* %s */", s[0], s[1])
+				}
 			}
-			val s = toStringWithComment.invoke(it)
-			if (withNumber) {
-				ps.printf("%n(%d,%s) /* %s */", i[0], s[0], s[1])
-			} else {
-				ps.printf("%n(%s) /* %s */", s[0], s[1])
-			}
-			i[0]++
-		}
 		ps.println(";")
 	}
 
@@ -316,23 +316,23 @@ object Printers {
 		toStrings: (T) -> List<String>,
 		withNumber: Boolean
 	) {
-		val i = intArrayOf(1) // used as a final int holder
-		seq.forEach {
-			val ss = toStrings.invoke(it)
-			for (s in ss) {
-				if (i[0] == 1) {
-					ps.printf("INSERT INTO %s (%s) VALUES", table, columns)
-				} else {
-					ps.print(',')
+		seq
+			.withIndex()
+			.forEach { (index, thing) ->
+				val ss = toStrings.invoke(thing)
+				for (s in ss) {
+					if (index == 0) {
+						ps.printf("INSERT INTO %s (%s) VALUES", table, columns)
+					} else {
+						ps.print(',')
+					}
+					if (withNumber) {
+						ps.printf("%n(%d,%s)", index + 1, s)
+					} else {
+						ps.printf("%n(%s)", s)
+					}
 				}
-				if (withNumber) {
-					ps.printf("%n(%d,%s)", i[0], s)
-				} else {
-					ps.printf("%n(%s)", s)
-				}
-				i[0]++
 			}
-		}
 		ps.println(";")
 	}
 
@@ -356,27 +356,28 @@ object Printers {
 		toStringsWithComments: (T) -> List<Array<String>>,
 		withNumber: Boolean
 	) {
-		val i = intArrayOf(1) // used as a final int holder
-		seq.forEach {
-			val ss = toStringsWithComments.invoke(it)
-			for (s in ss) {
-				if (i[0] == 1) {
-					ps.printf("INSERT INTO %s (%s) VALUES", table, columns)
-				} else {
-					ps.print(',')
+		seq
+			.withIndex()
+			.forEach { (index, thing) ->
+				val ss = toStringsWithComments.invoke(thing)
+				for (s in ss) {
+					if (index == 0) {
+						ps.printf("INSERT INTO %s (%s) VALUES", table, columns)
+					} else {
+						ps.print(',')
+					}
+					if (withNumber) {
+						ps.printf("%n(%d,%s) /* %s */", index + 1, s[0], s[1])
+					} else {
+						ps.printf("%n(%s) /* %s */", s[0], s[1])
+					}
+
 				}
-				if (withNumber) {
-					ps.printf("%n(%d,%s) /* %s */", i[0], s[0], s[1])
-				} else {
-					ps.printf("%n(%s) /* %s */", s[0], s[1])
-				}
-				i[0]++
 			}
-		}
 		ps.println(";")
 	}
 
-	// to table
+// to table
 
 	/**
 	 * Print inserts, single value
@@ -397,17 +398,16 @@ object Printers {
 		mapper: Map<String, T>
 	) {
 		ps.printf("INSERT INTO %s (%s) VALUES", table, columns)
-
-		val i = intArrayOf(1) // used only as an int holder
 		mapper.entries
 			.asSequence()
 			.sortedBy { it.value }
-			.forEach {
-				if (i[0]++ != 1) {
+			.withIndex()
+			.forEach { (index, pair) ->
+				if (index > 0) {
 					ps.print(',')
 				}
-				val k = it.key
-				val v = it.value
+				val k = pair.key
+				val v = pair.value
 				ps.printf(format, v, Utils.escape(k))
 			}
 		ps.println(";")
@@ -431,17 +431,16 @@ object Printers {
 		mapper: Map<Array<Any>, T>
 	) {
 		ps.printf("INSERT INTO %s (%s) VALUES", table, columns)
-
-		val i = intArrayOf(1) // used it only as an int holder
 		mapper.entries
 			.toList()
 			.sortedBy { it.value }
-			.forEach {
-				if (i[0]++ != 1) {
+			.withIndex()
+			.forEach { (index, pair) ->
+				if (index > 0) {
 					ps.print(',')
 				}
-				val k = it.key
-				val v = it.value
+				val k = pair.key
+				val v = pair.value
 				ps.printf(format, v, k[0], k[1])
 			}
 		ps.println(";")
@@ -466,16 +465,16 @@ object Printers {
 	) {
 		ps.printf("INSERT INTO %s (%s) VALUES", table, columns)
 
-		val i = intArrayOf(1) // used it only as an int holder
 		mapper.entries
 			.toList()
 			.sortedBy { it.value }
-			.forEach {
-				if (i[0]++ != 1) {
+			.withIndex()
+			.forEach { (index, pair) ->
+				if (index > 0) {
 					ps.print(',')
 				}
-				val k = it.key
-				val v = it.value
+				val k = pair.key
+				val v = pair.value
 				ps.printf(format, v, k[0], k[1], k[2])
 			}
 		ps.println(";")

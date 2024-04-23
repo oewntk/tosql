@@ -8,7 +8,6 @@ import org.oewntk.model.Key.W_P_A.Companion.of_t
 import org.oewntk.model.KeyF
 import org.oewntk.model.Lex
 import java.io.PrintStream
-import java.util.function.Function
 
 /**
  * Process lexes
@@ -131,7 +130,7 @@ object Lexes {
 			Names.CASEDWORDS.casedword,
 			Names.CASEDWORDS.wordid
 		)
-		val toString = Function { casedWord: String ->
+		val toString = { casedWord: String ->
 			String.format(
 				"'%s',%d",
 				Utils.escape(casedWord),
@@ -234,13 +233,15 @@ object Lexes {
 				val stringsWithComment = ArrayList<Array<String>>()
 				val casedWord = lex.lemma
 				val type = lex.type
-				for ((i, morph) in lex.forms!!.withIndex()) {
-					stringsWithComment.add(
-						arrayOf(
-							strings[i],
-							String.format("'%s' '%s' %c", morph, casedWord, type)
+				if (lex.forms != null) {
+					for ((i, morph) in lex.forms!!.withIndex()) {
+						stringsWithComment.add(
+							arrayOf(
+								strings[i],
+								String.format("'%s' '%s' %c", morph, casedWord, type)
+							)
 						)
-					)
+					}
 				}
 				stringsWithComment
 			}
@@ -351,21 +352,23 @@ object Lexes {
 				val stringsWithComment = ArrayList<Array<String>>()
 				val casedWord = lex.lemma
 				val type = lex.type
-				for ((i, pronunciation) in lex.pronunciations!!.withIndex()) {
-					val variety = pronunciation.variety
-					val value = pronunciation.value
-					stringsWithComment.add(
-						arrayOf(
-							strings[i],
-							String.format(
-								"%s%s '%s' %c",
-								value,
-								if (variety == null) "" else " [$variety]",
-								casedWord,
-								type
-							),
+				if (lex.pronunciations != null) {
+					for ((i, pronunciation) in lex.pronunciations!!.withIndex()) {
+						val variety = pronunciation.variety
+						val value = pronunciation.value
+						stringsWithComment.add(
+							arrayOf(
+								strings[i],
+								String.format(
+									"%s%s '%s' %c",
+									value,
+									if (variety == null) "" else " [$variety]",
+									casedWord,
+									type
+								),
+							)
 						)
-					)
+					}
 				}
 				stringsWithComment
 			}
@@ -381,7 +384,6 @@ object Lexes {
 	 */
 	@JvmStatic
 	fun makePronunciationNIDs(lexes: Collection<Lex>): Map<String, Int> {
-		// stream of pronunciation values
 		return lexes.asSequence()
 			.filter { it.pronunciations != null && it.pronunciations!!.isNotEmpty() }
 			.flatMap { it.pronunciations!!.asSequence() }
