@@ -49,7 +49,7 @@ object NIDMaps {
 			assert(nid != 0)
 			return nid
 		} catch (e: Exception) {
-			Tracing.psErr.printf("lookup of <%s> failed%n", key)
+			Tracing.psErr.printf("lookup of <%s> failed%n", key.toLongString())
 			throw e
 		}
 	}
