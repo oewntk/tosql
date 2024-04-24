@@ -13,7 +13,11 @@ import java.io.PrintStream
 object VerbFrames {
 
 	// name, frameid
-	private val VERBFRAME_VALUES = arrayOf(
+
+	/**
+	 * Map frame id (via, ...) to numeric id
+	 */
+	val VERB_FRAME_ID_TO_NIDS = mapOf(
 		"vii" to 1,
 		"via" to 2,
 		"nonreferential" to 3,
@@ -54,12 +58,6 @@ object VerbFrames {
 		"via-on-anim" to 38,
 		"via-out-of" to 39,
 	)
-
-	/**
-	 * Map frame id (via, ...) to numeric id
-	 */
-	val VERB_FRAME_ID_TO_NIDS = VERBFRAME_VALUES
-		.associate { it.first to it.second }
 
 	/**
 	 * Get nid
