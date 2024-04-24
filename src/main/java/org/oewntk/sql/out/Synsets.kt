@@ -27,7 +27,7 @@ object Synsets {
 		return synsets.asSequence()
 			.map { s: Synset -> s.synsetId }
 			.withIndex()
-			.associate { it.value to it.index }
+			.associate { it.value to it.index + 1 }
 	}
 
 	/**

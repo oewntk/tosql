@@ -34,10 +34,11 @@ object Lexes {
 	): Map<out Key, Int> {
 
 		// lex key to NID
-		val lexKeyToNID = lexes.asSequence()
+		val lexKeyToNID = lexes
+			.asSequence()
 			.map { of_t(it) }
 			.withIndex()
-			.associate { it.value to it.index }
+			.associate { it.value to it.index + 1 }
 
 		// insert map
 		val columns =
@@ -99,7 +100,7 @@ object Lexes {
 			.map(Lex::lCLemma)
 			.distinct()
 			.withIndex()
-			.associate { it.value to it.index }
+			.associate { it.value to it.index + 1 }
 		assert(map.values.none { it == 0 })
 		return map
 	}
@@ -155,7 +156,7 @@ object Lexes {
 			.map { it.lemma }
 			.distinct()
 			.withIndex()
-			.associate { it.value to it.index }
+			.associate { it.value to it.index +1 }
 		assert(map.values.none { it == 0 })
 		return map
 	}
@@ -263,7 +264,7 @@ object Lexes {
 			.sorted()
 			.distinct()
 			.withIndex()
-			.associate { it.value to it.index }
+			.associate { it.value to it.index + 1 }
 	}
 
 	// pronunciations

@@ -200,7 +200,8 @@ object Printers {
 			ps.print("-- NONE")
 		} else {
 			ps.printf("INSERT INTO %s (%s) VALUES", table, columns)
-			lexes.asSequence()
+			lexes
+				.asSequence()
 				.map { it to NIDMaps.lookup(lexKeyToNID, KeyF.F_W_P_A.Mono.of(Lex::lemma, Lex::type, it)) }
 				.toList()
 				.sortedBy { it.second }

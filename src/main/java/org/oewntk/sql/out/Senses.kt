@@ -36,7 +36,7 @@ object Senses {
 			.distinct()
 			.sorted()
 			.withIndex()
-			.associate { it.value to it.index }
+			.associate { it.value to it.index + 1 }
 	}
 
 	/**
