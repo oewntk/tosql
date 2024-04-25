@@ -17,6 +17,7 @@ import java.nio.charset.StandardCharsets
  * Lookup of ID/KEY-to-NID maps and printing them
  */
 object NIDMaps {
+
 	/**
 	 * Lookup of id of type K
 	 *
@@ -24,7 +25,7 @@ object NIDMaps {
 	 * @param key key
 	 * @param <K> type of key
 	 * @return nid
-	</K> */
+	 */
 	fun <K> lookup(map: Map<K, Int>, key: K): Int {
 		try {
 			val nid = map[key]!!
@@ -32,24 +33,6 @@ object NIDMaps {
 			return nid
 		} catch (e: Exception) {
 			Tracing.psErr.printf("lookup of <%s> failed%n", key)
-			throw e
-		}
-	}
-
-	/**
-	 * Lookup of key
-	 *
-	 * @param map map of key-integer pairs
-	 * @param key key
-	 * @return nid
-	 */
-	fun lookup(map: Map<out Key, Int>, key: Key): Int {
-		try {
-			val nid = map[key]!!
-			assert(nid != 0)
-			return nid
-		} catch (e: Exception) {
-			Tracing.psErr.printf("lookup of <%s> failed%n", key.toLongString())
 			throw e
 		}
 	}
