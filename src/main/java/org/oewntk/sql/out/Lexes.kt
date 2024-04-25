@@ -4,8 +4,6 @@
 package org.oewntk.sql.out
 
 import org.oewntk.model.Key
-import org.oewntk.model.Key.W_P_A.Companion.of_t
-import org.oewntk.model.KeyF
 import org.oewntk.model.Lex
 import java.io.PrintStream
 
@@ -31,18 +29,17 @@ object Lexes {
 		lexes: Collection<Lex>,
 		wordToNID: Map<String, Int>,
 		casedwordToNID: Map<String, Int>
-	): Map<out Key, Int> {
+	): Map<Key, Int> {
 
 		// lex key to NID
-		val lexKeyToNID = lexes
+		val lexKeyToNID: Map<Key, Int> = lexes
 			.asSequence()
-			.map { of_t(it) }
+			.map { Key.W_P_A.of_t(it) }
 			.withIndex()
-			.associate { it.value to it.index + 1 }
+			.associate { it.value to it.index + 1 } // map(of_t(lex), nid)
 
 		// insert map
-		val columns =
-			java.lang.String.join(",", Names.LEXES.luid, Names.LEXES.posid, Names.LEXES.wordid, Names.LEXES.casedwordid)
+		val columns = listOf(Names.LEXES.luid, Names.LEXES.posid, Names.LEXES.wordid, Names.LEXES.casedwordid).joinToString(",")
 		val toString = { lex: Lex ->
 			val word = lex.lCLemma
 			val wordNID = NIDMaps.lookupLC(wordToNID, word)
@@ -196,7 +193,7 @@ object Lexes {
 	fun generateLexesMorphs(
 		ps: PrintStream,
 		lexes: Collection<Lex>,
-		lexKeyToNID: Map<out Key, Int>,
+		lexKeyToNID: Map<Key, Int>,
 		wordToNID: Map<String, Int>,
 		morphToNID: Map<String, Int>
 	) {
@@ -218,7 +215,7 @@ object Lexes {
 			val strings = ArrayList<String>()
 			val word = lex.lCLemma
 			val wordNID = NIDMaps.lookupLC(wordToNID, word)
-			val lexNID = NIDMaps.lookup(lexKeyToNID, KeyF.F_W_P_A.Mono.of(Lex::lemma, Lex::type, lex))
+			val lexNID = NIDMaps.lookup(lexKeyToNID, Key.W_P_A.of_t(lex))
 			val type = lex.type
 			for (morph in lex.forms!!) {
 				val morphNID = NIDMaps.lookup(morphToNID, morph)
@@ -283,8 +280,7 @@ object Lexes {
 		val pronunciationValueToNID = makePronunciationNIDs(lexes)
 
 		// insert map
-		val columns =
-			java.lang.String.join(",", Names.PRONUNCIATIONS.pronunciationid, Names.PRONUNCIATIONS.pronunciation)
+		val columns =  listOf(Names.PRONUNCIATIONS.pronunciationid, Names.PRONUNCIATIONS.pronunciation).joinToString(",")
 		val toString = { pronunciationValue: String -> String.format("'%s'", Utils.escape(pronunciationValue)) }
 		Printers.printInsert(ps, Names.PRONUNCIATIONS.TABLE, columns, pronunciationValueToNID, toString)
 
@@ -304,7 +300,7 @@ object Lexes {
 	fun generateLexesPronunciations(
 		ps: PrintStream,
 		lexes: Collection<Lex>,
-		lexKeyToNID: Map<out Key, Int>,
+		lexKeyToNID: Map<Key, Int>,
 		wordToNID: Map<String, Int>,
 		pronunciationToNID: Map<String, Int>
 	) {
@@ -326,7 +322,7 @@ object Lexes {
 			val strings = ArrayList<String>()
 			val word = lex.lCLemma
 			val wordNID = NIDMaps.lookupLC(wordToNID, word)
-			val lexNID = NIDMaps.lookup(lexKeyToNID, KeyF.F_W_P_A.Mono.of(Lex::lemma, Lex::type, lex))
+			val lexNID = NIDMaps.lookup(lexKeyToNID, Key.W_P_A.of_t(lex))
 			val type = lex.type
 			for (pronunciation in lex.pronunciations!!) {
 				val variety = pronunciation.variety
@@ -392,6 +388,6 @@ object Lexes {
 			.sorted()
 			.distinct()
 			.withIndex()
-			.associate { it.value to it.index }
+			.associate { it.value to it.index + 1 }
 	}
 }

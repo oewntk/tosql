@@ -55,7 +55,7 @@ object Senses {
 		ps: PrintStream,
 		senses: Collection<Sense>,
 		synsetIdToNIDMap: Map<String, Int>,
-		lexKeyToNIDMap: Map<out Key, Int>,
+		lexKeyToNIDMap: Map<Key, Int>,
 		wordIdToNIDMap: Map<String, Int>,
 		casedWordIdToNIDMap: Map<String, Int>
 	): Map<String, Int> {
@@ -136,7 +136,7 @@ object Senses {
 		senses: Collection<Sense>,
 		sensesById: Map<String, Sense>,
 		synsetIdToNIDMap: Map<String, Int>,
-		lexKeyToNIDMap: Map<out Key, Int>,
+		lexKeyToNIDMap: Map<Key, Int>,
 		wordIdToNIDMap: Map<String, Int>
 	) {
 		// sequence of senses
@@ -246,7 +246,7 @@ object Senses {
 		ps: PrintStream,
 		senses: Collection<Sense>,
 		synsetIdToNIDMap: Map<String, Int>,
-		lexKeyToNIDMap: Map<out Key, Int>,
+		lexKeyToNIDMap: Map<Key, Int>,
 		wordIdToNIDMap: Map<String, Int>
 	) {
 		// sequence of senses
@@ -299,7 +299,7 @@ object Senses {
 		ps: PrintStream,
 		senses: Collection<Sense>,
 		synsetIdToNIDMap: Map<String, Int>,
-		lexKeyToNIDMap: Map<out Key, Int>,
+		lexKeyToNIDMap: Map<Key, Int>,
 		wordIdToNIDMap: Map<String, Int>
 	) {
 		// sequence of senses
@@ -366,7 +366,7 @@ object Senses {
 		ps: PrintStream,
 		sensesById: Map<String, Sense>,
 		synsetIdToNIDMap: Map<String, Int>,
-		lexKeyToNIDMap: Map<out Key, Int>,
+		lexKeyToNIDMap: Map<Key, Int>,
 		wordIdToNIDMap: Map<String, Int>
 	) {
 		// sequence of senses

@@ -45,7 +45,7 @@ class CoreModelConsumer(
 	 * NID maps
 	 */
 	@JvmField
-	var lexKeyToNID: Map<out Key, Int>? = null
+	var lexKeyToNID: Map<Key, Int>? = null
 
 	/**
 	 * Word to NID map

@@ -4,7 +4,6 @@
 package org.oewntk.sql.out
 
 import org.oewntk.model.Key
-import org.oewntk.model.KeyF
 import org.oewntk.model.Lex
 import java.io.PrintStream
 
@@ -24,7 +23,7 @@ object Printers {
 	 * @param columns     column names
 	 * @param objectToNID objects-to-nid map
 	 * @param toString    stringifier of objects
-	 * @param <T>         type of objects
+	 * @param T           type of objects
 	 */
 	fun <T> printInsert(
 		ps: PrintStream,
@@ -61,7 +60,7 @@ object Printers {
 	 * @param toId          id extractor
 	 * @param objectIdToNID id-to-nid map
 	 * @param toString      stringifier of objects
-	 * @param <T>           type of objects
+	 * @param T             type of objects
 	 */
 	@JvmStatic
 	fun <T> printInsert(
@@ -104,7 +103,7 @@ object Printers {
 	 * @param toId                 id extractor
 	 * @param objectIdToNID        id-to-nid map
 	 * @param toStringWithComments double stringifier of objects, two strings are produced: [0] insert values , [1] comment
-	 * @param <T>                  type of objects
+	 * @param T                    type of objects
 	 */
 	fun <T> printInsertWithComment(
 		ps: PrintStream,
@@ -152,7 +151,7 @@ object Printers {
 		table: String,
 		columns: String,
 		lexes: Collection<Lex>,
-		lexKeyToNID: Map<out Key, Int>,
+		lexKeyToNID: Map<Key, Int>,
 		toString: (Lex) -> String
 	) {
 		if (lexes.isEmpty()) {
@@ -161,7 +160,7 @@ object Printers {
 			ps.printf("INSERT INTO %s (%s) VALUES", table, columns)
 			lexes
 				.asSequence()
-				.map { it to NIDMaps.lookup(lexKeyToNID, KeyF.F_W_P_A.Mono.of(Lex::lemma, Lex::type, it)) }
+				.map { it to NIDMaps.lookup(lexKeyToNID, Key.W_P_A.of_t(it)) }
 				.toList()
 				.sortedBy { it.second }
 				.withIndex()
@@ -193,7 +192,7 @@ object Printers {
 		table: String,
 		columns: String,
 		lexes: Collection<Lex>,
-		lexKeyToNID: Map<out Key, Int>,
+		lexKeyToNID: Map<Key, Int>,
 		toStringWithComments: (Lex) -> Array<String>
 	) {
 		if (lexes.isEmpty()) {
@@ -202,7 +201,7 @@ object Printers {
 			ps.printf("INSERT INTO %s (%s) VALUES", table, columns)
 			lexes
 				.asSequence()
-				.map { it to NIDMaps.lookup(lexKeyToNID, KeyF.F_W_P_A.Mono.of(Lex::lemma, Lex::type, it)) }
+				.map { it to NIDMaps.lookup(lexKeyToNID, Key.W_P_A.of_t(it)) }
 				.toList()
 				.sortedBy { it.second }
 				.withIndex()
@@ -230,7 +229,7 @@ object Printers {
 	 * @param seq        sequence of objects
 	 * @param toString   stringifier of objects
 	 * @param withNumber whether to number objects
-	 * @param <T>        type of objects in stream
+	 * @param T          type of objects in stream
 	 */
 	@JvmStatic
 	fun <T> printInsert(
@@ -268,7 +267,7 @@ object Printers {
 	 * @param seq                 sequence of objects
 	 * @param toStringWithComment double stringifier of objects, two strings are produced: [0] insert values , [1] comment
 	 * @param withNumber          whether to number objects
-	 * @param <T>                 type of objects in stream
+	 * @param T                   type of objects in stream
 	 */
 	@JvmStatic
 	fun <T> printInsertWithComment(
@@ -306,7 +305,7 @@ object Printers {
 	 * @param seq        sequence of objects
 	 * @param toStrings  stringifier for multiple values
 	 * @param withNumber whether to number objects
-	 * @param <T>        type of objects in stream
+	 * @param T          type of objects in stream
 	 */
 	@JvmStatic
 	fun <T> printInserts(
@@ -346,7 +345,7 @@ object Printers {
 	 * @param seq                   sequence of objects
 	 * @param toStringsWithComments double stringifier of objects, two strings are produced: [0] insert values , [1] comment
 	 * @param withNumber            whether to number objects
-	 * @param <T>                   type of objects in stream
+	 * @param T                     type of objects in stream
 	 */
 	@JvmStatic
 	fun <T> printInsertsWithComment(
