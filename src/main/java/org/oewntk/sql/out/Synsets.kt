@@ -93,12 +93,11 @@ object Synsets {
 			.sortedBy(Synset::synsetId)
 
 		// insert
-		val columns = java.lang.String.join(
-			",",
+		val columns = listOf(
 			Names.SEMRELATIONS.synset1id,
 			Names.SEMRELATIONS.synset2id,
 			Names.SEMRELATIONS.relationid
-		)
+		).joinToString(",")
 		val toString = { synset: Synset ->
 			val strings = ArrayList<String>()
 			val synset1Id = synset.synsetId
@@ -157,7 +156,7 @@ object Synsets {
 			.sortedBy(Synset::synsetId)
 
 		// insert
-		val columns = java.lang.String.join(",", Names.SAMPLES.sampleid, Names.SAMPLES.synsetid, Names.SAMPLES.sample)
+		val columns = listOf(Names.SAMPLES.sampleid, Names.SAMPLES.synsetid, Names.SAMPLES.sample).joinToString(",")
 		val toString = { synset: Synset ->
 			val strings = ArrayList<String>()
 			val synsetId1 = synset.synsetId
