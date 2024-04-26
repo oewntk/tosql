@@ -161,8 +161,7 @@ object Synsets {
 			val strings = ArrayList<String>()
 			val synsetId1 = synset.synsetId
 			val synsetNID1 = NIDMaps.lookup(synsetIdToNIDMap, synsetId1)
-			val examples = synset.examples
-			for (example in examples!!) {
+			for (example in synset.examples!!) {
 				strings.add(String.format("%d,'%s'", synsetNID1, escape(example)))
 			}
 			strings
