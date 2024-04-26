@@ -78,7 +78,7 @@ object Lexes {
 		val wordToNID = makeWordNIDs(lexes)
 
 		// insert map
-		val columns = java.lang.String.join(",", Names.WORDS.wordid, Names.WORDS.word)
+		val columns = listOf(Names.WORDS.wordid, Names.WORDS.word).joinToString(",")
 		val toString = { word: String -> String.format("'%s'", Utils.escape(word)) }
 		Printers.printInsert(ps, Names.WORDS.TABLE, columns, wordToNID, toString)
 
@@ -124,12 +124,7 @@ object Lexes {
 		val casedWordToNID = makeCasedWordNIDs(lexes)
 
 		// insert map
-		val columns = java.lang.String.join(
-			",",
-			Names.CASEDWORDS.casedwordid,
-			Names.CASEDWORDS.casedword,
-			Names.CASEDWORDS.wordid
-		)
+		val columns = listOf(Names.CASEDWORDS.casedwordid, Names.CASEDWORDS.casedword, Names.CASEDWORDS.wordid).joinToString(",")
 		val toString = { casedWord: String ->
 			String.format(
 				"'%s',%d",
@@ -156,7 +151,7 @@ object Lexes {
 			.distinct()
 			.sorted()
 			.withIndex()
-			.associate { it.value to it.index +1 }
+			.associate { it.value to it.index + 1 }
 		assert(map.values.none { it == 0 })
 		return map
 	}
@@ -176,7 +171,7 @@ object Lexes {
 		val morphToNID = makeMorphNIDs(lexes)
 
 		// insert map
-		val columns = java.lang.String.join(",", Names.MORPHS.morphid, Names.MORPHS.morph)
+		val columns = listOf(Names.MORPHS.morphid, Names.MORPHS.morph).joinToString(",")
 		val toString = { morph: String -> String.format("'%s'", Utils.escape(morph)) }
 		Printers.printInsert(ps, Names.MORPHS.TABLE, columns, morphToNID, toString)
 
@@ -207,13 +202,7 @@ object Lexes {
 			.sortedBy { it.lemma }
 
 		// insert map
-		val columns = java.lang.String.join(
-			",",
-			Names.LEXES_MORPHS.morphid,
-			Names.LEXES_MORPHS.luid,
-			Names.LEXES_MORPHS.wordid,
-			Names.LEXES_MORPHS.posid
-		)
+		val columns = listOf(Names.LEXES_MORPHS.morphid, Names.LEXES_MORPHS.luid, Names.LEXES_MORPHS.wordid, Names.LEXES_MORPHS.posid).joinToString(",")
 		val toString = { lex: Lex ->
 			val strings = ArrayList<String>()
 			val word = lex.lCLemma
@@ -283,7 +272,7 @@ object Lexes {
 		val pronunciationValueToNID = makePronunciationNIDs(lexes)
 
 		// insert map
-		val columns =  listOf(Names.PRONUNCIATIONS.pronunciationid, Names.PRONUNCIATIONS.pronunciation).joinToString(",")
+		val columns = listOf(Names.PRONUNCIATIONS.pronunciationid, Names.PRONUNCIATIONS.pronunciation).joinToString(",")
 		val toString = { pronunciationValue: String -> String.format("'%s'", Utils.escape(pronunciationValue)) }
 		Printers.printInsert(ps, Names.PRONUNCIATIONS.TABLE, columns, pronunciationValueToNID, toString)
 
@@ -313,14 +302,13 @@ object Lexes {
 			.sortedBy { it.lemma }
 
 		// insert map
-		val columns = java.lang.String.join(
-			",",
+		val columns = listOf(
 			Names.LEXES_PRONUNCIATIONS.pronunciationid,
 			Names.LEXES_PRONUNCIATIONS.variety,
 			Names.LEXES_PRONUNCIATIONS.luid,
 			Names.LEXES_PRONUNCIATIONS.wordid,
 			Names.LEXES_PRONUNCIATIONS.posid
-		)
+		).joinToString(",")
 		val toString = { lex: Lex ->
 			val strings = ArrayList<String>()
 			val word = lex.lCLemma
