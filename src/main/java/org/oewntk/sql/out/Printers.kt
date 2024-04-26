@@ -316,10 +316,10 @@ object Printers {
 		toStrings: (T) -> List<String>,
 		withNumber: Boolean
 	) {
+		var index = 0
 		seq
-			.withIndex()
-			.forEach { (index, thing) ->
-				val ss = toStrings.invoke(thing)
+			.forEach {
+				val ss = toStrings.invoke(it)
 				for (s in ss) {
 					if (index == 0) {
 						ps.printf("INSERT INTO %s (%s) VALUES", table, columns)
@@ -331,6 +331,7 @@ object Printers {
 					} else {
 						ps.printf("%n(%s)", s)
 					}
+					index++
 				}
 			}
 		ps.println(";")
@@ -356,10 +357,10 @@ object Printers {
 		toStringsWithComments: (T) -> List<Array<String>>,
 		withNumber: Boolean
 	) {
+		var index = 0
 		seq
-			.withIndex()
-			.forEach { (index, thing) ->
-				val ss = toStringsWithComments.invoke(thing)
+			.forEach {
+				val ss = toStringsWithComments.invoke(it)
 				for (s in ss) {
 					if (index == 0) {
 						ps.printf("INSERT INTO %s (%s) VALUES", table, columns)
@@ -371,13 +372,13 @@ object Printers {
 					} else {
 						ps.printf("%n(%s) /* %s */", s[0], s[1])
 					}
-
+					index++
 				}
 			}
 		ps.println(";")
 	}
 
-    // from map
+	// from map
 
 	/**
 	 * Print inserts, single value
@@ -464,7 +465,6 @@ object Printers {
 		mapper: Map<Array<String>, T>
 	) {
 		ps.printf("INSERT INTO %s (%s) VALUES", table, columns)
-
 		mapper.entries
 			.toList()
 			.sortedBy { it.value }
