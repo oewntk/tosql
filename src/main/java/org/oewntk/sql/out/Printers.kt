@@ -316,22 +316,19 @@ object Printers {
 		toStrings: (T) -> List<String>,
 		withNumber: Boolean
 	) {
-		var index = 0
 		seq
+			.flatMap(toStrings)
+			.withIndex()
 			.forEach {
-				val ss = toStrings.invoke(it)
-				for (s in ss) {
-					if (index == 0) {
-						ps.printf("INSERT INTO %s (%s) VALUES", table, columns)
-					} else {
-						ps.print(',')
-					}
-					if (withNumber) {
-						ps.printf("%n(%d,%s)", index + 1, s)
-					} else {
-						ps.printf("%n(%s)", s)
-					}
-					index++
+				if (it.index == 0) {
+					ps.printf("INSERT INTO %s (%s) VALUES", table, columns)
+				} else {
+					ps.print(',')
+				}
+				if (withNumber) {
+					ps.printf("%n(%d,%s)", it.index + 1, it.value)
+				} else {
+					ps.printf("%n(%s)", it.value)
 				}
 			}
 		ps.println(";")
@@ -357,22 +354,19 @@ object Printers {
 		toStringsWithComments: (T) -> List<Array<String>>,
 		withNumber: Boolean
 	) {
-		var index = 0
 		seq
+			.flatMap(toStringsWithComments)
+			.withIndex()
 			.forEach {
-				val ss = toStringsWithComments.invoke(it)
-				for (s in ss) {
-					if (index == 0) {
-						ps.printf("INSERT INTO %s (%s) VALUES", table, columns)
-					} else {
-						ps.print(',')
-					}
-					if (withNumber) {
-						ps.printf("%n(%d,%s) /* %s */", index + 1, s[0], s[1])
-					} else {
-						ps.printf("%n(%s) /* %s */", s[0], s[1])
-					}
-					index++
+				if (it.index == 0) {
+					ps.printf("INSERT INTO %s (%s) VALUES", table, columns)
+				} else {
+					ps.print(',')
+				}
+				if (withNumber) {
+					ps.printf("%n(%d,%s) /* %s */", it.index + 1, it.value[0], it.value[1])
+				} else {
+					ps.printf("%n(%s) /* %s */", it.value[0], it.value[1])
 				}
 			}
 		ps.println(";")
