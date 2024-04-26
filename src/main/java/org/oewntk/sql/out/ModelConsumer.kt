@@ -102,6 +102,7 @@ class ModelConsumer(
 		val toString = { entry: Pair<Int, VerbTemplate> ->
 			"${entry.first}, '${escape(entry.second.template)}'"
 		}
+
 		PrintStream(
 			FileOutputStream(File(outDir, makeFilename(Names.VTEMPLATES.FILE))),
 			true,
@@ -110,7 +111,7 @@ class ModelConsumer(
 			generateTable(
 				ps,
 				Names.VTEMPLATES.TABLE,
-				java.lang.String.join(",", Names.VTEMPLATES.templateid, Names.VTEMPLATES.template),
+				listOf(Names.VTEMPLATES.templateid, Names.VTEMPLATES.template).joinToString(","),
 				verbTemplatesById,
 				toString
 			)
