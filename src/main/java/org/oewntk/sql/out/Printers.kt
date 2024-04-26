@@ -221,7 +221,7 @@ object Printers {
 	// from sequences
 
 	/**
-	 * Print inserts from stream
+	 * Print inserts from sequence
 	 *
 	 * @param ps         print stream
 	 * @param table      table name
@@ -229,7 +229,7 @@ object Printers {
 	 * @param seq        sequence of objects
 	 * @param toString   stringifier of objects
 	 * @param withNumber whether to number objects
-	 * @param T          type of objects in stream
+	 * @param T          type of objects in sequence
 	 */
 	@JvmStatic
 	fun <T> printInsert(
@@ -259,7 +259,7 @@ object Printers {
 	}
 
 	/**
-	 * Print inserts from stream with comments
+	 * Print inserts from sequence with comments
 	 *
 	 * @param ps                  print stream
 	 * @param table               table name
@@ -267,7 +267,7 @@ object Printers {
 	 * @param seq                 sequence of objects
 	 * @param toStringWithComment double stringifier of objects, two strings are produced: [0] insert values , [1] comment
 	 * @param withNumber          whether to number objects
-	 * @param T                   type of objects in stream
+	 * @param T                   type of objects in sequence
 	 */
 	@JvmStatic
 	fun <T> printInsertWithComment(
@@ -297,15 +297,15 @@ object Printers {
 	}
 
 	/**
-	 * Print inserts from stream
+	 * Print inserts from sequence
 	 *
-	 * @param ps         print stream
+	 * @param ps         print sequence
 	 * @param table      table name
 	 * @param columns    column names
 	 * @param seq        sequence of objects
 	 * @param toStrings  stringifier for multiple values
 	 * @param withNumber whether to number objects
-	 * @param T          type of objects in stream
+	 * @param T          type of objects in sequence
 	 */
 	@JvmStatic
 	fun <T> printInserts(
@@ -337,7 +337,7 @@ object Printers {
 	}
 
 	/**
-	 * Print inserts from stream with comments
+	 * Print inserts from sequence with comments
 	 *
 	 * @param ps                    print stream
 	 * @param table                 table name
@@ -345,7 +345,7 @@ object Printers {
 	 * @param seq                   sequence of objects
 	 * @param toStringsWithComments double stringifier of objects, two strings are produced: [0] insert values , [1] comment
 	 * @param withNumber            whether to number objects
-	 * @param T                     type of objects in stream
+	 * @param T                     type of objects in sequence
 	 */
 	@JvmStatic
 	fun <T> printInsertsWithComment(
