@@ -64,8 +64,7 @@ object Senses {
 		val idToNID = makeSenseNIDs(senses)
 
 		// insert map
-		val columns = java.lang.String.join(
-			",",
+		val columns = listOf(
 			Names.SENSES.senseid,
 			Names.SENSES.sensekey,
 			Names.SENSES.sensenum,
@@ -75,7 +74,7 @@ object Senses {
 			Names.SENSES.casedwordid,
 			Names.SENSES.lexid,
 			Names.SENSES.tagcount
-		)
+		).joinToString(",")
 		val toString = { sense: Sense ->
 			val lex = sense.lex
 			val casedWord = lex.lemma
@@ -146,8 +145,7 @@ object Senses {
 			.sortedBy(Sense::senseKey)
 
 		// insert map
-		val columns = java.lang.String.join(
-			",",
+		val columns = listOf(
 			Names.LEXRELATIONS.synset1id,
 			Names.LEXRELATIONS.lu1id,
 			Names.LEXRELATIONS.word1id,
@@ -155,7 +153,7 @@ object Senses {
 			Names.LEXRELATIONS.lu2id,
 			Names.LEXRELATIONS.word2id,
 			Names.LEXRELATIONS.relationid
-		)
+		).joinToString(",")
 		val toString = { sense: Sense ->
 			val strings = ArrayList<String>()
 			val synsetId1 = sense.synsetId
@@ -256,13 +254,12 @@ object Senses {
 			.sortedBy(Sense::senseKey)
 
 		// insert map
-		val columns = java.lang.String.join(
-			",",
+		val columns = listOf(
 			Names.SENSES_ADJPOSITIONS.synsetid,
 			Names.SENSES_ADJPOSITIONS.luid,
 			Names.SENSES_ADJPOSITIONS.wordid,
 			Names.SENSES_ADJPOSITIONS.positionid
-		)
+		).joinToString(",")
 		val toString = { sense: Sense ->
 			val synsetId = sense.synsetId
 			val lex = sense.lex
@@ -309,13 +306,12 @@ object Senses {
 			.sortedBy(Sense::senseKey)
 
 		// insert map
-		val columns = java.lang.String.join(
-			",",
+		val columns = listOf(
 			Names.SENSES_VFRAMES.synsetid,
 			Names.SENSES_VFRAMES.luid,
 			Names.SENSES_VFRAMES.wordid,
 			Names.SENSES_VFRAMES.frameid
-		)
+		).joinToString(",")
 		val toString = { sense: Sense ->
 			val strings = ArrayList<String>()
 			val synsetId = sense.synsetId
@@ -376,13 +372,12 @@ object Senses {
 			.sortedBy(Sense::senseKey)
 
 		// insert map
-		val columns = java.lang.String.join(
-			",",
+		val columns = arrayOf(
 			Names.SENSES_VTEMPLATES.synsetid,
 			Names.SENSES_VTEMPLATES.luid,
 			Names.SENSES_VTEMPLATES.wordid,
 			Names.SENSES_VTEMPLATES.templateid
-		)
+		).joinToString(",")
 		val toString = { sense: Sense ->
 			val strings = ArrayList<String>()
 			val synsetId = sense.synsetId
