@@ -377,7 +377,7 @@ object Printers {
 		ps.println(";")
 	}
 
-// to table
+    // from map
 
 	/**
 	 * Print inserts, single value
