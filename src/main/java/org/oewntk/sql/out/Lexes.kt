@@ -35,6 +35,7 @@ object Lexes {
 		val lexKeyToNID: Map<Key, Int> = lexes
 			.asSequence()
 			.map { Key.W_P_A.of_t(it) }
+			.sorted()
 			.withIndex()
 			.associate { it.value to it.index + 1 } // map(of_t(lex), nid)
 
@@ -96,6 +97,7 @@ object Lexes {
 		val map = lexes.asSequence()
 			.map(Lex::lCLemma)
 			.distinct()
+			.sorted()
 			.withIndex()
 			.associate { it.value to it.index + 1 }
 		assert(map.values.none { it == 0 })
@@ -152,6 +154,7 @@ object Lexes {
 			.filter(Lex::isCased)
 			.map { it.lemma }
 			.distinct()
+			.sorted()
 			.withIndex()
 			.associate { it.value to it.index +1 }
 		assert(map.values.none { it == 0 })
