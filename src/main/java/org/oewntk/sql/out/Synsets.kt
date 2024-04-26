@@ -26,6 +26,7 @@ object Synsets {
 	fun makeSynsetNIDs(synsets: Collection<Synset>): Map<String, Int> {
 		return synsets.asSequence()
 			.map { s: Synset -> s.synsetId }
+			.sorted()
 			.withIndex()
 			.associate { it.value to it.index + 1 }
 	}
@@ -43,13 +44,12 @@ object Synsets {
 		val synsetIdToNID = makeSynsetNIDs(synsets)
 
 		// insert map
-		val columns = java.lang.String.join(
-			",",
+		val columns = listOf(
 			Names.SYNSETS.synsetid,
 			Names.SYNSETS.posid,
 			Names.SYNSETS.domainid,
 			Names.SYNSETS.definition
-		)
+		).joinToString(",")
 		val toString = { synset: Synset ->
 			val type = synset.type
 			val definition = synset.definition
