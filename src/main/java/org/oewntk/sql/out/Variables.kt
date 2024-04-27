@@ -77,8 +77,8 @@ class Variables(bundle: ResourceBundle) {
 		// iterate on lines
 		BufferedReader(InputStreamReader(`is`, Charset.defaultCharset())).use { reader ->
 			var lineNum = 0
-			var line: String
-			while ((reader.readLine().also { line = it }) != null) {
+			while (true) {
+				var line: String = reader.readLine() ?: break
 				lineNum++
 				try {
 					//initVars(line);
