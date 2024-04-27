@@ -51,7 +51,7 @@ class TestSqlBundle {
 
 		@JvmStatic
 		@BeforeClass
-		fun init(): Unit {
+		fun init() {
 			bundle = ResourceBundle.getBundle("wn/Names")
 			bundleCompat = ResourceBundle.getBundle("wn/NamesCompat")
 		}

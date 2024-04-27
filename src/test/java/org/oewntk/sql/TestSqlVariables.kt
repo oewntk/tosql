@@ -55,7 +55,7 @@ class TestSqlVariables {
 
 		@JvmStatic
 		@BeforeClass
-		fun init(): Unit {
+		fun init() {
 			val bundle = ResourceBundle.getBundle("wn/Names")
 			variables = Variables(bundle)
 		}
