@@ -1,76 +1,63 @@
 /*
  * Copyright (c) 2021. Bernard Bou.
  */
+package org.oewntk.sql
 
-package org.oewntk.sql;
+import org.junit.Assert
+import org.junit.BeforeClass
+import org.junit.Test
+import org.oewntk.model.Tracing
+import org.oewntk.sql.out.Variables
+import java.util.*
 
-import org.junit.BeforeClass;
-import org.junit.Test;
-import org.oewntk.model.Tracing;
-import org.oewntk.sql.out.Variables;
+class TestSqlVariables {
 
-import java.io.PrintStream;
-import java.util.ResourceBundle;
+	private val wellFormedInputs = arrayOf(
+		"\${senses.file} \${senses_vtemplates.templateid} a \${senses_vframes.file} b \${lexes_pronunciations.wordid} c @{senses.file} d @{senses.file}",
+	)
 
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.fail;
-
-public class TestSqlVariables
-{
-	private static final PrintStream ps = !System.getProperties().containsKey("SILENT") ? Tracing.psInfo : Tracing.psNull;
-
-	private final String[] wellFormedInputs = new String[]{ //
-			"${senses.file} ${senses_vtemplates.templateid} a ${senses_vframes.file} b ${lexes_pronunciations.wordid} c @{senses.file} d @{senses.file}", //
-	};
-
-	private final String[] illFormedInputs = new String[]{ //
-			// "${senses.file} a $ { }", //
-			"${senses.file} b ${var4} ", //
-			"${senses.file} c ${senses._file_} ", //
-	};
-
-	static Variables variables;
-
-	@BeforeClass
-	public static void init()
-	{
-		ResourceBundle bundle = ResourceBundle.getBundle("wn/Names");
-		variables = new Variables(bundle);
-	}
+	private val illFormedInputs = arrayOf(
+		// "${senses.file} a $ { }", //
+		"\${senses.file} b \${var4} ",  //
+		"\${senses.file} c \${senses._file_} ",  //
+	)
 
 	@Test
-	public void wellFormedVarSubstitution()
-	{
-		for (var input : wellFormedInputs)
-		{
-			assertNotNull(input);
-			try
-			{
-				String output = variables.varSubstitution(input, false);
-				ps.println(output);
-			}
-			catch (IllegalArgumentException e)
-			{
-				fail("Not expected to fail " + input);
+	fun wellFormedVarSubstitution() {
+		for (input in wellFormedInputs) {
+			Assert.assertNotNull(input)
+			try {
+				val output = variables!!.varSubstitution(input, false)
+				ps.println(output)
+			} catch (e: IllegalArgumentException) {
+				Assert.fail("Not expected to fail $input")
 			}
 		}
 	}
 
 	@Test
-	public void illFormedVarSubstitution()
-	{
-		for (var input : illFormedInputs)
-		{
-			assertNotNull(input);
-			try
-			{
-				String output = variables.varSubstitution(input, false);
-				fail("Not expected to succeed " + input + " yields " + output);
+	fun illFormedVarSubstitution() {
+		for (input in illFormedInputs) {
+			Assert.assertNotNull(input)
+			try {
+				val output = variables!!.varSubstitution(input, false)
+				Assert.fail("Not expected to succeed $input yields $output")
+			} catch (e: IllegalArgumentException) {
+				// Tracing.psErr.println(e)
 			}
-			catch (IllegalArgumentException e)
-			{
-				// Tracing.psErr.println(e);
-			}
+		}
+	}
+
+	companion object {
+		private val ps = if (!System.getProperties().containsKey("SILENT")) Tracing.psInfo else Tracing.psNull
+
+		var variables: Variables? = null
+
+		@JvmStatic
+		@BeforeClass
+		fun init(): Unit {
+			val bundle = ResourceBundle.getBundle("wn/Names")
+			variables = Variables(bundle)
 		}
 	}
 }
