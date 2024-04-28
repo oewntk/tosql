@@ -67,11 +67,11 @@ for line in lines:
 	line0=line
 	line=line.strip()
 
-	if re.match("^.*CREATE TABLE.*$", line):
+	if re.match(r"^.*CREATE TABLE.*$", line):
 		creating=True
-	elif re.match("^.*ALTER TABLE.*$", line):
+	elif re.match(r"^.*ALTER TABLE.*$", line):
 		altering=True
-	elif re.match("^.*CREATE.*VIEW.*$", line):
+	elif re.match(r"^.*CREATE.*VIEW.*$", line):
 		view=True
 
 	if creating:
