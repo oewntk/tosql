@@ -29,9 +29,9 @@ class SourcesGenerator {
 			outdir.mkdirs()
 		}
 		val url = checkNotNull(SourcesGenerator::class.java.getResource("/wn/sqltemplates/data/sources.sql"))
-		url.openStream().use { `is` ->
+		url.openStream().use {
 			FileOutputStream(File(outdir, "sources.sql")).use { os ->
-				`is`.transferTo(os)
+				it.transferTo(os)
 			}
 		}
 	}
