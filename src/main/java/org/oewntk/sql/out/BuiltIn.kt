@@ -161,7 +161,6 @@ object BuiltIn {
 	 *
 	 * @param ps print stream
 	 */
-	@JvmStatic
 	fun generatePosTypes(ps: PrintStream) {
 		printInsert(
 			ps,
@@ -177,7 +176,6 @@ object BuiltIn {
 	 *
 	 * @param ps print stream
 	 */
-	@JvmStatic
 	fun generateAdjectivePositionTypes(ps: PrintStream) {
 		printInsert(
 			ps,
@@ -193,7 +191,6 @@ object BuiltIn {
 	 *
 	 * @param ps print stream
 	 */
-	@JvmStatic
 	fun generateRelationTypes(ps: PrintStream) {
 		printInsert2(
 			ps,
@@ -209,7 +206,6 @@ object BuiltIn {
 	 *
 	 * @param ps print stream
 	 */
-	@JvmStatic
 	fun generateDomains(ps: PrintStream?) {
 		printInsert3(
 			ps!!,

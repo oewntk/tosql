@@ -62,7 +62,6 @@ object Printers {
 	 * @param toString      stringifier of objects
 	 * @param T             type of objects
 	 */
-	@JvmStatic
 	fun <T> printInsert(
 		ps: PrintStream,
 		table: String,
@@ -231,7 +230,6 @@ object Printers {
 	 * @param withNumber whether to number objects
 	 * @param T          type of objects in sequence
 	 */
-	@JvmStatic
 	fun <T> printInsert(
 		ps: PrintStream,
 		table: String,
@@ -269,7 +267,6 @@ object Printers {
 	 * @param withNumber          whether to number objects
 	 * @param T                   type of objects in sequence
 	 */
-	@JvmStatic
 	fun <T> printInsertWithComment(
 		ps: PrintStream,
 		table: String,
@@ -307,7 +304,6 @@ object Printers {
 	 * @param withNumber whether to number objects
 	 * @param T          type of objects in sequence
 	 */
-	@JvmStatic
 	fun <T> printInserts(
 		ps: PrintStream,
 		table: String,
@@ -345,7 +341,6 @@ object Printers {
 	 * @param withNumber            whether to number objects
 	 * @param T                     type of objects in sequence
 	 */
-	@JvmStatic
 	fun <T> printInsertsWithComment(
 		ps: PrintStream,
 		table: String,
@@ -384,7 +379,6 @@ object Printers {
 	 * @param mapper  objects by id
 	 * @param T       type of objects
 	 */
-	@JvmStatic
 	fun <T : Comparable<T>> printInsert(
 		ps: PrintStream,
 		table: String,

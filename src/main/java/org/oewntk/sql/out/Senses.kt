@@ -29,7 +29,6 @@ object Senses {
 	 * @param senses senses
 	 * @return id-to-nid map
 	 */
-	@JvmStatic
 	fun makeSenseNIDs(senses: Collection<Sense>): Map<String, Int> {
 		return senses.asSequence()
 			.map(makeId)
@@ -50,7 +49,6 @@ object Senses {
 	 * @param casedWordIdToNIDMap id-to-nid map for cased words
 	 * @return senses id-to-nid map
 	 */
-	@JvmStatic
 	fun generateSenses(
 		ps: PrintStream,
 		senses: Collection<Sense>,
@@ -129,7 +127,6 @@ object Senses {
 	 * @param lexKeyToNIDMap   key-to-nid map for lexes
 	 * @param wordIdToNIDMap   id-to-nid map for words
 	 */
-	@JvmStatic
 	fun generateSenseRelations(
 		ps: PrintStream,
 		senses: Collection<Sense>,
@@ -239,7 +236,6 @@ object Senses {
 	 * @param lexKeyToNIDMap   key-to-nid map for lexes
 	 * @param wordIdToNIDMap   id-to-nid map for words
 	 */
-	@JvmStatic
 	fun generateSensesAdjPositions(
 		ps: PrintStream,
 		senses: Collection<Sense>,
@@ -291,7 +287,6 @@ object Senses {
 	 * @param lexKeyToNIDMap   key-to-nid map for lexes
 	 * @param wordIdToNIDMap   id-to-nid map for words
 	 */
-	@JvmStatic
 	fun generateSensesVerbFrames(
 		ps: PrintStream,
 		senses: Collection<Sense>,
@@ -357,7 +352,6 @@ object Senses {
 	 * @param lexKeyToNIDMap   key-to-nid map for lexes
 	 * @param wordIdToNIDMap   id-to-nid map for words
 	 */
-	@JvmStatic
 	fun generateSensesVerbTemplates(
 		ps: PrintStream,
 		sensesById: Map<String, Sense>,

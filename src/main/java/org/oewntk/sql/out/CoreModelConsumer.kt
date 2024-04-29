@@ -44,25 +44,21 @@ class CoreModelConsumer(
 	/**
 	 * NID maps
 	 */
-	@JvmField
 	var lexKeyToNID: Map<Key, Int>? = null
 
 	/**
 	 * Word to NID map
 	 */
-	@JvmField
 	var wordToNID: Map<String, Int>? = null
 
 	/**
 	 * Cased word to NID map
 	 */
-	@JvmField
 	var casedWordToNID: Map<String, Int>? = null
 
 	/**
 	 * Synset to NID map
 	 */
-	@JvmField
 	var synsetIdToNID: Map<String, Int>? = null
 
 	override fun accept(model: CoreModel) {
@@ -220,7 +216,6 @@ class CoreModelConsumer(
 		 * @param outDir out dir
 		 * @throws FileNotFoundException file not found exception
 		 */
-		@JvmStatic
 		@Throws(FileNotFoundException::class)
 		fun builtins(outDir: File?) {
 			PrintStream(
@@ -259,7 +254,6 @@ class CoreModelConsumer(
 		 * @param name name
 		 * @return filename
 		 */
-		@JvmStatic
 		fun makeFilename(name: String): String {
 			val fileName = "$name.sql"
 			Tracing.psInfo.println(fileName)

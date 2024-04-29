@@ -22,7 +22,6 @@ object Synsets {
 	 * @param synsets synsets
 	 * @return id-to-nid map
 	 */
-	@JvmStatic
 	fun makeSynsetNIDs(synsets: Collection<Synset>): Map<String, Int> {
 		return synsets.asSequence()
 			.map { s: Synset -> s.synsetId }
@@ -38,7 +37,6 @@ object Synsets {
 	 * @param synsets synsets
 	 * @return synsets id-to-nid map
 	 */
-	@JvmStatic
 	fun generateSynsets(ps: PrintStream, synsets: Collection<Synset>): Map<String, Int> {
 		// make synsetId-to-nid map
 		val synsetIdToNID = makeSynsetNIDs(synsets)
@@ -83,7 +81,6 @@ object Synsets {
 	 * @param synsets          synsets
 	 * @param synsetIdToNIDMap id-to-nid map
 	 */
-	@JvmStatic
 	fun generateSynsetRelations(ps: PrintStream, synsets: Collection<Synset>, synsetIdToNIDMap: Map<String, Int>) {
 
 		// synset sequence
@@ -146,7 +143,6 @@ object Synsets {
 	 * @param synsets          synsets
 	 * @param synsetIdToNIDMap id-to-nid map
 	 */
-	@JvmStatic
 	fun generateSamples(ps: PrintStream, synsets: Collection<Synset>, synsetIdToNIDMap: Map<String, Int>) {
 
 		// sequence of synsets

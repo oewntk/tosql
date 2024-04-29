@@ -43,6 +43,7 @@ class TestSqlBundle {
 	}
 
 	companion object {
+
 		private val ps = if (!System.getProperties().containsKey("SILENT")) Tracing.psInfo else Tracing.psNull
 
 		private var bundle: ResourceBundle? = null

@@ -49,6 +49,7 @@ class TestSqlVariables {
 	}
 
 	companion object {
+
 		private val ps = if (!System.getProperties().containsKey("SILENT")) Tracing.psInfo else Tracing.psNull
 
 		var variables: Variables? = null

@@ -47,7 +47,6 @@ object Utils {
 	 * @param str string
 	 * @return SQL escaped string
 	 */
-	@JvmStatic
 	fun escape(str: String): String {
 		return str.replace("'", "''")
 	}

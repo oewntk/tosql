@@ -41,7 +41,6 @@ object Lexes {
 	 * @param casedwordToNID id-to-nid map for cased words
 	 * @return lex_key-to-nid map
 	 */
-	@JvmStatic
 	fun generateLexes(
 		ps: PrintStream,
 		lexes: Collection<Lex>,
@@ -86,7 +85,6 @@ object Lexes {
 	 * @param lexes lexes
 	 * @return word-to-nid map
 	 */
-	@JvmStatic
 	fun generateWords(ps: PrintStream, lexes: Collection<Lex>): Map<String, Int> {
 		// make word-to-nid map
 		val wordToNID = makeWordNIDs(lexes)
@@ -105,7 +103,6 @@ object Lexes {
 	 * @param lexes lexes
 	 * @return word-to-nid map
 	 */
-	@JvmStatic
 	fun makeWordNIDs(lexes: Collection<Lex>): Map<String, Int> {
 		// stream of words
 		val map = lexes.asSequence()
@@ -127,7 +124,6 @@ object Lexes {
 	 * @param wordIdToNID word-to-nid map
 	 * @return cased_word-to-nid map
 	 */
-	@JvmStatic
 	fun generateCasedWords(
 		ps: PrintStream,
 		lexes: Collection<Lex>,
@@ -157,7 +153,6 @@ object Lexes {
 	 * @param lexes lexes
 	 * @return cased_word-to-nid map
 	 */
-	@JvmStatic
 	fun makeCasedWordNIDs(lexes: Collection<Lex>): Map<String, Int> {
 		val map = lexes.asSequence()
 			.filter(Lex::isCased)
@@ -178,7 +173,6 @@ object Lexes {
 	 * @param lexes lexes
 	 * @return morph-to-nid map
 	 */
-	@JvmStatic
 	fun generateMorphs(ps: PrintStream, lexes: Collection<Lex>): Map<String, Int> {
 
 		// make morph-to-nid map
@@ -201,7 +195,6 @@ object Lexes {
 	 * @param wordToNID   word-to-nid map
 	 * @param morphToNID  morph-to-nid map
 	 */
-	@JvmStatic
 	fun generateLexesMorphs(
 		ps: PrintStream,
 		lexes: Collection<Lex>,
@@ -259,7 +252,6 @@ object Lexes {
 	 * @param lexes lexes
 	 * @return morph-to-nid map
 	 */
-	@JvmStatic
 	fun makeMorphNIDs(lexes: Collection<Lex>): Map<String, Int> {
 		return lexes.asSequence()
 			.filter { it.forms != null && it.forms!!.isNotEmpty() }
@@ -279,7 +271,6 @@ object Lexes {
 	 * @param lexes lexes
 	 * @return pronunciation-to-nid
 	 */
-	@JvmStatic
 	fun generatePronunciations(ps: PrintStream, lexes: Collection<Lex>): Map<String, Int> {
 
 		// make pronunciation_value-to-nid map
@@ -302,7 +293,6 @@ object Lexes {
 	 * @param wordToNID          word-to-nid map
 	 * @param pronunciationToNID pronunciation-to-nid
 	 */
-	@JvmStatic
 	fun generateLexesPronunciations(
 		ps: PrintStream,
 		lexes: Collection<Lex>,
@@ -384,7 +374,6 @@ object Lexes {
 	 * @param lexes lexes
 	 * @return pronunciation-to-nid map
 	 */
-	@JvmStatic
 	fun makePronunciationNIDs(lexes: Collection<Lex>): Map<String, Int> {
 		return lexes.asSequence()
 			.filter { it.pronunciations != null && it.pronunciations!!.isNotEmpty() }
