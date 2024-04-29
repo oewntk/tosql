@@ -31,20 +31,20 @@ if [ "${outdir}" == "" ]; then
 fi
 
 m=wn
-
+jar=target/tosql-1.0.5-uber.jar
 if [ "$*" != "" ]; then
   indir="$1"
   shift
   for sql in $*; do
     base=$(basename ${sql})
-    java -ea -cp generate-schema.jar org.oewntk.sql.out.SchemaGenerator ${compatswitch} ${m} "${outdir}" "${indir}" "${sql}"
+    java -ea -cp "${jar}" org.oewntk.sql.out.SchemaGenerator ${compatswitch} ${m} "${outdir}" "${indir}" "${sql}"
   done
 else
   #echo -e "${C}$(readlink -f ${outdir})${Z}"
   for db in mysql sqlite; do
     for type in create index reference views; do
       echo -e "${M}${db}/${type}${Z}"
-      java -ea -cp generate-schema.jar org.oewntk.sql.out.SchemaGenerator ${compatswitch} ${m} "${outdir}/${db}/${type}" "${db}/${type}" $*
+      java -ea -cp "${jar}" org.oewntk.sql.out.SchemaGenerator ${compatswitch} ${m} "${outdir}/${db}/${type}" "${db}/${type}" $*
     done
   done
 fi

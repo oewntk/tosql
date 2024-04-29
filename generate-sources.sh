@@ -19,4 +19,5 @@ if [ "${outdir}" == "" ]; then
   outdir="sql"
 fi
 
-java -ea -cp generate-schema.jar org.oewntk.sql.out.SourcesGenerator "${outdir}"
+jar=target/tosql-1.0.5-uber.jar
+java -ea -cp "${jar}" org.oewntk.sql.out.SourcesGenerator "${outdir}"
