@@ -57,6 +57,7 @@ object DeSerializeNIDs {
 	 * @throws ClassNotFoundException class not found exception
 	 */
 	@Throws(IOException::class, ClassNotFoundException::class)
+	@Suppress("UNCHECKED_CAST")
 	fun deSerializeNIDs(`is`: InputStream): Map<String, Int> {
 		return deSerialize(`is`) as Map<String, Int>
 	}
