@@ -12,6 +12,24 @@ import java.io.PrintStream
  */
 object Lexes {
 
+	/**
+	 * Make lex NID map
+	 */
+
+	/**
+	 * Make lex key to NID
+	 */
+	fun makeLexesNIDs(
+		lexes: Collection<Lex>,
+	): Map<Key, Int> {
+		return lexes
+			.asSequence()
+			.map { Key.W_P_A.of_t(it) }
+			.sorted()
+			.withIndex()
+			.associate { it.value to it.index + 1 } // map(of_t(lex), nid)
+	}
+
 	// lexes
 
 	/**
@@ -32,12 +50,7 @@ object Lexes {
 	): Map<Key, Int> {
 
 		// lex key to NID
-		val lexKeyToNID: Map<Key, Int> = lexes
-			.asSequence()
-			.map { Key.W_P_A.of_t(it) }
-			.sorted()
-			.withIndex()
-			.associate { it.value to it.index + 1 } // map(of_t(lex), nid)
+		val lexKeyToNID: Map<Key, Int> = makeLexesNIDs(lexes)
 
 		// insert map
 		val columns = listOf(Names.LEXES.luid, Names.LEXES.posid, Names.LEXES.wordid, Names.LEXES.casedwordid).joinToString(",")
@@ -65,6 +78,7 @@ object Lexes {
 	}
 
 	// words
+
 	/**
 	 * Generate words table
 	 *
