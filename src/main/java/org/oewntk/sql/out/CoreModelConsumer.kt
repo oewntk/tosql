@@ -54,7 +54,7 @@ class CoreModelConsumer(
     /**
      * Cased word to NID map
      */
-    var casedWordToNID: Map<String, Int>? = null
+    private var casedWordToNID: Map<String, Int>? = null
 
     /**
      * Synset to NID map
