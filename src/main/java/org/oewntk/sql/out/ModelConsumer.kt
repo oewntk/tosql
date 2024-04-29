@@ -27,94 +27,94 @@ import java.util.function.Consumer
  * @see "https://sqlunet.sourceforge.net/schema.html"
  */
 class ModelConsumer(
-	private val outDir: File
+    private val outDir: File,
 ) : Consumer<Model> {
 
-	override fun accept(model: Model) {
-		Tracing.psInfo.printf("[Model] %s%n", model.sources.contentToString())
+    override fun accept(model: Model) {
+        Tracing.psInfo.printf("[Model] %s%n", model.sources.contentToString())
 
-		// core
-		val coreConsumer = CoreModelConsumer(outDir)
-		coreConsumer.accept(model)
+        // core
+        val coreConsumer = CoreModelConsumer(outDir)
+        coreConsumer.accept(model)
 
-		// verb frames
-		try {
-			frames(outDir, model.verbFrames)
-		} catch (e: FileNotFoundException) {
-			e.printStackTrace(Tracing.psErr)
-		}
+        // verb frames
+        try {
+            frames(outDir, model.verbFrames)
+        } catch (e: FileNotFoundException) {
+            e.printStackTrace(Tracing.psErr)
+        }
 
-		// verb templates
-		try {
-			templates(outDir, coreConsumer, model.sensesById, model.verbTemplatesById)
-		} catch (e: FileNotFoundException) {
-			e.printStackTrace(Tracing.psErr)
-		}
-	}
+        // verb templates
+        try {
+            templates(outDir, coreConsumer, model.sensesById, model.verbTemplatesById)
+        } catch (e: FileNotFoundException) {
+            e.printStackTrace(Tracing.psErr)
+        }
+    }
 
-	/**
-	 * Consume frames
-	 *
-	 * @param outDir     out dir
-	 * @param verbFrames verb frames
-	 * @throws FileNotFoundException file not found exception
-	 */
-	@Throws(FileNotFoundException::class)
-	private fun frames(outDir: File, verbFrames: Collection<VerbFrame>) {
-		PrintStream(
-			FileOutputStream(File(outDir, makeFilename(Names.VFRAMES.FILE))),
-			true,
-			StandardCharsets.UTF_8
-		).use { ps ->
-			VerbFrames.generateVerbFrames(ps, verbFrames)
-		}
-	}
+    /**
+     * Consume frames
+     *
+     * @param outDir     out dir
+     * @param verbFrames verb frames
+     * @throws FileNotFoundException file not found exception
+     */
+    @Throws(FileNotFoundException::class)
+    private fun frames(outDir: File, verbFrames: Collection<VerbFrame>) {
+        PrintStream(
+            FileOutputStream(File(outDir, makeFilename(Names.VFRAMES.FILE))),
+            true,
+            StandardCharsets.UTF_8
+        ).use { ps ->
+            VerbFrames.generateVerbFrames(ps, verbFrames)
+        }
+    }
 
-	/**
-	 * Consume templates
-	 *
-	 * @param outDir            out dir
-	 * @param coreConsumer      core consumer
-	 * @param sensesById        senses by id
-	 * @param verbTemplatesById verb templates by id
-	 * @throws FileNotFoundException file not found exception
-	 */
-	@Throws(FileNotFoundException::class)
-	private fun templates(
-		outDir: File,
-		coreConsumer: CoreModelConsumer,
-		sensesById: Map<String, Sense>?,
-		verbTemplatesById: Map<Int, VerbTemplate>
-	) {
-		PrintStream(
-			FileOutputStream(File(outDir, makeFilename(Names.SENSES_VTEMPLATES.FILE))),
-			true,
-			StandardCharsets.UTF_8
-		).use { ps ->
-			generateSensesVerbTemplates(
-				ps,
-				sensesById!!,
-				coreConsumer.synsetIdToNID!!,
-				coreConsumer.lexKeyToNID!!,
-				coreConsumer.wordToNID!!
-			)
-		}
-		val toString = { entry: Pair<Int, VerbTemplate> ->
-			"${entry.first}, '${escape(entry.second.template)}'"
-		}
+    /**
+     * Consume templates
+     *
+     * @param outDir            out dir
+     * @param coreConsumer      core consumer
+     * @param sensesById        senses by id
+     * @param verbTemplatesById verb templates by id
+     * @throws FileNotFoundException file not found exception
+     */
+    @Throws(FileNotFoundException::class)
+    private fun templates(
+        outDir: File,
+        coreConsumer: CoreModelConsumer,
+        sensesById: Map<String, Sense>?,
+        verbTemplatesById: Map<Int, VerbTemplate>,
+    ) {
+        PrintStream(
+            FileOutputStream(File(outDir, makeFilename(Names.SENSES_VTEMPLATES.FILE))),
+            true,
+            StandardCharsets.UTF_8
+        ).use { ps ->
+            generateSensesVerbTemplates(
+                ps,
+                sensesById!!,
+                coreConsumer.synsetIdToNID!!,
+                coreConsumer.lexKeyToNID!!,
+                coreConsumer.wordToNID!!
+            )
+        }
+        val toString = { entry: Pair<Int, VerbTemplate> ->
+            "${entry.first}, '${escape(entry.second.template)}'"
+        }
 
-		PrintStream(
-			FileOutputStream(File(outDir, makeFilename(Names.VTEMPLATES.FILE))),
-			true,
-			StandardCharsets.UTF_8
-		).use { ps ->
-			generateTable(
-				ps,
-				Names.VTEMPLATES.TABLE,
-				listOf(Names.VTEMPLATES.templateid, Names.VTEMPLATES.template).joinToString(","),
-				verbTemplatesById,
-				toString
-			)
-		}
-	}
+        PrintStream(
+            FileOutputStream(File(outDir, makeFilename(Names.VTEMPLATES.FILE))),
+            true,
+            StandardCharsets.UTF_8
+        ).use { ps ->
+            generateTable(
+                ps,
+                Names.VTEMPLATES.TABLE,
+                listOf(Names.VTEMPLATES.templateid, Names.VTEMPLATES.template).joinToString(","),
+                verbTemplatesById,
+                toString
+            )
+        }
+    }
 }
