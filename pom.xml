@@ -185,6 +185,7 @@
               <goal>shade</goal>
             </goals>
             <configuration>
+              <outputFile>${project.build.directory}/generator-uber.jar</outputFile>
               <transformers>
                 <transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
                   <manifestEntries>

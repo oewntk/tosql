@@ -27,7 +27,7 @@ if [ "${outdir}" == "" ]; then
 fi
 
 m=wn
-jar=target/tosql-1.0.5-uber.jar
+jar=target/generator-uber.jar
 if [ "$*" != "" ]; then
   indir="$1"
   shift
