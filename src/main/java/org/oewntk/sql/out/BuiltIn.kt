@@ -54,7 +54,7 @@ object BuiltIn {
         arrayOf("consumption", "v", "verb.consumption", 34),
         arrayOf("contact", "v", "verb.contact", 35),
         arrayOf("creation", "v", "verb.creation", 36),
-        arrayOf("emotion", "v", "verb.emotion", 37),  //
+        arrayOf("emotion", "v", "verb.emotion", 37),  
         arrayOf("motion", "v", "verb.motion", 38),
         arrayOf("perception", "v", "verb.perception", 39),
         arrayOf("possession", "v", "verb.possession", 40),
