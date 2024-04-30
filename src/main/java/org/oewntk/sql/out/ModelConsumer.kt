@@ -46,7 +46,7 @@ class ModelConsumer(
 
         // verb templates
         try {
-            templates(outDir, coreConsumer, model.sensesById, model.verbTemplatesById)
+            templates(outDir, coreConsumer, model.sensesById, model.verbTemplatesById!!)
         } catch (e: FileNotFoundException) {
             e.printStackTrace(Tracing.psErr)
         }
