@@ -45,6 +45,7 @@
   </dependencies>
 
   <build>
+
     <plugins>
 
       <plugin>
@@ -197,6 +198,54 @@
                   <excludes>
                     <exclude>META-INF/MANIFEST.MF</exclude>
                   </excludes>
+                  <includes>
+                    <include>org/oewntk/sql/out/SchemaGenerator.class</include>
+                    <include>org/oewntk/sql/out/SchemaGenerator$Companion.class</include>
+                    <include>org/oewntk/sql/out/SourcesGenerator.class</include>
+                    <include>org/oewntk/sql/out/SourcesGenerator$Companion.class</include>
+                    <include>org/oewntk/sql/out/Variables.class</include>
+                    <include>org/oewntk/sql/out/Variables$Companion.class</include>
+                    <include>org/oewntk/sql/out/Names.class</include>
+                    <include>org/oewntk/sql/out/Names$**.class</include>
+                    <include>wn/sqltemplates/**</include>
+                    <include>wn/Names.properties</include>
+                    <include>wn/NamesCompat.properties</include>
+                    <include>kotlin/**</include>
+
+                    <!--
+                    org/oewntk/sql/out/SchemaGenerator.class" />
+                    org/oewntk/sql/out/Variables.class" />
+                    org/oewntk/sql/out/Names$ADJPOSITIONS.class" />
+                    org/oewntk/sql/out/Names$CASEDWORDS.class" />
+                    org/oewntk/sql/out/Names$DOMAINS.class" />
+                    org/oewntk/sql/out/Names$LEXES.class" />
+                    org/oewntk/sql/out/Names$LEXES_MORPHS.class" />
+                    org/oewntk/sql/out/Names$LEXES_PRONUNCIATIONS.class" />
+                    org/oewntk/sql/out/Names$MORPHS.class" />
+                    org/oewntk/sql/out/Names$POSES.class" />
+                    org/oewntk/sql/out/Names$PRONUNCIATIONS.class" />
+                    org/oewntk/sql/out/Names$RELS.class" />
+                    org/oewntk/sql/out/Names$SAMPLES.class" />
+                    org/oewntk/sql/out/Names$SENSES.class" />
+                    org/oewntk/sql/out/Names$SENSES_ADJPOSITIONS.class" />
+                    org/oewntk/sql/out/Names$SENSES_SENSES.class" />
+                    org/oewntk/sql/out/Names$SENSES_VFRAMES.class" />
+                    org/oewntk/sql/out/Names$SENSES_VTEMPLATES.class" />
+                    org/oewntk/sql/out/Names$SYNSETS.class" />
+                    org/oewntk/sql/out/Names$SYNSETS_SYNSETS.class" />
+                    org/oewntk/sql/out/Names$VFRAMES.class" />
+                    org/oewntk/sql/out/Names$VTEMPLATES.class" />
+                    org/oewntk/sql/out/Names$WORDS.class" />
+                    org/oewntk/sql/out/Names.class" />
+                    org/oewntk/sql/out/SourcesGenerator.class" />
+                    wn/sqltemplates" />
+                    wn/Names.properties" />
+                    wn/NamesCompat.properties" />
+                    -->
+                  </includes>
+<!--                  <excludes>-->
+<!--                    <exclude>**/*</exclude>-->
+<!--                  </excludes>-->
                 </filter>
               </filters>
               <shadedArtifactAttached>true</shadedArtifactAttached>
