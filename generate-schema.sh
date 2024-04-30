@@ -1,12 +1,8 @@
 #!/bin/bash
 
 #
-# Copyright (c) 2021. Bernard Bou.
+# Copyright (c) 2021-2024. Bernard Bou.
 #
-# -compat
-# outdir
-# indir
-# files*: external sql template file names, if none they are taken from resources
 
 R='\u001b[31m'
 G='\u001b[32m'

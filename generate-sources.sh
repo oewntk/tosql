@@ -1,9 +1,8 @@
 #!/bin/bash
 
 #
-# Copyright (c) 2021. Bernard Bou.
+# Copyright (c) 2021-2024. Bernard Bou.
 #
-# outdir
 
 export R='\u001b[31m'
 export G='\u001b[32m'
