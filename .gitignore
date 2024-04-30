@@ -5,6 +5,7 @@
 /sql*
 **/_*/
 **/_*
+/dependency-reduced-pom.xml
 /doc/pages/
 /doc/cases/
 /doc/pdf/fks*.pdf
