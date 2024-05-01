@@ -27,7 +27,7 @@ object NIDMaps {
      *
      * @param map map of K-integer pairs
      * @param key key
-     * @param <K> type of key
+     * @param K type of key
      * @return nid
      */
     fun <K> lookup(map: Map<K, Int>, key: K): Int {
@@ -58,9 +58,9 @@ object NIDMaps {
      *
      * @param map map
      * @param key key
-     * @param <K> type of key
+     * @param K type of key
      * @return nid or "NULL"
-    </K> */
+     */
     fun <K> lookupNullable(map: Map<K, Int>, key: K): String {
         val value = map[key] ?: return "NULL"
         return value.toString()
