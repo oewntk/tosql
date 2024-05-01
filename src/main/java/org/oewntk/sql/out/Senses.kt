@@ -87,17 +87,7 @@ object Senses {
             val lexNID = NIDMaps.lookup(lexKeyToNIDMap, of_t(lex))
             val casedWordNID = NIDMaps.lookupNullable(casedWordIdToNIDMap, casedWord)
             val tagCnt = tagCount?.count?.toString() ?: "NULL"
-            String.format(
-                "'%s',%d,%d,%d,%d,%s,%s,%s",
-                escape(sensekey),
-                senseNum,
-                synsetNID,
-                lexNID,
-                wordNID,
-                casedWordNID,
-                lexid,
-                tagCnt
-            )
+            "'${escape(sensekey)}',$senseNum,$synsetNID,$lexNID,$wordNID,$casedWordNID,$lexid,$tagCnt"
         }
         if (!Printers.WITH_COMMENT) {
             printInsert(ps, Names.SENSES.TABLE, columns, senses, makeId, idToNID, toString)
@@ -109,7 +99,7 @@ object Senses {
                 val sensekey = sense.senseKey
                 arrayOf(
                     toString.invoke(sense),
-                    String.format("%s %s '%s'", sensekey, synsetId, casedWord),
+                    "$sensekey $synsetId '$casedWord'"
                 )
             }
             printInsertWithComment(ps, Names.SENSES.TABLE, columns, senses, makeId, idToNID, toStringWithComment)
@@ -168,21 +158,11 @@ object Senses {
                     val synsetId2 = sense2!!.synsetId
                     val lex2 = sense2.lex
                     val word2 = lex2.lCLemma
-
                     val lu2NID = NIDMaps.lookup(lexKeyToNIDMap, of_t(lex2))
                     val wordNID2 = NIDMaps.lookupLC(wordIdToNIDMap, word2)
                     val synsetNID2 = NIDMaps.lookup(synsetIdToNIDMap, synsetId2)
                     strings.add(
-                        String.format(
-                            "%d,%d,%d,%d,%d,%d,%d",
-                            synsetNID1,
-                            lu1NID,
-                            wordNID1,
-                            synsetNID2,
-                            lu2NID,
-                            wordNID2,
-                            relationId
-                        )
+                        "$synsetNID1,$lu1NID,$wordNID1,$synsetNID2,$lu2NID,$wordNID2,$relationId"
                     )
                 }
             }
@@ -208,14 +188,7 @@ object Senses {
                         stringWithComments.add(
                             arrayOf(
                                 strings[i],
-                                String.format(
-                                    "%s '%s' -%s-> %s '%s'",
-                                    synsetId1,
-                                    casedword1,
-                                    relation,
-                                    synsetId2,
-                                    casedword2
-                                ),
+                                "$synsetId1 '$casedword1' -$relation-> $synsetId2 '$casedword2'"
                             )
                         )
                         i++
@@ -263,7 +236,7 @@ object Senses {
             val synsetNID = NIDMaps.lookup(synsetIdToNIDMap, synsetId)
             val luNID = NIDMaps.lookup(lexKeyToNIDMap, of_t(lex))
             val wordNID = NIDMaps.lookupLC(wordIdToNIDMap, word)
-            String.format("%d,%d,%d,'%s'", synsetNID, luNID, wordNID, sense.adjPosition)
+            "$synsetNID,$luNID,$wordNID,'${sense.adjPosition}'"
         }
         if (!Printers.WITH_COMMENT) {
             printInsert(ps, Names.SENSES_ADJPOSITIONS.TABLE, columns, senseSeq, toString, false)
@@ -318,7 +291,7 @@ object Senses {
 
             for (frameId in sense.verbFrames!!) {
                 val frameNID = VerbFrames.VERB_FRAME_ID_TO_NIDS[frameId]!!
-                strings.add(String.format("%d,%d,%d,%d", synsetNID, luNID, wordNID, frameNID))
+                strings.add("$synsetNID,$luNID,$wordNID,$frameNID")
             }
             strings
         }
@@ -382,7 +355,7 @@ object Senses {
             val luNID = NIDMaps.lookup(lexKeyToNIDMap, of_t(lex))
 
             for (templateId in sense.verbTemplates!!) {
-                strings.add(String.format("%d,%d,%d,%d", synsetNID, luNID, wordNID, templateId))
+                strings.add("$synsetNID,$luNID,$wordNID,$templateId")
             }
             strings
         }

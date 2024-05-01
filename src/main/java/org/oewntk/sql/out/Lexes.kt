@@ -58,7 +58,7 @@ object Lexes {
             val wordNID = NIDMaps.lookupLC(wordToNID, word)
             val casedWordNID = NIDMaps.lookupNullable(casedwordToNID, lex.lemma)
             val type = lex.type
-            String.format("'%c',%d,%s", type, wordNID, casedWordNID)
+            "'$type',$wordNID,$casedWordNID"
         }
         if (!Printers.WITH_COMMENT) {
             Printers.printInsert(ps, Names.LEXES.TABLE, columns, lexes, lexKeyToNID, toString)
@@ -68,7 +68,7 @@ object Lexes {
                 val type = lex.type
                 arrayOf(
                     toString.invoke(lex),
-                    String.format("%c '%s'", type, casedWord),
+                    "$type '$casedWord'",
                 )
             }
             Printers.printInsertWithComment(ps, Names.LEXES.TABLE, columns, lexes, lexKeyToNID, toStrings)
@@ -91,7 +91,7 @@ object Lexes {
 
         // insert map
         val columns = listOf(Names.WORDS.wordid, Names.WORDS.word).joinToString(",")
-        val toString = { word: String -> String.format("'%s'", Utils.escape(word)) }
+        val toString = { word: String -> "'${Utils.escape(word)}'" }
         Printers.printInsert(ps, Names.WORDS.TABLE, columns, wordToNID, toString)
 
         return wordToNID
@@ -136,11 +136,8 @@ object Lexes {
         // insert map
         val columns = listOf(Names.CASEDWORDS.casedwordid, Names.CASEDWORDS.casedword, Names.CASEDWORDS.wordid).joinToString(",")
         val toString = { casedWord: String ->
-            String.format(
-                "'%s',%d",
-                Utils.escape(casedWord),
-                NIDMaps.lookupLC(wordIdToNID, casedWord.lowercase())
-            )
+            val nid = NIDMaps.lookupLC(wordIdToNID, casedWord.lowercase())
+            "'${Utils.escape(casedWord)}',$nid"
         }
         Printers.printInsert(ps, Names.CASEDWORDS.TABLE, columns, casedWordToNID, toString)
 
@@ -180,7 +177,7 @@ object Lexes {
 
         // insert map
         val columns = listOf(Names.MORPHS.morphid, Names.MORPHS.morph).joinToString(",")
-        val toString = { morph: String -> String.format("'%s'", Utils.escape(morph)) }
+        val toString = { morph: String -> "'${Utils.escape(morph)}'" }
         Printers.printInsert(ps, Names.MORPHS.TABLE, columns, morphToNID, toString)
 
         return morphToNID
@@ -218,7 +215,7 @@ object Lexes {
             val type = lex.type
             for (morph in lex.forms!!) {
                 val morphNID = NIDMaps.lookup(morphToNID, morph)
-                strings.add(String.format("%d,%d,%d,'%c'", morphNID, lexNID, wordNID, type))
+                strings.add("$morphNID,$lexNID,$wordNID,'$type'")
             }
             strings
         }
@@ -235,7 +232,7 @@ object Lexes {
                         stringsWithComment.add(
                             arrayOf(
                                 strings[i],
-                                String.format("'%s' '%s' %c", morph, casedWord, type)
+                                "'$morph' '$casedWord' $type"
                             )
                         )
                     }
@@ -278,7 +275,7 @@ object Lexes {
 
         // insert map
         val columns = listOf(Names.PRONUNCIATIONS.pronunciationid, Names.PRONUNCIATIONS.pronunciation).joinToString(",")
-        val toString = { pronunciationValue: String -> String.format("'%s'", Utils.escape(pronunciationValue)) }
+        val toString = { pronunciationValue: String -> "'${Utils.escape(pronunciationValue)}'" }
         Printers.printInsert(ps, Names.PRONUNCIATIONS.TABLE, columns, pronunciationValueToNID, toString)
 
         return pronunciationValueToNID
@@ -320,19 +317,10 @@ object Lexes {
             val lexNID = NIDMaps.lookup(lexKeyToNID, Key.W_P_A.of_t(lex))
             val type = lex.type
             for (pronunciation in lex.pronunciations!!) {
-                val variety = pronunciation.variety
                 val value = pronunciation.value
+                val variety = if (pronunciation.variety == null) "NULL" else "'${pronunciation.variety}'"
                 val pronunciationNID = NIDMaps.lookup(pronunciationToNID, value)
-                strings.add(
-                    String.format(
-                        "%d,%s,%d,%d,'%c'",
-                        pronunciationNID,
-                        if (variety == null) "NULL" else "'$variety'",
-                        lexNID,
-                        wordNID,
-                        type
-                    )
-                )
+                strings.add("$pronunciationNID,$variety,$lexNID,$wordNID,'$type'")
             }
             strings
         }
@@ -346,18 +334,12 @@ object Lexes {
                 val type = lex.type
                 if (lex.pronunciations != null) {
                     for ((i, pronunciation) in lex.pronunciations!!.withIndex()) {
-                        val variety = pronunciation.variety
                         val value = pronunciation.value
+                        val variety = if (pronunciation.variety == null) "" else " [${pronunciation.variety}]"
                         stringsWithComment.add(
                             arrayOf(
                                 strings[i],
-                                String.format(
-                                    "%s%s '%s' %c",
-                                    value,
-                                    if (variety == null) "" else " [$variety]",
-                                    casedWord,
-                                    type
-                                ),
+                                "$value$variety '$casedWord' $type"
                             )
                         )
                     }

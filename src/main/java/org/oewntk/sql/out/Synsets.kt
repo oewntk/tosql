@@ -53,7 +53,7 @@ object Synsets {
             val definition = synset.definition
             val domain = synset.lexfile
             val lexdomainId = BuiltIn.LEXFILE_NIDS[domain]!!
-            String.format("'%c',%d,'%s'", type, lexdomainId, escape(definition!!))
+            "'$type',$lexdomainId,'${escape(definition!!)}'"
         }
         if (!Printers.WITH_COMMENT) {
             printInsert(ps, Names.SYNSETS.TABLE, columns, synsets, { it.synsetId }, synsetIdToNID, toString)
@@ -105,7 +105,7 @@ object Synsets {
                 val relationId = BuiltIn.OEWN_RELATION_TYPES[relation]!!
                 for (synset2Id in relations[relation]!!) {
                     val synset2NID = NIDMaps.lookup(synsetIdToNIDMap, synset2Id)
-                    strings.add(String.format("%d,%d,%d", synset1NID, synset2NID, relationId))
+                    strings.add("$synset1NID,$synset2NID,$relationId")
                 }
             }
             strings
@@ -124,7 +124,7 @@ object Synsets {
                         stringsWithComment.add(
                             arrayOf(
                                 strings[i],
-                                String.format("%s -%s-> %s", synset1Id, relation, synsetId2),
+                                "$synset1Id -$relation-> $synsetId2"
                             )
                         )
                         i++
@@ -158,7 +158,7 @@ object Synsets {
             val synsetId1 = synset.synsetId
             val synsetNID1 = NIDMaps.lookup(synsetIdToNIDMap, synsetId1)
             for (example in synset.examples!!) {
-                strings.add(String.format("%d,'%s'", synsetNID1, escape(example)))
+                strings.add("$synsetNID1,'${escape(example)}'")
             }
             strings
         }
