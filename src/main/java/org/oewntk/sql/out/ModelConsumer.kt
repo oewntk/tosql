@@ -93,7 +93,7 @@ class ModelConsumer(
         ).use { 
             generateSensesVerbTemplates(
                 it,
-                sensesById!!,
+                sensesById,
                 coreConsumer.synsetIdToNID!!,
                 coreConsumer.lexKeyToNID!!,
                 coreConsumer.wordToNID!!
