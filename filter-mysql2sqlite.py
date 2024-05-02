@@ -8,11 +8,14 @@ import re
 c_en1=r'([^\s]+)\s*ENUM\s*\(([^)]+)\)'
 c_en2=r'\1 CHARACTER (1) CHECK( \1 IN (\2) )'
 
-c_bc1=r'COLLATE\s+utf8_bin\s*'
+c_bc1=r'COLLATE\s+utf8mb4_bin\s*'
 c_bc2=r''
 
 c_cc1=r'COLLATE\s+utf8mb4_0900_as_cs\s*'
 c_cc2=r''
+
+c_ci1=r'COLLATE\s+utf8mb4_0900_as_ci\s*'
+c_ci2=r''
 
 c_dcs1=r'DEFAULT\s+CHARSET=utf8mb4'
 c_dcs2=r''
@@ -78,6 +81,7 @@ for line in lines:
 		line=replace(c_en1,c_en2,line)
 		line=replace(c_bc1,c_bc2,line)
 		line=replace(c_cc1,c_cc2,line)
+		line=replace(c_ci1,c_ci2,line)
 		line=replace(c_dcs1,c_dcs2,line)
 		line=replace(c_cs1,c_cs2,line)
 		line=replace(c_uk1,c_uk2,line)
