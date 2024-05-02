@@ -1,6 +1,6 @@
 CREATE TABLE ${senses.table} (
 ${senses.senseid} INT NOT NULL,
-${senses.sensekey} VARCHAR(100) mb4 COLLATE utf8mb4_bin DEFAULT NULL,
+${senses.sensekey} VARCHAR(100) COLLATE utf8mb4_bin DEFAULT NULL,
 ${senses.synsetid} INT NOT NULL,
 ${senses.luid} INT NOT NULL,
 ${senses.wordid} INT NOT NULL,
