@@ -107,8 +107,8 @@ object Printers {
      */
     fun <T> printInsertWithComment(
         ps: PrintStream,
-        table: String?,
-        columns: String?,
+        table: String,
+        columns: String,
         objects: Collection<T>,
         toId: (T) -> String,
         objectIdToNID: Map<String, Int>,
@@ -413,7 +413,7 @@ object Printers {
      * @param mapper  object arrays by id
      * @param T       type of objects
      */
-    fun <T : Comparable<T>?> printInsert2(
+    fun <T : Comparable<T>> printInsert2(
         ps: PrintStream,
         table: String,
         columns: String,
@@ -446,7 +446,7 @@ object Printers {
      * @param mapper  object arrays by id
      * @param T       type of objects
      */
-    fun <T : Comparable<T>?> printInsert3(
+    fun <T : Comparable<T>> printInsert3(
         ps: PrintStream,
         table: String,
         columns: String,

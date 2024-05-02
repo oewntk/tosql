@@ -61,7 +61,7 @@ class SchemaGenerator
         // Single output if console or file
         if (outputFileOrDir == null || outputFileOrDir.isFile) {
             if (outputFileOrDir == null) System.out else PrintStream(outputFileOrDir).use { ps ->
-                processTemplates(module, inputSubdir, inputs) { `is`: InputStream, _: String ->
+                processTemplates(module, inputSubdir, inputs) { `is`: InputStream, _ ->
                     try {
                         variables.varSubstitutionInIS(`is`, ps, useBackticks = true, compress = true)
                     } catch (e: IOException) {

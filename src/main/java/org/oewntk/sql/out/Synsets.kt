@@ -96,41 +96,43 @@ object Synsets {
             Names.SEMRELATIONS.relationid
         ).joinToString(",")
         val toString = { synset: Synset ->
-            val strings = ArrayList<String>()
+            val result = ArrayList<String>()
             val synset1Id = synset.synsetId
             val synset1NID = NIDMaps.lookup(synsetIdToNIDMap, synset1Id)
-            val relations: Map<String, Set<String>>? = synset.relations
-            for (relation in relations!!.keys) {
-                require(BuiltIn.OEWN_RELATION_TYPES.containsKey(relation)) { relation }
-                val relationId = BuiltIn.OEWN_RELATION_TYPES[relation]!!
-                for (synset2Id in relations[relation]!!) {
-                    val synset2NID = NIDMaps.lookup(synsetIdToNIDMap, synset2Id)
-                    strings.add("$synset1NID,$synset2NID,$relationId")
+            if (synset.relations != null) {
+                for (relation in synset.relations!!.keys) {
+                    require(BuiltIn.OEWN_RELATION_TYPES.containsKey(relation)) { relation }
+                    val relationId = BuiltIn.OEWN_RELATION_TYPES[relation]!!
+                    for (synset2Id in synset.relations!![relation]!!) {
+                        val synset2NID = NIDMaps.lookup(synsetIdToNIDMap, synset2Id)
+                        result.add("$synset1NID,$synset2NID,$relationId")
+                    }
                 }
             }
-            strings
+            result
         }
         if (!Printers.WITH_COMMENT) {
             printInserts(ps, Names.SEMRELATIONS.TABLE, columns, synsetSeq, toString, false)
         } else {
             val toStrings = { synset: Synset ->
-                val strings = toString.invoke(synset)
-                val stringsWithComment = ArrayList<Array<String>>()
+                val result = ArrayList<Array<String>>()
+                val data = toString.invoke(synset)
                 val synset1Id = synset.synsetId
-                val relations: Map<String, Set<String>>? = synset.relations
-                var i = 0
-                for (relation in relations!!.keys) {
-                    for (synsetId2 in relations[relation]!!) {
-                        stringsWithComment.add(
-                            arrayOf(
-                                strings[i],
-                                "$synset1Id -$relation-> $synsetId2"
+                if (synset.relations != null) {
+                    var i = 0
+                    for (relation in synset.relations!!.keys) {
+                        for (synsetId2 in synset.relations!![relation]!!) {
+                            result.add(
+                                arrayOf(
+                                    data[i],
+                                    "$synset1Id -$relation-> $synsetId2"
+                                )
                             )
-                        )
-                        i++
+                            i++
+                        }
                     }
                 }
-                stringsWithComment
+                result
             }
             printInsertsWithComment(ps, Names.SEMRELATIONS.TABLE, columns, synsetSeq, toStrings, false)
         }

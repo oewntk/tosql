@@ -206,9 +206,9 @@ object BuiltIn {
      *
      * @param ps print stream
      */
-    fun generateDomains(ps: PrintStream?) {
+    fun generateDomains(ps: PrintStream) {
         printInsert3(
-            ps!!,
+            ps,
             Names.DOMAINS.TABLE,
             listOf(Names.DOMAINS.domainid, Names.DOMAINS.domain, Names.DOMAINS.posid, Names.DOMAINS.domainname).joinToString(","),
             "%n(%d,'%s','%s','%s')",

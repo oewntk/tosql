@@ -67,7 +67,7 @@ class CoreModelConsumer(
         try {
             lexes(outDir, model.lexes)
             synsets(outDir, model.synsets)
-            senses(outDir, model.senses, model.sensesById)
+            senses(outDir, model.senses, model.sensesById!!)
             builtins(outDir)
         } catch (e: FileNotFoundException) {
             e.printStackTrace(Tracing.psErr)
@@ -87,52 +87,52 @@ class CoreModelConsumer(
             FileOutputStream(File(outDir, makeFilename(Names.WORDS.FILE))),
             true,
             StandardCharsets.UTF_8
-        ).use { ps ->
-            wordToNID = generateWords(ps, lexes)
+        ).use {
+            wordToNID = generateWords(it, lexes)
         }
         PrintStream(
             FileOutputStream(File(outDir, makeFilename(Names.CASEDWORDS.FILE))),
             true,
             StandardCharsets.UTF_8
-        ).use { ps ->
-            casedWordToNID = generateCasedWords(ps, lexes, wordToNID!!)
+        ).use {
+            casedWordToNID = generateCasedWords(it, lexes, wordToNID!!)
         }
         PrintStream(
             FileOutputStream(File(outDir, makeFilename(Names.LEXES.FILE))),
             true,
             StandardCharsets.UTF_8
-        ).use { ps ->
-            lexKeyToNID = generateLexes(ps, lexes, wordToNID!!, casedWordToNID!!)
+        ).use {
+            lexKeyToNID = generateLexes(it, lexes, wordToNID!!, casedWordToNID!!)
         }
         var morphToNID: Map<String, Int>
         PrintStream(
             FileOutputStream(File(outDir, makeFilename(Names.MORPHS.FILE))),
             true,
             StandardCharsets.UTF_8
-        ).use { ps ->
-            morphToNID = generateMorphs(ps, lexes)
+        ).use {
+            morphToNID = generateMorphs(it, lexes)
         }
         PrintStream(
             FileOutputStream(File(outDir, makeFilename(Names.LEXES_MORPHS.FILE))),
             true,
             StandardCharsets.UTF_8
-        ).use { ps ->
-            generateLexesMorphs(ps, lexes, lexKeyToNID!!, wordToNID!!, morphToNID)
+        ).use {
+            generateLexesMorphs(it, lexes, lexKeyToNID!!, wordToNID!!, morphToNID)
         }
         var pronunciationToNID: Map<String, Int>
         PrintStream(
             FileOutputStream(File(outDir, makeFilename(Names.PRONUNCIATIONS.FILE))),
             true,
             StandardCharsets.UTF_8
-        ).use { ps ->
-            pronunciationToNID = generatePronunciations(ps, lexes)
+        ).use {
+            pronunciationToNID = generatePronunciations(it, lexes)
         }
         PrintStream(
             FileOutputStream(File(outDir, makeFilename(Names.LEXES_PRONUNCIATIONS.FILE))),
             true,
             StandardCharsets.UTF_8
-        ).use { ps ->
-            generateLexesPronunciations(ps, lexes, lexKeyToNID!!, wordToNID!!, pronunciationToNID)
+        ).use {
+            generateLexesPronunciations(it, lexes, lexKeyToNID!!, wordToNID!!, pronunciationToNID)
         }
     }
 
@@ -149,22 +149,22 @@ class CoreModelConsumer(
             FileOutputStream(File(outDir, makeFilename(Names.SYNSETS.FILE))),
             true,
             StandardCharsets.UTF_8
-        ).use { ps ->
-            synsetIdToNID = generateSynsets(ps, synsets)
+        ).use {
+            synsetIdToNID = generateSynsets(it, synsets)
         }
         PrintStream(
             FileOutputStream(File(outDir, makeFilename(Names.SAMPLES.FILE))),
             true,
             StandardCharsets.UTF_8
-        ).use { ps ->
-            generateSamples(ps, synsets, synsetIdToNID!!)
+        ).use {
+            generateSamples(it, synsets, synsetIdToNID!!)
         }
         PrintStream(
             FileOutputStream(File(outDir, makeFilename(Names.SEMRELATIONS.FILE))),
             true,
             StandardCharsets.UTF_8
-        ).use { ps ->
-            generateSynsetRelations(ps, synsets, synsetIdToNID!!)
+        ).use {
+            generateSynsetRelations(it, synsets, synsetIdToNID!!)
         }
     }
 
@@ -177,35 +177,34 @@ class CoreModelConsumer(
      * @throws FileNotFoundException file not found exception
      */
     @Throws(FileNotFoundException::class)
-    private fun senses(outDir: File, senses: Collection<Sense>, sensesById: Map<String, Sense>?) {
+    private fun senses(outDir: File, senses: Collection<Sense>, sensesById: Map<String, Sense>) {
         PrintStream(
             FileOutputStream(File(outDir, makeFilename(Names.SENSES.FILE))),
             true,
             StandardCharsets.UTF_8
-        ).use { ps ->
-            /* Map<String, Integer> idToNID =*/
-            generateSenses(ps, senses, synsetIdToNID!!, lexKeyToNID!!, wordToNID!!, casedWordToNID!!)
+        ).use {
+            generateSenses(it, senses, synsetIdToNID!!, lexKeyToNID!!, wordToNID!!, casedWordToNID!!)
         }
         PrintStream(
             FileOutputStream(File(outDir, makeFilename(Names.LEXRELATIONS.FILE))),
             true,
             StandardCharsets.UTF_8
-        ).use { ps ->
-            generateSenseRelations(ps, senses, sensesById!!, synsetIdToNID!!, lexKeyToNID!!, wordToNID!!)
+        ).use {
+            generateSenseRelations(it, senses, sensesById, synsetIdToNID!!, lexKeyToNID!!, wordToNID!!)
         }
         PrintStream(
             FileOutputStream(File(outDir, makeFilename(Names.SENSES_VFRAMES.FILE))),
             true,
             StandardCharsets.UTF_8
-        ).use { ps ->
-            generateSensesVerbFrames(ps, senses, synsetIdToNID!!, lexKeyToNID!!, wordToNID!!)
+        ).use {
+            generateSensesVerbFrames(it, senses, synsetIdToNID!!, lexKeyToNID!!, wordToNID!!)
         }
         PrintStream(
             FileOutputStream(File(outDir, makeFilename(Names.SENSES_ADJPOSITIONS.FILE))),
             true,
             StandardCharsets.UTF_8
-        ).use { ps ->
-            generateSensesAdjPositions(ps, senses, synsetIdToNID!!, lexKeyToNID!!, wordToNID!!)
+        ).use {
+            generateSensesAdjPositions(it, senses, synsetIdToNID!!, lexKeyToNID!!, wordToNID!!)
         }
     }
 
@@ -218,34 +217,34 @@ class CoreModelConsumer(
          * @throws FileNotFoundException file not found exception
          */
         @Throws(FileNotFoundException::class)
-        fun builtins(outDir: File?) {
+        fun builtins(outDir: File) {
             PrintStream(
                 FileOutputStream(File(outDir, makeFilename(Names.DOMAINS.TABLE))),
                 true,
                 StandardCharsets.UTF_8
-            ).use { ps ->
-                generateDomains(ps)
+            ).use {
+                generateDomains(it)
             }
             PrintStream(
                 FileOutputStream(File(outDir, makeFilename(Names.POSES.FILE))),
                 true,
                 StandardCharsets.UTF_8
-            ).use { ps ->
-                generatePosTypes(ps)
+            ).use {
+                generatePosTypes(it)
             }
             PrintStream(
                 FileOutputStream(File(outDir, makeFilename(Names.ADJPOSITIONS.FILE))),
                 true,
                 StandardCharsets.UTF_8
-            ).use { ps ->
-                generateAdjectivePositionTypes(ps)
+            ).use {
+                generateAdjectivePositionTypes(it)
             }
             PrintStream(
                 FileOutputStream(File(outDir, makeFilename(Names.RELS.FILE))),
                 true,
                 StandardCharsets.UTF_8
-            ).use { ps ->
-                generateRelationTypes(ps)
+            ).use {
+                generateRelationTypes(it)
             }
         }
 

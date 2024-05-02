@@ -46,7 +46,7 @@ class ModelConsumer(
 
         // verb templates
         try {
-            templates(outDir, coreConsumer, model.sensesById, model.verbTemplatesById!!)
+            templates(outDir, coreConsumer, model.sensesById!!, model.verbTemplatesById!!)
         } catch (e: FileNotFoundException) {
             e.printStackTrace(Tracing.psErr)
         }
@@ -65,8 +65,8 @@ class ModelConsumer(
             FileOutputStream(File(outDir, makeFilename(Names.VFRAMES.FILE))),
             true,
             StandardCharsets.UTF_8
-        ).use { ps ->
-            VerbFrames.generateVerbFrames(ps, verbFrames)
+        ).use { 
+            VerbFrames.generateVerbFrames(it, verbFrames)
         }
     }
 
@@ -83,16 +83,16 @@ class ModelConsumer(
     private fun templates(
         outDir: File,
         coreConsumer: CoreModelConsumer,
-        sensesById: Map<String, Sense>?,
+        sensesById: Map<String, Sense>,
         verbTemplatesById: Map<Int, VerbTemplate>,
     ) {
         PrintStream(
             FileOutputStream(File(outDir, makeFilename(Names.SENSES_VTEMPLATES.FILE))),
             true,
             StandardCharsets.UTF_8
-        ).use { ps ->
+        ).use { 
             generateSensesVerbTemplates(
-                ps,
+                it,
                 sensesById!!,
                 coreConsumer.synsetIdToNID!!,
                 coreConsumer.lexKeyToNID!!,
@@ -107,9 +107,9 @@ class ModelConsumer(
             FileOutputStream(File(outDir, makeFilename(Names.VTEMPLATES.FILE))),
             true,
             StandardCharsets.UTF_8
-        ).use { ps ->
+        ).use { 
             generateTable(
-                ps,
+                it,
                 Names.VTEMPLATES.TABLE,
                 listOf(Names.VTEMPLATES.templateid, Names.VTEMPLATES.template).joinToString(","),
                 verbTemplatesById,

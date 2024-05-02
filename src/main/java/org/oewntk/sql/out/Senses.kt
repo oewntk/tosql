@@ -142,59 +142,60 @@ object Senses {
             Names.LEXRELATIONS.relationid
         ).joinToString(",")
         val toString = { sense: Sense ->
-            val strings = ArrayList<String>()
+            val result = ArrayList<String>()
             val synsetId1 = sense.synsetId
             val lex1 = sense.lex
             val word1 = lex1.lCLemma
             val lu1NID = NIDMaps.lookup(lexKeyToNIDMap, of_t(lex1))
             val wordNID1 = NIDMaps.lookupLC(wordIdToNIDMap, word1)
             val synsetNID1 = NIDMaps.lookup(synsetIdToNIDMap, synsetId1)
-            val relations: Map<String, Set<String>>? = sense.relations
-            for (relation in relations!!.keys) {
-                require(BuiltIn.OEWN_RELATION_TYPES.containsKey(relation)) { relation }
-                val relationId = BuiltIn.OEWN_RELATION_TYPES[relation]!!
-                for (senseId2 in relations[relation]!!) {
-                    val sense2 = sensesById[senseId2]
-                    val synsetId2 = sense2!!.synsetId
-                    val lex2 = sense2.lex
-                    val word2 = lex2.lCLemma
-                    val lu2NID = NIDMaps.lookup(lexKeyToNIDMap, of_t(lex2))
-                    val wordNID2 = NIDMaps.lookupLC(wordIdToNIDMap, word2)
-                    val synsetNID2 = NIDMaps.lookup(synsetIdToNIDMap, synsetId2)
-                    strings.add(
-                        "$synsetNID1,$lu1NID,$wordNID1,$synsetNID2,$lu2NID,$wordNID2,$relationId"
-                    )
+            if (sense.relations != null) {
+                for (relation in sense.relations!!.keys) {
+                    require(BuiltIn.OEWN_RELATION_TYPES.containsKey(relation)) { relation }
+                    val relationId = BuiltIn.OEWN_RELATION_TYPES[relation]!!
+                    for (senseId2 in sense.relations!![relation]!!) {
+                        val sense2 = sensesById[senseId2]
+                        val synsetId2 = sense2!!.synsetId
+                        val lex2 = sense2.lex
+                        val word2 = lex2.lCLemma
+                        val lu2NID = NIDMaps.lookup(lexKeyToNIDMap, of_t(lex2))
+                        val wordNID2 = NIDMaps.lookupLC(wordIdToNIDMap, word2)
+                        val synsetNID2 = NIDMaps.lookup(synsetIdToNIDMap, synsetId2)
+                        result.add("$synsetNID1,$lu1NID,$wordNID1,$synsetNID2,$lu2NID,$wordNID2,$relationId")
+                    }
                 }
             }
-            strings
+            result
         }
         if (!Printers.WITH_COMMENT) {
             printInserts(ps, Names.LEXRELATIONS.TABLE, columns, senseSeq, toString, false)
         } else {
             val toStrings = { sense: Sense ->
-                val strings = toString.invoke(sense)
-                val stringWithComments = ArrayList<Array<String>>()
+                val result = ArrayList<Array<String>>()
+                val data = toString.invoke(sense)
                 val synsetId1 = sense.synsetId
                 val lex1 = sense.lex
                 val casedword1 = lex1.lemma
-                val relations: Map<String, Set<String>>? = sense.relations
-                var i = 0
-                for (relation in relations!!.keys) {
-                    for (senseId2 in relations[relation]!!) {
-                        val sense2 = sensesById[senseId2]
-                        val synsetId2 = sense2!!.synsetId
-                        val lex2 = sense2.lex
-                        val casedword2 = lex2.lemma
-                        stringWithComments.add(
-                            arrayOf(
-                                strings[i],
-                                "$synsetId1 '$casedword1' -$relation-> $synsetId2 '$casedword2'"
+
+                 if (sense.relations != null) {
+                    var i = 0
+                    for (relation in sense.relations!!.keys) {
+                        for (senseId2 in sense.relations!![relation]!!) {
+                            val sense2 = sensesById[senseId2]
+                            val synsetId2 = sense2!!.synsetId
+                            val lex2 = sense2.lex
+                            val casedword2 = lex2.lemma
+                            result.add(
+                                arrayOf(
+                                    data[i],
+                                    "$synsetId1 '$casedword1' -$relation-> $synsetId2 '$casedword2'"
+                                )
                             )
-                        )
-                        i++
+                            i++
+                        }
                     }
                 }
-                stringWithComments
+                result
             }
             printInsertsWithComment(ps, Names.LEXRELATIONS.TABLE, columns, senseSeq, toStrings, false)
         }
