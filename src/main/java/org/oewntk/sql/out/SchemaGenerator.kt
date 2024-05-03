@@ -31,7 +31,12 @@ class SchemaGenerator
      * @throws IOException io exception
      */
     @Throws(IOException::class)
-    fun generate(module: String, output: String, inputSubdir: String, inputs: Array<String>?) {
+    fun generate(
+        module: String,
+        output: String,
+        inputSubdir: String,
+        inputs: Array<String>?,
+    ) {
         var outputFileOrDir: File? = null
 
         // Output

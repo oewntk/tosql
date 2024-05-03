@@ -177,7 +177,7 @@ object Senses {
                 val lex1 = sense.lex
                 val casedword1 = lex1.lemma
 
-                 if (sense.relations != null) {
+                if (sense.relations != null) {
                     var i = 0
                     for (relation in sense.relations!!.keys) {
                         for (senseId2 in sense.relations!![relation]!!) {

@@ -65,7 +65,7 @@ class ModelConsumer(
             FileOutputStream(File(outDir, makeFilename(Names.VFRAMES.FILE))),
             true,
             StandardCharsets.UTF_8
-        ).use { 
+        ).use {
             VerbFrames.generateVerbFrames(it, verbFrames)
         }
     }
@@ -90,7 +90,7 @@ class ModelConsumer(
             FileOutputStream(File(outDir, makeFilename(Names.SENSES_VTEMPLATES.FILE))),
             true,
             StandardCharsets.UTF_8
-        ).use { 
+        ).use {
             generateSensesVerbTemplates(
                 it,
                 sensesById,
@@ -107,7 +107,7 @@ class ModelConsumer(
             FileOutputStream(File(outDir, makeFilename(Names.VTEMPLATES.FILE))),
             true,
             StandardCharsets.UTF_8
-        ).use { 
+        ).use {
             generateTable(
                 it,
                 Names.VTEMPLATES.TABLE,
