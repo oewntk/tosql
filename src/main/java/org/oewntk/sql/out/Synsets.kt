@@ -23,7 +23,8 @@ object Synsets {
      * @return id-to-nid map
      */
     fun makeSynsetNIDs(synsets: Collection<Synset>): Map<String, Int> {
-        return synsets.asSequence()
+        return synsets
+            .asSequence()
             .map { s: Synset -> s.synsetId }
             .sorted()
             .withIndex()

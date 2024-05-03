@@ -30,7 +30,8 @@ object Utils {
     ) {
 
         // make object-to-nid map
-        val seq = byNid.entries.asSequence()
+        val seq = byNid.entries
+            .asSequence()
             .map { Pair(it.key, it.value) }
             .sortedBy { it.first }
 

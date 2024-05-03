@@ -118,7 +118,8 @@ object Printers {
             ps.print("-- NONE")
         } else {
             ps.printf("INSERT INTO %s (%s) VALUES", table, columns)
-            objects.asSequence()
+            objects
+                .asSequence()
                 .map { it to NIDMaps.lookup(objectIdToNID, toId.invoke(it)) }
                 .toList()
                 .sortedBy { it.second }

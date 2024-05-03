@@ -30,7 +30,8 @@ object Senses {
      * @return id-to-nid map
      */
     fun makeSenseNIDs(senses: Collection<Sense>): Map<String, Int> {
-        return senses.asSequence()
+        return senses
+            .asSequence()
             .map(makeId)
             .distinct()
             .sorted()

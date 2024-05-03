@@ -105,7 +105,8 @@ object Lexes {
      */
     fun makeWordNIDs(lexes: Collection<Lex>): Map<String, Int> {
         // stream of words
-        val map = lexes.asSequence()
+        val map = lexes
+            .asSequence()
             .map(Lex::lCLemma)
             .distinct()
             .sorted()
@@ -151,7 +152,8 @@ object Lexes {
      * @return cased_word-to-nid map
      */
     fun makeCasedWordNIDs(lexes: Collection<Lex>): Map<String, Int> {
-        val map = lexes.asSequence()
+        val map = lexes
+            .asSequence()
             .filter(Lex::isCased)
             .map { it.lemma }
             .distinct()
@@ -250,7 +252,8 @@ object Lexes {
      * @return morph-to-nid map
      */
     fun makeMorphNIDs(lexes: Collection<Lex>): Map<String, Int> {
-        return lexes.asSequence()
+        return lexes
+            .asSequence()
             .filter { it.forms != null && it.forms!!.isNotEmpty() }
             .flatMap { it.forms!!.asSequence() }
             .sorted()
@@ -298,7 +301,8 @@ object Lexes {
         pronunciationToNID: Map<String, Int>,
     ) {
         // stream of lexes
-        val lexSeq = lexes.asSequence()
+        val lexSeq = lexes
+            .asSequence()
             .filter { it.pronunciations != null && it.pronunciations!!.isNotEmpty() }
             .sortedBy { it.lemma }
 
@@ -357,7 +361,8 @@ object Lexes {
      * @return pronunciation-to-nid map
      */
     fun makePronunciationNIDs(lexes: Collection<Lex>): Map<String, Int> {
-        return lexes.asSequence()
+        return lexes
+            .asSequence()
             .filter { it.pronunciations != null && it.pronunciations!!.isNotEmpty() }
             .flatMap { it.pronunciations!!.asSequence() }
             .map { it.value }
