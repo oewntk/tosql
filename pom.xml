@@ -244,9 +244,9 @@
                     wn/NamesCompat.properties" />
                     -->
                   </includes>
-<!--                  <excludes>-->
-<!--                    <exclude>**/*</exclude>-->
-<!--                  </excludes>-->
+                  <!--                  <excludes>-->
+                  <!--                    <exclude>**/*</exclude>-->
+                  <!--                  </excludes>-->
                 </filter>
               </filters>
               <shadedArtifactAttached>true</shadedArtifactAttached>
