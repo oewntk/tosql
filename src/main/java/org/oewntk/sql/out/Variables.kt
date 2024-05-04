@@ -67,7 +67,7 @@ class Variables(bundle: ResourceBundle) {
     /**
      * Substitute values to variables in input stream
      *
-     * @param `is`         input stream
+     * @param inStream     input stream
      * @param ps           print stream
      * @param useBackticks surround with back-ticks
      * @param compress     whether to compress spaces to single space

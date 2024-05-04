@@ -53,7 +53,7 @@ object DeSerializeNIDs {
     /**
      * Deserialize id-to_nid map
      *
-     * @param `is` input stream
+     * @param inStream input stream
      * @return id-to-nid map
      * @throws IOException            io exception
      * @throws ClassNotFoundException class not found exception
@@ -67,7 +67,7 @@ object DeSerializeNIDs {
     /**
      * Deserialize object
      *
-     * @param `is` input stream
+     * @param inStream input stream
      * @return object
      * @throws IOException            io exception
      * @throws ClassNotFoundException class not found exception

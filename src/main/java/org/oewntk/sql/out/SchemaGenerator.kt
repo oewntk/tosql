@@ -67,9 +67,9 @@ class SchemaGenerator(
         // Single output if console or file
         if (outputFileOrDir == null || outputFileOrDir.isFile) {
             if (outputFileOrDir == null) System.out else PrintStream(outputFileOrDir).use { ps ->
-                processTemplates(module, inputSubdir, inputs) { `is`: InputStream, _ ->
+                processTemplates(module, inputSubdir, inputs) { inStream: InputStream, _ ->
                     try {
-                        variables.varSubstitutionInIS(`is`, ps, useBackticks = true, compress = true)
+                        variables.varSubstitutionInIS(inStream, ps, useBackticks = true, compress = true)
                     } catch (e: IOException) {
                         e.printStackTrace()
                     }
@@ -77,12 +77,12 @@ class SchemaGenerator(
             }
         } else if (outputFileOrDir.isDirectory) {
             val dir: File = outputFileOrDir
-            processTemplates(module, inputSubdir, inputs) { `is`: InputStream, name: String ->
+            processTemplates(module, inputSubdir, inputs) { inStream: InputStream, name: String ->
                 System.err.println(name)
                 val output2 = File(dir, name)
                 try {
                     PrintStream(output2).use { ps ->
-                        variables.varSubstitutionInIS(`is`, ps, useBackticks = true, compress = true)
+                        variables.varSubstitutionInIS(inStream, ps, useBackticks = true, compress = true)
                     }
                 } catch (e: IOException) {
                     e.printStackTrace()
@@ -138,8 +138,8 @@ class SchemaGenerator(
                     //filter according to the path
                     if (name.startsWith(prefix)) {
                         val fileName = Paths.get(name).fileName.toString()
-                        jar.getInputStream(entry).use { `is` ->
-                            consumer.accept(`is`, fileName)
+                        jar.getInputStream(entry).use { inStream ->
+                            consumer.accept(inStream, fileName)
                         }
                     }
                 }
