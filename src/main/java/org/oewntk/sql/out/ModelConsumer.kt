@@ -30,6 +30,11 @@ class ModelConsumer(
     private val outDir: File,
 ) : Consumer<Model> {
 
+    /**
+     * Accept model
+     *
+     * @param model model
+     */
     override fun accept(model: Model) {
         Tracing.psInfo.printf("[Model] %s%n", model.sources.contentToString())
 

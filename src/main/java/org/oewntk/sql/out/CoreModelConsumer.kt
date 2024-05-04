@@ -61,6 +61,11 @@ class CoreModelConsumer(
      */
     var synsetIdToNID: Map<String, Int>? = null
 
+    /**
+     * Accept model
+     *
+     * @param model model
+     */
     override fun accept(model: CoreModel) {
         Tracing.psInfo.printf("[CoreModel] %s%n", model.source)
 

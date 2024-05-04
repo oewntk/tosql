@@ -12,12 +12,10 @@ import java.io.PrintStream
  */
 object Lexes {
 
-    /**
-     * Make lex NID map
-     */
+    // lexes
 
     /**
-     * Make lex key to NID
+     * Make lex-to-NID map
      */
     fun makeLexesNIDs(
         lexes: Collection<Lex>,
@@ -29,8 +27,6 @@ object Lexes {
             .withIndex()
             .associate { it.value to it.index + 1 } // map(of_t(lex), nid)
     }
-
-    // lexes
 
     /**
      * Generate lexes table
@@ -79,6 +75,25 @@ object Lexes {
     // words
 
     /**
+     * Make word-to-NID map
+     *
+     * @param lexes lexes
+     * @return word-to-nid map
+     */
+    fun makeWordNIDs(lexes: Collection<Lex>): Map<String, Int> {
+        // stream of words
+        val map = lexes
+            .asSequence()
+            .map(Lex::lCLemma)
+            .distinct()
+            .sorted()
+            .withIndex()
+            .associate { it.value to it.index + 1 }
+        assert(map.values.none { it == 0 })
+        return map
+    }
+
+    /**
      * Generate words table
      *
      * @param ps    print stream
@@ -97,17 +112,19 @@ object Lexes {
         return wordToNID
     }
 
+    // cased words
+
     /**
-     * Make word-to-nid map
+     * Make cased_word-to-NID map
      *
      * @param lexes lexes
-     * @return word-to-nid map
+     * @return cased_word-to-nid map
      */
-    fun makeWordNIDs(lexes: Collection<Lex>): Map<String, Int> {
-        // stream of words
+    fun makeCasedWordNIDs(lexes: Collection<Lex>): Map<String, Int> {
         val map = lexes
             .asSequence()
-            .map(Lex::lCLemma)
+            .filter(Lex::isCased)
+            .map { it.lemma }
             .distinct()
             .sorted()
             .withIndex()
@@ -116,7 +133,6 @@ object Lexes {
         return map
     }
 
-    // cased words
     /**
      * Generate cased word table
      *
@@ -145,26 +161,25 @@ object Lexes {
         return casedWordToNID
     }
 
+    // morphs
+
     /**
-     * Make cased_word-to-nid map
+     * Make morphs-to-NID map
      *
      * @param lexes lexes
-     * @return cased_word-to-nid map
+     * @return morph-to-nid map
      */
-    fun makeCasedWordNIDs(lexes: Collection<Lex>): Map<String, Int> {
-        val map = lexes
+    fun makeMorphNIDs(lexes: Collection<Lex>): Map<String, Int> {
+        return lexes
             .asSequence()
-            .filter(Lex::isCased)
-            .map { it.lemma }
-            .distinct()
+            .filter { it.forms != null && it.forms!!.isNotEmpty() }
+            .flatMap { it.forms!!.asSequence() }
             .sorted()
+            .distinct()
             .withIndex()
             .associate { it.value to it.index + 1 }
-        assert(map.values.none { it == 0 })
-        return map
     }
 
-    // morphs
     /**
      * Generate morphs table
      *
@@ -245,24 +260,25 @@ object Lexes {
         }
     }
 
+    // pronunciations
+
     /**
-     * Make morphs nid map
+     * Make pronunciation(values)-to-NID map
      *
      * @param lexes lexes
-     * @return morph-to-nid map
+     * @return pronunciation-to-nid map
      */
-    fun makeMorphNIDs(lexes: Collection<Lex>): Map<String, Int> {
+    fun makePronunciationNIDs(lexes: Collection<Lex>): Map<String, Int> {
         return lexes
             .asSequence()
-            .filter { it.forms != null && it.forms!!.isNotEmpty() }
-            .flatMap { it.forms!!.asSequence() }
+            .filter { it.pronunciations != null && it.pronunciations!!.isNotEmpty() }
+            .flatMap { it.pronunciations!!.asSequence() }
+            .map { it.value }
             .sorted()
             .distinct()
             .withIndex()
             .associate { it.value to it.index + 1 }
     }
-
-    // pronunciations
 
     /**
      * Generate pronunciations table
@@ -352,23 +368,5 @@ object Lexes {
             }
             Printers.printInsertsWithComment(ps, Names.LEXES_PRONUNCIATIONS.TABLE, columns, lexSeq, toStrings, false)
         }
-    }
-
-    /**
-     * Make pronunciation values nid map
-     *
-     * @param lexes lexes
-     * @return pronunciation-to-nid map
-     */
-    fun makePronunciationNIDs(lexes: Collection<Lex>): Map<String, Int> {
-        return lexes
-            .asSequence()
-            .filter { it.pronunciations != null && it.pronunciations!!.isNotEmpty() }
-            .flatMap { it.pronunciations!!.asSequence() }
-            .map { it.value }
-            .sorted()
-            .distinct()
-            .withIndex()
-            .associate { it.value to it.index + 1 }
     }
 }

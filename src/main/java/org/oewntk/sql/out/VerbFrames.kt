@@ -15,7 +15,7 @@ object VerbFrames {
     // name, frameid
 
     /**
-     * Map frame id (via, ...) to numeric id
+     * VerbFrame name-to-NID map (via, ...)
      */
     val VERB_FRAME_ID_TO_NIDS = mapOf(
         "vii" to 1,

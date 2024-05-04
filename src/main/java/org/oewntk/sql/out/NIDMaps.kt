@@ -22,6 +22,8 @@ import java.nio.charset.StandardCharsets
  */
 object NIDMaps {
 
+    // L O O K U P
+
     /**
      * Lookup of id of type K
      *

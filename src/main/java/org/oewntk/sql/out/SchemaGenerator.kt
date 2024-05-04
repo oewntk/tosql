@@ -18,8 +18,9 @@ import kotlin.system.exitProcess
  * @author Bernard Bou
  * @see "https://sqlunet.sourceforge.net/schema.html"
  */
-class SchemaGenerator
-    (private val variables: Variables) {
+class SchemaGenerator(
+    private val variables: Variables,
+) {
 
     /**
      * Generate schema
@@ -35,7 +36,7 @@ class SchemaGenerator
         module: String,
         output: String,
         inputSubdir: String,
-        inputs: Array<String>?,
+        inputs: Array<String>,
     ) {
         var outputFileOrDir: File? = null
 
@@ -105,11 +106,11 @@ class SchemaGenerator
     private fun processTemplates(
         module: String,
         path: String,
-        inputs: Array<String>?,
+        inputs: Array<String>,
         consumer: BiConsumer<InputStream, String>,
     ) {
         // external resources
-        if (!inputs.isNullOrEmpty()) {
+        if (inputs.isNotEmpty()) {
             for (input in inputs) {
                 val file = File(path, input)
                 val fileName = Paths.get(input).fileName.toString()

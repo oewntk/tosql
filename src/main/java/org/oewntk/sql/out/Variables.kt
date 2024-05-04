@@ -52,10 +52,11 @@ class Variables(bundle: ResourceBundle) {
      */
     @Throws(IOException::class)
     fun varSubstitutionInFile(file: File, ps: PrintStream, useBackticks: Boolean, compress: Boolean) {
+
         // iterate on lines
         try {
-            FileInputStream(file).use { `is` ->
-                varSubstitutionInIS(`is`, ps, useBackticks, compress)
+            FileInputStream(file).use { inStream ->
+                varSubstitutionInIS(inStream, ps, useBackticks, compress)
             }
         } catch (iae: IllegalArgumentException) {
             System.err.printf("At %s%n%s%n", file, iae.message)
@@ -66,16 +67,17 @@ class Variables(bundle: ResourceBundle) {
     /**
      * Substitute values to variables in input stream
      *
-     * @param is           input stream
+     * @param `is`         input stream
      * @param ps           print stream
      * @param useBackticks surround with back-ticks
      * @param compress     whether to compress spaces to single space
      * @throws IOException io exception
      */
     @Throws(IOException::class)
-    fun varSubstitutionInIS(`is`: InputStream, ps: PrintStream, useBackticks: Boolean, compress: Boolean) {
+    fun varSubstitutionInIS(inStream: InputStream, ps: PrintStream, useBackticks: Boolean, compress: Boolean) {
+
         // iterate on lines
-        BufferedReader(InputStreamReader(`is`, Charset.defaultCharset())).use { reader ->
+        BufferedReader(InputStreamReader(inStream, Charset.defaultCharset())).use { reader ->
             var lineNum = 0
             while (true) {
                 var line: String = reader.readLine() ?: break
@@ -115,6 +117,7 @@ class Variables(bundle: ResourceBundle) {
      * @return string with values substituted for variable name
      */
     private fun varSubstitution(input: String, p: Pattern, useBackticks: Boolean): String {
+
         val m = p.matcher(input)
         if (m.find()) {
             val output = m.replaceAll { r: MatchResult ->

@@ -53,28 +53,28 @@ object DeSerializeNIDs {
     /**
      * Deserialize id-to_nid map
      *
-     * @param is input stream
+     * @param `is` input stream
      * @return id-to-nid map
      * @throws IOException            io exception
      * @throws ClassNotFoundException class not found exception
      */
     @Throws(IOException::class, ClassNotFoundException::class)
     @Suppress("UNCHECKED_CAST")
-    fun deSerializeNIDs(`is`: InputStream): Map<String, Int> {
-        return deSerialize(`is`) as Map<String, Int>
+    fun deSerializeNIDs(inStream: InputStream): Map<String, Int> {
+        return deSerialize(inStream) as Map<String, Int>
     }
 
     /**
      * Deserialize object
      *
-     * @param is input stream
+     * @param `is` input stream
      * @return object
      * @throws IOException            io exception
      * @throws ClassNotFoundException class not found exception
      */
     @Throws(IOException::class, ClassNotFoundException::class)
-    private fun deSerialize(`is`: InputStream): Any {
-        ObjectInputStream(`is`).use { return it.readObject() }
+    private fun deSerialize(inStream: InputStream): Any {
+        ObjectInputStream(inStream).use { return it.readObject() }
     }
 
     /**

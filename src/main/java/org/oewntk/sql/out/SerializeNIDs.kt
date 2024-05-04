@@ -105,12 +105,12 @@ object SerializeNIDs {
      * Serialize object
      *
      * @param os     output stream
-     * @param object object
+     * @param `object` object
      * @throws IOException io exception
      */
     @Throws(IOException::class)
-    private fun serialize(os: OutputStream, `object`: Any) {
-        ObjectOutputStream(os).use { it.writeObject(`object`) }
+    private fun serialize(os: OutputStream, thing: Any) {
+        ObjectOutputStream(os).use { it.writeObject(thing) }
     }
 
     /**
