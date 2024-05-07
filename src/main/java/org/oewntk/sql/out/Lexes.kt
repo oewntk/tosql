@@ -4,6 +4,7 @@
 package org.oewntk.sql.out
 
 import org.oewntk.model.Key
+import org.oewntk.model.LemmaType
 import org.oewntk.model.Lex
 import java.io.PrintStream
 
@@ -106,7 +107,7 @@ object Lexes {
 
         // insert map
         val columns = listOf(Names.WORDS.wordid, Names.WORDS.word).joinToString(",")
-        val toString = { word: String -> "'${Utils.escape(word)}'" }
+        val toString = { word: LemmaType -> "'${Utils.escape(word)}'" }
         Printers.printInsert(ps, Names.WORDS.TABLE, columns, wordToNID, toString)
 
         return wordToNID
@@ -152,7 +153,7 @@ object Lexes {
 
         // insert map
         val columns = listOf(Names.CASEDWORDS.casedwordid, Names.CASEDWORDS.casedword, Names.CASEDWORDS.wordid).joinToString(",")
-        val toString = { casedWord: String ->
+        val toString = { casedWord: LemmaType ->
             val nid = NIDMaps.lookupLC(wordIdToNID, casedWord.lowercase())
             "'${Utils.escape(casedWord)}',$nid"
         }
