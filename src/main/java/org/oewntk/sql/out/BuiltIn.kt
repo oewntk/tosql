@@ -161,7 +161,7 @@ object BuiltIn {
      *
      * @param ps print stream
      */
-    fun generatePosTypes(ps: PrintStream) {
+    fun generatePoses(ps: PrintStream) {
         printInsert(
             ps,
             Names.POSES.TABLE,

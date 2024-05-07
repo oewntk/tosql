@@ -6,7 +6,7 @@ package org.oewntk.sql.out
 import org.oewntk.model.*
 import org.oewntk.sql.out.BuiltIn.generateAdjectivePositionTypes
 import org.oewntk.sql.out.BuiltIn.generateDomains
-import org.oewntk.sql.out.BuiltIn.generatePosTypes
+import org.oewntk.sql.out.BuiltIn.generatePoses
 import org.oewntk.sql.out.BuiltIn.generateRelationTypes
 import org.oewntk.sql.out.Lexes.generateCasedWords
 import org.oewntk.sql.out.Lexes.generateLexes
@@ -235,7 +235,7 @@ class CoreModelConsumer(
                 true,
                 StandardCharsets.UTF_8
             ).use {
-                generatePosTypes(it)
+                generatePoses(it)
             }
             PrintStream(
                 FileOutputStream(File(outDir, makeFilename(Names.ADJPOSITIONS.FILE))),
