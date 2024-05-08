@@ -161,7 +161,7 @@ object Printers {
             ps.printf("INSERT INTO %s (%s) VALUES", table, columns)
             lexes
                 .asSequence()
-                .map { it to NIDMaps.lookup(lexKeyToNID, Key.W_P_A.of_t(it)) }
+                .map { it to NIDMaps.lookup(lexKeyToNID, Key.KeyLCP.of_t(it)) }
                 .toList()
                 .sortedBy { it.second }
                 .withIndex()
@@ -202,7 +202,7 @@ object Printers {
             ps.printf("INSERT INTO %s (%s) VALUES", table, columns)
             lexes
                 .asSequence()
-                .map { it to NIDMaps.lookup(lexKeyToNID, Key.W_P_A.of_t(it)) }
+                .map { it to NIDMaps.lookup(lexKeyToNID, Key.KeyLCP.of_t(it)) }
                 .toList()
                 .sortedBy { it.second }
                 .withIndex()

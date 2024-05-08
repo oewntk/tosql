@@ -4,7 +4,7 @@
 package org.oewntk.sql.out
 
 import org.oewntk.model.Key
-import org.oewntk.model.LemmaType
+import org.oewntk.model.Lemma
 import org.oewntk.model.Lex
 import java.io.PrintStream
 
@@ -23,7 +23,7 @@ object Lexes {
     ): Map<Key, Int> {
         return lexes
             .asSequence()
-            .map { Key.W_P_A.of_t(it) }
+            .map { Key.KeyLCP.of_t(it) }
             .sorted()
             .withIndex()
             .associate { it.value to it.index + 1 } // map(of_t(lex), nid)
@@ -107,7 +107,7 @@ object Lexes {
 
         // insert map
         val columns = listOf(Names.WORDS.wordid, Names.WORDS.word).joinToString(",")
-        val toString = { word: LemmaType -> "'${Utils.escape(word)}'" }
+        val toString = { word: Lemma -> "'${Utils.escape(word)}'" }
         Printers.printInsert(ps, Names.WORDS.TABLE, columns, wordToNID, toString)
 
         return wordToNID
@@ -153,7 +153,7 @@ object Lexes {
 
         // insert map
         val columns = listOf(Names.CASEDWORDS.casedwordid, Names.CASEDWORDS.casedword, Names.CASEDWORDS.wordid).joinToString(",")
-        val toString = { casedWord: LemmaType ->
+        val toString = { casedWord: Lemma ->
             val nid = NIDMaps.lookupLC(wordIdToNID, casedWord.lowercase())
             "'${Utils.escape(casedWord)}',$nid"
         }
@@ -229,7 +229,7 @@ object Lexes {
             val strings = ArrayList<String>()
             val word = lex.lCLemma
             val wordNID = NIDMaps.lookupLC(wordToNID, word)
-            val lexNID = NIDMaps.lookup(lexKeyToNID, Key.W_P_A.of_t(lex))
+            val lexNID = NIDMaps.lookup(lexKeyToNID, Key.KeyLCP.of_t(lex))
             val type = lex.type
             for (morph in lex.forms!!) {
                 val morphNID = NIDMaps.lookup(morphToNID, morph)
@@ -335,7 +335,7 @@ object Lexes {
             val strings = ArrayList<String>()
             val word = lex.lCLemma
             val wordNID = NIDMaps.lookupLC(wordToNID, word)
-            val lexNID = NIDMaps.lookup(lexKeyToNID, Key.W_P_A.of_t(lex))
+            val lexNID = NIDMaps.lookup(lexKeyToNID, Key.KeyLCP.of_t(lex))
             val type = lex.type
             for (pronunciation in lex.pronunciations!!) {
                 val value = pronunciation.value

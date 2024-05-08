@@ -4,7 +4,7 @@
 package org.oewntk.sql.out
 
 import org.oewntk.model.Key
-import org.oewntk.model.Key.W_P_A.Companion.of_t
+import org.oewntk.model.Key.KeyLCP.Companion.of_t
 import org.oewntk.model.Sense
 import org.oewntk.sql.out.Printers.printInsert
 import org.oewntk.sql.out.Printers.printInsertWithComment
