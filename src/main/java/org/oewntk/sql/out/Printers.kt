@@ -23,7 +23,7 @@ object Printers {
      * @param table       table name
      * @param columns     column names
      * @param objectToNID objects-to-nid map
-     * @param toString    stringifier of objects
+     * @param toRow       stringifier of objects
      * @param T           type of objects
      */
     fun <T> printInsert(
@@ -31,7 +31,7 @@ object Printers {
         table: String,
         columns: String,
         objectToNID: Map<T, Int>,
-        toString: (T) -> String,
+        toRow: (T) -> String,
     ) {
         if (objectToNID.isEmpty()) {
             ps.print("-- NONE")
@@ -40,7 +40,7 @@ object Printers {
             objectToNID.keys
                 .withIndex()
                 .forEach { (index, key) ->
-                    val s = toString.invoke(key)
+                    val s = toRow.invoke(key)
                     if (index > 0) {
                         ps.print(',')
                     }
@@ -60,7 +60,7 @@ object Printers {
      * @param objects       collection of objects
      * @param toId          id extractor
      * @param objectIdToNID id-to-nid map
-     * @param toString      stringifier of objects
+     * @param toRow         stringifier of objects
      * @param T             type of objects
      */
     fun <T> printInsert(
@@ -70,7 +70,7 @@ object Printers {
         objects: Collection<T>,
         toId: (T) -> String,
         objectIdToNID: Map<String, Int>,
-        toString: (T) -> String,
+        toRow: (T) -> String,
     ) {
         if (objects.isEmpty()) {
             ps.print("-- NONE")
@@ -86,7 +86,7 @@ object Printers {
                     if (index > 0) {
                         ps.print(',')
                     }
-                    val s = toString.invoke(pair.first)
+                    val s = toRow.invoke(pair.first)
                     ps.printf("%n(%d,%s)", pair.second, s)
                 }
             ps.println(";")
@@ -102,7 +102,7 @@ object Printers {
      * @param objects              collection of objects
      * @param toId                 id extractor
      * @param objectIdToNID        id-to-nid map
-     * @param toStringWithComments double stringifier of objects, two strings are produced: [0] insert values , [1] comment
+     * @param toRowWithComment     double stringifier of objects, two strings are produced: [0] insert values , [1] comment
      * @param T                    type of objects
      */
     fun <T> printInsertWithComment(
@@ -112,7 +112,7 @@ object Printers {
         objects: Collection<T>,
         toId: (T) -> String,
         objectIdToNID: Map<String, Int>,
-        toStringWithComments: (T) -> Array<String>,
+        toRowWithComment: (T) -> Pair<String, String>,
     ) {
         if (objects.isEmpty()) {
             ps.print("-- NONE")
@@ -128,8 +128,8 @@ object Printers {
                     if (index > 0) {
                         ps.print(',')
                     }
-                    val s = toStringWithComments.invoke(pair.first)
-                    ps.printf("%n(%d,%s) /* %s */", pair.second, s[0], s[1])
+                    val s = toRowWithComment.invoke(pair.first)
+                    ps.printf("%n(%d,%s) /* %s */", pair.second, s.first, s.second)
                 }
             ps.println(";")
         }
@@ -145,7 +145,7 @@ object Printers {
      * @param columns     column names
      * @param lexes       lexes
      * @param lexKeyToNID lex_key-to-nid map
-     * @param toString    stringifier of objects
+     * @param toRow       stringifier of lexes
      */
     fun printInsert(
         ps: PrintStream,
@@ -153,7 +153,7 @@ object Printers {
         columns: String,
         lexes: Collection<Lex>,
         lexKeyToNID: Map<Key, Int>,
-        toString: (Lex) -> String,
+        toRow: (Lex) -> String,
     ) {
         if (lexes.isEmpty()) {
             ps.print("-- NONE")
@@ -171,7 +171,7 @@ object Printers {
                     }
                     val lex = pair.first
                     val v = pair.second
-                    val s = toString.invoke(lex)
+                    val s = toRow.invoke(lex)
                     ps.printf("%n(%d,%s)", v, s)
                 }
             ps.println(";")
@@ -186,7 +186,7 @@ object Printers {
      * @param columns              column names
      * @param lexes                lexes
      * @param lexKeyToNID          lex_key-to-nid map
-     * @param toStringWithComments double stringifier of objects, two strings are produced: [0] insert values , [1] comment
+     * @param toRowWithComment     double stringifier of lexes, two strings are produced: [0] insert values , [1] comment
      */
     fun printInsertWithComment(
         ps: PrintStream,
@@ -194,7 +194,7 @@ object Printers {
         columns: String,
         lexes: Collection<Lex>,
         lexKeyToNID: Map<Key, Int>,
-        toStringWithComments: (Lex) -> Array<String>,
+        toRowWithComment: (Lex) -> Pair<String, String>,
     ) {
         if (lexes.isEmpty()) {
             ps.print("-- NONE")
@@ -212,8 +212,8 @@ object Printers {
                     }
                     val lex = pair.first
                     val v = pair.second
-                    val s = toStringWithComments.invoke(lex)
-                    ps.printf("%n(%d,%s) /* %s */", v, s[0], s[1])
+                    val s = toRowWithComment.invoke(lex)
+                    ps.printf("%n(%d,%s) /* %s */", v, s.first, s.second)
                 }
             ps.println(";")
         }
@@ -228,7 +228,7 @@ object Printers {
      * @param table      table name
      * @param columns    column names
      * @param seq        sequence of objects
-     * @param toString   stringifier of objects
+     * @param toRow      stringifier of objects
      * @param withNumber whether to number objects
      * @param T          type of objects in sequence
      */
@@ -237,7 +237,7 @@ object Printers {
         table: String,
         columns: String,
         seq: Sequence<T>,
-        toString: (T) -> String,
+        toRow: (T) -> String,
         withNumber: Boolean,
     ) {
         seq
@@ -248,7 +248,7 @@ object Printers {
                 } else {
                     ps.print(',')
                 }
-                val s = toString.invoke(thing)
+                val s = toRow.invoke(thing)
                 if (withNumber) {
                     ps.printf("%n(%d,%s)", index + 1, s)
                 } else {
@@ -265,7 +265,7 @@ object Printers {
      * @param table               table name
      * @param columns             column names
      * @param seq                 sequence of objects
-     * @param toStringWithComment double stringifier of objects, two strings are produced: [0] insert values , [1] comment
+     * @param toRowWithComment    double stringifier of objects, two strings are produced: [0] insert values , [1] comment
      * @param withNumber          whether to number objects
      * @param T                   type of objects in sequence
      */
@@ -274,7 +274,7 @@ object Printers {
         table: String,
         columns: String,
         seq: Sequence<T>,
-        toStringWithComment: (T) -> Array<String>,
+        toRowWithComment: (T) -> Pair<String,String>,
         withNumber: Boolean,
     ) {
         seq
@@ -285,11 +285,11 @@ object Printers {
                 } else {
                     ps.print(',')
                 }
-                val s = toStringWithComment.invoke(thing)
+                val s = toRowWithComment.invoke(thing)
                 if (withNumber) {
-                    ps.printf("%n(%d,%s) /* %s */", index + 1, s[0], s[1])
+                    ps.printf("%n(%d,%s) /* %s */", index + 1, s.first, s.second)
                 } else {
-                    ps.printf("%n(%s) /* %s */", s[0], s[1])
+                    ps.printf("%n(%s) /* %s */", s.first, s.second)
                 }
             }
         ps.println(";")
@@ -302,7 +302,7 @@ object Printers {
      * @param table      table name
      * @param columns    column names
      * @param seq        sequence of objects
-     * @param toStrings  stringifier for multiple values
+     * @param toRows     stringifier for multiple values
      * @param withNumber whether to number objects
      * @param T          type of objects in sequence
      */
@@ -311,11 +311,11 @@ object Printers {
         table: String,
         columns: String,
         seq: Sequence<T>,
-        toStrings: (T) -> List<String>,
+        toRows: (T) -> List<String>,
         withNumber: Boolean,
     ) {
         seq
-            .flatMap(toStrings)
+            .flatMap(toRows)
             .withIndex()
             .forEach {
                 if (it.index == 0) {
@@ -339,7 +339,7 @@ object Printers {
      * @param table                 table name
      * @param columns               column names
      * @param seq                   sequence of objects
-     * @param toStringsWithComments double stringifier of objects, two strings are produced: [0] insert values , [1] comment
+     * @param toRowsWithComments double stringifier of objects, two strings are produced: [0] insert values , [1] comment
      * @param withNumber            whether to number objects
      * @param T                     type of objects in sequence
      */
@@ -348,11 +348,11 @@ object Printers {
         table: String,
         columns: String,
         seq: Sequence<T>,
-        toStringsWithComments: (T) -> List<Array<String>>,
+        toRowsWithComments: (T) -> Sequence<Pair<String, String>>,
         withNumber: Boolean,
     ) {
         seq
-            .flatMap(toStringsWithComments)
+            .flatMap(toRowsWithComments)
             .withIndex()
             .forEach {
                 if (it.index == 0) {
@@ -361,9 +361,9 @@ object Printers {
                     ps.print(',')
                 }
                 if (withNumber) {
-                    ps.printf("%n(%d,%s) /* %s */", it.index + 1, it.value[0], it.value[1])
+                    ps.printf("%n(%d,%s) /* %s */", it.index + 1, it.value.first, it.value.second)
                 } else {
-                    ps.printf("%n(%s) /* %s */", it.value[0], it.value[1])
+                    ps.printf("%n(%s) /* %s */", it.value.first, it.value.second)
                 }
             }
         ps.println(";")

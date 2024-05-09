@@ -3,7 +3,9 @@
  */
 package org.oewntk.sql.out
 
+import org.oewntk.model.Relation
 import org.oewntk.model.Synset
+import org.oewntk.model.SynsetId
 import org.oewntk.sql.out.Printers.printInsert
 import org.oewntk.sql.out.Printers.printInsertWithComment
 import org.oewntk.sql.out.Printers.printInserts
@@ -49,7 +51,7 @@ object Synsets {
             Names.SYNSETS.domainid,
             Names.SYNSETS.definition
         ).joinToString(",")
-        val toString = { synset: Synset ->
+        val toSqlData = { synset: Synset ->
             val type = synset.type
             val definition = synset.definition
             val domain = synset.lexfile
@@ -57,11 +59,9 @@ object Synsets {
             "'$type',$lexdomainId,'${escape(definition!!)}'"
         }
         if (!Printers.WITH_COMMENT) {
-            printInsert(ps, Names.SYNSETS.TABLE, columns, synsets, { it.synsetId }, synsetIdToNID, toString)
+            printInsert(ps, Names.SYNSETS.TABLE, columns, synsets, { it.synsetId }, synsetIdToNID, toSqlData)
         } else {
-            val toStrings = { synset: Synset ->
-                arrayOf(toString.invoke(synset), synset.synsetId)
-            }
+            val toDataWithComments = { synset: Synset -> toSqlData.invoke(synset) to synset.synsetId }
             printInsertWithComment(
                 ps,
                 Names.SYNSETS.TABLE,
@@ -69,7 +69,7 @@ object Synsets {
                 synsets,
                 { it.synsetId },
                 synsetIdToNID,
-                toStrings
+                toDataWithComments
             )
         }
         return synsetIdToNID
@@ -96,46 +96,51 @@ object Synsets {
             Names.SEMRELATIONS.synset2id,
             Names.SEMRELATIONS.relationid
         ).joinToString(",")
-        val toString = { synset: Synset ->
-            val result = ArrayList<String>()
+
+        val toTargetData = { synset: Synset ->
+            synset.relations?.keys
+                ?.asSequence()
+                ?.onEach { require(BuiltIn.OEWN_RELATION_TYPES.containsKey(it)) { it } } // relation type
+                ?.flatMap {
+                    val relation: Relation = it
+                    val relationNID: Int = BuiltIn.OEWN_RELATION_TYPES[it]!! // relation NID
+                    synset.relations!![it]!!
+                        .asSequence() // sequence of synset2 ids
+                        .map { synset2Id -> Triple(relation, relationNID, synset2Id) }
+                } // sequence of (relation, relationNID, synset2Id1) (relation, relationNID, synset2Id2) ...
+                ?.sortedWith(
+                    Comparator
+                        .comparing(Triple<*, Int, SynsetId>::second)
+                        .thenComparing(Triple<*, *, SynsetId>::third)
+                )
+        }
+
+        val toSqlData = { synset: Synset ->
             val synset1Id = synset.synsetId
             val synset1NID = NIDMaps.lookup(synsetIdToNIDMap, synset1Id)
-            if (synset.relations != null) {
-                for (relation in synset.relations!!.keys) {
-                    require(BuiltIn.OEWN_RELATION_TYPES.containsKey(relation)) { relation }
-                    val relationId = BuiltIn.OEWN_RELATION_TYPES[relation]!!
-                    for (synset2Id in synset.relations!![relation]!!) {
-                        val synset2NID = NIDMaps.lookup(synsetIdToNIDMap, synset2Id)
-                        result.add("$synset1NID,$synset2NID,$relationId")
-                    }
+            toTargetData(synset) // sequence of (relation, relationNID, synset2Id1) (relation, relationNID, synset2Id2) ...
+                ?.map {
+                    val relationNID: Int = BuiltIn.OEWN_RELATION_TYPES[it.first]!! // relation type id
+                    val synset2NID = NIDMaps.lookup(synsetIdToNIDMap, it.third)
+                    "$synset1NID,$synset2NID,$relationNID"
                 }
-            }
-            result
+                ?.toList()!!
         }
+
         if (!Printers.WITH_COMMENT) {
-            printInserts(ps, Names.SEMRELATIONS.TABLE, columns, synsetSeq, toString, false)
+            printInserts(ps, Names.SEMRELATIONS.TABLE, columns, synsetSeq, toSqlData, false)
         } else {
-            val toStrings = { synset: Synset ->
-                val result = ArrayList<Array<String>>()
-                val data = toString.invoke(synset)
+            val toDataWithComments = { synset: Synset ->
                 val synset1Id = synset.synsetId
-                if (synset.relations != null) {
-                    var i = 0
-                    for (relation in synset.relations!!.keys) {
-                        for (synsetId2 in synset.relations!![relation]!!) {
-                            result.add(
-                                arrayOf(
-                                    data[i],
-                                    "$synset1Id -$relation-> $synsetId2"
-                                )
-                            )
-                            i++
-                        }
-                    }
-                }
+                val data = toSqlData.invoke(synset)
+                val comment = toTargetData(synset) // sequence of (relation, relationNID, synset2Id1) (relation, relationNID, synset2Id2) ...
+                    ?.map { "$synset1Id -${it.first}-> ${it.third}" }
+                val result = data
+                    .asSequence()
+                    .zip(comment!!)
                 result
             }
-            printInsertsWithComment(ps, Names.SEMRELATIONS.TABLE, columns, synsetSeq, toStrings, false)
+            printInsertsWithComment(ps, Names.SEMRELATIONS.TABLE, columns, synsetSeq, toDataWithComments, false)
         }
     }
 
@@ -156,15 +161,15 @@ object Synsets {
 
         // insert
         val columns = listOf(Names.SAMPLES.sampleid, Names.SAMPLES.synsetid, Names.SAMPLES.sample).joinToString(",")
-        val toString = { synset: Synset ->
-            val strings = ArrayList<String>()
+        val toRows = { synset: Synset ->
+            val rows = ArrayList<String>()
             val synsetId1 = synset.synsetId
             val synsetNID1 = NIDMaps.lookup(synsetIdToNIDMap, synsetId1)
             for (example in synset.examples!!) {
-                strings.add("$synsetNID1,'${escape(example)}'")
+                rows.add("$synsetNID1,'${escape(example)}'")
             }
-            strings
+            rows
         }
-        printInserts(ps, Names.SAMPLES.TABLE, columns, synsetSeq, toString, true)
+        printInserts(ps, Names.SAMPLES.TABLE, columns, synsetSeq, toRows, true)
     }
 }
