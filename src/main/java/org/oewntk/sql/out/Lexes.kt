@@ -237,14 +237,12 @@ object Lexes {
             Names.LEXES_MORPHS.posid
         ).joinToString(",")
         val toSqlRows = { lex: Lex ->
-            val word = lex.lCLemma
-            val wordNID = NIDMaps.lookupLC(wordToNID, word)
+            val wordNID = NIDMaps.lookupLC(wordToNID, lex.lCLemma)
             val lexNID = NIDMaps.lookup(lexKeyToNID, Key.KeyLCP.of_t(lex))
-            val type = lex.type
             lex.forms!!
                 .map {
                     val morphNID = NIDMaps.lookup(morphToNID, it)
-                    "$morphNID,$lexNID,$wordNID,'$type'"
+                    "$morphNID,$lexNID,$wordNID,'${lex.type}'"
                 }
         }
         if (!Printers.WITH_COMMENT) {
@@ -252,11 +250,9 @@ object Lexes {
         } else {
             val toSqlRowsWithComments = { lex: Lex ->
                 val rows = toSqlRows.invoke(lex)
-                val casedWord = lex.lemma
-                val type = lex.type
                 val comments = lex.forms!!
                     .asSequence()
-                    .map { "'$it' '$casedWord' $type" }
+                    .map { "'$it' '${lex.lemma}' ${lex.type}" }
                 rows
                     .asSequence()
                     .zip(comments)
@@ -339,16 +335,13 @@ object Lexes {
             Names.LEXES_PRONUNCIATIONS.posid
         ).joinToString(",")
         val toSqlRows = { lex: Lex ->
-            val word = lex.lCLemma
-            val wordNID = NIDMaps.lookupLC(wordToNID, word)
+            val wordNID = NIDMaps.lookupLC(wordToNID, lex.lCLemma)
             val lexNID = NIDMaps.lookup(lexKeyToNID, Key.KeyLCP.of_t(lex))
-            val type = lex.type
             lex.pronunciations!!
                 .map {
-                    val value = it.value
                     val variety = if (it.variety == null) "NULL" else "'${it.variety}'"
-                    val pronunciationNID = NIDMaps.lookup(pronunciationToNID, value)
-                    "$pronunciationNID,$variety,$lexNID,$wordNID,'$type'"
+                    val pronunciationNID = NIDMaps.lookup(pronunciationToNID, it.value)
+                    "$pronunciationNID,$variety,$lexNID,$wordNID,'${lex.type}'"
                 }
                 .toList()
         }
@@ -360,11 +353,8 @@ object Lexes {
                 val comments = lex.pronunciations!!
                     .asSequence()
                     .map {
-                        val casedWord = lex.lemma
-                        val type = lex.type
-                        val value = it.value
                         val variety = if (it.variety == null) "" else " [${it.variety}]"
-                        "$value$variety '$casedWord' $type"
+                        "${it.value}$variety '${lex.lemma}' ${lex.type}"
                     }
                 rows
                     .asSequence()

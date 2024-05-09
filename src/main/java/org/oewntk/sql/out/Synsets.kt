@@ -91,17 +91,17 @@ object Synsets {
         ).joinToString(",")
 
         val toTargetData = { synset: Synset ->
-            synset.relations?.keys
-                ?.asSequence()
-                ?.onEach { require(BuiltIn.OEWN_RELATION_TYPES.containsKey(it)) { it } } // relation type
-                ?.flatMap {
+            synset.relations!!.keys
+                .asSequence()
+                .onEach { require(BuiltIn.OEWN_RELATION_TYPES.containsKey(it)) { it } } // relation type
+                .flatMap {
                     val relation: Relation = it
                     val relationNID: Int = BuiltIn.OEWN_RELATION_TYPES[it]!! // relation NID
                     synset.relations!![it]!!
                         .asSequence() // sequence of synset2 ids
                         .map { synset2Id -> Triple(relation, relationNID, synset2Id) }
                 } // sequence of (relation, relationNID, synset2Id1) (relation, relationNID, synset2Id2) ...
-                ?.sortedWith(
+                .sortedWith(
                     Comparator
                         .comparing(Triple<*, Int, SynsetId>::second)
                         .thenComparing(Triple<*, *, SynsetId>::third)
@@ -109,15 +109,14 @@ object Synsets {
         }
 
         val toSqlRows = { synset: Synset ->
-            val synset1Id = synset.synsetId
-            val synset1NID = NIDMaps.lookup(synsetIdToNIDMap, synset1Id)
+            val synset1NID = NIDMaps.lookup(synsetIdToNIDMap, synset.synsetId)
             toTargetData(synset) // sequence of (relation, relationNID, synset2Id1) (relation, relationNID, synset2Id2) ...
-                ?.map {
+                .map {
                     val relationNID: Int = BuiltIn.OEWN_RELATION_TYPES[it.first]!! // relation type id
                     val synset2NID = NIDMaps.lookup(synsetIdToNIDMap, it.third)
                     "$synset1NID,$synset2NID,$relationNID"
                 }
-                ?.toList()!!
+                .toList()
         }
 
         if (!Printers.WITH_COMMENT) {
@@ -126,10 +125,10 @@ object Synsets {
             val toSqlRowsWithComments = { synset: Synset ->
                 val rows = toSqlRows.invoke(synset)
                 val comments = toTargetData(synset) // sequence of (relation, relationNID, synset2Id1) (relation, relationNID, synset2Id2) ...
-                    ?.map { "${synset.synsetId} -${it.first}-> ${it.third}" }
+                    .map { "${synset.synsetId} -${it.first}-> ${it.third}" }
                 rows
                     .asSequence()
-                    .zip(comments!!)
+                    .zip(comments)
             }
             printInsertsWithComment(ps, Names.SEMRELATIONS.TABLE, columns, synsetSeq, toSqlRowsWithComments, false)
         }
@@ -157,8 +156,7 @@ object Synsets {
             Names.SAMPLES.sample
         ).joinToString(",")
         val toSqlRows = { synset: Synset ->
-            val synsetId1 = synset.synsetId
-            val synsetNID1 = NIDMaps.lookup(synsetIdToNIDMap, synsetId1)
+            val synsetNID1 = NIDMaps.lookup(synsetIdToNIDMap, synset.synsetId)
             synset.examples!!
                 .map { "$synsetNID1,'${escape(it)}'" }
                 .toList()

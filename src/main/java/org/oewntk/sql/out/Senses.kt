@@ -133,6 +133,7 @@ object Senses {
             Names.LEXRELATIONS.word2id,
             Names.LEXRELATIONS.relationid
         ).joinToString(",")
+        //TODO
         val toSqlRows = { sense: Sense ->
             val rows = ArrayList<String>()
             val synsetId1 = sense.synsetId
@@ -163,7 +164,7 @@ object Senses {
             printInserts(ps, Names.LEXRELATIONS.TABLE, columns, senseSeq, toSqlRows, false)
         } else {
             val toSqlRowsWithComments = { sense: Sense ->
-                val data = toSqlRows.invoke(sense)
+                val rows = toSqlRows.invoke(sense)
 
                 val result = ArrayList<Pair<String, String>>()
                 val synsetId1 = sense.synsetId
@@ -178,7 +179,7 @@ object Senses {
                             val synsetId2 = sense2!!.synsetId
                             val lex2 = sense2.lex
                             val casedword2 = lex2.lemma
-                            result.add(data[i] to "$synsetId1 '$casedword1' -$relation-> $synsetId2 '$casedword2'")
+                            result.add(rows[i] to "$synsetId1 '$casedword1' -$relation-> $synsetId2 '$casedword2'")
                             i++
                         }
                     }
@@ -266,13 +267,9 @@ object Senses {
         ).joinToString(",")
 
         val toSqlRows = { sense: Sense ->
-            val synsetId = sense.synsetId
-            val word = sense.lCLemma
-            val synsetNID = NIDMaps.lookup(synsetIdToNIDMap, synsetId)
-            val wordNID = NIDMaps.lookupLC(wordIdToNIDMap, word)
-            val lex = sense.lex
-            val luNID = NIDMaps.lookup(lexKeyToNIDMap, of_t(lex))
-
+            val synsetNID = NIDMaps.lookup(synsetIdToNIDMap, sense.synsetId)
+            val wordNID = NIDMaps.lookupLC(wordIdToNIDMap, sense.lCLemma)
+            val luNID = NIDMaps.lookup(lexKeyToNIDMap, of_t(sense.lex))
             sense.verbFrames!!
                 .map {
                     val verbFrameNID = VerbFrames.VERB_FRAME_ID_TO_NIDS[it]!!
@@ -325,13 +322,9 @@ object Senses {
         ).joinToString(",")
 
         val toSqlRows = { sense: Sense ->
-            val strings = ArrayList<String>()
-            val synsetId = sense.synsetId
-            val word = sense.lCLemma
-            val synsetNID = NIDMaps.lookup(synsetIdToNIDMap, synsetId)
-            val wordNID = NIDMaps.lookupLC(wordIdToNIDMap, word)
-            val lex = sense.lex
-            val luNID = NIDMaps.lookup(lexKeyToNIDMap, of_t(lex))
+            val synsetNID = NIDMaps.lookup(synsetIdToNIDMap, sense.synsetId)
+            val wordNID = NIDMaps.lookupLC(wordIdToNIDMap, sense.lCLemma)
+            val luNID = NIDMaps.lookup(lexKeyToNIDMap, of_t(sense.lex))
             sense.verbTemplates!!
                 .map { "$synsetNID,$luNID,$wordNID,$it" }
                 .toList()
