@@ -88,7 +88,10 @@ object VerbFrames {
         printInsert(
             ps,
             Names.VFRAMES.TABLE,
-            listOf(Names.VFRAMES.frameid, Names.VFRAMES.frame).joinToString(","),
+            listOf(
+                Names.VFRAMES.frameid,
+                Names.VFRAMES.frame
+            ).joinToString(","),
             "%n(%d,'%s')",
             table
         )

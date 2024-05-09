@@ -104,7 +104,7 @@ class ModelConsumer(
                 coreConsumer.wordToNID!!
             )
         }
-        val toString = { entry: Pair<Int, VerbTemplate> ->
+        val toSqlRow = { entry: Pair<Int, VerbTemplate> ->
             "${entry.first}, '${escape(entry.second.template)}'"
         }
 
@@ -116,9 +116,12 @@ class ModelConsumer(
             generateTable(
                 it,
                 Names.VTEMPLATES.TABLE,
-                listOf(Names.VTEMPLATES.templateid, Names.VTEMPLATES.template).joinToString(","),
+                listOf(
+                    Names.VTEMPLATES.templateid,
+                    Names.VTEMPLATES.template
+                ).joinToString(","),
                 verbTemplatesById,
-                toString
+                toSqlRow
             )
         }
     }

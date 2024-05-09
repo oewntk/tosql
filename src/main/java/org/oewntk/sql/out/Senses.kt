@@ -74,7 +74,7 @@ object Senses {
             Names.SENSES.lexid,
             Names.SENSES.tagcount
         ).joinToString(",")
-        val toSqlData = { sense: Sense ->
+        val toSqlRow = { sense: Sense ->
             val lex = sense.lex
             val casedWord = lex.lemma
             val word = lex.lCLemma
@@ -91,16 +91,10 @@ object Senses {
             "'${escape(sensekey)}',$senseNum,$synsetNID,$lexNID,$wordNID,$casedWordNID,$lexid,$tagCnt"
         }
         if (!Printers.WITH_COMMENT) {
-            printInsert(ps, Names.SENSES.TABLE, columns, senses, makeId, idToNID, toSqlData)
+            printInsert(ps, Names.SENSES.TABLE, columns, senses, makeId, idToNID, toSqlRow)
         } else {
-            val toDataWithComments = { sense: Sense ->
-                val lex = sense.lex
-                val casedWord = lex.lemma
-                val synsetId = sense.synsetId
-                val sensekey = sense.senseKey
-                toSqlData.invoke(sense) to "$sensekey $synsetId '$casedWord'"
-            }
-            printInsertWithComment(ps, Names.SENSES.TABLE, columns, senses, makeId, idToNID, toDataWithComments)
+            val toSqlRowWithComment = { sense: Sense -> toSqlRow.invoke(sense) to "${sense.senseKey} ${sense.synsetId} '${sense.lex.lemma}'" }
+            printInsertWithComment(ps, Names.SENSES.TABLE, columns, senses, makeId, idToNID, toSqlRowWithComment)
         }
         return idToNID
     }
@@ -139,7 +133,7 @@ object Senses {
             Names.LEXRELATIONS.word2id,
             Names.LEXRELATIONS.relationid
         ).joinToString(",")
-        val toSqlData = { sense: Sense ->
+        val toSqlRows = { sense: Sense ->
             val rows = ArrayList<String>()
             val synsetId1 = sense.synsetId
             val lex1 = sense.lex
@@ -166,10 +160,10 @@ object Senses {
             rows
         }
         if (!Printers.WITH_COMMENT) {
-            printInserts(ps, Names.LEXRELATIONS.TABLE, columns, senseSeq, toSqlData, false)
+            printInserts(ps, Names.LEXRELATIONS.TABLE, columns, senseSeq, toSqlRows, false)
         } else {
-            val toDataWithComments = { sense: Sense ->
-                val data = toSqlData.invoke(sense)
+            val toSqlRowsWithComments = { sense: Sense ->
+                val data = toSqlRows.invoke(sense)
 
                 val result = ArrayList<Pair<String, String>>()
                 val synsetId1 = sense.synsetId
@@ -191,7 +185,7 @@ object Senses {
                 }
                 result.asSequence()
             }
-            printInsertsWithComment(ps, Names.LEXRELATIONS.TABLE, columns, senseSeq, toDataWithComments, false)
+            printInsertsWithComment(ps, Names.LEXRELATIONS.TABLE, columns, senseSeq, toSqlRowsWithComments, false)
         }
     }
 
@@ -224,7 +218,7 @@ object Senses {
             Names.SENSES_ADJPOSITIONS.wordid,
             Names.SENSES_ADJPOSITIONS.positionid
         ).joinToString(",")
-        val toSqlData = { sense: Sense ->
+        val toSqlRow = { sense: Sense ->
             val synsetId = sense.synsetId
             val lex = sense.lex
             val word = lex.lCLemma
@@ -234,12 +228,10 @@ object Senses {
             "$synsetNID,$luNID,$wordNID,'${sense.adjPosition}'"
         }
         if (!Printers.WITH_COMMENT) {
-            printInsert(ps, Names.SENSES_ADJPOSITIONS.TABLE, columns, senseSeq, toSqlData, false)
+            printInsert(ps, Names.SENSES_ADJPOSITIONS.TABLE, columns, senseSeq, toSqlRow, false)
         } else {
-            val toDataWithComments = { sense: Sense ->
-                toSqlData.invoke(sense) to sense.senseKey
-            }
-            printInsertWithComment(ps, Names.SENSES_ADJPOSITIONS.TABLE, columns, senseSeq, toDataWithComments, false)
+            val toSqlRowWithComment = { sense: Sense -> toSqlRow.invoke(sense) to sense.senseKey }
+            printInsertWithComment(ps, Names.SENSES_ADJPOSITIONS.TABLE, columns, senseSeq, toSqlRowWithComment, false)
         }
     }
 
@@ -272,8 +264,8 @@ object Senses {
             Names.SENSES_VFRAMES.wordid,
             Names.SENSES_VFRAMES.frameid
         ).joinToString(",")
-        val toString = { sense: Sense ->
-            val strings = ArrayList<String>()
+
+        val toSqlRows = { sense: Sense ->
             val synsetId = sense.synsetId
             val word = sense.lCLemma
             val synsetNID = NIDMaps.lookup(synsetIdToNIDMap, synsetId)
@@ -281,25 +273,24 @@ object Senses {
             val lex = sense.lex
             val luNID = NIDMaps.lookup(lexKeyToNIDMap, of_t(lex))
 
-            for (frameId in sense.verbFrames!!) {
-                val frameNID = VerbFrames.VERB_FRAME_ID_TO_NIDS[frameId]!!
-                strings.add("$synsetNID,$luNID,$wordNID,$frameNID")
-            }
-            strings
+            sense.verbFrames!!
+                .map {
+                    val verbFrameNID = VerbFrames.VERB_FRAME_ID_TO_NIDS[it]!!
+                    "$synsetNID,$luNID,$wordNID,$verbFrameNID"
+                }
+                .toList()
         }
         if (!Printers.WITH_COMMENT) {
-            printInserts(ps, Names.SENSES_VFRAMES.TABLE, columns, senseSeq, toString, false)
+            printInserts(ps, Names.SENSES_VFRAMES.TABLE, columns, senseSeq, toSqlRows, false)
         } else {
-            val toDataWithComments = { sense: Sense ->
-                val data = toString.invoke(sense)
-                val dataWithComments = ArrayList<Pair<String, String>>()
-                val sensekey = sense.senseKey
-                for (i in sense.verbFrames!!.indices) {
-                    dataWithComments.add(data[i] to sensekey)
-                }
-                dataWithComments.asSequence()
+            val toSqlRowsWithComments = { sense: Sense ->
+                val rows = toSqlRows.invoke(sense)
+                val comments = generateSequence { sense.senseKey }
+                rows
+                    .asSequence()
+                    .zip(comments)
             }
-            printInsertsWithComment(ps, Names.SENSES_VFRAMES.TABLE, columns, senseSeq, toDataWithComments, false)
+            printInsertsWithComment(ps, Names.SENSES_VFRAMES.TABLE, columns, senseSeq, toSqlRowsWithComments, false)
         }
     }
 
@@ -332,7 +323,8 @@ object Senses {
             Names.SENSES_VTEMPLATES.wordid,
             Names.SENSES_VTEMPLATES.templateid
         ).joinToString(",")
-        val toSqlData = { sense: Sense ->
+
+        val toSqlRows = { sense: Sense ->
             val strings = ArrayList<String>()
             val synsetId = sense.synsetId
             val word = sense.lCLemma
@@ -340,25 +332,21 @@ object Senses {
             val wordNID = NIDMaps.lookupLC(wordIdToNIDMap, word)
             val lex = sense.lex
             val luNID = NIDMaps.lookup(lexKeyToNIDMap, of_t(lex))
-
-            for (templateId in sense.verbTemplates!!) {
-                strings.add("$synsetNID,$luNID,$wordNID,$templateId")
-            }
-            strings
+            sense.verbTemplates!!
+                .map { "$synsetNID,$luNID,$wordNID,$it" }
+                .toList()
         }
         if (!Printers.WITH_COMMENT) {
-            printInserts(ps, Names.SENSES_VTEMPLATES.TABLE, columns, senseSeq, toSqlData, false)
+            printInserts(ps, Names.SENSES_VTEMPLATES.TABLE, columns, senseSeq, toSqlRows, false)
         } else {
-            val toRowWithComments = { sense: Sense ->
-                val rows = toSqlData.invoke(sense)
-                val rowsWithComments = ArrayList<Pair<String, String>>()
-                val sensekey = sense.senseKey
-                for (i in sense.verbTemplates!!.indices) {
-                    rowsWithComments.add(rows[i] to sensekey)
-                }
-                rowsWithComments.asSequence()
+            val toSqlRowsWithComments = { sense: Sense ->
+                val rows = toSqlRows.invoke(sense)
+                val comments = generateSequence { sense.senseKey }
+                rows
+                    .asSequence()
+                    .zip(comments)
             }
-            printInsertsWithComment(ps, Names.SENSES_VTEMPLATES.TABLE, columns, senseSeq, toRowWithComments, false)
+            printInsertsWithComment(ps, Names.SENSES_VTEMPLATES.TABLE, columns, senseSeq, toSqlRowsWithComments, false)
         }
     }
 }

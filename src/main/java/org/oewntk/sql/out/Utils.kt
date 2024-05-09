@@ -18,7 +18,7 @@ object Utils {
      * @param table    table name
      * @param columns  column name
      * @param byNid    nid-to-value map, values mapped by nid
-     * @param toString nid-to-value pair stringifier
+     * @param toRow    nid-to-value pair stringifier
      * @param T        type of values
      */
     fun <T> generateTable(
@@ -26,7 +26,7 @@ object Utils {
         table: String,
         columns: String,
         byNid: Map<Int, T>,
-        toString: (Pair<Int, T>) -> String,
+        toRow: (Pair<Int, T>) -> String,
     ) {
 
         // make object-to-nid map
@@ -36,7 +36,7 @@ object Utils {
             .sortedBy { it.first }
 
         // insert map
-        printInsert(ps, table, columns, seq, toString, false)
+        printInsert(ps, table, columns, seq, toRow, false)
     }
 
     // escape

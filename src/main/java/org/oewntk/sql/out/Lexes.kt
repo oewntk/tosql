@@ -3,9 +3,7 @@
  */
 package org.oewntk.sql.out
 
-import org.oewntk.model.Key
-import org.oewntk.model.Lemma
-import org.oewntk.model.Lex
+import org.oewntk.model.*
 import java.io.PrintStream
 
 /**
@@ -49,8 +47,13 @@ object Lexes {
         val lexKeyToNID: Map<Key, Int> = makeLexesNIDs(lexes)
 
         // insert map
-        val columns = listOf(Names.LEXES.luid, Names.LEXES.posid, Names.LEXES.wordid, Names.LEXES.casedwordid).joinToString(",")
-        val toSqlData = { lex: Lex ->
+        val columns = listOf(
+            Names.LEXES.luid,
+            Names.LEXES.posid,
+            Names.LEXES.wordid,
+            Names.LEXES.casedwordid
+        ).joinToString(",")
+        val toSqlRow = { lex: Lex ->
             val word = lex.lCLemma
             val wordNID = NIDMaps.lookupLC(wordToNID, word)
             val casedWordNID = NIDMaps.lookupNullable(casedwordToNID, lex.lemma)
@@ -58,15 +61,10 @@ object Lexes {
             "'$type',$wordNID,$casedWordNID"
         }
         if (!Printers.WITH_COMMENT) {
-            Printers.printInsert(ps, Names.LEXES.TABLE, columns, lexes, lexKeyToNID, toSqlData)
+            Printers.printInsert(ps, Names.LEXES.TABLE, columns, lexes, lexKeyToNID, toSqlRow)
         } else {
-            val toDataWithComments = { lex: Lex ->
-                val casedWord = lex.lemma
-                val type = lex.type
-                val comment = "$type '$casedWord'"
-                toSqlData.invoke(lex) to comment
-            }
-            Printers.printInsertWithComment(ps, Names.LEXES.TABLE, columns, lexes, lexKeyToNID, toDataWithComments)
+            val toSqlRowWithComment = { lex: Lex -> toSqlRow.invoke(lex) to "${lex.type} '${lex.lemma}'" }
+            Printers.printInsertWithComment(ps, Names.LEXES.TABLE, columns, lexes, lexKeyToNID, toSqlRowWithComment)
         }
         return lexKeyToNID
     }
@@ -104,9 +102,12 @@ object Lexes {
         val wordToNID = makeWordNIDs(lexes)
 
         // insert map
-        val columns = listOf(Names.WORDS.wordid, Names.WORDS.word).joinToString(",")
-        val toString = { word: Lemma -> "'${Utils.escape(word)}'" }
-        Printers.printInsert(ps, Names.WORDS.TABLE, columns, wordToNID, toString)
+        val columns = listOf(
+            Names.WORDS.wordid,
+            Names.WORDS.word
+        ).joinToString(",")
+        val toSqlRow = { lemma: Lemma -> "'${Utils.escape(lemma)}'" }
+        Printers.printInsert(ps, Names.WORDS.TABLE, columns, wordToNID, toSqlRow)
 
         return wordToNID
     }
@@ -150,12 +151,16 @@ object Lexes {
         val casedWordToNID = makeCasedWordNIDs(lexes)
 
         // insert map
-        val columns = listOf(Names.CASEDWORDS.casedwordid, Names.CASEDWORDS.casedword, Names.CASEDWORDS.wordid).joinToString(",")
-        val toString = { casedWord: Lemma ->
+        val columns = listOf(
+            Names.CASEDWORDS.casedwordid,
+            Names.CASEDWORDS.casedword,
+            Names.CASEDWORDS.wordid
+        ).joinToString(",")
+        val toSqlRow = { casedWord: Lemma ->
             val nid = NIDMaps.lookupLC(wordIdToNID, casedWord.lowercase())
             "'${Utils.escape(casedWord)}',$nid"
         }
-        Printers.printInsert(ps, Names.CASEDWORDS.TABLE, columns, casedWordToNID, toString)
+        Printers.printInsert(ps, Names.CASEDWORDS.TABLE, columns, casedWordToNID, toSqlRow)
 
         return casedWordToNID
     }
@@ -192,9 +197,12 @@ object Lexes {
         val morphToNID = makeMorphNIDs(lexes)
 
         // insert map
-        val columns = listOf(Names.MORPHS.morphid, Names.MORPHS.morph).joinToString(",")
-        val toString = { morph: String -> "'${Utils.escape(morph)}'" }
-        Printers.printInsert(ps, Names.MORPHS.TABLE, columns, morphToNID, toString)
+        val columns = listOf(
+            Names.MORPHS.morphid,
+            Names.MORPHS.morph
+        ).joinToString(",")
+        val toSqlRow = { morph: Morph -> "'${Utils.escape(morph)}'" }
+        Printers.printInsert(ps, Names.MORPHS.TABLE, columns, morphToNID, toSqlRow)
 
         return morphToNID
     }
@@ -218,44 +226,46 @@ object Lexes {
         // stream of lexes
         val lexSeq = lexes
             .asSequence()
-            .filter { lex: Lex -> lex.forms != null && lex.forms!!.isNotEmpty() }
+            .filter { it.forms != null && it.forms!!.isNotEmpty() }
             .sortedBy { it.lemma }
 
         // insert map
-        val columns = listOf(Names.LEXES_MORPHS.morphid, Names.LEXES_MORPHS.luid, Names.LEXES_MORPHS.wordid, Names.LEXES_MORPHS.posid).joinToString(",")
-        val toSqlData = { lex: Lex ->
-            val rows = ArrayList<String>()
+        val columns = listOf(
+            Names.LEXES_MORPHS.morphid,
+            Names.LEXES_MORPHS.luid,
+            Names.LEXES_MORPHS.wordid,
+            Names.LEXES_MORPHS.posid
+        ).joinToString(",")
+        val toSqlRows = { lex: Lex ->
             val word = lex.lCLemma
             val wordNID = NIDMaps.lookupLC(wordToNID, word)
             val lexNID = NIDMaps.lookup(lexKeyToNID, Key.KeyLCP.of_t(lex))
             val type = lex.type
-            for (morph in lex.forms!!) {
-                val morphNID = NIDMaps.lookup(morphToNID, morph)
-                rows.add("$morphNID,$lexNID,$wordNID,'$type'")
-            }
-            rows
+            lex.forms!!
+                .map {
+                    val morphNID = NIDMaps.lookup(morphToNID, it)
+                    "$morphNID,$lexNID,$wordNID,'$type'"
+                }
         }
         if (!Printers.WITH_COMMENT) {
-            Printers.printInserts(ps, Names.LEXES_MORPHS.TABLE, columns, lexSeq, toSqlData, false)
+            Printers.printInserts(ps, Names.LEXES_MORPHS.TABLE, columns, lexSeq, toSqlRows, false)
         } else {
-            val toDataWithComment = { lex: Lex ->
-                val data = toSqlData.invoke(lex)
-                val dataWithComment = ArrayList<Pair<String, String>>()
+            val toSqlRowsWithComments = { lex: Lex ->
+                val rows = toSqlRows.invoke(lex)
                 val casedWord = lex.lemma
                 val type = lex.type
-                if (lex.forms != null) {
-                    for ((i, morph) in lex.forms!!.withIndex()) {
-                        val comment = "'$morph' '$casedWord' $type"
-                        dataWithComment.add(data[i] to comment)
-                    }
-                }
-                dataWithComment.asSequence()
+                val comments = lex.forms!!
+                    .asSequence()
+                    .map { "'$it' '$casedWord' $type" }
+                rows
+                    .asSequence()
+                    .zip(comments)
             }
-            Printers.printInsertsWithComment(ps, Names.LEXES_MORPHS.TABLE, columns, lexSeq, toDataWithComment, false)
+            Printers.printInsertsWithComment(ps, Names.LEXES_MORPHS.TABLE, columns, lexSeq, toSqlRowsWithComments, false)
         }
     }
 
-    // pronunciations
+// pronunciations
 
     /**
      * Make pronunciation(values)-to-NID map
@@ -288,9 +298,12 @@ object Lexes {
         val pronunciationValueToNID = makePronunciationNIDs(lexes)
 
         // insert map
-        val columns = listOf(Names.PRONUNCIATIONS.pronunciationid, Names.PRONUNCIATIONS.pronunciation).joinToString(",")
-        val toString = { pronunciationValue: String -> "'${Utils.escape(pronunciationValue)}'" }
-        Printers.printInsert(ps, Names.PRONUNCIATIONS.TABLE, columns, pronunciationValueToNID, toString)
+        val columns = listOf(
+            Names.PRONUNCIATIONS.pronunciationid,
+            Names.PRONUNCIATIONS.pronunciation
+        ).joinToString(",")
+        val toSqlRow = { pronunciationValue: PronunciationValue -> "'${Utils.escape(pronunciationValue)}'" }
+        Printers.printInsert(ps, Names.PRONUNCIATIONS.TABLE, columns, pronunciationValueToNID, toSqlRow)
 
         return pronunciationValueToNID
     }
@@ -325,40 +338,39 @@ object Lexes {
             Names.LEXES_PRONUNCIATIONS.wordid,
             Names.LEXES_PRONUNCIATIONS.posid
         ).joinToString(",")
-
-        val toSqlData = { lex: Lex ->
-            val rows = ArrayList<String>()
+        val toSqlRows = { lex: Lex ->
             val word = lex.lCLemma
             val wordNID = NIDMaps.lookupLC(wordToNID, word)
             val lexNID = NIDMaps.lookup(lexKeyToNID, Key.KeyLCP.of_t(lex))
             val type = lex.type
-            for (pronunciation in lex.pronunciations!!) {
-                val value = pronunciation.value
-                val variety = if (pronunciation.variety == null) "NULL" else "'${pronunciation.variety}'"
-                val pronunciationNID = NIDMaps.lookup(pronunciationToNID, value)
-                rows.add("$pronunciationNID,$variety,$lexNID,$wordNID,'$type'")
-            }
-            rows
+            lex.pronunciations!!
+                .map {
+                    val value = it.value
+                    val variety = if (it.variety == null) "NULL" else "'${it.variety}'"
+                    val pronunciationNID = NIDMaps.lookup(pronunciationToNID, value)
+                    "$pronunciationNID,$variety,$lexNID,$wordNID,'$type'"
+                }
+                .toList()
         }
         if (!Printers.WITH_COMMENT) {
-            Printers.printInserts(ps, Names.LEXES_PRONUNCIATIONS.TABLE, columns, lexSeq, toSqlData, false)
+            Printers.printInserts(ps, Names.LEXES_PRONUNCIATIONS.TABLE, columns, lexSeq, toSqlRows, false)
         } else {
-            val toDataWithComments = { lex: Lex ->
-                val data = toSqlData.invoke(lex)
-                val dataWithComment = ArrayList<Pair<String, String>>()
-                val casedWord = lex.lemma
-                val type = lex.type
-                if (lex.pronunciations != null) {
-                    for ((i, pronunciation) in lex.pronunciations!!.withIndex()) {
-                        val value = pronunciation.value
-                        val variety = if (pronunciation.variety == null) "" else " [${pronunciation.variety}]"
-                        val comment = "$value$variety '$casedWord' $type"
-                        dataWithComment.add(data[i] to comment)
+            val toSqlRowsWithComments = { lex: Lex ->
+                val rows = toSqlRows.invoke(lex)
+                val comments = lex.pronunciations!!
+                    .asSequence()
+                    .map {
+                        val casedWord = lex.lemma
+                        val type = lex.type
+                        val value = it.value
+                        val variety = if (it.variety == null) "" else " [${it.variety}]"
+                        "$value$variety '$casedWord' $type"
                     }
-                }
-                dataWithComment.asSequence()
+                rows
+                    .asSequence()
+                    .zip(comments)
             }
-            Printers.printInsertsWithComment(ps, Names.LEXES_PRONUNCIATIONS.TABLE, columns, lexSeq, toDataWithComments, false)
+            Printers.printInsertsWithComment(ps, Names.LEXES_PRONUNCIATIONS.TABLE, columns, lexSeq, toSqlRowsWithComments, false)
         }
     }
 }

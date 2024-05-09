@@ -165,7 +165,10 @@ object BuiltIn {
         printInsert(
             ps,
             Names.POSES.TABLE,
-            listOf(Names.POSES.posid, Names.POSES.pos).joinToString(","),
+            listOf(
+                Names.POSES.posid,
+                Names.POSES.pos
+            ).joinToString(","),
             "%n('%s','%s')",
             POS_TYPES
         )
@@ -180,7 +183,10 @@ object BuiltIn {
         printInsert(
             ps,
             Names.ADJPOSITIONS.TABLE,
-            listOf(Names.ADJPOSITIONS.positionid, Names.ADJPOSITIONS.position).joinToString(","),
+            listOf(
+                Names.ADJPOSITIONS.positionid,
+                Names.ADJPOSITIONS.position
+            ).joinToString(","),
             "%n('%s','%s')",
             ADJPOSITION_TYPES
         )
@@ -195,7 +201,11 @@ object BuiltIn {
         printInsert2(
             ps,
             Names.RELS.TABLE,
-            listOf(Names.RELS.relationid, Names.RELS.relation, Names.RELS.recurses).joinToString(","),
+            listOf(
+                Names.RELS.relationid,
+                Names.RELS.relation,
+                Names.RELS.recurses
+            ).joinToString(","),
             "%n(%d,'%s', %d)",
             RELATION_TO_NIDS
         )
@@ -210,7 +220,12 @@ object BuiltIn {
         printInsert3(
             ps,
             Names.DOMAINS.TABLE,
-            listOf(Names.DOMAINS.domainid, Names.DOMAINS.domain, Names.DOMAINS.posid, Names.DOMAINS.domainname).joinToString(","),
+            listOf(
+                Names.DOMAINS.domainid,
+                Names.DOMAINS.domain,
+                Names.DOMAINS.posid,
+                Names.DOMAINS.domainname
+            ).joinToString(","),
             "%n(%d,'%s','%s','%s')",
             DOMAIN_TO_NIDS
         )
