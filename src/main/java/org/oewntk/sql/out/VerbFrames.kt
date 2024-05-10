@@ -92,7 +92,7 @@ object VerbFrames {
                 Names.VFRAMES.frameid,
                 Names.VFRAMES.frame
             ).joinToString(","),
-            "%n(%d,'%s')",
+            "(%d,'%s')",
             table
         )
     }

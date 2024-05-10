@@ -36,7 +36,7 @@ class ModelConsumer(
      * @param model model
      */
     override fun accept(model: Model) {
-        Tracing.psInfo.printf("[Model] %s%n", model.sources.contentToString())
+        Tracing.psInfo.println("[Model] ${model.sources.contentToString()}")
 
         // core
         val coreConsumer = CoreModelConsumer(outDir)

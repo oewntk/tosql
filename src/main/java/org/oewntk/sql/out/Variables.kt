@@ -54,7 +54,7 @@ class Variables(bundle: ResourceBundle) {
                     varSubstitutionInIS(inStream, ps, useBackticks, compress)
                 }
         } catch (iae: IllegalArgumentException) {
-            System.err.printf("At %s%n%s%n", file, iae.message)
+            System.err.println("At $file\n${iae.message}")
             throw iae
         }
     }
@@ -82,7 +82,7 @@ class Variables(bundle: ResourceBundle) {
                         //initVars(line);
                         line = varSubstitution(line, useBackticks)
                     } catch (iae: IllegalArgumentException) {
-                        System.err.printf("At line %d content: [%s]%n", lineNum, line)
+                        System.err.println("At line $lineNum content: [$line]")
                         throw iae
                     }
                     if (compress) {
@@ -137,19 +137,5 @@ class Variables(bundle: ResourceBundle) {
         private val DOLLAR_PATTERN: Pattern = Pattern.compile("\\$\\{([a-zA-Z0-9_.]+)}")
 
         private val AT_PATTERN: Pattern = Pattern.compile("@\\{([a-zA-Z0-9_.]+)}")
-
-        /**
-         * Scan input and produces list on stderr with same value
-         *
-         * @param input input
-         */
-        fun dumpVars(input: String) {
-            val p = Pattern.compile("\\$\\{([a-zA-Z0-9_.]+)}")
-            val m = p.matcher(input)
-            if (m.find()) {
-                val varName = m.group(1)
-                System.err.printf("%s=%s%n", varName, varName)
-            }
-        }
     }
 }

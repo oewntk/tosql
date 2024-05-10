@@ -169,7 +169,7 @@ object BuiltIn {
                 Names.POSES.posid,
                 Names.POSES.pos
             ).joinToString(","),
-            "%n('%s','%s')",
+            "('%s','%s')",
             POS_TYPES
         )
     }
@@ -187,7 +187,7 @@ object BuiltIn {
                 Names.ADJPOSITIONS.positionid,
                 Names.ADJPOSITIONS.position
             ).joinToString(","),
-            "%n('%s','%s')",
+            "('%s','%s')",
             ADJPOSITION_TYPES
         )
     }
@@ -206,7 +206,7 @@ object BuiltIn {
                 Names.RELS.relation,
                 Names.RELS.recurses
             ).joinToString(","),
-            "%n(%d,'%s', %d)",
+            "(%d,'%s', %d)",
             RELATION_TO_NIDS
         )
     }
@@ -226,7 +226,7 @@ object BuiltIn {
                 Names.DOMAINS.posid,
                 Names.DOMAINS.domainname
             ).joinToString(","),
-            "%n(%d,'%s','%s','%s')",
+            "(%d,'%s','%s','%s')",
             DOMAIN_TO_NIDS
         )
     }

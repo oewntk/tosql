@@ -36,7 +36,7 @@ object Printers {
         if (objectToNID.isEmpty()) {
             ps.print("-- NONE")
         } else {
-            ps.printf("INSERT INTO %s (%s) VALUES", table, columns)
+            ps.print("INSERT INTO $table ($columns) VALUES")
             objectToNID.keys
                 .withIndex()
                 .forEach { (index, key) ->
@@ -45,7 +45,7 @@ object Printers {
                         ps.print(',')
                     }
                     val nid = NIDMaps.lookup(objectToNID, key)
-                    ps.printf("%n(%d,%s)", nid, row)
+                    ps.print("\n($nid,$row)")
                 }
             ps.println(";")
         }
@@ -75,7 +75,7 @@ object Printers {
         if (objects.isEmpty()) {
             ps.print("-- NONE")
         } else {
-            ps.printf("INSERT INTO %s (%s) VALUES", table, columns)
+            ps.print("INSERT INTO $table ($columns) VALUES")
             objects
                 .asSequence()
                 .map { it to NIDMaps.lookup(objectIdToNID, toId.invoke(it)) }
@@ -87,7 +87,7 @@ object Printers {
                         ps.print(',')
                     }
                     val row = toRow.invoke(valueWithNID.first)
-                    ps.printf("%n(%d,%s)", valueWithNID.second, row)
+                    ps.print("\n(${valueWithNID.second},$row)")
                 }
             ps.println(";")
         }
@@ -117,7 +117,7 @@ object Printers {
         if (objects.isEmpty()) {
             ps.print("-- NONE")
         } else {
-            ps.printf("INSERT INTO %s (%s) VALUES", table, columns)
+            ps.print("INSERT INTO $table ($columns) VALUES")
             objects
                 .asSequence()
                 .map { it to NIDMaps.lookup(objectIdToNID, toId.invoke(it)) }
@@ -129,7 +129,7 @@ object Printers {
                         ps.print(',')
                     }
                     val rowWithComment = toRowWithComment.invoke(valueWithNID.first)
-                    ps.printf("%n(%d,%s) /* %s */", valueWithNID.second, rowWithComment.first, rowWithComment.second)
+                    ps.print("\n(${valueWithNID.second},${rowWithComment.first}) /* ${rowWithComment.second} */")
                 }
             ps.println(";")
         }
@@ -158,7 +158,7 @@ object Printers {
         if (lexes.isEmpty()) {
             ps.print("-- NONE")
         } else {
-            ps.printf("INSERT INTO %s (%s) VALUES", table, columns)
+            ps.print("INSERT INTO $table ($columns) VALUES")
             lexes
                 .asSequence()
                 .map { it to NIDMaps.lookup(lexKeyToNID, Key.KeyLCP.of_t(it)) }
@@ -170,7 +170,7 @@ object Printers {
                         ps.print(',')
                     }
                     val row = toRow.invoke(lexWithNID.first)
-                    ps.printf("%n(%d,%s)", lexWithNID.second, row)
+                    ps.print("\n(${lexWithNID.second},$row)")
                 }
             ps.println(";")
         }
@@ -197,7 +197,7 @@ object Printers {
         if (lexes.isEmpty()) {
             ps.print("-- NONE")
         } else {
-            ps.printf("INSERT INTO %s (%s) VALUES", table, columns)
+            ps.print("INSERT INTO $table ($columns) VALUES")
             lexes
                 .asSequence()
                 .map { it to NIDMaps.lookup(lexKeyToNID, Key.KeyLCP.of_t(it)) }
@@ -209,7 +209,7 @@ object Printers {
                         ps.print(',')
                     }
                     val rowWithComment = toRowWithComment.invoke(lexWithNID.first)
-                    ps.printf("%n(%d,%s) /* %s */", lexWithNID.second, rowWithComment.first, rowWithComment.second)
+                    ps.print("\n(${lexWithNID.second},${rowWithComment.first}) /* ${rowWithComment.second} */")
                 }
             ps.println(";")
         }
@@ -240,15 +240,15 @@ object Printers {
             .withIndex()
             .forEach { (index, thing) ->
                 if (index == 0) {
-                    ps.printf("INSERT INTO %s (%s) VALUES", table, columns)
+                    ps.print("INSERT INTO $table ($columns) VALUES")
                 } else {
                     ps.print(',')
                 }
                 val row = toRow.invoke(thing)
                 if (withNumber) {
-                    ps.printf("%n(%d,%s)", index + 1, row)
+                    ps.print("\n(${index + 1},$row)")
                 } else {
-                    ps.printf("%n(%s)", row)
+                    ps.print("\n($row)")
                 }
             }
         ps.println(";")
@@ -277,15 +277,15 @@ object Printers {
             .withIndex()
             .forEach { (index, thing) ->
                 if (index == 0) {
-                    ps.printf("INSERT INTO %s (%s) VALUES", table, columns)
+                    ps.print("INSERT INTO $table ($columns) VALUES")
                 } else {
                     ps.print(',')
                 }
                 val rowAndComment = toRowWithComment.invoke(thing)
                 if (withNumber) {
-                    ps.printf("%n(%d,%s) /* %s */", index + 1, rowAndComment.first, rowAndComment.second)
+                    ps.print("\n(${index + 1},${rowAndComment.first}) /* ${rowAndComment.second} */")
                 } else {
-                    ps.printf("%n(%s) /* %s */", rowAndComment.first, rowAndComment.second)
+                    ps.print("\n(${rowAndComment.first}) /* ${rowAndComment.second} */")
                 }
             }
         ps.println(";")
@@ -315,14 +315,14 @@ object Printers {
             .withIndex()
             .forEach { (index, row) ->
                 if (index == 0) {
-                    ps.printf("INSERT INTO %s (%s) VALUES", table, columns)
+                    ps.print("INSERT INTO $table ($columns) VALUES")
                 } else {
                     ps.print(',')
                 }
                 if (withNumber) {
-                    ps.printf("%n(%d,%s)", index + 1, row)
+                    ps.print("\n(${index + 1},$row)")
                 } else {
-                    ps.printf("%n(%s)", row)
+                    ps.print("\n($row)")
                 }
             }
         ps.println(";")
@@ -352,14 +352,14 @@ object Printers {
             .withIndex()
             .forEach { (index, rowAndComment) ->
                 if (index == 0) {
-                    ps.printf("INSERT INTO %s (%s) VALUES", table, columns)
+                    ps.print("INSERT INTO $table ($columns) VALUES")
                 } else {
                     ps.print(',')
                 }
                 if (withNumber) {
-                    ps.printf("%n(%d,%s) /* %s */", index + 1, rowAndComment.first, rowAndComment.second)
+                    ps.print("\n(${index + 1},${rowAndComment.first}) /* ${rowAndComment.second} */")
                 } else {
-                    ps.printf("%n(%s) /* %s */", rowAndComment.first, rowAndComment.second)
+                    ps.print("\n(${rowAndComment.first}) /* ${rowAndComment.second} */")
                 }
             }
         ps.println(";")
@@ -384,7 +384,7 @@ object Printers {
         format: String,
         mapper: Map<String, T>,
     ) {
-        ps.printf("INSERT INTO %s (%s) VALUES", table, columns)
+        ps.print("INSERT INTO $table ($columns) VALUES")
         mapper.entries
             .asSequence()
             .sortedBy { it.value }
@@ -393,7 +393,8 @@ object Printers {
                 if (index > 0) {
                     ps.print(',')
                 }
-                ps.printf(format, entry.value, Utils.escape(entry.key))
+                val row = String.format(format, entry.value, Utils.escape(entry.key))
+                ps.print("\n$row")
             }
         ps.println(";")
     }
@@ -415,7 +416,7 @@ object Printers {
         format: String,
         mapper: Map<Array<Any>, T>,
     ) {
-        ps.printf("INSERT INTO %s (%s) VALUES", table, columns)
+        ps.print("INSERT INTO $table ($columns) VALUES")
         mapper.entries
             .toList()
             .sortedBy { it.value }
@@ -425,7 +426,8 @@ object Printers {
                     ps.print(',')
                 }
                 val keys = entry.key
-                ps.printf(format, entry.value, keys[0], keys[1])
+                val row = String.format(format, entry.value, keys[0], keys[1])
+                ps.print("\n$row")
             }
         ps.println(";")
     }
@@ -447,7 +449,7 @@ object Printers {
         format: String,
         mapper: Map<Array<String>, T>,
     ) {
-        ps.printf("INSERT INTO %s (%s) VALUES", table, columns)
+        ps.print("INSERT INTO $table ($columns) VALUES")
         mapper.entries
             .toList()
             .sortedBy { it.value }
@@ -457,7 +459,8 @@ object Printers {
                     ps.print(',')
                 }
                 val keys = entry.key
-                ps.printf(format, entry.value, keys[0], keys[1], keys[2])
+                val row = String.format(format, entry.value, keys[0], keys[1], keys[2])
+                ps.print("\n$row")
             }
         ps.println(";")
     }

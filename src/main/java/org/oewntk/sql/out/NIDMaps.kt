@@ -38,7 +38,7 @@ object NIDMaps {
             assert(nid != 0)
             return nid
         } catch (e: Exception) {
-            Tracing.psErr.printf("lookup of <%s> failed%n", key)
+            Tracing.psErr.println("lookup of <$key> failed")
             throw e
         }
     }
@@ -145,7 +145,7 @@ object NIDMaps {
     private fun print(ps: PrintStream, toNID: Map<String, Int>) {
         toNID.keys
             .sorted()
-            .forEach { ps.printf("%s %d%n", it, toNID[it]) }
+            .forEach { ps.println("$it ${toNID[it]}") }
     }
 
     /**

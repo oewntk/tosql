@@ -67,7 +67,7 @@ class CoreModelConsumer(
      * @param model model
      */
     override fun accept(model: CoreModel) {
-        Tracing.psInfo.printf("[CoreModel] %s%n", model.source)
+        Tracing.psInfo.println("[CoreModel] ${model.source}")
 
         try {
             lexes(outDir, model.lexes)
