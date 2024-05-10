@@ -18,17 +18,11 @@ class Variables(bundle: ResourceBundle) {
 
     /**
      * Variable-value map
-     */
-    private val toValue: MutableMap<String, String> = HashMap()
-
-    /**
      * Set values in map from resource bundle
      */
-    init {
-        for (k in bundle.keySet()) {
-            toValue[k] = bundle.getString(k)
-        }
-    }
+    private val toValue: MutableMap<String, String> = bundle.keySet()
+        .associateWith { bundle.getString(it) }
+        .toMutableMap()
 
     /**
      * Add key-value pair
