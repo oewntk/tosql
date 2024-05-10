@@ -110,7 +110,8 @@ object SerializeNIDs {
      */
     @Throws(IOException::class)
     private fun serialize(os: OutputStream, thing: Any) {
-        ObjectOutputStream(os).use { it.writeObject(thing) }
+        ObjectOutputStream(os)
+            .use { it.writeObject(thing) }
     }
 
     /**
@@ -147,26 +148,33 @@ object SerializeNIDs {
      */
     @Throws(IOException::class)
     fun serializeNIDs(model: CoreModel, outDir: File) {
-        FileOutputStream(File(outDir, "$NID_PREFIX${Names.WORDS.FILE}.ser")).use {
-            serializeWordNIDs(it, model.lexes)
-        }
-        FileOutputStream(File(outDir, "$NID_PREFIX${Names.CASEDWORDS.FILE}.ser")).use {
-            serializeCasedWordNIDs(it, model.lexes)
-        }
-        FileOutputStream(File(outDir, "$NID_PREFIX${Names.MORPHS.FILE}.ser")).use {
-            serializeMorphNIDs(it, model.lexes)
-        }
-        FileOutputStream(File(outDir, "$NID_PREFIX${Names.PRONUNCIATIONS.FILE}.ser")).use {
-            serializePronunciationNIDs(it, model.lexes)
-        }
-        FileOutputStream(File(outDir, "$NID_PREFIX${Names.SENSES.FILE}.ser")).use {
-            serializeSensesNIDs(it, model.senses)
-        }
-        FileOutputStream(File(outDir, "$NID_PREFIX${Names.SYNSETS.FILE}.ser")).use {
-            serializeSynsetNIDs(it, model.synsets)
-        }
-        FileOutputStream(File(outDir, "$SENSEKEYS_WORDS_SYNSETS_FILE.ser")).use {
-            serializeSensekeysWordsSynsetsNIDs(it, model)
-        }
+        FileOutputStream(File(outDir, "$NID_PREFIX${Names.WORDS.FILE}.ser"))
+            .use {
+                serializeWordNIDs(it, model.lexes)
+            }
+        FileOutputStream(File(outDir, "$NID_PREFIX${Names.CASEDWORDS.FILE}.ser"))
+            .use {
+                serializeCasedWordNIDs(it, model.lexes)
+            }
+        FileOutputStream(File(outDir, "$NID_PREFIX${Names.MORPHS.FILE}.ser"))
+            .use {
+                serializeMorphNIDs(it, model.lexes)
+            }
+        FileOutputStream(File(outDir, "$NID_PREFIX${Names.PRONUNCIATIONS.FILE}.ser"))
+            .use {
+                serializePronunciationNIDs(it, model.lexes)
+            }
+        FileOutputStream(File(outDir, "$NID_PREFIX${Names.SENSES.FILE}.ser"))
+            .use {
+                serializeSensesNIDs(it, model.senses)
+            }
+        FileOutputStream(File(outDir, "$NID_PREFIX${Names.SYNSETS.FILE}.ser"))
+            .use {
+                serializeSynsetNIDs(it, model.synsets)
+            }
+        FileOutputStream(File(outDir, "$SENSEKEYS_WORDS_SYNSETS_FILE.ser"))
+            .use {
+                serializeSensekeysWordsSynsetsNIDs(it, model)
+            }
     }
 }

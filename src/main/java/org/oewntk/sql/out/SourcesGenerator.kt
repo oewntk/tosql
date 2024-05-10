@@ -30,11 +30,13 @@ class SourcesGenerator {
             outdir.mkdirs()
         }
         val url = checkNotNull(SourcesGenerator::class.java.getResource("/wn/sqltemplates/data/sources.sql"))
-        url.openStream().use {
-            FileOutputStream(File(outdir, "sources.sql")).use { os ->
-                it.transferTo(os)
+        url.openStream()
+            .use {
+                FileOutputStream(File(outdir, "sources.sql"))
+                    .use { os ->
+                        it.transferTo(os)
+                    }
             }
-        }
     }
 
     companion object {

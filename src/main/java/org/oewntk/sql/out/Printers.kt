@@ -40,12 +40,12 @@ object Printers {
             objectToNID.keys
                 .withIndex()
                 .forEach { (index, key) ->
-                    val s = toRow.invoke(key)
+                    val row = toRow.invoke(key)
                     if (index > 0) {
                         ps.print(',')
                     }
                     val nid = NIDMaps.lookup(objectToNID, key)
-                    ps.printf("%n(%d,%s)", nid, s)
+                    ps.printf("%n(%d,%s)", nid, row)
                 }
             ps.println(";")
         }
@@ -82,12 +82,12 @@ object Printers {
                 .toList()
                 .sortedBy { it.second }
                 .withIndex()
-                .forEach { (index, pair) ->
+                .forEach { (index, valueWithNID) ->
                     if (index > 0) {
                         ps.print(',')
                     }
-                    val s = toRow.invoke(pair.first)
-                    ps.printf("%n(%d,%s)", pair.second, s)
+                    val row = toRow.invoke(valueWithNID.first)
+                    ps.printf("%n(%d,%s)", valueWithNID.second, row)
                 }
             ps.println(";")
         }
@@ -124,12 +124,12 @@ object Printers {
                 .toList()
                 .sortedBy { it.second }
                 .withIndex()
-                .forEach { (index, pair) ->
+                .forEach { (index, valueWithNID) ->
                     if (index > 0) {
                         ps.print(',')
                     }
-                    val s = toRowWithComment.invoke(pair.first)
-                    ps.printf("%n(%d,%s) /* %s */", pair.second, s.first, s.second)
+                    val rowWithComment = toRowWithComment.invoke(valueWithNID.first)
+                    ps.printf("%n(%d,%s) /* %s */", valueWithNID.second, rowWithComment.first, rowWithComment.second)
                 }
             ps.println(";")
         }
@@ -165,14 +165,12 @@ object Printers {
                 .toList()
                 .sortedBy { it.second }
                 .withIndex()
-                .forEach { (index, pair) ->
+                .forEach { (index, lexWithNID) ->
                     if (index > 0) {
                         ps.print(',')
                     }
-                    val lex = pair.first
-                    val v = pair.second
-                    val s = toRow.invoke(lex)
-                    ps.printf("%n(%d,%s)", v, s)
+                    val row = toRow.invoke(lexWithNID.first)
+                    ps.printf("%n(%d,%s)", lexWithNID.second, row)
                 }
             ps.println(";")
         }
@@ -206,14 +204,12 @@ object Printers {
                 .toList()
                 .sortedBy { it.second }
                 .withIndex()
-                .forEach { (index, pair) ->
+                .forEach { (index, lexWithNID) ->
                     if (index > 0) {
                         ps.print(',')
                     }
-                    val lex = pair.first
-                    val v = pair.second
-                    val s = toRowWithComment.invoke(lex)
-                    ps.printf("%n(%d,%s) /* %s */", v, s.first, s.second)
+                    val rowWithComment = toRowWithComment.invoke(lexWithNID.first)
+                    ps.printf("%n(%d,%s) /* %s */", lexWithNID.second, rowWithComment.first, rowWithComment.second)
                 }
             ps.println(";")
         }
@@ -248,11 +244,11 @@ object Printers {
                 } else {
                     ps.print(',')
                 }
-                val s = toRow.invoke(thing)
+                val row = toRow.invoke(thing)
                 if (withNumber) {
-                    ps.printf("%n(%d,%s)", index + 1, s)
+                    ps.printf("%n(%d,%s)", index + 1, row)
                 } else {
-                    ps.printf("%n(%s)", s)
+                    ps.printf("%n(%s)", row)
                 }
             }
         ps.println(";")
@@ -274,7 +270,7 @@ object Printers {
         table: String,
         columns: String,
         seq: Sequence<T>,
-        toRowWithComment: (T) -> Pair<String,String>,
+        toRowWithComment: (T) -> Pair<String, String>,
         withNumber: Boolean,
     ) {
         seq
@@ -285,11 +281,11 @@ object Printers {
                 } else {
                     ps.print(',')
                 }
-                val s = toRowWithComment.invoke(thing)
+                val rowAndComment = toRowWithComment.invoke(thing)
                 if (withNumber) {
-                    ps.printf("%n(%d,%s) /* %s */", index + 1, s.first, s.second)
+                    ps.printf("%n(%d,%s) /* %s */", index + 1, rowAndComment.first, rowAndComment.second)
                 } else {
-                    ps.printf("%n(%s) /* %s */", s.first, s.second)
+                    ps.printf("%n(%s) /* %s */", rowAndComment.first, rowAndComment.second)
                 }
             }
         ps.println(";")
@@ -317,16 +313,16 @@ object Printers {
         seq
             .flatMap(toRows)
             .withIndex()
-            .forEach {
-                if (it.index == 0) {
+            .forEach { (index, row) ->
+                if (index == 0) {
                     ps.printf("INSERT INTO %s (%s) VALUES", table, columns)
                 } else {
                     ps.print(',')
                 }
                 if (withNumber) {
-                    ps.printf("%n(%d,%s)", it.index + 1, it.value)
+                    ps.printf("%n(%d,%s)", index + 1, row)
                 } else {
-                    ps.printf("%n(%s)", it.value)
+                    ps.printf("%n(%s)", row)
                 }
             }
         ps.println(";")
@@ -354,16 +350,16 @@ object Printers {
         seq
             .flatMap(toRowsWithComments)
             .withIndex()
-            .forEach {
-                if (it.index == 0) {
+            .forEach { (index, rowAndComment) ->
+                if (index == 0) {
                     ps.printf("INSERT INTO %s (%s) VALUES", table, columns)
                 } else {
                     ps.print(',')
                 }
                 if (withNumber) {
-                    ps.printf("%n(%d,%s) /* %s */", it.index + 1, it.value.first, it.value.second)
+                    ps.printf("%n(%d,%s) /* %s */", index + 1, rowAndComment.first, rowAndComment.second)
                 } else {
-                    ps.printf("%n(%s) /* %s */", it.value.first, it.value.second)
+                    ps.printf("%n(%s) /* %s */", rowAndComment.first, rowAndComment.second)
                 }
             }
         ps.println(";")
@@ -393,13 +389,11 @@ object Printers {
             .asSequence()
             .sortedBy { it.value }
             .withIndex()
-            .forEach { (index, pair) ->
+            .forEach { (index, entry) ->
                 if (index > 0) {
                     ps.print(',')
                 }
-                val k = pair.key
-                val v = pair.value
-                ps.printf(format, v, Utils.escape(k))
+                ps.printf(format, entry.value, Utils.escape(entry.key))
             }
         ps.println(";")
     }
@@ -426,13 +420,12 @@ object Printers {
             .toList()
             .sortedBy { it.value }
             .withIndex()
-            .forEach { (index, pair) ->
+            .forEach { (index, entry) ->
                 if (index > 0) {
                     ps.print(',')
                 }
-                val k = pair.key
-                val v = pair.value
-                ps.printf(format, v, k[0], k[1])
+                val keys = entry.key
+                ps.printf(format, entry.value, keys[0], keys[1])
             }
         ps.println(";")
     }
@@ -459,13 +452,12 @@ object Printers {
             .toList()
             .sortedBy { it.value }
             .withIndex()
-            .forEach { (index, pair) ->
+            .forEach { (index, entry) ->
                 if (index > 0) {
                     ps.print(',')
                 }
-                val k = pair.key
-                val v = pair.value
-                ps.printf(format, v, k[0], k[1], k[2])
+                val keys = entry.key
+                ps.printf(format, entry.value, keys[0], keys[1], keys[2])
             }
         ps.println(";")
     }

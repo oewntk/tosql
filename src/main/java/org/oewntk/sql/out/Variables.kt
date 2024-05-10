@@ -55,9 +55,10 @@ class Variables(bundle: ResourceBundle) {
 
         // iterate on lines
         try {
-            FileInputStream(file).use { inStream ->
-                varSubstitutionInIS(inStream, ps, useBackticks, compress)
-            }
+            FileInputStream(file)
+                .use { inStream ->
+                    varSubstitutionInIS(inStream, ps, useBackticks, compress)
+                }
         } catch (iae: IllegalArgumentException) {
             System.err.printf("At %s%n%s%n", file, iae.message)
             throw iae
@@ -77,24 +78,25 @@ class Variables(bundle: ResourceBundle) {
     fun varSubstitutionInIS(inStream: InputStream, ps: PrintStream, useBackticks: Boolean, compress: Boolean) {
 
         // iterate on lines
-        BufferedReader(InputStreamReader(inStream, Charset.defaultCharset())).use { reader ->
-            var lineNum = 0
-            while (true) {
-                var line: String = reader.readLine() ?: break
-                lineNum++
-                try {
-                    //initVars(line);
-                    line = varSubstitution(line, useBackticks)
-                } catch (iae: IllegalArgumentException) {
-                    System.err.printf("At line %d content: [%s]%n", lineNum, line)
-                    throw iae
+        BufferedReader(InputStreamReader(inStream, Charset.defaultCharset()))
+            .use { reader ->
+                var lineNum = 0
+                while (true) {
+                    var line: String = reader.readLine() ?: break
+                    lineNum++
+                    try {
+                        //initVars(line);
+                        line = varSubstitution(line, useBackticks)
+                    } catch (iae: IllegalArgumentException) {
+                        System.err.printf("At line %d content: [%s]%n", lineNum, line)
+                        throw iae
+                    }
+                    if (compress) {
+                        line = line.replace("\\s+".toRegex(), " ")
+                    }
+                    ps.println(line)
                 }
-                if (compress) {
-                    line = line.replace("\\s+".toRegex(), " ")
-                }
-                ps.println(line)
             }
-        }
     }
 
     /**

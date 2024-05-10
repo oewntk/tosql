@@ -66,24 +66,26 @@ class SchemaGenerator(
         // Input
         // Single output if console or file
         if (outputFileOrDir == null || outputFileOrDir.isFile) {
-            if (outputFileOrDir == null) System.out else PrintStream(outputFileOrDir).use { ps ->
-                processTemplates(module, inputSubdir, inputs) { inStream: InputStream, _ ->
-                    try {
-                        variables.varSubstitutionInIS(inStream, ps, useBackticks = true, compress = true)
-                    } catch (e: IOException) {
-                        e.printStackTrace()
+            if (outputFileOrDir == null) System.out else PrintStream(outputFileOrDir)
+                .use { ps ->
+                    processTemplates(module, inputSubdir, inputs) { inStream: InputStream, _ ->
+                        try {
+                            variables.varSubstitutionInIS(inStream, ps, useBackticks = true, compress = true)
+                        } catch (e: IOException) {
+                            e.printStackTrace()
+                        }
                     }
                 }
-            }
         } else if (outputFileOrDir.isDirectory) {
             val dir: File = outputFileOrDir
             processTemplates(module, inputSubdir, inputs) { inStream: InputStream, name: String ->
                 System.err.println(name)
                 val output2 = File(dir, name)
                 try {
-                    PrintStream(output2).use { ps ->
-                        variables.varSubstitutionInIS(inStream, ps, useBackticks = true, compress = true)
-                    }
+                    PrintStream(output2)
+                        .use { ps ->
+                            variables.varSubstitutionInIS(inStream, ps, useBackticks = true, compress = true)
+                        }
                 } catch (e: IOException) {
                     e.printStackTrace()
                 }
@@ -114,9 +116,10 @@ class SchemaGenerator(
             for (input in inputs) {
                 val file = File(path, input)
                 val fileName = Paths.get(input).fileName.toString()
-                FileInputStream(file).use { fis ->
-                    consumer.accept(fis, fileName)
-                }
+                FileInputStream(file)
+                    .use { fis ->
+                        consumer.accept(fis, fileName)
+                    }
             }
             return
         }
@@ -126,24 +129,26 @@ class SchemaGenerator(
         if (jarFile.isFile) {
             // Run with JAR file
             val prefix = "$module/sqltemplates/$path/"
-            JarFile(jarFile).use { jar ->
-                val entries = jar.entries() //gives ALL entries in jar
-                while (entries.hasMoreElements()) {
-                    val entry = entries.nextElement()
-                    if (entry.isDirectory) {
-                        continue
-                    }
+            JarFile(jarFile)
+                .use { jar ->
+                    val entries = jar.entries() //gives ALL entries in jar
+                    while (entries.hasMoreElements()) {
+                        val entry = entries.nextElement()
+                        if (entry.isDirectory) {
+                            continue
+                        }
 
-                    val name = entry.name
-                    //filter according to the path
-                    if (name.startsWith(prefix)) {
-                        val fileName = Paths.get(name).fileName.toString()
-                        jar.getInputStream(entry).use { inStream ->
-                            consumer.accept(inStream, fileName)
+                        val name = entry.name
+                        //filter according to the path
+                        if (name.startsWith(prefix)) {
+                            val fileName = Paths.get(name).fileName.toString()
+                            jar.getInputStream(entry)
+                                .use { inStream ->
+                                    consumer.accept(inStream, fileName)
+                                }
                         }
                     }
                 }
-            }
         } else {
             // Run with IDE
             val url = SchemaGenerator::class.java.getResource("/$module/sqltemplates/$path")
@@ -154,9 +159,10 @@ class SchemaGenerator(
                     if (files != null) {
                         for (file in files) {
                             System.err.println(file.name)
-                            FileInputStream(file).use { fis ->
-                                consumer.accept(fis, file.name)
-                            }
+                            FileInputStream(file)
+                                .use { fis ->
+                                    consumer.accept(fis, file.name)
+                                }
                         }
                     }
                 } catch (ex: URISyntaxException) {

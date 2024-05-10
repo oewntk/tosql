@@ -23,30 +23,36 @@ object DeSerializeNIDs {
     fun deserializeNIDs(inDir: File): Map<String, Map<String, Int>> {
 
         val maps: MutableMap<String, Map<String, Int>> = HashMap()
-        FileInputStream(File(inDir, SerializeNIDs.NID_PREFIX + Names.WORDS.FILE)).use {
-            val m = deSerializeNIDs(it)
-            maps.put(Names.WORDS.FILE, m)
-        }
-        FileInputStream(File(inDir, SerializeNIDs.NID_PREFIX + Names.CASEDWORDS.FILE)).use {
-            val m = deSerializeNIDs(it)
-            maps.put(Names.CASEDWORDS.FILE, m)
-        }
-        FileInputStream(File(inDir, SerializeNIDs.NID_PREFIX + Names.MORPHS.FILE)).use {
-            val m = deSerializeNIDs(it)
-            maps.put(Names.MORPHS.FILE, m)
-        }
-        FileInputStream(File(inDir, SerializeNIDs.NID_PREFIX + Names.PRONUNCIATIONS.FILE)).use {
-            val m = deSerializeNIDs(it)
-            maps.put(Names.PRONUNCIATIONS.FILE, m)
-        }
-        FileInputStream(File(inDir, SerializeNIDs.NID_PREFIX + Names.SENSES.FILE)).use {
-            val m = deSerializeNIDs(it)
-            maps.put(Names.SENSES.FILE, m)
-        }
-        FileInputStream(File(inDir, SerializeNIDs.NID_PREFIX + Names.SYNSETS.FILE)).use {
-            val m = deSerializeNIDs(it)
-            maps.put(Names.SYNSETS.FILE, m)
-        }
+        FileInputStream(File(inDir, SerializeNIDs.NID_PREFIX + Names.WORDS.FILE))
+            .use {
+                val m = deSerializeNIDs(it)
+                maps.put(Names.WORDS.FILE, m)
+            }
+        FileInputStream(File(inDir, SerializeNIDs.NID_PREFIX + Names.CASEDWORDS.FILE))
+            .use {
+                val m = deSerializeNIDs(it)
+                maps.put(Names.CASEDWORDS.FILE, m)
+            }
+        FileInputStream(File(inDir, SerializeNIDs.NID_PREFIX + Names.MORPHS.FILE))
+            .use {
+                val m = deSerializeNIDs(it)
+                maps.put(Names.MORPHS.FILE, m)
+            }
+        FileInputStream(File(inDir, SerializeNIDs.NID_PREFIX + Names.PRONUNCIATIONS.FILE))
+            .use {
+                val m = deSerializeNIDs(it)
+                maps.put(Names.PRONUNCIATIONS.FILE, m)
+            }
+        FileInputStream(File(inDir, SerializeNIDs.NID_PREFIX + Names.SENSES.FILE))
+            .use {
+                val m = deSerializeNIDs(it)
+                maps.put(Names.SENSES.FILE, m)
+            }
+        FileInputStream(File(inDir, SerializeNIDs.NID_PREFIX + Names.SYNSETS.FILE))
+            .use {
+                val m = deSerializeNIDs(it)
+                maps.put(Names.SYNSETS.FILE, m)
+            }
         return maps
     }
 
@@ -74,7 +80,8 @@ object DeSerializeNIDs {
      */
     @Throws(IOException::class, ClassNotFoundException::class)
     private fun deSerialize(inStream: InputStream): Any {
-        ObjectInputStream(inStream).use { return it.readObject() }
+        ObjectInputStream(inStream)
+            .use { return it.readObject() }
     }
 
     /**

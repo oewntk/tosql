@@ -66,13 +66,10 @@ class ModelConsumer(
      */
     @Throws(FileNotFoundException::class)
     private fun frames(outDir: File, verbFrames: Collection<VerbFrame>) {
-        PrintStream(
-            FileOutputStream(File(outDir, makeFilename(Names.VFRAMES.FILE))),
-            true,
-            StandardCharsets.UTF_8
-        ).use {
-            VerbFrames.generateVerbFrames(it, verbFrames)
-        }
+        PrintStream(FileOutputStream(File(outDir, makeFilename(Names.VFRAMES.FILE))), true, StandardCharsets.UTF_8)
+            .use {
+                VerbFrames.generateVerbFrames(it, verbFrames)
+            }
     }
 
     /**
@@ -91,38 +88,31 @@ class ModelConsumer(
         sensesById: Map<String, Sense>,
         verbTemplatesById: Map<Int, VerbTemplate>,
     ) {
-        PrintStream(
-            FileOutputStream(File(outDir, makeFilename(Names.SENSES_VTEMPLATES.FILE))),
-            true,
-            StandardCharsets.UTF_8
-        ).use {
-            generateSensesVerbTemplates(
-                it,
-                sensesById,
-                coreConsumer.synsetIdToNID!!,
-                coreConsumer.lexKeyToNID!!,
-                coreConsumer.wordToNID!!
-            )
-        }
+        PrintStream(FileOutputStream(File(outDir, makeFilename(Names.SENSES_VTEMPLATES.FILE))), true, StandardCharsets.UTF_8)
+            .use {
+                generateSensesVerbTemplates(
+                    it,
+                    sensesById,
+                    coreConsumer.synsetIdToNID!!,
+                    coreConsumer.lexKeyToNID!!,
+                    coreConsumer.wordToNID!!
+                )
+            }
         val toSqlRow = { entry: Pair<Int, VerbTemplate> ->
             "${entry.first}, '${escape(entry.second.template)}'"
         }
-
-        PrintStream(
-            FileOutputStream(File(outDir, makeFilename(Names.VTEMPLATES.FILE))),
-            true,
-            StandardCharsets.UTF_8
-        ).use {
-            generateTable(
-                it,
-                Names.VTEMPLATES.TABLE,
-                listOf(
-                    Names.VTEMPLATES.templateid,
-                    Names.VTEMPLATES.template
-                ).joinToString(","),
-                verbTemplatesById,
-                toSqlRow
-            )
-        }
+        PrintStream(FileOutputStream(File(outDir, makeFilename(Names.VTEMPLATES.FILE))), true, StandardCharsets.UTF_8)
+            .use {
+                generateTable(
+                    it,
+                    Names.VTEMPLATES.TABLE,
+                    listOf(
+                        Names.VTEMPLATES.templateid,
+                        Names.VTEMPLATES.template
+                    ).joinToString(","),
+                    verbTemplatesById,
+                    toSqlRow
+                )
+            }
     }
 }
