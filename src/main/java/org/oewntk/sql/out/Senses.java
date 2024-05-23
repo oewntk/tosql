@@ -135,7 +135,9 @@ public class Senses
 			int wordNID1 = NIDMaps.lookupLC(wordIdToNIDMap, word1);
 			int synsetNID1 = NIDMaps.lookup(synsetIdToNIDMap, synsetId1);
 			var relations = sense.getRelations();
-			for (String relation : relations.keySet())
+			List<String> keys = new ArrayList<>(relations.keySet());
+			keys.sort(BuiltIn.RELATION_COMPARATOR);
+			for (String relation : keys)
 			{
 				if (!BuiltIn.OEWN_RELATION_TYPES.containsKey(relation))
 				{

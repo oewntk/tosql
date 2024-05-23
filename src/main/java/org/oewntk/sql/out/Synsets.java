@@ -127,7 +127,9 @@ public class Synsets
 				String synset1Id = synset.getSynsetId();
 				var relations = synset.getRelations();
 				int i = 0;
-				for (String relation : relations.keySet())
+				List<String> keys = new ArrayList<>(relations.keySet());
+				keys.sort(BuiltIn.RELATION_COMPARATOR);
+				for (String relation : keys)
 				{
 					for (String synsetId2 : relations.get(relation))
 					{
