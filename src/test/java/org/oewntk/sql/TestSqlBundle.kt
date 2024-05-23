@@ -6,7 +6,6 @@ package org.oewntk.sql
 import org.junit.Assert
 import org.junit.BeforeClass
 import org.junit.Test
-import org.oewntk.model.Tracing
 import org.oewntk.sql.out.Names
 import org.oewntk.sql.out.Variables
 import java.util.*
