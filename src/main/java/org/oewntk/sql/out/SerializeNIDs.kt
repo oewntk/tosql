@@ -13,6 +13,7 @@ import org.oewntk.sql.out.Lexes.makeWordNIDs
 import org.oewntk.sql.out.Senses.makeSenseNIDs
 import org.oewntk.sql.out.Synsets.makeSynsetNIDs
 import java.io.*
+import java.util.*
 
 /**
  * Serialize ID to Numeric IDs maps
@@ -116,6 +117,7 @@ object SerializeNIDs {
 
     /**
      * Serialize sensekey to wordnid-synsetnid
+     * Does not use Kotlin pairs.
      *
      * @param os    output stream
      * @param model model
@@ -123,6 +125,31 @@ object SerializeNIDs {
      */
     @Throws(IOException::class)
     private fun serializeSensekeysWordsSynsetsNIDs(os: OutputStream, model: CoreModel) {
+        val wordToNID = makeWordNIDs(model.lexes)
+        val synsetIdToNID = makeSynsetNIDs(model.synsets)
+        val m = model.senses
+            .asSequence()
+            .map { AbstractMap.SimpleEntry(it.senseKey, (AbstractMap.SimpleEntry(wordToNID[it.lCLemma], synsetIdToNID[it.synsetId]))) } // avoid kotlin.Pair dependency
+            .groupBy { it.key }
+            .mapValues { (_, values) ->
+                values
+                    .reduce { e, n ->
+                        if (e != n) System.err.println("existing $e -> $n")
+                        e
+                    }
+            }
+        serialize(os, m)
+    }
+
+    /**
+     * Serialize sensekey to wordnid-synsetnid
+     *
+     * @param os    output stream
+     * @param model model
+     * @throws IOException io exception
+     */
+    @Throws(IOException::class)
+    private fun kserializeSensekeysWordsSynsetsNIDs(os: OutputStream, model: CoreModel) {
         val wordToNID = makeWordNIDs(model.lexes)
         val synsetIdToNID = makeSynsetNIDs(model.synsets)
         val m = model.senses
