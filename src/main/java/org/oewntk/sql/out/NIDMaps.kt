@@ -157,27 +157,27 @@ object NIDMaps {
      */
     @Throws(IOException::class)
     fun printMaps(model: CoreModel, outDir: File) {
-        PrintStream(FileOutputStream(File(outDir, Names.WORDS.FILE)), true, StandardCharsets.UTF_8)
+        PrintStream(FileOutputStream(File(outDir, "${Names.WORDS.FILE}.ser")), true, StandardCharsets.UTF_8)
             .use {
                 printWords(it, model.lexes)
             }
-        PrintStream(FileOutputStream(File(outDir, Names.CASEDWORDS.FILE)), true, StandardCharsets.UTF_8)
+        PrintStream(FileOutputStream(File(outDir, "${Names.CASEDWORDS.FILE}.ser")), true, StandardCharsets.UTF_8)
             .use {
                 printCasedWords(it, model.lexes)
             }
-        PrintStream(FileOutputStream(File(outDir, Names.MORPHS.FILE)), true, StandardCharsets.UTF_8)
+        PrintStream(FileOutputStream(File(outDir, "${Names.MORPHS.FILE}.ser")), true, StandardCharsets.UTF_8)
             .use {
                 printMorphs(it, model.lexes)
             }
-        PrintStream(FileOutputStream(File(outDir, Names.PRONUNCIATIONS.FILE)), true, StandardCharsets.UTF_8)
+        PrintStream(FileOutputStream(File(outDir, "${Names.PRONUNCIATIONS.FILE}.ser")), true, StandardCharsets.UTF_8)
             .use {
                 printPronunciations(it, model.lexes)
             }
-        PrintStream(FileOutputStream(File(outDir, Names.SYNSETS.FILE)), true, StandardCharsets.UTF_8)
+        PrintStream(FileOutputStream(File(outDir, "${Names.SYNSETS.FILE}.ser")), true, StandardCharsets.UTF_8)
             .use {
                 printSynsets(it, model.synsets)
             }
-        PrintStream(FileOutputStream(File(outDir, Names.SENSES.FILE)), true, StandardCharsets.UTF_8)
+        PrintStream(FileOutputStream(File(outDir, "${Names.SENSES.FILE}.ser")), true, StandardCharsets.UTF_8)
             .use {
                 printSenses(it, model.senses)
             }
