@@ -128,16 +128,7 @@ object SerializeNIDs {
         val wordToNID = makeWordNIDs(model.lexes)
         val synsetIdToNID = makeSynsetNIDs(model.synsets)
         val m = model.senses
-            .asSequence()
-            .map { AbstractMap.SimpleEntry(it.senseKey, (AbstractMap.SimpleEntry(wordToNID[it.lCLemma], synsetIdToNID[it.synsetId]))) } // avoid kotlin.Pair dependency
-            .groupBy { it.key }
-            .mapValues { (_, values) ->
-                values
-                    .reduce { e, n ->
-                        if (e != n) System.err.println("existing $e -> $n")
-                        e
-                    }
-            }
+            .associate { it.senseKey to AbstractMap.SimpleEntry(wordToNID[it.lCLemma], synsetIdToNID[it.synsetId]) } // (sensekey, (lemma,synsetId)), avoid kotlin.Pair dependency
         serialize(os, m)
     }
 
@@ -153,16 +144,7 @@ object SerializeNIDs {
         val wordToNID = makeWordNIDs(model.lexes)
         val synsetIdToNID = makeSynsetNIDs(model.synsets)
         val m = model.senses
-            .asSequence()
-            .map { it.senseKey to (wordToNID[it.lCLemma] to synsetIdToNID[it.synsetId]) }
-            .groupBy { it.first }
-            .mapValues { (_, values) ->
-                values
-                    .reduce { e, n ->
-                        if (e != n) System.err.println("existing $e -> $n")
-                        e
-                    }
-            }
+            .associate { it.senseKey to (wordToNID[it.lCLemma] to synsetIdToNID[it.synsetId]) } // (sensekey, (lemma,synsetId))
         serialize(os, m)
     }
 
