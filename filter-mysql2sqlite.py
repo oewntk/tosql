@@ -8,17 +8,20 @@ import re
 c_en1=r'([^\s]+)\s*ENUM\s*\(([^)]+)\)'
 c_en2=r'\1 CHARACTER (1) CHECK( \1 IN (\2) )'
 
-c_cs1=r'CHARACTER\s+SET\s+utf8\s*'
-c_cs2=r''
-
-c_bc1=r'COLLATE\s+utf8_bin\s*'
+c_bc1=r'COLLATE\s+utf8mb4_bin\s*'
 c_bc2=r''
 
 c_cc1=r'COLLATE\s+utf8mb4_0900_as_cs\s*'
 c_cc2=r''
 
+c_ci1=r'COLLATE\s+utf8mb4_0900_as_ci\s*'
+c_ci2=r''
+
 c_dcs1=r'DEFAULT\s+CHARSET=utf8mb4'
 c_dcs2=r''
+
+c_cs1=r'CHARACTER\s+SET\s+utf8mb4\s*'
+c_cs2=r''
 
 c_uk1=r'UNIQUE\s+KEY\s'
 c_uk2=r'UNIQUE'
@@ -67,19 +70,20 @@ for line in lines:
 	line0=line
 	line=line.strip()
 
-	if re.match("^.*CREATE TABLE.*$", line):
+	if re.match(r"^.*CREATE TABLE.*$", line):
 		creating=True
-	elif re.match("^.*ALTER TABLE.*$", line):
+	elif re.match(r"^.*ALTER TABLE.*$", line):
 		altering=True
-	elif re.match("^.*CREATE.*VIEW.*$", line):
+	elif re.match(r"^.*CREATE.*VIEW.*$", line):
 		view=True
 
 	if creating:
 		line=replace(c_en1,c_en2,line)
 		line=replace(c_bc1,c_bc2,line)
 		line=replace(c_cc1,c_cc2,line)
-		line=replace(c_cs1,c_cs2,line)
+		line=replace(c_ci1,c_ci2,line)
 		line=replace(c_dcs1,c_dcs2,line)
+		line=replace(c_cs1,c_cs2,line)
 		line=replace(c_uk1,c_uk2,line)
 	elif altering:
 		line=replace(k_l1,k_l2,line)

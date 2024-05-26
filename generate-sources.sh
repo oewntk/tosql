@@ -1,9 +1,8 @@
 #!/bin/bash
 
 #
-# Copyright (c) 2021. Bernard Bou.
+# Copyright (c) 2021-2024. Bernard Bou.
 #
-# outdir
 
 export R='\u001b[31m'
 export G='\u001b[32m'
@@ -19,4 +18,5 @@ if [ "${outdir}" == "" ]; then
   outdir="sql"
 fi
 
-java -ea -cp generate-schema.jar org.oewntk.sql.out.SourcesGenerator "${outdir}"
+jar=target/generator-uber.jar
+java -ea -cp "${jar}" org.oewntk.sql.out.SourcesGenerator "${outdir}"

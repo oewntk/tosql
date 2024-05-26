@@ -1,209 +1,374 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<!--
-  ~ Copyright (c) 2021. Bernard Bou.
+<?xml version="1.0" encoding="UTF-8"?><!--
+  ~ Copyright (c) 2021-2024. Bernard Bou.
   -->
 
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-	<modelVersion>4.0.0</modelVersion>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
 
-	<groupId>io.github.oewntk</groupId>
-	<artifactId>tosql</artifactId>
-	<version>1.0.4</version>
-	<name>to_sql</name>
-	<description>Export Wordnet model to SQL files.</description>
-	<url>https://github.com/oewntk/tosql</url>
+  <groupId>io.github.oewntk</groupId>
+  <artifactId>tosql</artifactId>
+  <version>2.1.1</version>
+  <name>to_sql</name>
+  <description>Export Wordnet model to SQL files.</description>
+  <url>https://github.com/oewntk/tosql</url>
 
-	<properties>
-		<maven.compiler.source>11</maven.compiler.source>
-		<maven.compiler.target>11</maven.compiler.target>
-		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-	</properties>
+  <properties>
+    <maven.compiler.source>11</maven.compiler.source>
+    <maven.compiler.target>11</maven.compiler.target>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <kotlin.version>1.9.23</kotlin.version>
+  </properties>
 
-	<dependencies>
-		<dependency>
-			<groupId>io.github.oewntk</groupId>
-			<artifactId>model</artifactId>
-			<version>1.0.4</version>
-		</dependency>
-		<dependency>
-			<groupId>junit</groupId>
-			<artifactId>junit</artifactId>
-			<version>4.13.2</version>
-			<scope>test</scope>
-		</dependency>
-	</dependencies>
+  <dependencies>
+    <dependency>
+      <groupId>io.github.oewntk</groupId>
+      <artifactId>model</artifactId>
+      <version>2.1.1</version>
+    </dependency>
+    <dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+      <version>4.13.2</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.jetbrains.kotlin</groupId>
+      <artifactId>kotlin-stdlib</artifactId>
+      <version>${kotlin.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.jetbrains.kotlin</groupId>
+      <artifactId>kotlin-test-junit</artifactId>
+      <version>${kotlin.version}</version>
+      <scope>test</scope>
+    </dependency>
+  </dependencies>
 
-	<build>
-		<plugins>
+  <build>
 
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-compiler-plugin</artifactId>
-				<version>3.8.1</version>
-				<configuration>
-					<source>11</source>
-					<target>11</target>
-				</configuration>
-			</plugin>
+    <plugins>
 
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-source-plugin</artifactId>
-				<version>3.2.1</version>
-				<executions>
-					<execution>
-						<id>attach-sources</id>
-						<goals>
-							<goal>jar</goal>
-						</goals>
-					</execution>
-				</executions>
-			</plugin>
+      <plugin>
+        <groupId>org.jetbrains.kotlin</groupId>
+        <artifactId>kotlin-maven-plugin</artifactId>
+        <version>${kotlin.version}</version>
+        <executions>
+          <execution>
+            <id>compile</id>
+            <phase>compile</phase>
+            <goals>
+              <goal>compile</goal>
+            </goals>
+            <configuration>
+              <sourceDirs>
+                <source>target/generated-sources/annotations</source>
+              </sourceDirs>
+            </configuration>
+          </execution>
+          <execution>
+            <id>test-compile</id>
+            <phase>test-compile</phase>
+            <goals>
+              <goal>test-compile</goal>
+            </goals>
+            <configuration>
+              <sourceDirs>
+                <source>target/generated-test-sources/test-annotations</source>
+              </sourceDirs>
+            </configuration>
+          </execution>
+        </executions>
+        <configuration>
+          <jvmTarget>${maven.compiler.target}</jvmTarget>
+        </configuration>
+      </plugin>
 
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-surefire-plugin</artifactId>
-				<version>2.22.2</version>
-				<configuration>
-					<systemProperties>
-						<property>
-							<name>SILENT</name>
-						</property>
-					</systemProperties>
-				</configuration>
-			</plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-compiler-plugin</artifactId>
+        <version>3.8.1</version>
+        <executions>
+          <execution>
+            <id>default-compile</id>
+            <phase>none</phase>
+          </execution>
+          <execution>
+            <id>default-testCompile</id>
+            <phase>none</phase>
+          </execution>
+          <execution>
+            <id>compile</id>
+            <phase>compile</phase>
+            <goals>
+              <goal>compile</goal>
+            </goals>
+          </execution>
+          <execution>
+            <id>testCompile</id>
+            <phase>test-compile</phase>
+            <goals>
+              <goal>testCompile</goal>
+            </goals>
+          </execution>
+        </executions>
+        <configuration>
+          <source>11</source>
+          <target>11</target>
+        </configuration>
+      </plugin>
 
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-javadoc-plugin</artifactId>
-				<version>3.2.0</version>
-				<executions>
-					<execution>
-						<id>attach-javadocs</id>
-						<goals>
-							<goal>jar</goal>
-						</goals>
-					</execution>
-				</executions>
-				<configuration>
-					<source>11</source>
-				</configuration>
-			</plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-source-plugin</artifactId>
+        <version>3.2.1</version>
+        <executions>
+          <execution>
+            <id>attach-sources</id>
+            <goals>
+              <goal>jar</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
 
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-gpg-plugin</artifactId>
-				<version>1.6</version>
-				<executions>
-					<execution>
-						<id>sign-artifacts</id>
-						<phase>verify</phase>
-						<goals>
-							<goal>sign</goal>
-						</goals>
-					</execution>
-				</executions>
-			</plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-surefire-plugin</artifactId>
+        <version>2.22.2</version>
+        <configuration>
+          <systemPropertyVariables>
+            <SILENT/>
+          </systemPropertyVariables>
+        </configuration>
+      </plugin>
 
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-deploy-plugin</artifactId>
-				<version>2.8.2</version>
-				<executions>
-					<execution>
-						<id>default-deploy</id>
-						<phase>deploy</phase>
-						<goals>
-							<goal>deploy</goal>
-						</goals>
-					</execution>
-				</executions>
-			</plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-javadoc-plugin</artifactId>
+        <version>3.2.0</version>
+        <executions>
+          <execution>
+            <id>attach-javadocs</id>
+            <goals>
+              <goal>jar</goal>
+            </goals>
+          </execution>
+        </executions>
+        <configuration>
+          <source>11</source>
+        </configuration>
+      </plugin>
 
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-release-plugin</artifactId>
-				<version>2.5.3</version>
-				<configuration>
-					<localCheckout>true</localCheckout>
-					<pushChanges>false</pushChanges>
-					<mavenExecutorId>forked-path</mavenExecutorId>
-					<arguments>-Dgpg.passphrase=${gpg.passphrase}</arguments>
-				</configuration>
-				<dependencies>
-					<dependency>
-						<groupId>org.apache.maven.scm</groupId>
-						<artifactId>maven-scm-provider-gitexe</artifactId>
-						<version>1.9.5</version>
-					</dependency>
-				</dependencies>
-			</plugin>
+      <plugin>
+        <groupId>org.jetbrains.dokka</groupId>
+        <artifactId>dokka-maven-plugin</artifactId>
+        <version>1.9.20</version>
+        <executions>
+          <execution>
+            <id>generate-dokka</id>
+            <phase>prepare-package</phase>
+            <goals>
+              <goal>javadocJar</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
 
-			<plugin>
-				<groupId>org.sonatype.plugins</groupId>
-				<artifactId>nexus-staging-maven-plugin</artifactId>
-				<version>1.6.7</version>
-				<extensions>true</extensions>
-				<configuration>
-					<serverId>ossrh</serverId>
-					<nexusUrl>https://s01.oss.sonatype.org/</nexusUrl>
-					<autoReleaseAfterClose>true</autoReleaseAfterClose>
-				</configuration>
-			</plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-gpg-plugin</artifactId>
+        <version>1.6</version>
+        <executions>
+          <execution>
+            <id>sign-artifacts</id>
+            <phase>verify</phase>
+            <goals>
+              <goal>sign</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
 
-		</plugins>
-	</build>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-shade-plugin</artifactId>
+        <version>3.5.1</version>
+        <executions>
+          <execution>
+            <phase>package</phase>
+            <goals>
+              <goal>shade</goal>
+            </goals>
+            <configuration>
+              <outputFile>${project.build.directory}/generator-uber.jar</outputFile>
+              <transformers>
+                <transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
+                  <manifestEntries>
+                    <Build-Number>2.1.1</Build-Number>
+                  </manifestEntries>
+                </transformer>
+              </transformers>
+              <filters>
+                <filter>
+                  <artifact>*:*</artifact>
+                  <excludes>
+                    <exclude>META-INF/MANIFEST.MF</exclude>
+                  </excludes>
+                  <includes>
+                    <include>org/oewntk/sql/out/SchemaGenerator.class</include>
+                    <include>org/oewntk/sql/out/SchemaGenerator$Companion.class</include>
+                    <include>org/oewntk/sql/out/SourcesGenerator.class</include>
+                    <include>org/oewntk/sql/out/SourcesGenerator$Companion.class</include>
+                    <include>org/oewntk/sql/out/Variables.class</include>
+                    <include>org/oewntk/sql/out/Variables$Companion.class</include>
+                    <include>org/oewntk/sql/out/Names.class</include>
+                    <include>org/oewntk/sql/out/Names$**.class</include>
+                    <include>wn/sqltemplates/**</include>
+                    <include>wn/Names.properties</include>
+                    <include>wn/NamesCompat.properties</include>
+                    <include>kotlin/**</include>
 
-	<distributionManagement>
-		<repository>
-			<id>ossrh</id>
-			<name>Maven Central Staging Repository</name>
-			<url>https://s01.oss.sonatype.org/service/local/staging/deploy/maven2</url>
-		</repository>
-		<snapshotRepository>
-			<id>ossrh</id>
-			<name>Maven Central Snapshot Repository</name>
-			<url>https://s01.oss.sonatype.org/content/repositories/snapshots</url>
-		</snapshotRepository>
-	</distributionManagement>
+                    <!--
+                    org/oewntk/sql/out/SchemaGenerator.class" />
+                    org/oewntk/sql/out/Variables.class" />
+                    org/oewntk/sql/out/Names$ADJPOSITIONS.class" />
+                    org/oewntk/sql/out/Names$CASEDWORDS.class" />
+                    org/oewntk/sql/out/Names$DOMAINS.class" />
+                    org/oewntk/sql/out/Names$LEXES.class" />
+                    org/oewntk/sql/out/Names$LEXES_MORPHS.class" />
+                    org/oewntk/sql/out/Names$LEXES_PRONUNCIATIONS.class" />
+                    org/oewntk/sql/out/Names$MORPHS.class" />
+                    org/oewntk/sql/out/Names$POSES.class" />
+                    org/oewntk/sql/out/Names$PRONUNCIATIONS.class" />
+                    org/oewntk/sql/out/Names$RELS.class" />
+                    org/oewntk/sql/out/Names$SAMPLES.class" />
+                    org/oewntk/sql/out/Names$SENSES.class" />
+                    org/oewntk/sql/out/Names$SENSES_ADJPOSITIONS.class" />
+                    org/oewntk/sql/out/Names$SENSES_SENSES.class" />
+                    org/oewntk/sql/out/Names$SENSES_VFRAMES.class" />
+                    org/oewntk/sql/out/Names$SENSES_VTEMPLATES.class" />
+                    org/oewntk/sql/out/Names$SYNSETS.class" />
+                    org/oewntk/sql/out/Names$SYNSETS_SYNSETS.class" />
+                    org/oewntk/sql/out/Names$VFRAMES.class" />
+                    org/oewntk/sql/out/Names$VTEMPLATES.class" />
+                    org/oewntk/sql/out/Names$WORDS.class" />
+                    org/oewntk/sql/out/Names.class" />
+                    org/oewntk/sql/out/SourcesGenerator.class" />
+                    wn/sqltemplates" />
+                    wn/Names.properties" />
+                    wn/NamesCompat.properties" />
+                    -->
+                  </includes>
+                  <!--                  <excludes>-->
+                  <!--                    <exclude>**/*</exclude>-->
+                  <!--                  </excludes>-->
+                </filter>
+              </filters>
+              <shadedArtifactAttached>true</shadedArtifactAttached>
+              <shadedClassifierName>uber</shadedClassifierName>
+              <minimizeJar>false</minimizeJar>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
 
-	<scm>
-		<url>https://github.com/oewntk/tosql</url>
-		<connection>scm:git:git://github.com/oewntk/tosql.git</connection>
-		<developerConnection>scm:git:ssh://git@github.com:oewntk/tosql.git</developerConnection>
-	</scm>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-deploy-plugin</artifactId>
+        <version>2.8.2</version>
+        <executions>
+          <execution>
+            <id>default-deploy</id>
+            <phase>deploy</phase>
+            <goals>
+              <goal>deploy</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
 
-	<issueManagement>
-		<system>GitHub</system>
-		<url>https://github.com/oewntk/tosql/issues</url>
-	</issueManagement>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-release-plugin</artifactId>
+        <version>2.5.3</version>
+        <configuration>
+          <localCheckout>true</localCheckout>
+          <pushChanges>false</pushChanges>
+          <mavenExecutorId>forked-path</mavenExecutorId>
+          <arguments>-Dgpg.passphrase=${gpg.passphrase}</arguments>
+        </configuration>
+        <dependencies>
+          <dependency>
+            <groupId>org.apache.maven.scm</groupId>
+            <artifactId>maven-scm-provider-gitexe</artifactId>
+            <version>1.9.5</version>
+          </dependency>
+        </dependencies>
+      </plugin>
 
-	<licenses>
-		<license>
-			<name>GPL 3.0</name>
-			<url>https://www.gnu.org/licenses/gpl-3.0.en.html</url>
-			<distribution>repo</distribution>
-		</license>
-	</licenses>
+      <plugin>
+        <groupId>org.sonatype.plugins</groupId>
+        <artifactId>nexus-staging-maven-plugin</artifactId>
+        <version>1.6.7</version>
+        <extensions>true</extensions>
+        <configuration>
+          <serverId>ossrh</serverId>
+          <nexusUrl>https://s01.oss.sonatype.org/</nexusUrl>
+          <autoReleaseAfterClose>true</autoReleaseAfterClose>
+        </configuration>
+      </plugin>
 
-	<organization>
-		<name>com.github.oewntk</name>
-		<url>https://github.com/oewntk</url>
-	</organization>
+    </plugins>
+  </build>
 
-	<developers>
-		<developer>
-			<name>Bernard Bou</name>
-			<id>bbou</id>
-			<email>1313ou@gmail.com</email>
-			<roles>
-				<role>architect</role>
-				<role>developer</role>
-				<role>maintainer</role>
-			</roles>
-		</developer>
-	</developers>
+  <distributionManagement>
+    <repository>
+      <id>ossrh</id>
+      <name>Maven Central Staging Repository</name>
+      <url>https://s01.oss.sonatype.org/service/local/staging/deploy/maven2</url>
+    </repository>
+    <snapshotRepository>
+      <id>ossrh</id>
+      <name>Maven Central Snapshot Repository</name>
+      <url>https://s01.oss.sonatype.org/content/repositories/snapshots</url>
+    </snapshotRepository>
+  </distributionManagement>
+
+  <scm>
+    <url>https://github.com/oewntk/tosql</url>
+    <connection>scm:git:git://github.com/oewntk/tosql.git</connection>
+    <developerConnection>scm:git:ssh://git@github.com:oewntk/tosql.git</developerConnection>
+  </scm>
+
+  <issueManagement>
+    <system>GitHub</system>
+    <url>https://github.com/oewntk/tosql/issues</url>
+  </issueManagement>
+
+  <licenses>
+    <license>
+      <name>GPL 3.0</name>
+      <url>https://www.gnu.org/licenses/gpl-3.0.en.html</url>
+      <distribution>repo</distribution>
+    </license>
+  </licenses>
+
+  <organization>
+    <name>com.github.oewntk</name>
+    <url>https://github.com/oewntk</url>
+  </organization>
+
+  <developers>
+    <developer>
+      <name>Bernard Bou</name>
+      <id>bbou</id>
+      <email>1313ou@gmail.com</email>
+      <roles>
+        <role>architect</role>
+        <role>developer</role>
+        <role>maintainer</role>
+      </roles>
+    </developer>
+  </developers>
 
 </project>

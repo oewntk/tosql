@@ -2,7 +2,11 @@
 <module version="4">
   <component name="AdditionalModuleElements">
     <content url="file://$MODULE_DIR$" dumb="true">
-      <excludeFolder url="file://$MODULE_DIR$/doc/pages" />
+      <excludeFolder url="file://$MODULE_DIR$/_sql" />
+      <excludeFolder url="file://$MODULE_DIR$/doc" />
+      <excludeFolder url="file://$MODULE_DIR$/images" />
+      <excludeFolder url="file://$MODULE_DIR$/queries" />
+      <excludeFolder url="file://$MODULE_DIR$/renames" />
       <excludeFolder url="file://$MODULE_DIR$/sql" />
     </content>
   </component>
