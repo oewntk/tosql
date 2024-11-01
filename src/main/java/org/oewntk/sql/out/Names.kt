@@ -183,14 +183,20 @@ object Names {
         lateinit var TABLE: String
         lateinit var sampleid: String
         lateinit var sample: String
+        lateinit var source: String
         lateinit var synsetid: String
+        lateinit var luid: String
+        lateinit var wordid: String
 
         fun set(bundle: ResourceBundle) {
             FILE = bundle.getString("samples.file")
             TABLE = bundle.getString("samples.table")
             sampleid = bundle.getString("samples.sampleid")
             sample = bundle.getString("samples.sample")
+            source = bundle.getString("samples.source")
             synsetid = bundle.getString("samples.synsetid")
+            luid = bundle.getString("samples.luid")
+            wordid = bundle.getString("samples.wordid")
         }
 
         init {
