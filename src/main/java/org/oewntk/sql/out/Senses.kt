@@ -204,6 +204,24 @@ object Senses {
     }
 
     /**
+     * Generate sense samples
+     *
+     * @param ps               print stream
+     * @param senses           senses
+     * @param synsetIdToNIDMap id-to-nid map for synsets
+     * @param lexKeyToNIDMap   key-to-nid map for lexes
+     * @param wordIdToNIDMap   id-to-nid map for words
+     */
+    fun generateSensesSamples(
+        ps: PrintStream,
+        senses: Collection<Sense>,
+        synsetIdToNIDMap: Map<String, Int>,
+        lexKeyToNIDMap: Map<Key, Int>,
+        wordIdToNIDMap: Map<String, Int>,
+    ) {
+    }
+
+    /**
      * Generate senses to adj position
      *
      * @param ps               print stream
