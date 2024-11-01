@@ -18,6 +18,7 @@ import org.oewntk.sql.out.Lexes.generateWords
 import org.oewntk.sql.out.Senses.generateSenseRelations
 import org.oewntk.sql.out.Senses.generateSenses
 import org.oewntk.sql.out.Senses.generateSensesAdjPositions
+import org.oewntk.sql.out.Senses.generateSensesSamples
 import org.oewntk.sql.out.Senses.generateSensesVerbFrames
 import org.oewntk.sql.out.Synsets.generateSamples
 import org.oewntk.sql.out.Synsets.generateSynsetRelations
@@ -133,7 +134,8 @@ class CoreModelConsumer(
             .use {
                 synsetIdToNID = generateSynsets(it, synsets)
             }
-        PrintStream(FileOutputStream(File(outDir, makeFilename(Names.SAMPLES.FILE))), true, StandardCharsets.UTF_8)
+        // synsets are generated first, so do not append
+        PrintStream(FileOutputStream(File(outDir, makeFilename(Names.SAMPLES.FILE)), false), true, StandardCharsets.UTF_8)
             .use {
                 generateSamples(it, synsets, synsetIdToNID!!)
             }
@@ -160,6 +162,11 @@ class CoreModelConsumer(
         PrintStream(FileOutputStream(File(outDir, makeFilename(Names.LEXRELATIONS.FILE))), true, StandardCharsets.UTF_8)
             .use {
                 generateSenseRelations(it, senses, sensesById, synsetIdToNID!!, lexKeyToNID!!, wordToNID!!)
+            }
+        // senses are generated second, so append
+        PrintStream(FileOutputStream(File(outDir, makeFilename(Names.SAMPLES.FILE)), true), true, StandardCharsets.UTF_8)
+            .use {
+                generateSensesSamples(it, senses, synsetIdToNID!!, lexKeyToNID!!, wordToNID!!)
             }
         PrintStream(FileOutputStream(File(outDir, makeFilename(Names.SENSES_VFRAMES.FILE))), true, StandardCharsets.UTF_8)
             .use {
