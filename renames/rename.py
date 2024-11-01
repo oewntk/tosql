@@ -44,7 +44,7 @@ subs=(
 )
 
 def outputdata(data):
-	print("%s" % (data))
+	print("%s" % data)
 
 def replace(line):
 	for r,s in subs:

@@ -187,13 +187,13 @@ class SchemaGenerator(
             var compat = false
             if ("-compat" == args[0]) {
                 compat = true
-                args = Arrays.copyOfRange(args, 1, args.size)
+                args = args.copyOfRange(1, args.size)
             }
 
             val module = args[0]
             val output = args[1]
             val inputSubdir = args[2]
-            val inputs = Arrays.copyOfRange(args, 3, args.size)
+            val inputs = args.copyOfRange(3, args.size)
 
             val path = "$module/"
             val bundle = ResourceBundle.getBundle(path + (if (compat) "NamesCompat" else "Names"))

@@ -9,6 +9,7 @@ import java.io.PrintStream
 /**
  * Process lexes
  */
+@Suppress("KotlinConstantConditions")
 object Lexes {
 
     // lexes

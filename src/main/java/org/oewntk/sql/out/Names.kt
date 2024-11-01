@@ -8,6 +8,7 @@ import java.util.*
 /**
  * Names from resources
  */
+@Suppress("ClassName")
 object Names {
 
     val bundle: ResourceBundle = ResourceBundle.getBundle("wn/Names")
