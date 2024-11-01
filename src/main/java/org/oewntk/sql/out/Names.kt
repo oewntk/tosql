@@ -231,6 +231,44 @@ object Names {
         }
     }
 
+    object ILIS {
+
+        lateinit var FILE: String
+        lateinit var TABLE: String
+        lateinit var synsetid: String
+        lateinit var ili: String
+
+        fun set(bundle: ResourceBundle) {
+            FILE = bundle.getString("ilis.file")
+            TABLE = bundle.getString("ilis.table")
+            synsetid = bundle.getString("ilis.synsetid")
+            ili = bundle.getString("ilis.ili")
+        }
+
+        init {
+            set(bundle)
+        }
+    }
+
+    object WIKIDATAS {
+
+        lateinit var FILE: String
+        lateinit var TABLE: String
+        lateinit var synsetid: String
+        lateinit var wikidata: String
+
+        fun set(bundle: ResourceBundle) {
+            FILE = bundle.getString("wikidatas.file")
+            TABLE = bundle.getString("wikidatas.table")
+            synsetid = bundle.getString("wikidatas.synsetid")
+            wikidata = bundle.getString("wikidatas.wikidata")
+        }
+
+        init {
+            set(bundle)
+        }
+    }
+
     object DOMAINS {
 
         private lateinit var FILE: String

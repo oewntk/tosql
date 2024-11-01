@@ -206,4 +206,58 @@ object Synsets {
         }
         printInserts(ps, Names.SAMPLES.TABLE, columns, synsetSeq, toSqlRows, true)
     }
+
+    /**
+     * Generate ilis table
+     *
+     * @param ps               print stream
+     * @param synsets          synsets
+     * @param synsetIdToNIDMap id-to-nid map
+     */
+    fun generateIlis(ps: PrintStream, synsets: Collection<Synset>, synsetIdToNIDMap: Map<String, Int>) {
+
+        // sequence of synsets
+        val synsetSeq = synsets
+            .asSequence()
+            .filter { !it.ili.isNullOrEmpty() }
+            .sortedBy(Synset::synsetId)
+
+        // insert
+        val columns = listOf(
+            Names.ILIS.synsetid,
+            Names.ILIS.ili,
+        ).joinToString(",")
+        val toSqlRows = { synset: Synset ->
+            val synsetNID1 = NIDMaps.lookup(synsetIdToNIDMap, synset.synsetId)
+            "$synsetNID1,'${synset.ili}'"
+        }
+        printInsert(ps, Names.ILIS.TABLE, columns, synsetSeq, toSqlRows, false)
+    }
+
+    /**
+     * Generate wikidatas table
+     *
+     * @param ps               print stream
+     * @param synsets          synsets
+     * @param synsetIdToNIDMap id-to-nid map
+     */
+    fun generateWikidatas(ps: PrintStream, synsets: Collection<Synset>, synsetIdToNIDMap: Map<String, Int>) {
+
+        // sequence of synsets
+        val synsetSeq = synsets
+            .asSequence()
+            .filter { !it.wikidata.isNullOrEmpty() }
+            .sortedBy(Synset::synsetId)
+
+        // insert
+        val columns = listOf(
+            Names.WIKIDATAS.synsetid,
+            Names.WIKIDATAS.wikidata,
+        ).joinToString(",")
+        val toSqlRows = { synset: Synset ->
+            val synsetNID1 = NIDMaps.lookup(synsetIdToNIDMap, synset.synsetId)
+            "$synsetNID1,'${synset.wikidata}'"
+        }
+        printInsert(ps, Names.ILIS.TABLE, columns, synsetSeq, toSqlRows, false)
+    }
 }

@@ -20,10 +20,12 @@ import org.oewntk.sql.out.Senses.generateSenses
 import org.oewntk.sql.out.Senses.generateSensesAdjPositions
 import org.oewntk.sql.out.Senses.generateSensesSamples
 import org.oewntk.sql.out.Senses.generateSensesVerbFrames
+import org.oewntk.sql.out.Synsets.generateIlis
 import org.oewntk.sql.out.Synsets.generateSamples
 import org.oewntk.sql.out.Synsets.generateSynsetRelations
 import org.oewntk.sql.out.Synsets.generateSynsets
 import org.oewntk.sql.out.Synsets.generateUsages
+import org.oewntk.sql.out.Synsets.generateWikidatas
 import java.io.File
 import java.io.FileNotFoundException
 import java.io.FileOutputStream
@@ -147,6 +149,14 @@ class CoreModelConsumer(
         PrintStream(FileOutputStream(File(outDir, makeFilename(Names.SEMRELATIONS.FILE))), true, StandardCharsets.UTF_8)
             .use {
                 generateSynsetRelations(it, synsets, synsetIdToNID!!)
+            }
+        PrintStream(FileOutputStream(File(outDir, makeFilename(Names.ILIS.FILE))), true, StandardCharsets.UTF_8)
+            .use {
+                generateIlis(it, synsets, synsetIdToNID!!)
+            }
+        PrintStream(FileOutputStream(File(outDir, makeFilename(Names.WIKIDATAS.FILE))), true, StandardCharsets.UTF_8)
+            .use {
+                generateWikidatas(it, synsets, synsetIdToNID!!)
             }
     }
 
