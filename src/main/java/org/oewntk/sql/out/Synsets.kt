@@ -153,12 +153,19 @@ object Synsets {
         val columns = listOf(
             Names.SAMPLES.sampleid,
             Names.SAMPLES.synsetid,
-            Names.SAMPLES.sample
+            Names.SAMPLES.luid,
+            Names.SAMPLES.wordid,
+            Names.SAMPLES.sample,
+            Names.SAMPLES.source
         ).joinToString(",")
         val toSqlRows = { synset: Synset ->
             val synsetNID1 = NIDMaps.lookup(synsetIdToNIDMap, synset.synsetId)
             synset.examples!!
-                .map { "$synsetNID1,'${escape(it)}'" }
+                .map {
+                    val text = escape(it.first)
+                    val source = if (it.second == null) "NULL" else "'${escape(it.second!!)}'"
+                    "$synsetNID1,NULL,NULL,'$text',$source"
+                }
                 .toList()
         }
         printInserts(ps, Names.SAMPLES.TABLE, columns, synsetSeq, toSqlRows, true)

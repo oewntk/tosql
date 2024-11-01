@@ -219,6 +219,35 @@ object Senses {
         lexKeyToNIDMap: Map<Key, Int>,
         wordIdToNIDMap: Map<String, Int>,
     ) {
+
+        // sequence of senses
+        val senseSeq = senses
+            .asSequence()
+            .filter { !it.examples.isNullOrEmpty() }
+            .sortedBy(Sense::senseKey)
+
+        // insert
+        val columns = listOf(
+            Names.SAMPLES.sampleid,
+            Names.SAMPLES.synsetid,
+            Names.SAMPLES.luid,
+            Names.SAMPLES.wordid,
+            Names.SAMPLES.sample,
+            Names.SAMPLES.source
+        ).joinToString(",")
+        val toSqlRows = { sense: Sense ->
+            val synsetNID1 = NIDMaps.lookup(synsetIdToNIDMap, sense.synsetId)
+            val lexNID1 = NIDMaps.lookup(lexKeyToNIDMap, of_t(sense.lex))
+            val wordNID1 = NIDMaps.lookup(wordIdToNIDMap, sense.lex.lCLemma)
+            sense.examples!!
+                .map {
+                    val text = escape(it.first)
+                    val source = if (it.second == null) "NULL" else "'${escape(it.second!!)}'"
+                    "$synsetNID1,$lexNID1,$wordNID1,'$text',$source"
+                }
+                .toList()
+        }
+        printInserts(ps, Names.SAMPLES.TABLE, columns, senseSeq, toSqlRows, true)
     }
 
     /**
