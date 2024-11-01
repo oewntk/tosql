@@ -171,4 +171,39 @@ object Synsets {
         }
         printInserts(ps, Names.SAMPLES.TABLE, columns, synsetSeq, toSqlRows, true)
     }
+
+    /**
+     * Generate usages table
+     *
+     * @param ps               print stream
+     * @param synsets          synsets
+     * @param synsetIdToNIDMap id-to-nid map
+     */
+    fun generateUsages(ps: PrintStream, synsets: Collection<Synset>, synsetIdToNIDMap: Map<String, Int>) {
+
+        // sequence of synsets
+        val synsetSeq = synsets
+            .asSequence()
+            .filter { !it.usages.isNullOrEmpty() }
+            .sortedBy(Synset::synsetId)
+
+        // insert
+        val columns = listOf(
+            Names.USAGES.usageid,
+            Names.USAGES.synsetid,
+            Names.USAGES.luid,
+            Names.USAGES.wordid,
+            Names.USAGES.usage,
+        ).joinToString(",")
+        val toSqlRows = { synset: Synset ->
+            val synsetNID1 = NIDMaps.lookup(synsetIdToNIDMap, synset.synsetId)
+            synset.usages!!
+                .map {
+                    val usage = escape(it)
+                    "$synsetNID1,NULL,NULL,'$usage'"
+                }
+                .toList()
+        }
+        printInserts(ps, Names.SAMPLES.TABLE, columns, synsetSeq, toSqlRows, true)
+    }
 }

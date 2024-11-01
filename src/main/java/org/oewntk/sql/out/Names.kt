@@ -205,6 +205,32 @@ object Names {
         }
     }
 
+    object USAGES {
+
+        lateinit var FILE: String
+        lateinit var TABLE: String
+        lateinit var usageid: String
+        lateinit var usage: String
+        lateinit var source: String
+        lateinit var synsetid: String
+        lateinit var luid: String
+        lateinit var wordid: String
+
+        fun set(bundle: ResourceBundle) {
+            FILE = bundle.getString("usages.file")
+            TABLE = bundle.getString("usages.table")
+            usageid = bundle.getString("usages.usageid")
+            usage = bundle.getString("usages.usage")
+            synsetid = bundle.getString("usages.synsetid")
+            luid = bundle.getString("usages.luid")
+            wordid = bundle.getString("usages.wordid")
+        }
+
+        init {
+            set(bundle)
+        }
+    }
+
     object DOMAINS {
 
         private lateinit var FILE: String
