@@ -193,7 +193,7 @@ object Synsets {
             Names.USAGES.synsetid,
             Names.USAGES.luid,
             Names.USAGES.wordid,
-            Names.USAGES.usage,
+            Names.USAGES.usagenote,
         ).joinToString(",")
         val toSqlRows = { synset: Synset ->
             val synsetNID1 = NIDMaps.lookup(synsetIdToNIDMap, synset.synsetId)

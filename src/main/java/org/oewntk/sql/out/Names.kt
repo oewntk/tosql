@@ -210,7 +210,7 @@ object Names {
         lateinit var FILE: String
         lateinit var TABLE: String
         lateinit var usageid: String
-        lateinit var usage: String
+        lateinit var usagenote: String
         lateinit var source: String
         lateinit var synsetid: String
         lateinit var luid: String
@@ -220,7 +220,7 @@ object Names {
             FILE = bundle.getString("usages.file")
             TABLE = bundle.getString("usages.table")
             usageid = bundle.getString("usages.usageid")
-            usage = bundle.getString("usages.usage")
+            usagenote = bundle.getString("usages.usagenote")
             synsetid = bundle.getString("usages.synsetid")
             luid = bundle.getString("usages.luid")
             wordid = bundle.getString("usages.wordid")
