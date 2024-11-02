@@ -204,7 +204,7 @@ object Synsets {
                 }
                 .toList()
         }
-        printInserts(ps, Names.SAMPLES.TABLE, columns, synsetSeq, toSqlRows, true)
+        printInserts(ps, Names.USAGES.TABLE, columns, synsetSeq, toSqlRows, true)
     }
 
     /**
@@ -258,6 +258,6 @@ object Synsets {
             val synsetNID1 = NIDMaps.lookup(synsetIdToNIDMap, synset.synsetId)
             "$synsetNID1,'${synset.wikidata}'"
         }
-        printInsert(ps, Names.ILIS.TABLE, columns, synsetSeq, toSqlRows, false)
+        printInsert(ps, Names.WIKIDATAS.TABLE, columns, synsetSeq, toSqlRows, false)
     }
 }
