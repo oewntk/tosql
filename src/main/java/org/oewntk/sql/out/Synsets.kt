@@ -142,7 +142,7 @@ object Synsets {
      * @param synsets          synsets
      * @param synsetIdToNIDMap id-to-nid map
      */
-    fun generateSamples(ps: PrintStream, synsets: Collection<Synset>, synsetIdToNIDMap: Map<String, Int>) {
+    fun generateSynsetSamples(ps: PrintStream, synsets: Collection<Synset>, synsetIdToNIDMap: Map<String, Int>) {
 
         // sequence of synsets
         val synsetSeq = synsets
@@ -179,7 +179,7 @@ object Synsets {
      * @param synsets          synsets
      * @param synsetIdToNIDMap id-to-nid map
      */
-    fun generateUsages(ps: PrintStream, synsets: Collection<Synset>, synsetIdToNIDMap: Map<String, Int>) {
+    fun generateSynsetUsages(ps: PrintStream, synsets: Collection<Synset>, synsetIdToNIDMap: Map<String, Int>) {
 
         // sequence of synsets
         val synsetSeq = synsets
@@ -214,7 +214,7 @@ object Synsets {
      * @param synsets          synsets
      * @param synsetIdToNIDMap id-to-nid map
      */
-    fun generateIlis(ps: PrintStream, synsets: Collection<Synset>, synsetIdToNIDMap: Map<String, Int>) {
+    fun generateSynsetIlis(ps: PrintStream, synsets: Collection<Synset>, synsetIdToNIDMap: Map<String, Int>) {
 
         // sequence of synsets
         val synsetSeq = synsets
@@ -241,7 +241,7 @@ object Synsets {
      * @param synsets          synsets
      * @param synsetIdToNIDMap id-to-nid map
      */
-    fun generateWikidatas(ps: PrintStream, synsets: Collection<Synset>, synsetIdToNIDMap: Map<String, Int>) {
+    fun generateSynsetWikidatas(ps: PrintStream, synsets: Collection<Synset>, synsetIdToNIDMap: Map<String, Int>) {
 
         // sequence of synsets
         val synsetSeq = synsets
