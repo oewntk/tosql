@@ -16,14 +16,14 @@ Z='\u001b[0m'
 
 if [ "$1" == "-compat" ]; then
   compatswitch="-compat"
-  shift
+  [ "$#" -eq 0 ] || shift
   echo -e "${Y}compat mode${Z}"
 else
   compatswitch=
 fi
 
 outdir="$1"
-shift
+[ "$#" -eq 0 ] || shift
 if [ "${outdir}" == "" ]; then
   outdir="sql"
 fi
@@ -32,7 +32,7 @@ m=wn
 jar=target/generator-uber.jar
 if [ "$*" != "" ]; then
   indir="$1"
-  shift
+  [ "$#" -eq 0 ] || shift
   for sql in $*; do
     base=$(basename ${sql})
     java -ea -cp "${jar}" org.oewntk.sql.out.SchemaGenerator ${compatswitch} ${m} "${outdir}" "${indir}" "${sql}"

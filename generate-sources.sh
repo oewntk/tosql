@@ -15,7 +15,7 @@ export C='\u001b[36m'
 export Z='\u001b[0m'
 
 outdir="$1"
-shift
+[ "$#" -eq 0 ] || shift
 if [ "${outdir}" == "" ]; then
   outdir="sql"
 fi

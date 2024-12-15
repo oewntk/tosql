@@ -10,12 +10,12 @@ sections="wn-basic wn-dict wn-cased wn-relations wn-misc wn-morph wn-pronunciati
 oneoutput=
 if [ "-one" == "$1" ]; then
 	oneoutput=true
-	shift
+	[ "$#" -eq 0 ] || shift
 fi
 createviews=true
 if [ "-noviews" == "$1" ]; then
 	donotcreateviews=
-	shift
+	[ "$#" -eq 0 ] || shift
 fi
 
 # C O L O R S
