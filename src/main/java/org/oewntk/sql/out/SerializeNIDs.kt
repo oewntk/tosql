@@ -128,7 +128,7 @@ object SerializeNIDs {
         val wordToNID = makeWordNIDs(model.lexes)
         val synsetIdToNID = makeSynsetNIDs(model.synsets)
         val m = model.senses
-            .associate { it.senseKey to AbstractMap.SimpleEntry(wordToNID[it.lCLemma], synsetIdToNID[it.synsetId]) } // (sensekey, (lemma,synsetId)), avoid kotlin.Pair dependency
+            .associate { it.senseKey to (wordToNID[it.lCLemma] to synsetIdToNID[it.synsetId]) } // (sensekey, (lemma,synsetId))
         serialize(os, m)
     }
 
