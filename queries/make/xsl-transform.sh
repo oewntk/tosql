@@ -1,5 +1,7 @@
 #!/bin/bash
 
+set -e
+
 in=$1
 out=$2
 xsl=$3

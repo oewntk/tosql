@@ -1,5 +1,7 @@
 #!/bin/bash
 
+set -e
+
 function replace_word()
 {
   local cl="sed -i 's/\b$1\b/$2/g' $3"

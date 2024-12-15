@@ -1,5 +1,7 @@
 #!/bin/bash
 
+set -e
+
 echo "<?xml version=\"1.0\"?><mysql>`
 sed '
 /<?xml version="1.0"?>/d

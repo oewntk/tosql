@@ -1,5 +1,7 @@
 #!/bin/bash
 
+set -e
+
 db=oewn
 sections="wn-basic wn-dict wn-cased wn-relations wn-misc wn-morph wn-pronunciation wn-legacy wn-vframe wn-cardinality"
 

@@ -2,6 +2,8 @@
 
 #MYSQL TO HTML
 
+set -e
+
 out=-
 in=-
 xsls="mysql2html.xsl"

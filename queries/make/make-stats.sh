@@ -1,6 +1,8 @@
 #!/bin/bash
 # 1313ou@gmail.com
 
+set -e
+
 db=oewn
 dbtag=2024
 

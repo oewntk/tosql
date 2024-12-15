@@ -1,5 +1,7 @@
 #!/bin/bash
 
+set -e
+
 export umls="uml-wordnet1 uml-wordnet2"
 export schemas="schemas-wordnet1 schemas-wordnet2"
 export fks="fks-wordnet"

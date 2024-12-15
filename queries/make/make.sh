@@ -1,5 +1,7 @@
 #!/bin/bash
 
+set -e
+
 thisdir="`dirname $(readlink -m $0)`/"
 thisdir="$(readlink -m ${thisdir})"
 
