@@ -13,7 +13,6 @@ import org.oewntk.sql.out.Lexes.makeWordNIDs
 import org.oewntk.sql.out.Senses.makeSenseNIDs
 import org.oewntk.sql.out.Synsets.makeSynsetNIDs
 import java.io.*
-import java.util.*
 
 /**
  * Serialize ID to Numeric IDs maps
