@@ -1,1 +1,1 @@
-CREATE UNIQUE INDEX `pk_@{wikidatas.table}` ON ${wikidatas.table} (${wikidatas.synsetid});
+CREATE UNIQUE INDEX `pk_@{wikidatas.table}` ON ${wikidatas.table} (${wikidatas.synsetid},${wikidatas.wikidata});
