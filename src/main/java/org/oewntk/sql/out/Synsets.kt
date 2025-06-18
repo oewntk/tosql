@@ -256,8 +256,10 @@ object Synsets {
         ).joinToString(",")
         val toSqlRows = { synset: Synset ->
             val synsetNID1 = NIDMaps.lookup(synsetIdToNIDMap, synset.synsetId)
-            "$synsetNID1,'${synset.wikidata}'"
+            synset.wikidata!!.map {
+                "$synsetNID1,'${it}'"
+            }
         }
-        printInsert(ps, Names.WIKIDATAS.TABLE, columns, synsetSeq, toSqlRows, false)
+        printInserts(ps, Names.WIKIDATAS.TABLE, columns, synsetSeq, toSqlRows, false)
     }
 }
