@@ -16,7 +16,6 @@ import java.io.PrintStream
 /**
  * Process synsets
  */
-@Suppress("KotlinConstantConditions")
 object Synsets {
 
     /**

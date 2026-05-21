@@ -1,7 +1,6 @@
 /*
  * Copyright (c) 2024. Bernard Bou.
  */
-@file:Suppress("KotlinConstantConditions")
 
 package org.oewntk.sql.out
 
@@ -19,7 +18,6 @@ import java.io.PrintStream
 /**
  * Process senses
  */
-@Suppress("KotlinConstantConditions")
 object Senses {
 
     /**
