@@ -3,6 +3,8 @@
  */
 package org.oewntk.sql.out
 
+import org.oewntk.model.PartOfSpeech
+import org.oewntk.model.SynsetType
 import org.oewntk.sql.out.Printers.printInsert
 import org.oewntk.sql.out.Printers.printInsert2
 import org.oewntk.sql.out.Printers.printInsert3
@@ -17,60 +19,58 @@ object BuiltIn {
     // lexdomain, lexdomainid
 
     private val domainsArray = arrayOf(
-        arrayOf<Any>("adjs", "a", "adj.all", 0),
-        arrayOf<Any>("adjs.pert", "a", "adj.pert", 1),
-        arrayOf<Any>("advs", "r", "adv.all", 2),
-        arrayOf<Any>("tops", "n", "noun.Tops", 3),
-        arrayOf<Any>("act", "n", "noun.act", 4),
-        arrayOf<Any>("animal", "n", "noun.animal", 5),
-        arrayOf<Any>("artifact", "n", "noun.artifact", 6),
-        arrayOf<Any>("attribute", "n", "noun.attribute", 7),
-        arrayOf<Any>("body", "n", "noun.body", 8),
-        arrayOf<Any>("cognition", "n", "noun.cognition", 9),
-        arrayOf<Any>("communication", "n", "noun.communication", 10),
-        arrayOf<Any>("event", "n", "noun.event", 11),
-        arrayOf<Any>("feeling", "n", "noun.feeling", 12),
-        arrayOf<Any>("food", "n", "noun.food", 13),
-        arrayOf<Any>("group", "n", "noun.group", 14),
-        arrayOf<Any>("location", "n", "noun.location", 15),
-        arrayOf<Any>("motive", "n", "noun.motive", 16),
-        arrayOf<Any>("object", "n", "noun.object", 17),
-        arrayOf<Any>("person", "n", "noun.person", 18),
-        arrayOf<Any>("phenomenon", "n", "noun.phenomenon", 19),
-        arrayOf<Any>("plant", "n", "noun.plant", 20),
-        arrayOf<Any>("possession", "n", "noun.possession", 21),
-        arrayOf<Any>("process", "n", "noun.process", 22),
-        arrayOf<Any>("quantity", "n", "noun.quantity", 23),
-        arrayOf<Any>("relation", "n", "noun.relation", 24),
-        arrayOf<Any>("shape", "n", "noun.shape", 25),
-        arrayOf<Any>("state", "n", "noun.state", 26),
-        arrayOf<Any>("substance", "n", "noun.substance", 27),
-        arrayOf<Any>("time", "n", "noun.time", 28),
-        arrayOf<Any>("body", "v", "verb.body", 29),
-        arrayOf<Any>("change", "v", "verb.change", 30),
-        arrayOf<Any>("cognition", "v", "verb.cognition", 31),
-        arrayOf<Any>("communication", "v", "verb.communication", 32),
-        arrayOf<Any>("competition", "v", "verb.competition", 33),
-        arrayOf<Any>("consumption", "v", "verb.consumption", 34),
-        arrayOf<Any>("contact", "v", "verb.contact", 35),
-        arrayOf<Any>("creation", "v", "verb.creation", 36),
-        arrayOf<Any>("emotion", "v", "verb.emotion", 37),
-        arrayOf<Any>("motion", "v", "verb.motion", 38),
-        arrayOf<Any>("perception", "v", "verb.perception", 39),
-        arrayOf<Any>("possession", "v", "verb.possession", 40),
-        arrayOf<Any>("social", "v", "verb.social", 41),
-        arrayOf<Any>("stative", "v", "verb.stative", 42),
-        arrayOf<Any>("weather", "v", "verb.weather", 43),
-        arrayOf<Any>("adjs.ppl", "a", "adj.ppl", 44),
-    )
+        // @formatter:off
+        arrayOf<Any>("adjs",           PartOfSpeech.A, "${PartOfSpeech.A.fullName}.all",             0),
+        arrayOf<Any>("adjs.pert",      PartOfSpeech.A, "${PartOfSpeech.A.fullName}.pert",            1),
+        arrayOf<Any>("advs",           PartOfSpeech.R, "${PartOfSpeech.R.fullName}.all",             2),
+        arrayOf<Any>("tops",           PartOfSpeech.N, "${PartOfSpeech.N.fullName}.Tops",            3),
+        arrayOf<Any>("act",            PartOfSpeech.N, "${PartOfSpeech.N.fullName}.act",             4),
+        arrayOf<Any>("animal",         PartOfSpeech.N, "${PartOfSpeech.N.fullName}.animal",          5),
+        arrayOf<Any>("artifact",       PartOfSpeech.N, "${PartOfSpeech.N.fullName}.artifact",        6),
+        arrayOf<Any>("attribute",      PartOfSpeech.N, "${PartOfSpeech.N.fullName}.attribute",       7),
+        arrayOf<Any>("body",           PartOfSpeech.N, "${PartOfSpeech.N.fullName}.body",            8),
+        arrayOf<Any>("cognition",      PartOfSpeech.N, "${PartOfSpeech.N.fullName}.cognition",       9),
+        arrayOf<Any>("communication",  PartOfSpeech.N, "${PartOfSpeech.N.fullName}.communication",   10),
+        arrayOf<Any>("event",          PartOfSpeech.N, "${PartOfSpeech.N.fullName}.event",           11),
+        arrayOf<Any>("feeling",        PartOfSpeech.N, "${PartOfSpeech.N.fullName}.feeling",         12),
+        arrayOf<Any>("food",           PartOfSpeech.N, "${PartOfSpeech.N.fullName}.food",            13),
+        arrayOf<Any>("group",          PartOfSpeech.N, "${PartOfSpeech.N.fullName}.group",           14),
+        arrayOf<Any>("location",       PartOfSpeech.N, "${PartOfSpeech.N.fullName}.location",        15),
+        arrayOf<Any>("motive",         PartOfSpeech.N, "${PartOfSpeech.N.fullName}.motive",          16),
+        arrayOf<Any>("object",         PartOfSpeech.N, "${PartOfSpeech.N.fullName}.object",          17),
+        arrayOf<Any>("person",         PartOfSpeech.N, "${PartOfSpeech.N.fullName}.person",          18),
+        arrayOf<Any>("phenomenon",     PartOfSpeech.N, "${PartOfSpeech.N.fullName}.phenomenon",      19),
+        arrayOf<Any>("plant",          PartOfSpeech.N, "${PartOfSpeech.N.fullName}.plant",           20),
+        arrayOf<Any>("possession",     PartOfSpeech.N, "${PartOfSpeech.N.fullName}.possession",      21),
+        arrayOf<Any>("process",        PartOfSpeech.N, "${PartOfSpeech.N.fullName}.process",         22),
+        arrayOf<Any>("quantity",       PartOfSpeech.N, "${PartOfSpeech.N.fullName}.quantity",        23),
+        arrayOf<Any>("relation",       PartOfSpeech.N, "${PartOfSpeech.N.fullName}.relation",        24),
+        arrayOf<Any>("shape",          PartOfSpeech.N, "${PartOfSpeech.N.fullName}.shape",           25),
+        arrayOf<Any>("state",          PartOfSpeech.N, "${PartOfSpeech.N.fullName}.state",           26),
+        arrayOf<Any>("substance",      PartOfSpeech.N, "${PartOfSpeech.N.fullName}.substance",       27),
+        arrayOf<Any>("time",           PartOfSpeech.N, "${PartOfSpeech.N.fullName}.time",            28),
+        arrayOf<Any>("body",           PartOfSpeech.V, "${PartOfSpeech.V.fullName}.body",            29),
+        arrayOf<Any>("change",         PartOfSpeech.V, "${PartOfSpeech.V.fullName}.change",          30),
+        arrayOf<Any>("cognition",      PartOfSpeech.V, "${PartOfSpeech.V.fullName}.cognition",       31),
+        arrayOf<Any>("communication",  PartOfSpeech.V, "${PartOfSpeech.V.fullName}.communication",   32),
+        arrayOf<Any>("competition",    PartOfSpeech.V, "${PartOfSpeech.V.fullName}.competition",     33),
+        arrayOf<Any>("consumption",    PartOfSpeech.V, "${PartOfSpeech.V.fullName}.consumption",     34),
+        arrayOf<Any>("contact",        PartOfSpeech.V, "${PartOfSpeech.V.fullName}.contact",         35),
+        arrayOf<Any>("creation",       PartOfSpeech.V, "${PartOfSpeech.V.fullName}.creation",        36),
+        arrayOf<Any>("emotion",        PartOfSpeech.V, "${PartOfSpeech.V.fullName}.emotion",         37),
+        arrayOf<Any>("motion",         PartOfSpeech.V, "${PartOfSpeech.V.fullName}.motion",          38),
+        arrayOf<Any>("perception",     PartOfSpeech.V, "${PartOfSpeech.V.fullName}.perception",      39),
+        arrayOf<Any>("possession",     PartOfSpeech.V, "${PartOfSpeech.V.fullName}.possession",      40),
+        arrayOf<Any>("social",         PartOfSpeech.V, "${PartOfSpeech.V.fullName}.social",          41),
+        arrayOf<Any>("stative",        PartOfSpeech.V, "${PartOfSpeech.V.fullName}.stative",         42),
+        arrayOf<Any>("weather",        PartOfSpeech.V, "${PartOfSpeech.V.fullName}.weather",         43),
+        arrayOf<Any>("adjs.ppl",       PartOfSpeech.A, "${PartOfSpeech.A.fullName}.ppl",             44),
+        // @formatter:on
+        )
 
-    val LEXFILE_NIDS: Map<String, Int> = sequenceOf(*domainsArray)
-        .map { it[2] as String to it[3] as Int }
-        .toMap()
+    val LEXFILE_NIDS: Map<String, Int> = sequenceOf(*domainsArray).associate { it[2] as String to it[3] as Int }
 
-    private val DOMAIN_TO_NIDS = sequenceOf(*domainsArray)
-        .map { arrayOf(escape(it[0] as String), escape(it[1] as String), escape(it[2] as String)) to it[3] as Int }
-        .toMap()
+    private val DOMAIN_TO_NIDS = sequenceOf(*domainsArray).associate { arrayOf(escape(it[0] as String), escape(it[1] as String), escape(it[2] as String)) to it[3] as Int }
 
     // link, recurses, linkid
 
@@ -125,13 +125,9 @@ object BuiltIn {
         arrayOf<Any>("collocation", "collocation", 0, 200),
     )
 
-    private val RELATION_TO_NIDS = sequenceOf(*relationTypesArray)
-        .map { arrayOf(escape(it[1] as String), it[2]) to it[3] as Int }
-        .toMap()
+    private val RELATION_TO_NIDS = sequenceOf(*relationTypesArray).associate { arrayOf(escape(it[1] as String), it[2]) to it[3] as Int }
 
-    val OEWN_RELATION_TYPES: Map<String, Int> = sequenceOf(*relationTypesArray)
-        .map { it[0] as String to it[3] as Int }
-        .toMap()
+    val OEWN_RELATION_TYPES: Map<String, Int> = sequenceOf(*relationTypesArray).associate { it[0] as String to it[3] as Int }
 
     // positionname, position
 
@@ -141,22 +137,18 @@ object BuiltIn {
         arrayOf("immediately postnominal", "ip"),
     )
 
-    private val ADJPOSITION_TYPES = sequenceOf(*adjPositionTypesArray)
-        .map { it[0] to it[1] }
-        .toMap()
+    private val ADJPOSITION_TYPES = sequenceOf(*adjPositionTypesArray).associate { it[0] to it[1] }
 
     // posname, pos
     private val posArray = arrayOf(
-        arrayOf("noun", "n"),
-        arrayOf("verb", "v"),
-        arrayOf("adjective", "a"),
-        arrayOf("adverb", "r"),
-        arrayOf("adjective satellite", "s"),
+        arrayOf("noun",                SynsetType.N.value.toString()),
+        arrayOf("verb",                SynsetType.V.value.toString()),
+        arrayOf("adjective",           SynsetType.A.value.toString()),
+        arrayOf("adverb",              SynsetType.R.value.toString()),
+        arrayOf("adjective satellite", SynsetType.S.value.toString()),
     )
 
-    private val POS_TYPES = sequenceOf(*posArray)
-        .map { it[0] to it[1] }
-        .toMap()
+    private val POS_TYPES = sequenceOf(*posArray).associate { it[0] to it[1] }
 
     /**
      * Generate pos types table
