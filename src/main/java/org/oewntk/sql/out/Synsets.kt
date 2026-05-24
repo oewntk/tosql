@@ -57,7 +57,7 @@ object Synsets {
             val definition = synset.definition
             val domain = synset.lexfile
             val lexdomainId = BuiltIn.LEXFILE_NIDS[domain]!!
-            "'$type',$lexdomainId,'${escape(definition!!)}'"
+            "'${type.value}',$lexdomainId,'${escape(definition!!)}'"
         }
         if (!Printers.WITH_COMMENT) {
             printInsert(ps, Names.SYNSETS.TABLE, columns, synsets, { it.synsetId }, synsetIdToNID, toSqlRow)

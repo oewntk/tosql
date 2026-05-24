@@ -58,7 +58,7 @@ object Lexes {
             val wordNID = NIDMaps.lookupLC(wordToNID, word)
             val casedWordNID = NIDMaps.lookupNullable(casedwordToNID, lex.lemma)
             val type = lex.type
-            "'$type',$wordNID,$casedWordNID"
+            "'${type.value}',$wordNID,$casedWordNID"
         }
         if (!Printers.WITH_COMMENT) {
             Printers.printInsert(ps, Names.LEXES.TABLE, columns, lexes, lexKeyToNID, toSqlRow)
