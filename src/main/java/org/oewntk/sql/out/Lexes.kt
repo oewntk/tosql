@@ -63,7 +63,7 @@ object Lexes {
         if (!Printers.WITH_COMMENT) {
             Printers.printInsert(ps, Names.LEXES.TABLE, columns, lexes, lexKeyToNID, toSqlRow)
         } else {
-            val toSqlRowWithComment = { lex: Lex -> toSqlRow.invoke(lex) to "${lex.type} '${lex.lemma}'" }
+            val toSqlRowWithComment = { lex: Lex -> toSqlRow.invoke(lex) to "${lex.type.value} '${lex.lemma}'" }
             Printers.printInsertWithComment(ps, Names.LEXES.TABLE, columns, lexes, lexKeyToNID, toSqlRowWithComment)
         }
         return lexKeyToNID
@@ -242,7 +242,7 @@ object Lexes {
             lex.forms!!
                 .map {
                     val morphNID = NIDMaps.lookup(morphToNID, it)
-                    "$morphNID,$lexNID,$wordNID,'${lex.type}'"
+                    "$morphNID,$lexNID,$wordNID,'${lex.type.value}'"
                 }
         }
         if (!Printers.WITH_COMMENT) {
@@ -252,7 +252,7 @@ object Lexes {
                 val rows = toSqlRows.invoke(lex)
                 val comments = lex.forms!!
                     .asSequence()
-                    .map { "'$it' '${lex.lemma}' ${lex.type}" }
+                    .map { "'$it' '${lex.lemma}' ${lex.type.value}" }
                 rows
                     .asSequence()
                     .zip(comments)
@@ -341,7 +341,7 @@ object Lexes {
                 .map {
                     val variety = if (it.variety == null) "NULL" else "'${it.variety}'"
                     val pronunciationNID = NIDMaps.lookup(pronunciationToNID, it.value)
-                    "$pronunciationNID,$variety,$lexNID,$wordNID,'${lex.type}'"
+                    "$pronunciationNID,$variety,$lexNID,$wordNID,'${lex.type.value}'"
                 }
                 .toList()
         }
@@ -354,7 +354,7 @@ object Lexes {
                     .asSequence()
                     .map {
                         val variety = if (it.variety == null) "" else " [${it.variety}]"
-                        "${it.value}$variety '${lex.lemma}' ${lex.type}"
+                        "${it.value}$variety '${lex.lemma}' ${lex.type.value}"
                     }
                 rows
                     .asSequence()
