@@ -70,7 +70,7 @@ object BuiltIn {
 
     val LEXFILE_NIDS: Map<String, Int> = sequenceOf(*domainsArray).associate { it[2] as String to it[3] as Int }
 
-    private val DOMAIN_TO_NIDS = sequenceOf(*domainsArray).associate { arrayOf(escape(it[0] as String), escape(it[1].toString()), escape(it[2] as String)) to it[3] as Int }
+    private val DOMAIN_TO_NIDS = sequenceOf(*domainsArray).associate { arrayOf(escape(it[0] as String), escape((it[1] as PartOfSpeech).value.toString()), escape(it[2] as String)) to it[3] as Int }
 
     // link, recurses, linkid
 
