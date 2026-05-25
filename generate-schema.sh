@@ -29,7 +29,18 @@ if [ "${outdir}" == "" ]; then
 fi
 
 m=wn
-jar=target/generator-uber.jar
+jar=generator-uber.jar
+if [ ! -e "${jar}" ]; then
+  if [ ! -e "target/${jar}" ]; then
+    echo "Non existing uber jar" >&2
+    exit 1
+    fi
+  ln -s "target/${jar}"
+  fi
+if [ ! -e "${jar}" ]; then
+  echo "Non existing uber jar" >&2
+  exit 2
+  fi
 if [ "$*" != "" ]; then
   indir="$1"
   [ "$#" -eq 0 ] || shift

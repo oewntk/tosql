@@ -20,5 +20,16 @@ if [ "${outdir}" == "" ]; then
   outdir="sql"
 fi
 
-jar=target/generator-uber.jar
+jar=generator-uber.jar
+if [ ! -e "${jar}" ]; then
+  if [ ! -e "target/${jar}" ]; then
+    echo "Non existing uber jar" >&2
+    exit 1
+    fi
+  ln -s "target/${jar}"
+  fi
+if [ ! -e "${jar}" ]; then
+  echo "Non existing uber jar" >&2
+  exit 2
+  fi
 java -ea -cp "${jar}" org.oewntk.sql.out.SourcesGenerator "${outdir}"
