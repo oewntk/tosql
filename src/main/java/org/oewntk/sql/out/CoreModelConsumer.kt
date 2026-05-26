@@ -72,7 +72,9 @@ class CoreModelConsumer(
      */
     override fun accept(model: CoreModel) {
         Tracing.psInfo.println("[CoreModel] ${model.source}")
-
+        if (!outDir.exists()) {
+            outDir.mkdirs()
+        }
         try {
             lexes(outDir, model.lexes)
             synsets(outDir, model.synsets)

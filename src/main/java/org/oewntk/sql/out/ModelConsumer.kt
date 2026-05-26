@@ -38,6 +38,9 @@ class ModelConsumer(
      */
     override fun accept(model: Model) {
         Tracing.psInfo.println("[Model] ${model.sources.contentToString()}")
+        if (!outDir.exists()) {
+            outDir.mkdirs()
+        }
 
         // core
         val coreConsumer = CoreModelConsumer(outDir)
