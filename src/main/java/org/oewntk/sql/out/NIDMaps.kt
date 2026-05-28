@@ -16,6 +16,7 @@ import java.io.FileOutputStream
 import java.io.IOException
 import java.io.PrintStream
 import java.nio.charset.StandardCharsets
+import java.util.Locale
 
 /**
  * Lookup of ID/KEY-to-NID maps and printing them
@@ -51,7 +52,7 @@ object NIDMaps {
      * @return nid
      */
     fun lookupLC(map: Map<String, Int>, key: String): Int {
-        assert(key == key.lowercase())
+        assert(key == key.lowercase(Locale.ENGLISH))
         return lookup(map, key)
     }
 

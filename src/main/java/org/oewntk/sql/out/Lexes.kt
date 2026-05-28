@@ -5,6 +5,7 @@ package org.oewntk.sql.out
 
 import org.oewntk.model.*
 import java.io.PrintStream
+import java.util.*
 
 /**
  * Process lexes
@@ -157,7 +158,7 @@ object Lexes {
             Names.CASEDWORDS.wordid
         ).joinToString(",")
         val toSqlRow = { casedWord: Lemma ->
-            val nid = NIDMaps.lookupLC(wordIdToNID, casedWord.lowercase())
+            val nid = NIDMaps.lookupLC(wordIdToNID, casedWord.lowercase(Locale.ENGLISH))
             "'${Utils.escape(casedWord)}',$nid"
         }
         Printers.printInsert(ps, Names.CASEDWORDS.TABLE, columns, casedWordToNID, toSqlRow)
