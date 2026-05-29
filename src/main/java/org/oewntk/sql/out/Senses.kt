@@ -8,6 +8,7 @@ import org.oewntk.model.Key
 import org.oewntk.model.Key.KeyLCP.Companion.of_t
 import org.oewntk.model.Relation
 import org.oewntk.model.Sense
+import org.oewntk.model.SenseKey
 import org.oewntk.sql.out.Printers.printInsert
 import org.oewntk.sql.out.Printers.printInsertWithComment
 import org.oewntk.sql.out.Printers.printInserts
@@ -106,7 +107,7 @@ object Senses {
      *
      * @param ps               print stream
      * @param senses           senses
-     * @param sensesById       senses by id
+     * @param senseResolver    sense resolver
      * @param synsetIdToNIDMap id-to-nid map for synsets
      * @param lexKeyToNIDMap   key-to-nid map for lexes
      * @param wordIdToNIDMap   id-to-nid map for words
@@ -114,7 +115,7 @@ object Senses {
     fun generateSenseRelations(
         ps: PrintStream,
         senses: Collection<Sense>,
-        sensesById: Map<String, Sense>,
+        senseResolver: (SenseKey) -> Sense,
         synsetIdToNIDMap: Map<String, Int>,
         lexKeyToNIDMap: Map<Key, Int>,
         wordIdToNIDMap: Map<String, Int>,
@@ -146,7 +147,7 @@ object Senses {
                     sense.relations!![it]!!
                         .asSequence() // sequence of synset2 ids
                         .map { senseKey2 ->
-                            val sense2 = sensesById[senseKey2]!!
+                            val sense2 = senseResolver(senseKey2)
                             (relation to relationNID) to sense2
                         }
                 } // sequence of ((relation, relationNID), sense2_1) ((relation, relationNID), sense2_2) ...
@@ -356,20 +357,20 @@ object Senses {
      * Generate senses to verb templates
      *
      * @param ps               print stream
-     * @param sensesById       senses by id
+     * @param senses           senses
      * @param synsetIdToNIDMap id-to-nid map for synsets
      * @param lexKeyToNIDMap   key-to-nid map for lexes
      * @param wordIdToNIDMap   id-to-nid map for words
      */
     fun generateSensesVerbTemplates(
         ps: PrintStream,
-        sensesById: Map<String, Sense>,
+        senses: Collection<Sense>,
         synsetIdToNIDMap: Map<String, Int>,
         lexKeyToNIDMap: Map<Key, Int>,
         wordIdToNIDMap: Map<String, Int>,
     ) {
         // sequence of senses
-        val senseSeq = sensesById.values
+        val senseSeq = senses
             .asSequence()
             .filter { !it.verbTemplates.isNullOrEmpty() }
             .sortedBy(Sense::senseKey)

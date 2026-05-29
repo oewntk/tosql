@@ -21,11 +21,11 @@ import org.oewntk.sql.out.Senses.generateSensesAdjPositions
 import org.oewntk.sql.out.Senses.generateSensesSamples
 import org.oewntk.sql.out.Senses.generateSensesVerbFrames
 import org.oewntk.sql.out.Synsets.generateSynsetIlis
-import org.oewntk.sql.out.Synsets.generateSynsetSamples
 import org.oewntk.sql.out.Synsets.generateSynsetRelations
-import org.oewntk.sql.out.Synsets.generateSynsets
+import org.oewntk.sql.out.Synsets.generateSynsetSamples
 import org.oewntk.sql.out.Synsets.generateSynsetUsages
 import org.oewntk.sql.out.Synsets.generateSynsetWikidatas
+import org.oewntk.sql.out.Synsets.generateSynsets
 import java.io.File
 import java.io.FileNotFoundException
 import java.io.FileOutputStream
@@ -78,7 +78,7 @@ class CoreModelConsumer(
         try {
             lexes(outDir, model.lexes)
             synsets(outDir, model.synsets)
-            senses(outDir, model.senses, model.sensesById!!)
+            senses(outDir, model.senses, model.senseResolver)
             builtins(outDir)
         } catch (e: FileNotFoundException) {
             e.printStackTrace(Tracing.psErr)
@@ -167,18 +167,18 @@ class CoreModelConsumer(
      *
      * @param outDir     out dir
      * @param senses     senses
-     * @param sensesById senses mapped by sensekeys
+     * @param senseResolver sense resolver from sensekey
      * @throws FileNotFoundException file not found exception
      */
     @Throws(FileNotFoundException::class)
-    private fun senses(outDir: File, senses: Collection<Sense>, sensesById: Map<String, Sense>) {
+    private fun senses(outDir: File, senses: Collection<Sense>, senseResolver: (SenseKey) -> Sense) {
         PrintStream(FileOutputStream(File(outDir, makeFilename(Names.SENSES.FILE))), true, StandardCharsets.UTF_8)
             .use {
                 generateSenses(it, senses, synsetIdToNID!!, lexKeyToNID!!, wordToNID!!, casedWordToNID!!)
             }
         PrintStream(FileOutputStream(File(outDir, makeFilename(Names.LEXRELATIONS.FILE))), true, StandardCharsets.UTF_8)
             .use {
-                generateSenseRelations(it, senses, sensesById, synsetIdToNID!!, lexKeyToNID!!, wordToNID!!)
+                generateSenseRelations(it, senses, senseResolver, synsetIdToNID!!, lexKeyToNID!!, wordToNID!!)
             }
         // senses are generated second, so append
         PrintStream(FileOutputStream(File(outDir, makeFilename(Names.SAMPLES.FILE)), true), true, StandardCharsets.UTF_8)

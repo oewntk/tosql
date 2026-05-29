@@ -55,7 +55,7 @@ class ModelConsumer(
 
         // verb templates
         try {
-            templates(outDir, coreConsumer, model.sensesById!!, model.verbTemplatesById!!)
+            templates(outDir, coreConsumer, model.senses, model.verbTemplatesById!!)
         } catch (e: FileNotFoundException) {
             e.printStackTrace(Tracing.psErr)
         }
@@ -81,7 +81,7 @@ class ModelConsumer(
      *
      * @param outDir            out dir
      * @param coreConsumer      core consumer
-     * @param sensesById        senses by id
+     * @param senses            senses
      * @param verbTemplatesById verb templates by id
      * @throws FileNotFoundException file not found exception
      */
@@ -89,14 +89,14 @@ class ModelConsumer(
     private fun templates(
         outDir: File,
         coreConsumer: CoreModelConsumer,
-        sensesById: Map<String, Sense>,
+        senses: Collection<Sense>,
         verbTemplatesById: Map<Int, VerbTemplate>,
     ) {
         PrintStream(FileOutputStream(File(outDir, makeFilename(Names.SENSES_VTEMPLATES.FILE))), true, StandardCharsets.UTF_8)
             .use {
                 generateSensesVerbTemplates(
                     it,
-                    sensesById,
+                    senses,
                     coreConsumer.synsetIdToNID!!,
                     coreConsumer.lexKeyToNID!!,
                     coreConsumer.wordToNID!!
