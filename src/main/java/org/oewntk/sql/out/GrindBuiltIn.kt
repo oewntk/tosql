@@ -29,7 +29,7 @@ object GrindBuiltIn {
         if (!outDir.exists()) {
             outDir.mkdirs()
         }
-        println("[Output] " + outDir.absolutePath)
+        Tracing.psInfo.println("[Output] " + outDir.absolutePath)
 
         // Process
         builtins(outDir)

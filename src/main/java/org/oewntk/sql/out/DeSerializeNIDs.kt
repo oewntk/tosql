@@ -100,11 +100,11 @@ object DeSerializeNIDs {
         }
 
         val maps = deserializeNIDs(inDir)
-        println("${Names.WORDS.FILE} ${maps[Names.WORDS.FILE]!!.size}")
-        println("${Names.CASEDWORDS.FILE} ${maps[Names.CASEDWORDS.FILE]!!.size}")
-        println("${Names.MORPHS.FILE} ${maps[Names.MORPHS.FILE]!!.size}")
-        println("${Names.PRONUNCIATIONS.FILE} ${maps[Names.PRONUNCIATIONS.FILE]!!.size}")
-        println("${Names.SENSES.FILE} ${maps[Names.SENSES.FILE]!!.size}")
-        println("${Names.SYNSETS.FILE} ${maps[Names.SYNSETS.FILE]!!.size}")
+        Tracing.psInfo.println("${Names.WORDS.FILE} ${maps[Names.WORDS.FILE]!!.size}")
+        Tracing.psInfo.println("${Names.CASEDWORDS.FILE} ${maps[Names.CASEDWORDS.FILE]!!.size}")
+        Tracing.psInfo.println("${Names.MORPHS.FILE} ${maps[Names.MORPHS.FILE]!!.size}")
+        Tracing.psInfo.println("${Names.PRONUNCIATIONS.FILE} ${maps[Names.PRONUNCIATIONS.FILE]!!.size}")
+        Tracing.psInfo.println("${Names.SENSES.FILE} ${maps[Names.SENSES.FILE]!!.size}")
+        Tracing.psInfo.println("${Names.SYNSETS.FILE} ${maps[Names.SYNSETS.FILE]!!.size}")
     }
 }
