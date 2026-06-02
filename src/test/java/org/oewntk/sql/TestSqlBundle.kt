@@ -8,6 +8,7 @@ import org.junit.BeforeClass
 import org.junit.Test
 import org.oewntk.sql.out.Names
 import org.oewntk.sql.out.Variables
+import java.io.PrintStream
 import java.util.*
 
 class TestSqlBundle {
@@ -43,7 +44,11 @@ class TestSqlBundle {
 
     companion object {
 
-        private val ps = if (!System.getProperties().containsKey("SILENT")) Tracing.psInfo else Tracing.psNull
+        private val silent = if (System.getProperties().containsKey("VERBOSE")) false
+        else if (System.getProperties().containsKey("SILENT")) true
+        else true
+
+        private val ps: PrintStream = if (!silent) Tracing.psInfo else Tracing.psNull
 
         private var bundle: ResourceBundle? = null
 

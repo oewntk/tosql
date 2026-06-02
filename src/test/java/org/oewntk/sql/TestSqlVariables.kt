@@ -7,6 +7,7 @@ import org.junit.Assert
 import org.junit.BeforeClass
 import org.junit.Test
 import org.oewntk.sql.out.Variables
+import java.io.PrintStream
 import java.util.*
 
 class TestSqlVariables {
@@ -48,7 +49,11 @@ class TestSqlVariables {
 
     companion object {
 
-        private val ps = if (!System.getProperties().containsKey("SILENT")) Tracing.psInfo else Tracing.psNull
+        private val silent = if (System.getProperties().containsKey("VERBOSE")) false
+        else if (System.getProperties().containsKey("SILENT")) true
+        else true
+
+        private val ps: PrintStream = if (!silent) Tracing.psInfo else Tracing.psNull
 
         var variables: Variables? = null
 
