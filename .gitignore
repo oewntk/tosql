@@ -1,10 +1,13 @@
 /target/
+/build/
+
 /sql/
 /sql
 /sql*/
 /sql*
 **/_*/
 **/_*
+
 /dependency-reduced-pom.xml
 /doc/pages/
 /doc/cases/
