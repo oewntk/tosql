@@ -19,4 +19,4 @@ Project [tosql](https://github.com/oewntk/tosql)
 
 		<groupId>io.github.oewntk</groupId>
 		<artifactId>tosql</artifactId>
-		<version>2.4.0</version>
+		<version>3.0.1</version>
