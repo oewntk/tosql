@@ -28,7 +28,7 @@ import java.util.function.Consumer
  */
 class ModelConsumer(
     private val outDir: File,
-    private val verbose: Boolean = false
+    private val verbose: Boolean = false,
 ) : Consumer<Model> {
 
     /**

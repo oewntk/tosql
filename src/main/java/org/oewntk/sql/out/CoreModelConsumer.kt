@@ -43,6 +43,7 @@ import java.util.function.Consumer
  */
 class CoreModelConsumer(
     private val outDir: File,
+    private val verbose: Boolean = false,
 ) : Consumer<CoreModel> {
 
     /**
