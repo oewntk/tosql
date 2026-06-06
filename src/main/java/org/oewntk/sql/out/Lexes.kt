@@ -3,11 +3,7 @@
  */
 package org.oewntk.sql.out
 
-import org.oewntk.model.Lemma
-import org.oewntk.model.Lex
-import org.oewntk.model.LexId
-import org.oewntk.model.Morph
-import org.oewntk.model.PronunciationValue
+import org.oewntk.model.*
 import java.io.PrintStream
 import java.util.*
 
@@ -18,9 +14,9 @@ object Lexes {
 
     // lexes
 
-    val lexIdComparator = compareBy<LexId> { it.first }
-        .thenBy { it.second }
-        .thenBy(nullsFirst(naturalOrder())) { it.third }
+    val lexIdComparator = compareBy<LexId> { it.lemma }
+        .thenBy { it.type }
+        .thenBy(nullsFirst(naturalOrder())) { it.discriminant }
 
     /**
      * Make lex-to-NID map
