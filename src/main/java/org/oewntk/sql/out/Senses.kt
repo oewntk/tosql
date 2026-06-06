@@ -4,15 +4,7 @@
 
 package org.oewntk.sql.out
 
-import org.oewntk.model.Category
-import org.oewntk.model.Key
-import org.oewntk.model.Key.KeyLCD
-import org.oewntk.model.Key.KeyLCD.Companion.of
-import org.oewntk.model.Key.KeyLCD.Companion.of_t
-import org.oewntk.model.Lemma
-import org.oewntk.model.Relation
-import org.oewntk.model.Sense
-import org.oewntk.model.SenseKey
+import org.oewntk.model.*
 import org.oewntk.sql.out.Printers.printInsert
 import org.oewntk.sql.out.Printers.printInsertWithComment
 import org.oewntk.sql.out.Printers.printInserts
@@ -29,20 +21,6 @@ object Senses {
      * Make id function, this adds the case-sensitive lemma to make it unique
      */
     private val makeId = { sense: Sense -> sense.senseKey + ' ' + sense.lemma.replace(' ', '_') }
-
-    private fun __of_t(sense: Sense) {}
-
-    fun of_t(sense: Sense): KeyLCD {
-        return of(sense, Sense::lemma) { it.type.toCategory() }
-    }
-
-    fun of(
-        sense: Sense,
-        lemmaExtractor: (Sense) -> Lemma,
-        categoryExtractor: (Sense) -> Category,
-    ): KeyLCD {
-        return KeyLCD(lemmaExtractor(sense), categoryExtractor(sense), sense.lexId.third)
-    }
 
     /**
      * Make sense id-to-nid map
@@ -66,7 +44,7 @@ object Senses {
      * @param ps                  print stream
      * @param senses              senses
      * @param synsetIdToNIDMap    id-to-nid map for synsets
-     * @param lexKeyToNIDMap      key-to-nid map for lexes
+     * @param lexIdToNIDMap      key-to-nid map for lexes
      * @param wordIdToNIDMap      id-to-nid map for words
      * @param casedWordIdToNIDMap id-to-nid map for cased words
      * @return senses id-to-nid map
@@ -74,10 +52,10 @@ object Senses {
     fun generateSenses(
         ps: PrintStream,
         senses: Collection<Sense>,
-        synsetIdToNIDMap: Map<String, Int>,
-        lexKeyToNIDMap: Map<Key, Int>,
-        wordIdToNIDMap: Map<String, Int>,
-        casedWordIdToNIDMap: Map<String, Int>,
+        synsetIdToNIDMap: Map<SynsetId, Int>,
+        lexIdToNIDMap: Map<LexId, Int>,
+        wordIdToNIDMap: Map<Lemma, Int>,
+        casedWordIdToNIDMap: Map<LowerCasedLemma, Int>,
     ): Map<String, Int> {
 
         // make sensekey␣lemma-to-nid map
@@ -99,13 +77,14 @@ object Senses {
             val casedWord = sense.lemma
             val word = sense.lCLemma
             val synsetId = sense.synsetId
+            val lexId = sense.lexId
             val sensekey = sense.senseKey
             val senseNum = sense.lexIndex + 1
             val lexid = sense.findLexid()
             val tagCount = sense.tagCount
             val wordNID = NIDMaps.lookupLC(wordIdToNIDMap, word)
             val synsetNID = NIDMaps.lookup(synsetIdToNIDMap, synsetId)
-            val lexNID = NIDMaps.lookup(lexKeyToNIDMap, of_t(sense))
+            val lexNID = NIDMaps.lookup(lexIdToNIDMap, lexId)
             val casedWordNID = NIDMaps.lookupNullable(casedWordIdToNIDMap, casedWord)
             val tagCnt = tagCount?.count?.toString() ?: "NULL"
             "'${escape(sensekey)}',$senseNum,$synsetNID,$lexNID,$wordNID,$casedWordNID,$lexid,$tagCnt"
@@ -126,16 +105,16 @@ object Senses {
      * @param senses           senses
      * @param senseResolver    sense resolver
      * @param synsetIdToNIDMap id-to-nid map for synsets
-     * @param lexKeyToNIDMap   key-to-nid map for lexes
+     * @param lexIdToNIDMap    id-to-nid map for lexes
      * @param wordIdToNIDMap   id-to-nid map for words
      */
     fun generateSenseRelations(
         ps: PrintStream,
         senses: Collection<Sense>,
         senseResolver: (SenseKey) -> Sense,
-        synsetIdToNIDMap: Map<String, Int>,
-        lexKeyToNIDMap: Map<Key, Int>,
-        wordIdToNIDMap: Map<String, Int>,
+        synsetIdToNIDMap: Map<SynsetId, Int>,
+        lexIdToNIDMap: Map<LexId, Int>,
+        wordIdToNIDMap: Map<Lemma, Int>,
     ) {
         // sequence of senses
         val senseSeq = senses
@@ -177,7 +156,7 @@ object Senses {
         }
 
         val toSqlRows = { sense: Sense ->
-            val lu1NID = NIDMaps.lookup(lexKeyToNIDMap, of_t(sense))
+            val lu1NID = NIDMaps.lookup(lexIdToNIDMap, sense.lexId)
             val word1NID = NIDMaps.lookupLC(wordIdToNIDMap, sense.lCLemma)
             val synset1NID = NIDMaps.lookup(synsetIdToNIDMap, sense.synsetId)
             toTargetData(sense) // sequence of ((relation, relationNID), sense2_1) ((relation, relationNID), sense2_2) ...
@@ -186,7 +165,7 @@ object Senses {
                     val word2 = sense2.lCLemma
                     val synsetId2 = sense2.synsetId
 
-                    val lu2NID = NIDMaps.lookup(lexKeyToNIDMap, of_t(sense2))
+                    val lu2NID = NIDMaps.lookup(lexIdToNIDMap, sense2.lexId)
                     val word2NID = NIDMaps.lookupLC(wordIdToNIDMap, word2)
                     val synset2NID = NIDMaps.lookup(synsetIdToNIDMap, synsetId2)
                     val relationNID: Int = BuiltIn.OEWN_RELATION_TYPES[it.first.first]!! // relation
@@ -225,15 +204,15 @@ object Senses {
      * @param ps               print stream
      * @param senses           senses
      * @param synsetIdToNIDMap id-to-nid map for synsets
-     * @param lexKeyToNIDMap   key-to-nid map for lexes
+     * @param lexIdToNIDMap    id-to-nid map for lexes
      * @param wordIdToNIDMap   id-to-nid map for words
      */
     fun generateSensesSamples(
         ps: PrintStream,
         senses: Collection<Sense>,
-        synsetIdToNIDMap: Map<String, Int>,
-        lexKeyToNIDMap: Map<Key, Int>,
-        wordIdToNIDMap: Map<String, Int>,
+        synsetIdToNIDMap: Map<SynsetId, Int>,
+        lexIdToNIDMap: Map<LexId, Int>,
+        wordIdToNIDMap: Map<Lemma, Int>,
     ) {
 
         // sequence of senses
@@ -253,7 +232,7 @@ object Senses {
         ).joinToString(",")
         val toSqlRows = { sense: Sense ->
             val synsetNID1 = NIDMaps.lookup(synsetIdToNIDMap, sense.synsetId)
-            val lexNID1 = NIDMaps.lookup(lexKeyToNIDMap, of_t(sense))
+            val lexNID1 = NIDMaps.lookup(lexIdToNIDMap, sense.lexId)
             val wordNID1 = NIDMaps.lookup(wordIdToNIDMap, sense.lCLemma)
             sense.examples!!
                 .map {
@@ -272,15 +251,15 @@ object Senses {
      * @param ps               print stream
      * @param senses           senses
      * @param synsetIdToNIDMap id-to-nid map for synsets
-     * @param lexKeyToNIDMap   key-to-nid map for lexes
+     * @param lexIdToNIDMap    id-to-nid map for lexes
      * @param wordIdToNIDMap   id-to-nid map for words
      */
     fun generateSensesAdjPositions(
         ps: PrintStream,
         senses: Collection<Sense>,
-        synsetIdToNIDMap: Map<String, Int>,
-        lexKeyToNIDMap: Map<Key, Int>,
-        wordIdToNIDMap: Map<String, Int>,
+        synsetIdToNIDMap: Map<SynsetId, Int>,
+        lexIdToNIDMap: Map<LexId, Int>,
+        wordIdToNIDMap: Map<Lemma, Int>,
     ) {
         // sequence of senses
         val senseSeq = senses
@@ -299,7 +278,7 @@ object Senses {
             val synsetId = sense.synsetId
             val word = sense.lCLemma
             val synsetNID = NIDMaps.lookup(synsetIdToNIDMap, synsetId)
-            val luNID = NIDMaps.lookup(lexKeyToNIDMap, of_t(sense))
+            val luNID = NIDMaps.lookup(lexIdToNIDMap, sense.lexId)
             val wordNID = NIDMaps.lookupLC(wordIdToNIDMap, word)
             "$synsetNID,$luNID,$wordNID,'${sense.adjPosition}'"
         }
@@ -317,15 +296,15 @@ object Senses {
      * @param ps               print stream
      * @param senses           senses
      * @param synsetIdToNIDMap id-to-nid map for synsets
-     * @param lexKeyToNIDMap   key-to-nid map for lexes
+     * @param lexIdToNIDMap    id-to-nid map for lexes
      * @param wordIdToNIDMap   id-to-nid map for words
      */
     fun generateSensesVerbFrames(
         ps: PrintStream,
         senses: Collection<Sense>,
-        synsetIdToNIDMap: Map<String, Int>,
-        lexKeyToNIDMap: Map<Key, Int>,
-        wordIdToNIDMap: Map<String, Int>,
+        synsetIdToNIDMap: Map<SynsetId, Int>,
+        lexIdToNIDMap: Map<LexId, Int>,
+        wordIdToNIDMap: Map<Lemma, Int>,
     ) {
         // sequence of senses
         val senseSeq = senses
@@ -344,7 +323,7 @@ object Senses {
         val toSqlRows = { sense: Sense ->
             val synsetNID = NIDMaps.lookup(synsetIdToNIDMap, sense.synsetId)
             val wordNID = NIDMaps.lookupLC(wordIdToNIDMap, sense.lCLemma)
-            val luNID = NIDMaps.lookup(lexKeyToNIDMap, of_t(sense))
+            val luNID = NIDMaps.lookup(lexIdToNIDMap, sense.lexId)
             sense.verbFrames!!
                 .map {
                     val verbFrameNID = VerbFrames.VERB_FRAME_ID_TO_NIDS[it]!!
@@ -372,15 +351,15 @@ object Senses {
      * @param ps               print stream
      * @param senses           senses
      * @param synsetIdToNIDMap id-to-nid map for synsets
-     * @param lexKeyToNIDMap   key-to-nid map for lexes
+     * @param lexIdToNIDMap    id-to-nid map for lexes
      * @param wordIdToNIDMap   id-to-nid map for words
      */
     fun generateSensesVerbTemplates(
         ps: PrintStream,
         senses: Collection<Sense>,
-        synsetIdToNIDMap: Map<String, Int>,
-        lexKeyToNIDMap: Map<Key, Int>,
-        wordIdToNIDMap: Map<String, Int>,
+        synsetIdToNIDMap: Map<SynsetId, Int>,
+        lexIdToNIDMap: Map<LexId, Int>,
+        wordIdToNIDMap: Map<Lemma, Int>,
     ) {
         // sequence of senses
         val senseSeq = senses
@@ -399,7 +378,7 @@ object Senses {
         val toSqlRows = { sense: Sense ->
             val synsetNID = NIDMaps.lookup(synsetIdToNIDMap, sense.synsetId)
             val wordNID = NIDMaps.lookupLC(wordIdToNIDMap, sense.lCLemma)
-            val luNID = NIDMaps.lookup(lexKeyToNIDMap, of_t(sense))
+            val luNID = NIDMaps.lookup(lexIdToNIDMap, sense.lexId)
             sense.verbTemplates!!
                 .map { "$synsetNID,$luNID,$wordNID,$it" }
                 .toList()

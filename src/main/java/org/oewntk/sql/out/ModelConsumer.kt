@@ -98,7 +98,7 @@ class ModelConsumer(
                     it,
                     senses,
                     coreConsumer.synsetIdToNID!!,
-                    coreConsumer.lexKeyToNID!!,
+                    coreConsumer.lexIdToNID!!,
                     coreConsumer.wordToNID!!
                 )
             }

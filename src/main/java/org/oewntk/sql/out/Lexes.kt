@@ -3,7 +3,11 @@
  */
 package org.oewntk.sql.out
 
-import org.oewntk.model.*
+import org.oewntk.model.Lemma
+import org.oewntk.model.Lex
+import org.oewntk.model.LexId
+import org.oewntk.model.Morph
+import org.oewntk.model.PronunciationValue
 import java.io.PrintStream
 import java.util.*
 
@@ -14,18 +18,22 @@ object Lexes {
 
     // lexes
 
+    val lexIdComparator = compareBy<LexId> { it.first }
+        .thenBy { it.second }
+        .thenBy(nullsFirst(naturalOrder())) { it.third }
+
     /**
      * Make lex-to-NID map
      */
     fun makeLexesNIDs(
         lexes: Collection<Lex>,
-    ): Map<Key, Int> {
+    ): Map<LexId, Int> {
         return lexes
             .asSequence()
-            .map { Key.KeyLCP.of_t(it) }
-            .sorted()
+            .map { it.key }
+            .sortedWith(lexIdComparator)
             .withIndex()
-            .associate { it.value to it.index + 1 } // map(of_t(lex), nid)
+            .associate { it.value to it.index + 1 } // map(lexId, nid)
     }
 
     /**
@@ -34,18 +42,18 @@ object Lexes {
      * @param ps             print stream
      * @param lexes          lexes
      * @param wordToNID      id-to-nid map for words
-     * @param casedwordToNID id-to-nid map for cased words
+     * @param casedWordToNID id-to-nid map for cased words
      * @return lex_key-to-nid map
      */
     fun generateLexes(
         ps: PrintStream,
         lexes: Collection<Lex>,
-        wordToNID: Map<String, Int>,
-        casedwordToNID: Map<String, Int>,
-    ): Map<Key, Int> {
+        wordToNID: Map<Lemma, Int>,
+        casedWordToNID: Map<Lemma, Int>,
+    ): Map<LexId, Int> {
 
         // lex key to NID
-        val lexKeyToNID: Map<Key, Int> = makeLexesNIDs(lexes)
+        val lexIdToNID: Map<LexId, Int> = makeLexesNIDs(lexes)
 
         // insert map
         val columns = listOf(
@@ -57,17 +65,17 @@ object Lexes {
         val toSqlRow = { lex: Lex ->
             val word = lex.lCLemma
             val wordNID = NIDMaps.lookupLC(wordToNID, word)
-            val casedWordNID = NIDMaps.lookupNullable(casedwordToNID, lex.lemma)
+            val casedWordNID = NIDMaps.lookupNullable(casedWordToNID, lex.lemma)
             val type = lex.type
             "'${type.value}',$wordNID,$casedWordNID"
         }
         if (!Printers.WITH_COMMENT) {
-            Printers.printInsert(ps, Names.LEXES.TABLE, columns, lexes, lexKeyToNID, toSqlRow)
+            Printers.printInsert(ps, Names.LEXES.TABLE, columns, lexes, lexIdToNID, toSqlRow)
         } else {
             val toSqlRowWithComment = { lex: Lex -> toSqlRow.invoke(lex) to "${lex.type.value} '${lex.lemma}'" }
-            Printers.printInsertWithComment(ps, Names.LEXES.TABLE, columns, lexes, lexKeyToNID, toSqlRowWithComment)
+            Printers.printInsertWithComment(ps, Names.LEXES.TABLE, columns, lexes, lexIdToNID, toSqlRowWithComment)
         }
-        return lexKeyToNID
+        return lexIdToNID
     }
 
     // words
@@ -213,16 +221,16 @@ object Lexes {
      *
      * @param ps          print stream
      * @param lexes       lexes
-     * @param lexKeyToNID lex_key-to-nid map
+     * @param lexIdToNID  lexId-to-nid map
      * @param wordToNID   word-to-nid map
      * @param morphToNID  morph-to-nid map
      */
     fun generateLexesMorphs(
         ps: PrintStream,
         lexes: Collection<Lex>,
-        lexKeyToNID: Map<Key, Int>,
-        wordToNID: Map<String, Int>,
-        morphToNID: Map<String, Int>,
+        lexIdToNID: Map<LexId, Int>,
+        wordToNID: Map<Lemma, Int>,
+        morphToNID: Map<Morph, Int>,
     ) {
         // stream of lexes
         val lexSeq = lexes
@@ -239,7 +247,7 @@ object Lexes {
         ).joinToString(",")
         val toSqlRows = { lex: Lex ->
             val wordNID = NIDMaps.lookupLC(wordToNID, lex.lCLemma)
-            val lexNID = NIDMaps.lookup(lexKeyToNID, Key.KeyLCP.of_t(lex))
+            val lexNID = NIDMaps.lookup(lexIdToNID, lex.key)
             lex.forms!!
                 .map {
                     val morphNID = NIDMaps.lookup(morphToNID, it)
@@ -310,14 +318,14 @@ object Lexes {
      *
      * @param ps                 print stream
      * @param lexes              lexes
-     * @param lexKeyToNID        lex_key-to-nid map
+     * @param lexIdToNID         lexId-to-nid map
      * @param wordToNID          word-to-nid map
      * @param pronunciationToNID pronunciation-to-nid
      */
     fun generateLexesPronunciations(
         ps: PrintStream,
         lexes: Collection<Lex>,
-        lexKeyToNID: Map<Key, Int>,
+        lexIdToNID: Map<LexId, Int>,
         wordToNID: Map<String, Int>,
         pronunciationToNID: Map<String, Int>,
     ) {
@@ -337,7 +345,7 @@ object Lexes {
         ).joinToString(",")
         val toSqlRows = { lex: Lex ->
             val wordNID = NIDMaps.lookupLC(wordToNID, lex.lCLemma)
-            val lexNID = NIDMaps.lookup(lexKeyToNID, Key.KeyLCP.of_t(lex))
+            val lexNID = NIDMaps.lookup(lexIdToNID, lex.key)
             lex.pronunciations!!
                 .map {
                     val variety = if (it.variety == null) "NULL" else "'${it.variety}'"

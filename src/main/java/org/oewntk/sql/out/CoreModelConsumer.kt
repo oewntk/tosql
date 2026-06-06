@@ -49,22 +49,22 @@ class CoreModelConsumer(
     /**
      * NID maps
      */
-    var lexKeyToNID: Map<Key, Int>? = null
+    var lexIdToNID: Map<LexId, Int>? = null
 
     /**
      * Word to NID map
      */
-    var wordToNID: Map<String, Int>? = null
+    var wordToNID: Map<Lemma, Int>? = null
 
     /**
      * Cased word to NID map
      */
-    private var casedWordToNID: Map<String, Int>? = null
+    private var casedWordToNID: Map<Lemma, Int>? = null
 
     /**
      * Synset to NID map
      */
-    var synsetIdToNID: Map<String, Int>? = null
+    var synsetIdToNID: Map<SynsetId, Int>? = null
 
     /**
      * Accept model
@@ -105,7 +105,7 @@ class CoreModelConsumer(
             }
         PrintStream(FileOutputStream(File(outDir, makeFilename(Names.LEXES.FILE))), true, StandardCharsets.UTF_8)
             .use {
-                lexKeyToNID = generateLexes(it, lexes, wordToNID!!, casedWordToNID!!)
+                lexIdToNID = generateLexes(it, lexes, wordToNID!!, casedWordToNID!!)
             }
         var morphToNID: Map<String, Int>
         PrintStream(FileOutputStream(File(outDir, makeFilename(Names.MORPHS.FILE))), true, StandardCharsets.UTF_8)
@@ -114,7 +114,7 @@ class CoreModelConsumer(
             }
         PrintStream(FileOutputStream(File(outDir, makeFilename(Names.LEXES_MORPHS.FILE))), true, StandardCharsets.UTF_8)
             .use {
-                generateLexesMorphs(it, lexes, lexKeyToNID!!, wordToNID!!, morphToNID)
+                generateLexesMorphs(it, lexes, lexIdToNID!!, wordToNID!!, morphToNID)
             }
         var pronunciationToNID: Map<String, Int>
         PrintStream(FileOutputStream(File(outDir, makeFilename(Names.PRONUNCIATIONS.FILE))), true, StandardCharsets.UTF_8)
@@ -123,7 +123,7 @@ class CoreModelConsumer(
             }
         PrintStream(FileOutputStream(File(outDir, makeFilename(Names.LEXES_PRONUNCIATIONS.FILE))), true, StandardCharsets.UTF_8)
             .use {
-                generateLexesPronunciations(it, lexes, lexKeyToNID!!, wordToNID!!, pronunciationToNID)
+                generateLexesPronunciations(it, lexes, lexIdToNID!!, wordToNID!!, pronunciationToNID)
             }
     }
 
@@ -175,24 +175,24 @@ class CoreModelConsumer(
     private fun senses(outDir: File, senses: Collection<Sense>, senseResolver: (SenseKey) -> Sense) {
         PrintStream(FileOutputStream(File(outDir, makeFilename(Names.SENSES.FILE))), true, StandardCharsets.UTF_8)
             .use {
-                generateSenses(it, senses, synsetIdToNID!!, lexKeyToNID!!, wordToNID!!, casedWordToNID!!)
+                generateSenses(it, senses, synsetIdToNID!!, lexIdToNID!!, wordToNID!!, casedWordToNID!!)
             }
         PrintStream(FileOutputStream(File(outDir, makeFilename(Names.LEXRELATIONS.FILE))), true, StandardCharsets.UTF_8)
             .use {
-                generateSenseRelations(it, senses, senseResolver, synsetIdToNID!!, lexKeyToNID!!, wordToNID!!)
+                generateSenseRelations(it, senses, senseResolver, synsetIdToNID!!, lexIdToNID!!, wordToNID!!)
             }
         // senses are generated second, so append
         PrintStream(FileOutputStream(File(outDir, makeFilename(Names.SAMPLES.FILE)), true), true, StandardCharsets.UTF_8)
             .use {
-                generateSensesSamples(it, senses, synsetIdToNID!!, lexKeyToNID!!, wordToNID!!)
+                generateSensesSamples(it, senses, synsetIdToNID!!, lexIdToNID!!, wordToNID!!)
             }
         PrintStream(FileOutputStream(File(outDir, makeFilename(Names.SENSES_VFRAMES.FILE))), true, StandardCharsets.UTF_8)
             .use {
-                generateSensesVerbFrames(it, senses, synsetIdToNID!!, lexKeyToNID!!, wordToNID!!)
+                generateSensesVerbFrames(it, senses, synsetIdToNID!!, lexIdToNID!!, wordToNID!!)
             }
         PrintStream(FileOutputStream(File(outDir, makeFilename(Names.SENSES_ADJPOSITIONS.FILE))), true, StandardCharsets.UTF_8)
             .use {
-                generateSensesAdjPositions(it, senses, synsetIdToNID!!, lexKeyToNID!!, wordToNID!!)
+                generateSensesAdjPositions(it, senses, synsetIdToNID!!, lexIdToNID!!, wordToNID!!)
             }
     }
 

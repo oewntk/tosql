@@ -3,8 +3,8 @@
  */
 package org.oewntk.sql.out
 
-import org.oewntk.model.Key
 import org.oewntk.model.Lex
+import org.oewntk.model.LexId
 import java.io.PrintStream
 
 /**
@@ -144,7 +144,7 @@ object Printers {
      * @param table       table name
      * @param columns     column names
      * @param lexes       lexes
-     * @param lexKeyToNID lex_key-to-nid map
+     * @param lexIdToNID  lexId-to-nid map
      * @param toRow       stringifier of lexes
      */
     fun printInsert(
@@ -152,7 +152,7 @@ object Printers {
         table: String,
         columns: String,
         lexes: Collection<Lex>,
-        lexKeyToNID: Map<Key, Int>,
+        lexIdToNID: Map<LexId, Int>,
         toRow: (Lex) -> String,
     ) {
         if (lexes.isEmpty()) {
@@ -161,7 +161,7 @@ object Printers {
             ps.print("INSERT INTO $table ($columns) VALUES")
             lexes
                 .asSequence()
-                .map { it to NIDMaps.lookup(lexKeyToNID, Key.KeyLCP.of_t(it)) }
+                .map { it to NIDMaps.lookup(lexIdToNID, it.key) }
                 .toList()
                 .sortedBy { it.second }
                 .withIndex()
@@ -183,7 +183,7 @@ object Printers {
      * @param table                table name
      * @param columns              column names
      * @param lexes                lexes
-     * @param lexKeyToNID          lex_key-to-nid map
+     * @param lexIdToNID           lexId-to-nid map
      * @param toRowWithComment     double stringifier of lexes, two strings are produced: [0] insert values , [1] comment
      */
     fun printInsertWithComment(
@@ -191,7 +191,7 @@ object Printers {
         table: String,
         columns: String,
         lexes: Collection<Lex>,
-        lexKeyToNID: Map<Key, Int>,
+        lexIdToNID: Map<LexId, Int>,
         toRowWithComment: (Lex) -> Pair<String, String>,
     ) {
         if (lexes.isEmpty()) {
@@ -200,7 +200,7 @@ object Printers {
             ps.print("INSERT INTO $table ($columns) VALUES")
             lexes
                 .asSequence()
-                .map { it to NIDMaps.lookup(lexKeyToNID, Key.KeyLCP.of_t(it)) }
+                .map { it to NIDMaps.lookup(lexIdToNID, it.key) }
                 .toList()
                 .sortedBy { it.second }
                 .withIndex()
