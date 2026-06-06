@@ -79,7 +79,7 @@ object Senses {
             val synsetId = sense.synsetId
             val lexId = sense.lexId
             val sensekey = sense.senseKey
-            val senseNum = sense.lexIndex + 1
+            val senseNum = sense.indexInLex + 1
             val lexid = sense.findLexid()
             val tagCount = sense.tagCount
             val wordNID = NIDMaps.lookupLC(wordIdToNIDMap, word)
