@@ -86,7 +86,7 @@ object Senses {
             val synsetNID = NIDMaps.lookup(synsetIdToNIDMap, synsetId)
             val lexNID = NIDMaps.lookup(lexIdToNIDMap, lexId)
             val casedWordNID = NIDMaps.lookupNullable(casedWordIdToNIDMap, casedWord)
-            val tagCnt = tagCount?.count?.toString() ?: "NULL"
+            val tagCnt = tagCount?.toString() ?: "NULL"
             "'${escape(sensekey)}',$senseNum,$synsetNID,$lexNID,$wordNID,$casedWordNID,$lexid,$tagCnt"
         }
         if (!Printers.WITH_COMMENT) {
