@@ -30,6 +30,7 @@ class ModelConsumer(
     private val outDir: File,
     private val withSchema: Boolean = true,
     private val withSources: Boolean = true,
+    private val compatSchema: Boolean = false,
     private val verbose: Boolean = false,
 ) : Consumer<Model> {
 
@@ -46,7 +47,7 @@ class ModelConsumer(
         }
 
         // core
-        val coreConsumer = CoreModelConsumer(outDir, withSchema = withSchema, withSources = withSources, verbose = verbose)
+        val coreConsumer = CoreModelConsumer(outDir, withSchema = withSchema, withSources = withSources, compatSchema = compatSchema, verbose = verbose)
         coreConsumer.accept(model)
 
         // verb frames

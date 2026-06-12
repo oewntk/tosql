@@ -47,6 +47,7 @@ class CoreModelConsumer(
     private val outDir: File,
     private val withSchema: Boolean = true,
     private val withSources: Boolean = true,
+    private val compatSchema: Boolean = false,
     private val verbose: Boolean = false,
 ) : Consumer<CoreModel> {
 
@@ -91,7 +92,7 @@ class CoreModelConsumer(
             senses(dataDir, model.senses, model.senseResolver)
             builtins(dataDir)
             if (withSources) sources(outDir)
-            if (withSchema) schema(outDir.absolutePath)
+            if (withSchema) schema(outDir.absolutePath, compat = compatSchema)
         } catch (e: FileNotFoundException) {
             e.printStackTrace(Tracing.psErr)
         }
