@@ -21,7 +21,6 @@ import kotlin.system.exitProcess
 class SchemaGenerator(
     private val variables: Variables,
 ) {
-
     /**
      * Generate schema
      *
@@ -36,7 +35,7 @@ class SchemaGenerator(
         module: String,
         output: String,
         inputSubdir: String,
-        inputs: Array<String>,
+        inputs: Array<String> = emptyArray(),
     ) {
         var outputFileOrDir: File? = null
 
@@ -45,10 +44,10 @@ class SchemaGenerator(
             // output is not console
             if (output.endsWith(".sql")) {
                 // output is plain sql file
-                System.err.println("Output to file $output")
+                Tracing.psInfo.println("Output to file $output")
                 outputFileOrDir = File(output)
                 if (outputFileOrDir.exists()) {
-                    System.err.println("Overwrite " + outputFileOrDir.absolutePath)
+                    Tracing.psErr.println("Overwrite " + outputFileOrDir.absolutePath)
                     exitProcess(1)
                 }
                 outputFileOrDir.createNewFile()
@@ -56,10 +55,10 @@ class SchemaGenerator(
                 // multiple outputs as per inputs
                 outputFileOrDir = File(output)
                 if (!outputFileOrDir.exists()) {
-                    // System.err.println("Output to new dir " + arg1);
+                    // Tracing.psErr.println("Output to new dir " + arg1);
                     outputFileOrDir.mkdirs()
                 }
-                System.err.println(outputFileOrDir.absolutePath)
+                Tracing.psInfo.println("${outputFileOrDir.name}")
             }
         }
 
@@ -79,7 +78,7 @@ class SchemaGenerator(
         } else if (outputFileOrDir.isDirectory) {
             val dir: File = outputFileOrDir
             processTemplates(module, inputSubdir, inputs) { inStream: InputStream, name: String ->
-                System.err.println(name)
+                Tracing.psInfo.println("-$name")
                 val output2 = File(dir, name)
                 try {
                     PrintStream(output2)
@@ -91,7 +90,7 @@ class SchemaGenerator(
                 }
             }
         } else {
-            System.err.println("Internal error")
+            Tracing.psErr.println("Internal error")
         }
     }
 
@@ -108,7 +107,7 @@ class SchemaGenerator(
     private fun processTemplates(
         module: String,
         path: String,
-        inputs: Array<String>,
+        inputs: Array<String> = emptyArray(),
         consumer: BiConsumer<InputStream, String>,
     ) {
         // external resources
@@ -158,14 +157,14 @@ class SchemaGenerator(
                     val files = dir.listFiles()
                     if (files != null) {
                         for (file in files) {
-                            System.err.println(file.name)
+                            // Tracing.psInfo.println("<${file.name}")
                             FileInputStream(file)
                                 .use { fis ->
                                     consumer.accept(fis, file.name)
                                 }
                         }
                     }
-                } catch (ex: URISyntaxException) {
+                } catch (_: URISyntaxException) {
                     // never happens
                 }
             }
@@ -173,6 +172,35 @@ class SchemaGenerator(
     }
 
     companion object {
+
+        @Throws(IOException::class)
+        @JvmStatic
+        fun schema(
+            outPath: String,
+            module: String = "wn",
+            inputSubdir: String,
+            inputs: Array<String> = emptyArray(),
+            compat: Boolean = false
+        ) {
+            val bundle = ResourceBundle.getBundle("$module/" + (if (compat) "NamesCompat" else "Names"))
+            val variables = Variables(bundle)
+            SchemaGenerator(variables).generate(module, outPath, inputSubdir, inputs = inputs)
+        }
+
+        @Throws(IOException::class)
+        @JvmStatic
+        fun schema(
+            outPath: String,
+            module: String = "wn",
+            inputs: Array<String> = emptyArray(),
+            compat: Boolean = false
+        ) {
+            arrayOf("mysql", "sqlite").forEach { db ->
+                arrayOf("create", "index", "reference", "views").forEach { type ->
+                    schema("$outPath/$db/$type", module, "$db/$type", inputs = inputs, compat = compat)
+                }
+            }
+        }
 
         /**
          * Main entry point
@@ -194,6 +222,14 @@ class SchemaGenerator(
             val output = args[1]
             val inputSubdir = args[2]
             val inputs = args.copyOfRange(3, args.size)
+
+            schema(
+                output,
+                module = module,
+                inputSubdir = inputSubdir,
+                inputs = inputs,
+                compat = compat
+            )
 
             val path = "$module/"
             val bundle = ResourceBundle.getBundle(path + (if (compat) "NamesCompat" else "Names"))

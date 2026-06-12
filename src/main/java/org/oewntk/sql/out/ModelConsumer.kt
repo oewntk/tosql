@@ -28,6 +28,8 @@ import java.util.function.Consumer
  */
 class ModelConsumer(
     private val outDir: File,
+    private val withSchema: Boolean = true,
+    private val withSources: Boolean = true,
     private val verbose: Boolean = false,
 ) : Consumer<Model> {
 
@@ -38,24 +40,25 @@ class ModelConsumer(
      */
     override fun accept(model: Model) {
         Tracing.psInfo.println("[Model] $model")
-        if (!outDir.exists()) {
-            outDir.mkdirs()
+        val dataDir = File(outDir, "data")
+        if (!dataDir.exists()) {
+            dataDir.mkdirs()
         }
 
         // core
-        val coreConsumer = CoreModelConsumer(outDir)
+        val coreConsumer = CoreModelConsumer(outDir, withSchema = withSchema, withSources = withSources, verbose = verbose)
         coreConsumer.accept(model)
 
         // verb frames
         try {
-            frames(outDir, model.verbFrames)
+            frames(dataDir, model.verbFrames)
         } catch (e: FileNotFoundException) {
             e.printStackTrace(Tracing.psErr)
         }
 
         // verb templates
         try {
-            templates(outDir, coreConsumer, model.senses, model.verbTemplatesById!!)
+            templates(dataDir, coreConsumer, model.senses, model.verbTemplatesById!!)
         } catch (e: FileNotFoundException) {
             e.printStackTrace(Tracing.psErr)
         }

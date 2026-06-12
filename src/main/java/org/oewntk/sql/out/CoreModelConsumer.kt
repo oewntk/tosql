@@ -15,11 +15,13 @@ import org.oewntk.sql.out.Lexes.generateLexesPronunciations
 import org.oewntk.sql.out.Lexes.generateMorphs
 import org.oewntk.sql.out.Lexes.generatePronunciations
 import org.oewntk.sql.out.Lexes.generateWords
+import org.oewntk.sql.out.SchemaGenerator.Companion.schema
 import org.oewntk.sql.out.Senses.generateSenseRelations
 import org.oewntk.sql.out.Senses.generateSenses
 import org.oewntk.sql.out.Senses.generateSensesAdjPositions
 import org.oewntk.sql.out.Senses.generateSensesSamples
 import org.oewntk.sql.out.Senses.generateSensesVerbFrames
+import org.oewntk.sql.out.SourcesGenerator.sources
 import org.oewntk.sql.out.Synsets.generateSynsetIlis
 import org.oewntk.sql.out.Synsets.generateSynsetRelations
 import org.oewntk.sql.out.Synsets.generateSynsetSamples
@@ -43,6 +45,8 @@ import java.util.function.Consumer
  */
 class CoreModelConsumer(
     private val outDir: File,
+    private val withSchema: Boolean = true,
+    private val withSources: Boolean = true,
     private val verbose: Boolean = false,
 ) : Consumer<CoreModel> {
 
@@ -72,18 +76,34 @@ class CoreModelConsumer(
      * @param model model
      */
     override fun accept(model: CoreModel) {
-        Tracing.psInfo.println("[CoreModel] ${model.source}")
+        if (verbose) Tracing.psInfo.println("[CoreModel] ${model.source}")
         if (!outDir.exists()) {
             outDir.mkdirs()
         }
+        val dataDir = File(outDir, "data")
+        if (!dataDir.exists()) {
+            dataDir.mkdirs()
+        }
+
         try {
-            lexes(outDir, model.lexes)
-            synsets(outDir, model.synsets)
-            senses(outDir, model.senses, model.senseResolver)
-            builtins(outDir)
+            lexes(dataDir, model.lexes)
+            synsets(dataDir, model.synsets)
+            senses(dataDir, model.senses, model.senseResolver)
+            builtins(dataDir)
+            if (withSources) sources(outDir)
+            if (withSchema) schema(outDir.absolutePath)
         } catch (e: FileNotFoundException) {
             e.printStackTrace(Tracing.psErr)
         }
+    }
+
+    private fun <T, R> generate(outDir: File, outFile: String, what: T, generator: (ps: PrintStream, what: T) -> R): R {
+        val fileName = makeFilename(outFile)
+        if (verbose) Tracing.psInfo.println("-$fileName")
+        var r: R? = null
+        PrintStream(FileOutputStream(File(outDir, fileName)), true, StandardCharsets.UTF_8)
+            .use { ps -> r = generator(ps, what) }
+        return r!!
     }
 
     /**
@@ -95,36 +115,13 @@ class CoreModelConsumer(
      */
     @Throws(FileNotFoundException::class)
     private fun lexes(outDir: File, lexes: Collection<Lex>) {
-        PrintStream(FileOutputStream(File(outDir, makeFilename(Names.WORDS.FILE))), true, StandardCharsets.UTF_8)
-            .use {
-                wordToNID = generateWords(it, lexes)
-            }
-        PrintStream(FileOutputStream(File(outDir, makeFilename(Names.CASEDWORDS.FILE))), true, StandardCharsets.UTF_8)
-            .use {
-                casedWordToNID = generateCasedWords(it, lexes, wordToNID!!)
-            }
-        PrintStream(FileOutputStream(File(outDir, makeFilename(Names.LEXES.FILE))), true, StandardCharsets.UTF_8)
-            .use {
-                lexIdToNID = generateLexes(it, lexes, wordToNID!!, casedWordToNID!!)
-            }
-        var morphToNID: Map<String, Int>
-        PrintStream(FileOutputStream(File(outDir, makeFilename(Names.MORPHS.FILE))), true, StandardCharsets.UTF_8)
-            .use {
-                morphToNID = generateMorphs(it, lexes)
-            }
-        PrintStream(FileOutputStream(File(outDir, makeFilename(Names.LEXES_MORPHS.FILE))), true, StandardCharsets.UTF_8)
-            .use {
-                generateLexesMorphs(it, lexes, lexIdToNID!!, wordToNID!!, morphToNID)
-            }
-        var pronunciationToNID: Map<String, Int>
-        PrintStream(FileOutputStream(File(outDir, makeFilename(Names.PRONUNCIATIONS.FILE))), true, StandardCharsets.UTF_8)
-            .use {
-                pronunciationToNID = generatePronunciations(it, lexes)
-            }
-        PrintStream(FileOutputStream(File(outDir, makeFilename(Names.LEXES_PRONUNCIATIONS.FILE))), true, StandardCharsets.UTF_8)
-            .use {
-                generateLexesPronunciations(it, lexes, lexIdToNID!!, wordToNID!!, pronunciationToNID)
-            }
+        wordToNID = generate(outDir, Names.WORDS.FILE, lexes, ::generateWords)
+        casedWordToNID = generate(outDir, Names.CASEDWORDS.FILE, lexes) { ps, lexes -> generateCasedWords(ps, lexes, wordToNID!!) }
+        lexIdToNID = generate(outDir, Names.LEXES.FILE, lexes) { ps, lexes -> generateLexes(ps, lexes, wordToNID!!, casedWordToNID!!) }
+        val morphToNID = generate(outDir, Names.MORPHS.FILE, lexes, ::generateMorphs)
+        generate(outDir, Names.LEXES_MORPHS.FILE, lexes) { ps, lexes -> generateLexesMorphs(ps, lexes, lexIdToNID!!, wordToNID!!, morphToNID) }
+        val pronunciationToNID = generate(outDir, Names.PRONUNCIATIONS.FILE, lexes, ::generatePronunciations)
+        generate(outDir, Names.LEXES_PRONUNCIATIONS.FILE, lexes) { ps, lexes -> generateLexesPronunciations(ps, lexes, lexIdToNID!!, wordToNID!!, pronunciationToNID) }
     }
 
     /**
@@ -136,31 +133,13 @@ class CoreModelConsumer(
      */
     @Throws(FileNotFoundException::class)
     private fun synsets(outDir: File, synsets: Collection<Synset>) {
-        PrintStream(FileOutputStream(File(outDir, makeFilename(Names.SYNSETS.FILE))), true, StandardCharsets.UTF_8)
-            .use {
-                synsetIdToNID = generateSynsets(it, synsets)
-            }
+        synsetIdToNID = generate(outDir, Names.SYNSETS.FILE, synsets, ::generateSynsets)
         // synsets are generated first, so do not append
-        PrintStream(FileOutputStream(File(outDir, makeFilename(Names.SAMPLES.FILE)), false), true, StandardCharsets.UTF_8)
-            .use {
-                generateSynsetSamples(it, synsets, synsetIdToNID!!)
-            }
-        PrintStream(FileOutputStream(File(outDir, makeFilename(Names.USAGES.FILE))), true, StandardCharsets.UTF_8)
-            .use {
-                generateSynsetUsages(it, synsets, synsetIdToNID!!)
-            }
-        PrintStream(FileOutputStream(File(outDir, makeFilename(Names.SEMRELATIONS.FILE))), true, StandardCharsets.UTF_8)
-            .use {
-                generateSynsetRelations(it, synsets, synsetIdToNID!!)
-            }
-        PrintStream(FileOutputStream(File(outDir, makeFilename(Names.ILIS.FILE))), true, StandardCharsets.UTF_8)
-            .use {
-                generateSynsetIlis(it, synsets, synsetIdToNID!!)
-            }
-        PrintStream(FileOutputStream(File(outDir, makeFilename(Names.WIKIDATAS.FILE))), true, StandardCharsets.UTF_8)
-            .use {
-                generateSynsetWikidatas(it, synsets, synsetIdToNID!!)
-            }
+        generate(outDir, Names.SAMPLES.FILE, synsets) { ps, synsets -> generateSynsetSamples(ps, synsets, synsetIdToNID!!) }
+        generate(outDir, Names.USAGES.FILE, synsets) { ps, synsets -> generateSynsetUsages(ps, synsets, synsetIdToNID!!) }
+        generate(outDir, Names.SEMRELATIONS.FILE, synsets) { ps, synsets -> generateSynsetRelations(ps, synsets, synsetIdToNID!!) }
+        generate(outDir, Names.ILIS.FILE, synsets) { ps, synsets -> generateSynsetIlis(ps, synsets, synsetIdToNID!!) }
+        generate(outDir, Names.WIKIDATAS.FILE, synsets) { ps, synsets -> generateSynsetWikidatas(ps, synsets, synsetIdToNID!!) }
     }
 
     /**
@@ -173,27 +152,11 @@ class CoreModelConsumer(
      */
     @Throws(FileNotFoundException::class)
     private fun senses(outDir: File, senses: Collection<Sense>, senseResolver: (SenseKey) -> Sense) {
-        PrintStream(FileOutputStream(File(outDir, makeFilename(Names.SENSES.FILE))), true, StandardCharsets.UTF_8)
-            .use {
-                generateSenses(it, senses, synsetIdToNID!!, lexIdToNID!!, wordToNID!!, casedWordToNID!!)
-            }
-        PrintStream(FileOutputStream(File(outDir, makeFilename(Names.LEXRELATIONS.FILE))), true, StandardCharsets.UTF_8)
-            .use {
-                generateSenseRelations(it, senses, senseResolver, synsetIdToNID!!, lexIdToNID!!, wordToNID!!)
-            }
-        // senses are generated second, so append
-        PrintStream(FileOutputStream(File(outDir, makeFilename(Names.SAMPLES.FILE)), true), true, StandardCharsets.UTF_8)
-            .use {
-                generateSensesSamples(it, senses, synsetIdToNID!!, lexIdToNID!!, wordToNID!!)
-            }
-        PrintStream(FileOutputStream(File(outDir, makeFilename(Names.SENSES_VFRAMES.FILE))), true, StandardCharsets.UTF_8)
-            .use {
-                generateSensesVerbFrames(it, senses, synsetIdToNID!!, lexIdToNID!!, wordToNID!!)
-            }
-        PrintStream(FileOutputStream(File(outDir, makeFilename(Names.SENSES_ADJPOSITIONS.FILE))), true, StandardCharsets.UTF_8)
-            .use {
-                generateSensesAdjPositions(it, senses, synsetIdToNID!!, lexIdToNID!!, wordToNID!!)
-            }
+        generate(outDir, Names.SENSES.FILE, senses) { ps, senses -> generateSenses(ps, senses, synsetIdToNID!!, lexIdToNID!!, wordToNID!!, casedWordToNID!!) }
+        generate(outDir, Names.LEXRELATIONS.FILE, senses) { ps, senses -> generateSenseRelations(ps, senses, senseResolver, synsetIdToNID!!, lexIdToNID!!, wordToNID!!) }
+        generate(outDir, Names.SAMPLES.FILE, senses) { ps, senses -> generateSensesSamples(ps, senses, synsetIdToNID!!, lexIdToNID!!, wordToNID!!) }
+        generate(outDir, Names.SENSES_VFRAMES.FILE, senses) { ps, senses -> generateSensesVerbFrames(ps, senses, synsetIdToNID!!, lexIdToNID!!, wordToNID!!) }
+        generate(outDir, Names.SENSES_ADJPOSITIONS.FILE, senses) { ps, senses -> generateSensesAdjPositions(ps, senses, synsetIdToNID!!, lexIdToNID!!, wordToNID!!) }
     }
 
     companion object {
@@ -206,22 +169,16 @@ class CoreModelConsumer(
          */
         @Throws(FileNotFoundException::class)
         fun builtins(outDir: File) {
-            PrintStream(FileOutputStream(File(outDir, makeFilename(Names.DOMAINS.TABLE))), true, StandardCharsets.UTF_8)
-                .use {
-                    generateDomains(it)
-                }
-            PrintStream(FileOutputStream(File(outDir, makeFilename(Names.POSES.FILE))), true, StandardCharsets.UTF_8)
-                .use {
-                    generatePoses(it)
-                }
-            PrintStream(FileOutputStream(File(outDir, makeFilename(Names.ADJPOSITIONS.FILE))), true, StandardCharsets.UTF_8)
-                .use {
-                    generateAdjectivePositionTypes(it)
-                }
-            PrintStream(FileOutputStream(File(outDir, makeFilename(Names.RELS.FILE))), true, StandardCharsets.UTF_8)
-                .use {
-                    generateRelationTypes(it)
-                }
+
+            fun generate(outDir: File, outFile: String, generator: (ps: PrintStream) -> Unit) {
+                PrintStream(FileOutputStream(File(outDir, makeFilename(outFile))), true, StandardCharsets.UTF_8)
+                    .use { ps -> generator(ps) }
+            }
+
+            generate(outDir, Names.DOMAINS.FILE, ::generateDomains)
+            generate(outDir, Names.POSES.FILE, ::generatePoses)
+            generate(outDir, Names.ADJPOSITIONS.FILE, ::generateAdjectivePositionTypes)
+            generate(outDir, Names.RELS.FILE, ::generateRelationTypes)
         }
 
         /**
@@ -230,10 +187,6 @@ class CoreModelConsumer(
          * @param name name
          * @return filename
          */
-        fun makeFilename(name: String): String {
-            val fileName = "$name.sql"
-            Tracing.psInfo.println(fileName)
-            return fileName
-        }
+        fun makeFilename(name: String): String = "$name.sql"
     }
 }
