@@ -144,6 +144,9 @@ object Synsets {
     fun generateSynsetSamples(ps: PrintStream, synsets: Collection<Synset>, synsetIdToNIDMap: Map<String, Int>) {
 
         // sequence of synsets
+        // val synsetCountWithExamples = synsets.count { !it.examples.isNullOrEmpty() }
+        // val exampleCount = synsets.asSequence().filter { !it.examples.isNullOrEmpty() }.flatMap { it.examples!! }.count()
+
         val synsetSeq = synsets
             .asSequence()
             .filter { !it.examples.isNullOrEmpty() }

@@ -98,11 +98,11 @@ class CoreModelConsumer(
         }
     }
 
-    private fun <T, R> generate(outDir: File, outFile: String, what: T, generator: (ps: PrintStream, what: T) -> R): R {
+    private fun <T, R> generate(outDir: File, outFile: String, append: Boolean = false, what: T, generator: (ps: PrintStream, what: T) -> R): R {
         val fileName = makeFilename(outFile)
         if (verbose) Tracing.psInfo.println("-$fileName")
         var r: R? = null
-        PrintStream(FileOutputStream(File(outDir, fileName)), true, StandardCharsets.UTF_8)
+        PrintStream(FileOutputStream(File(outDir, fileName), append), true, StandardCharsets.UTF_8)
             .use { ps -> r = generator(ps, what) }
         return r!!
     }
@@ -116,13 +116,13 @@ class CoreModelConsumer(
      */
     @Throws(FileNotFoundException::class)
     private fun lexes(outDir: File, lexes: Collection<Lex>) {
-        wordToNID = generate(outDir, Names.WORDS.FILE, lexes, ::generateWords)
-        casedWordToNID = generate(outDir, Names.CASEDWORDS.FILE, lexes) { ps, lexes -> generateCasedWords(ps, lexes, wordToNID!!) }
-        lexIdToNID = generate(outDir, Names.LEXES.FILE, lexes) { ps, lexes -> generateLexes(ps, lexes, wordToNID!!, casedWordToNID!!) }
-        val morphToNID = generate(outDir, Names.MORPHS.FILE, lexes, ::generateMorphs)
-        generate(outDir, Names.LEXES_MORPHS.FILE, lexes) { ps, lexes -> generateLexesMorphs(ps, lexes, lexIdToNID!!, wordToNID!!, morphToNID) }
-        val pronunciationToNID = generate(outDir, Names.PRONUNCIATIONS.FILE, lexes, ::generatePronunciations)
-        generate(outDir, Names.LEXES_PRONUNCIATIONS.FILE, lexes) { ps, lexes -> generateLexesPronunciations(ps, lexes, lexIdToNID!!, wordToNID!!, pronunciationToNID) }
+        wordToNID = generate(outDir, Names.WORDS.FILE, append = false, lexes, ::generateWords)
+        casedWordToNID = generate(outDir, Names.CASEDWORDS.FILE, append = false, lexes) { ps, lexes -> generateCasedWords(ps, lexes, wordToNID!!) }
+        lexIdToNID = generate(outDir, Names.LEXES.FILE, append = false, lexes) { ps, lexes -> generateLexes(ps, lexes, wordToNID!!, casedWordToNID!!) }
+        val morphToNID = generate(outDir, Names.MORPHS.FILE, append = false, lexes, ::generateMorphs)
+        generate(outDir, Names.LEXES_MORPHS.FILE, append = false, lexes) { ps, lexes -> generateLexesMorphs(ps, lexes, lexIdToNID!!, wordToNID!!, morphToNID) }
+        val pronunciationToNID = generate(outDir, Names.PRONUNCIATIONS.FILE, append = false, lexes, ::generatePronunciations)
+        generate(outDir, Names.LEXES_PRONUNCIATIONS.FILE, append = false, lexes) { ps, lexes -> generateLexesPronunciations(ps, lexes, lexIdToNID!!, wordToNID!!, pronunciationToNID) }
     }
 
     /**
@@ -134,13 +134,13 @@ class CoreModelConsumer(
      */
     @Throws(FileNotFoundException::class)
     private fun synsets(outDir: File, synsets: Collection<Synset>) {
-        synsetIdToNID = generate(outDir, Names.SYNSETS.FILE, synsets, ::generateSynsets)
+        synsetIdToNID = generate(outDir, Names.SYNSETS.FILE, append = false, synsets, ::generateSynsets)
         // synsets are generated first, so do not append
-        generate(outDir, Names.SAMPLES.FILE, synsets) { ps, synsets -> generateSynsetSamples(ps, synsets, synsetIdToNID!!) }
-        generate(outDir, Names.USAGES.FILE, synsets) { ps, synsets -> generateSynsetUsages(ps, synsets, synsetIdToNID!!) }
-        generate(outDir, Names.SEMRELATIONS.FILE, synsets) { ps, synsets -> generateSynsetRelations(ps, synsets, synsetIdToNID!!) }
-        generate(outDir, Names.ILIS.FILE, synsets) { ps, synsets -> generateSynsetIlis(ps, synsets, synsetIdToNID!!) }
-        generate(outDir, Names.WIKIDATAS.FILE, synsets) { ps, synsets -> generateSynsetWikidatas(ps, synsets, synsetIdToNID!!) }
+        generate(outDir, Names.SAMPLES.FILE, append = false, synsets) { ps, synsets -> generateSynsetSamples(ps, synsets, synsetIdToNID!!) }
+        generate(outDir, Names.USAGES.FILE, append = false, synsets) { ps, synsets -> generateSynsetUsages(ps, synsets, synsetIdToNID!!) }
+        generate(outDir, Names.SEMRELATIONS.FILE, append = false, synsets) { ps, synsets -> generateSynsetRelations(ps, synsets, synsetIdToNID!!) }
+        generate(outDir, Names.ILIS.FILE, append = false, synsets) { ps, synsets -> generateSynsetIlis(ps, synsets, synsetIdToNID!!) }
+        generate(outDir, Names.WIKIDATAS.FILE, append = false, synsets) { ps, synsets -> generateSynsetWikidatas(ps, synsets, synsetIdToNID!!) }
     }
 
     /**
@@ -153,11 +153,11 @@ class CoreModelConsumer(
      */
     @Throws(FileNotFoundException::class)
     private fun senses(outDir: File, senses: Collection<Sense>, senseResolver: (SenseKey) -> Sense) {
-        generate(outDir, Names.SENSES.FILE, senses) { ps, senses -> generateSenses(ps, senses, synsetIdToNID!!, lexIdToNID!!, wordToNID!!, casedWordToNID!!) }
-        generate(outDir, Names.LEXRELATIONS.FILE, senses) { ps, senses -> generateSenseRelations(ps, senses, senseResolver, synsetIdToNID!!, lexIdToNID!!, wordToNID!!) }
-        generate(outDir, Names.SAMPLES.FILE, senses) { ps, senses -> generateSensesSamples(ps, senses, synsetIdToNID!!, lexIdToNID!!, wordToNID!!) }
-        generate(outDir, Names.SENSES_VFRAMES.FILE, senses) { ps, senses -> generateSensesVerbFrames(ps, senses, synsetIdToNID!!, lexIdToNID!!, wordToNID!!) }
-        generate(outDir, Names.SENSES_ADJPOSITIONS.FILE, senses) { ps, senses -> generateSensesAdjPositions(ps, senses, synsetIdToNID!!, lexIdToNID!!, wordToNID!!) }
+        generate(outDir, Names.SENSES.FILE, append = false, senses) { ps, senses -> generateSenses(ps, senses, synsetIdToNID!!, lexIdToNID!!, wordToNID!!, casedWordToNID!!) }
+        generate(outDir, Names.LEXRELATIONS.FILE, append = false, senses) { ps, senses -> generateSenseRelations(ps, senses, senseResolver, synsetIdToNID!!, lexIdToNID!!, wordToNID!!) }
+        generate(outDir, Names.SAMPLES.FILE, append = true, senses) { ps, senses -> generateSensesSamples(ps, senses, synsetIdToNID!!, lexIdToNID!!, wordToNID!!) }
+        generate(outDir, Names.SENSES_VFRAMES.FILE, append = false, senses) { ps, senses -> generateSensesVerbFrames(ps, senses, synsetIdToNID!!, lexIdToNID!!, wordToNID!!) }
+        generate(outDir, Names.SENSES_ADJPOSITIONS.FILE, append = false, senses) { ps, senses -> generateSensesAdjPositions(ps, senses, synsetIdToNID!!, lexIdToNID!!, wordToNID!!) }
     }
 
     companion object {
@@ -171,15 +171,15 @@ class CoreModelConsumer(
         @Throws(FileNotFoundException::class)
         fun builtins(outDir: File) {
 
-            fun generate(outDir: File, outFile: String, generator: (ps: PrintStream) -> Unit) {
-                PrintStream(FileOutputStream(File(outDir, makeFilename(outFile))), true, StandardCharsets.UTF_8)
+            fun generate(outDir: File, outFile: String, append: Boolean = false, generator: (ps: PrintStream) -> Unit) {
+                PrintStream(FileOutputStream(File(outDir, makeFilename(outFile)), false), true, StandardCharsets.UTF_8)
                     .use { ps -> generator(ps) }
             }
 
-            generate(outDir, Names.DOMAINS.FILE, ::generateDomains)
-            generate(outDir, Names.POSES.FILE, ::generatePoses)
-            generate(outDir, Names.ADJPOSITIONS.FILE, ::generateAdjectivePositionTypes)
-            generate(outDir, Names.RELS.FILE, ::generateRelationTypes)
+            generate(outDir, Names.DOMAINS.FILE, append = false, ::generateDomains)
+            generate(outDir, Names.POSES.FILE, append = false, ::generatePoses)
+            generate(outDir, Names.ADJPOSITIONS.FILE, append = false, ::generateAdjectivePositionTypes)
+            generate(outDir, Names.RELS.FILE, append = false, ::generateRelationTypes)
         }
 
         /**

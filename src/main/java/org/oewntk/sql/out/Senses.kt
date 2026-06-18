@@ -214,6 +214,8 @@ object Senses {
         lexIdToNIDMap: Map<LexId, Int>,
         wordIdToNIDMap: Map<Lemma, Int>,
     ) {
+        // val sensesCountWithExamples = senses.count { !it.examples.isNullOrEmpty() }
+        // val exampleCount = senses.asSequence().filter { !it.examples.isNullOrEmpty() }.flatMap { it.examples!! }.count()
 
         // sequence of senses
         val senseSeq = senses
