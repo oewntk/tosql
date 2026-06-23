@@ -5,13 +5,13 @@ package org.oewntk.sql.out
 
 import org.oewntk.model.CoreModel
 import org.oewntk.model.Lex
+import org.oewntk.model.NIDs.makeCasedWordNIDs
+import org.oewntk.model.NIDs.makeMorphNIDs
+import org.oewntk.model.NIDs.makeSenseNIDs
+import org.oewntk.model.NIDs.makeSynsetNIDs
+import org.oewntk.model.NIDs.makeWordNIDs
 import org.oewntk.model.Sense
 import org.oewntk.model.Synset
-import org.oewntk.sql.out.Lexes.makeCasedWordNIDs
-import org.oewntk.sql.out.Lexes.makeMorphNIDs
-import org.oewntk.sql.out.Lexes.makeWordNIDs
-import org.oewntk.sql.out.Senses.makeSenseNIDs
-import org.oewntk.sql.out.Synsets.makeSynsetNIDs
 import java.io.*
 
 /**

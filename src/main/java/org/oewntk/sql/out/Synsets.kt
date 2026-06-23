@@ -3,6 +3,8 @@
  */
 package org.oewntk.sql.out
 
+import org.oewntk.model.NIDs.lookup
+import org.oewntk.model.NIDs.makeSynsetNIDs
 import org.oewntk.model.Relation
 import org.oewntk.model.Synset
 import org.oewntk.model.SynsetId
@@ -17,21 +19,6 @@ import java.io.PrintStream
  * Process synsets
  */
 object Synsets {
-
-    /**
-     * Make synset id-to-nid map
-     *
-     * @param synsets synsets
-     * @return id-to-nid map
-     */
-    fun makeSynsetNIDs(synsets: Collection<Synset>): Map<String, Int> {
-        return synsets
-            .asSequence()
-            .map { s: Synset -> s.synsetId }
-            .sorted()
-            .withIndex()
-            .associate { it.value to it.index + 1 }
-    }
 
     /**
      * Generate synsets table
@@ -109,11 +96,11 @@ object Synsets {
         }
 
         val toSqlRows = { synset: Synset ->
-            val synset1NID = NIDMaps.lookup(synsetIdToNIDMap, synset.synsetId)
+            val synset1NID = lookup(synsetIdToNIDMap, synset.synsetId)
             toTargetData(synset) // sequence of ((relation, relationNID), synset2Id_1) ((relation, relationNID, synset2Id_2) ...
                 .map {
                     val relationNID: Int = BuiltIn.OEWN_RELATION_TYPES[it.first.first]!! // relation
-                    val synset2NID = NIDMaps.lookup(synsetIdToNIDMap, it.second)
+                    val synset2NID = lookup(synsetIdToNIDMap, it.second)
                     "$synset1NID,$synset2NID,$relationNID"
                 }
                 .toList()
@@ -162,7 +149,7 @@ object Synsets {
             Names.SAMPLES.source
         ).joinToString(",")
         val toSqlRows = { synset: Synset ->
-            val synsetNID1 = NIDMaps.lookup(synsetIdToNIDMap, synset.synsetId)
+            val synsetNID1 = lookup(synsetIdToNIDMap, synset.synsetId)
             synset.examples!!
                 .map {
                     val text = escape(it.first)
@@ -198,7 +185,7 @@ object Synsets {
             Names.USAGES.usagenote,
         ).joinToString(",")
         val toSqlRows = { synset: Synset ->
-            val synsetNID1 = NIDMaps.lookup(synsetIdToNIDMap, synset.synsetId)
+            val synsetNID1 = lookup(synsetIdToNIDMap, synset.synsetId)
             synset.usages!!
                 .map {
                     val usage = escape(it)
@@ -230,7 +217,7 @@ object Synsets {
             Names.ILIS.ili,
         ).joinToString(",")
         val toSqlRows = { synset: Synset ->
-            val synsetNID1 = NIDMaps.lookup(synsetIdToNIDMap, synset.synsetId)
+            val synsetNID1 = lookup(synsetIdToNIDMap, synset.synsetId)
             "$synsetNID1,'${synset.ili}'"
         }
         printInsert(ps, Names.ILIS.TABLE, columns, synsetSeq, toSqlRows, false)
@@ -257,7 +244,7 @@ object Synsets {
             Names.WIKIDATAS.wikidata,
         ).joinToString(",")
         val toSqlRows = { synset: Synset ->
-            val synsetNID1 = NIDMaps.lookup(synsetIdToNIDMap, synset.synsetId)
+            val synsetNID1 = lookup(synsetIdToNIDMap, synset.synsetId)
             synset.wikidata!!.map {
                 "$synsetNID1,'${it}'"
             }

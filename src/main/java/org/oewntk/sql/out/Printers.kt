@@ -5,6 +5,7 @@ package org.oewntk.sql.out
 
 import org.oewntk.model.Lex
 import org.oewntk.model.LexId
+import org.oewntk.model.NIDs.lookup
 import java.io.PrintStream
 
 /**
@@ -44,7 +45,7 @@ object Printers {
                     if (index > 0) {
                         ps.print(',')
                     }
-                    val nid = NIDMaps.lookup(objectToNID, key)
+                    val nid = lookup(objectToNID, key)
                     ps.print("\n($nid,$row)")
                 }
             ps.println(";")
@@ -78,7 +79,7 @@ object Printers {
             ps.print("INSERT INTO $table ($columns) VALUES")
             objects
                 .asSequence()
-                .map { it to NIDMaps.lookup(objectIdToNID, toId.invoke(it)) }
+                .map { it to lookup(objectIdToNID, toId.invoke(it)) }
                 .toList()
                 .sortedBy { it.second }
                 .withIndex()
@@ -120,7 +121,7 @@ object Printers {
             ps.print("INSERT INTO $table ($columns) VALUES")
             objects
                 .asSequence()
-                .map { it to NIDMaps.lookup(objectIdToNID, toId.invoke(it)) }
+                .map { it to lookup(objectIdToNID, toId.invoke(it)) }
                 .toList()
                 .sortedBy { it.second }
                 .withIndex()
@@ -161,7 +162,7 @@ object Printers {
             ps.print("INSERT INTO $table ($columns) VALUES")
             lexes
                 .asSequence()
-                .map { it to NIDMaps.lookup(lexIdToNID, it.key) }
+                .map { it to lookup(lexIdToNID, it.key) }
                 .toList()
                 .sortedBy { it.second }
                 .withIndex()
@@ -200,7 +201,7 @@ object Printers {
             ps.print("INSERT INTO $table ($columns) VALUES")
             lexes
                 .asSequence()
-                .map { it to NIDMaps.lookup(lexIdToNID, it.key) }
+                .map { it to lookup(lexIdToNID, it.key) }
                 .toList()
                 .sortedBy { it.second }
                 .withIndex()
