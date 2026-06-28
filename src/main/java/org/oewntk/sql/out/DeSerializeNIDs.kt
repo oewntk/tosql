@@ -3,6 +3,7 @@
  */
 package org.oewntk.sql.out
 
+import org.oewntk.model.SerializeNIDs
 import java.io.*
 import kotlin.system.exitProcess
 
