@@ -394,7 +394,7 @@ object Printers {
                 if (index > 0) {
                     ps.print(',')
                 }
-                val row = String.format(format, entry.value, Utils.escape(entry.key))
+                val row = format.format(entry.value, Utils.escape(entry.key))
                 ps.print("\n$row")
             }
         ps.println(";")
@@ -427,7 +427,7 @@ object Printers {
                     ps.print(',')
                 }
                 val keys = entry.key
-                val row = String.format(format, entry.value, keys[0], keys[1])
+                val row = format.format(entry.value, keys[0], keys[1])
                 ps.print("\n$row")
             }
         ps.println(";")
@@ -460,7 +460,7 @@ object Printers {
                     ps.print(',')
                 }
                 val keys = entry.key
-                val row = String.format(format, entry.value, keys[0], keys[1], keys[2])
+                val row = format.format(entry.value, keys[0], keys[1], keys[2])
                 ps.print("\n$row")
             }
         ps.println(";")
