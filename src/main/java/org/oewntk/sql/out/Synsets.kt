@@ -152,8 +152,8 @@ object Synsets {
             val synsetNID1 = lookup(synsetIdToNIDMap, synset.synsetId)
             synset.examples!!
                 .map {
-                    val text = escape(it.first)
-                    val source = if (it.second == null) "NULL" else "'${escape(it.second!!)}'"
+                    val text = escape(it.text)
+                    val source = if (it.source == null) "NULL" else "'${escape(it.source!!)}'"
                     "$synsetNID1,NULL,NULL,'$text',$source"
                 }
                 .toList()

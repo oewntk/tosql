@@ -221,8 +221,8 @@ object Senses {
             val wordNID1 = lookup(wordIdToNIDMap, sense.lCLemma)
             sense.examples!!
                 .map {
-                    val text = escape(it.first)
-                    val source = if (it.second == null) "NULL" else "'${escape(it.second!!)}'"
+                    val text = escape(it.text)
+                    val source = if (it.source == null) "NULL" else "'${escape(it.source!!)}'"
                     "$synsetNID1,$lexNID1,$wordNID1,'$text',$source"
                 }
                 .toList()
