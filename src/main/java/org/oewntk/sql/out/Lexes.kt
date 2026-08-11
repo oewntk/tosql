@@ -52,13 +52,13 @@ object Lexes {
             val word = lex.lCLemma
             val wordNID = lookupLC(wordToNID, word)
             val casedWordNID = lookupNullable(casedWordToNID, lex.lemma)
-            val type = lex.type
-            "'${type.value}',$wordNID,$casedWordNID"
+            val pos = lex.partOfSpeech
+            "'${pos.value}',$wordNID,$casedWordNID"
         }
         if (!Printers.WITH_COMMENT) {
             Printers.printInsert(ps, Names.LEXES.TABLE, columns, lexes, lexIdToNID, toSqlRow)
         } else {
-            val toSqlRowWithComment = { lex: Lex -> toSqlRow.invoke(lex) to "${lex.type.value} '${lex.lemma}'" }
+            val toSqlRowWithComment = { lex: Lex -> toSqlRow.invoke(lex) to "${lex.partOfSpeech.value} '${lex.lemma}'" }
             Printers.printInsertWithComment(ps, Names.LEXES.TABLE, columns, lexes, lexIdToNID, toSqlRowWithComment)
         }
         return lexIdToNID
@@ -182,7 +182,7 @@ object Lexes {
             lex.forms!!
                 .map {
                     val morphNID = lookup(morphToNID, it)
-                    "$morphNID,$lexNID,$wordNID,'${lex.type.value}'"
+                    "$morphNID,$lexNID,$wordNID,'${lex.partOfSpeech.value}'"
                 }
         }
         if (!Printers.WITH_COMMENT) {
@@ -192,7 +192,7 @@ object Lexes {
                 val rows = toSqlRows.invoke(lex)
                 val comments = lex.forms!!
                     .asSequence()
-                    .map { "'$it' '${lex.lemma}' ${lex.type.value}" }
+                    .map { "'$it' '${lex.lemma}' ${lex.partOfSpeech.value}" }
                 rows
                     .asSequence()
                     .zip(comments)
@@ -263,7 +263,7 @@ object Lexes {
                 .map {
                     val variety = if (it.variety == null) "NULL" else "'${it.variety}'"
                     val pronunciationNID = lookup(pronunciationToNID, it.value)
-                    "$pronunciationNID,$variety,$lexNID,$wordNID,'${lex.type.value}'"
+                    "$pronunciationNID,$variety,$lexNID,$wordNID,'${lex.partOfSpeech.value}'"
                 }
                 .toList()
         }
@@ -276,7 +276,7 @@ object Lexes {
                     .asSequence()
                     .map {
                         val variety = if (it.variety == null) "" else " [${it.variety}]"
-                        "${it.value}$variety '${lex.lemma}' ${lex.type.value}"
+                        "${it.value}$variety '${lex.lemma}' ${lex.partOfSpeech.value}"
                     }
                 rows
                     .asSequence()
