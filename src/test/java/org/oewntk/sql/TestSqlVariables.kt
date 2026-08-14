@@ -13,7 +13,7 @@ import java.util.*
 class TestSqlVariables {
 
     private val wellFormedInputs = arrayOf(
-        "\${senses.file} \${senses_vtemplates.templateid} a \${senses_vframes.file} b \${lexes_pronunciations.wordid} c @{senses.file} d @{senses.file}",
+        $$"${senses.file} ${senses_vtemplates.templateid} a ${senses_vframes.file} b ${lexes_pronunciations.wordid} c @{senses.file} d @{senses.file}",
     )
 
     private val illFormedInputs = arrayOf(

@@ -36,10 +36,10 @@ class TestSqlBundle {
         val v = Variables(bundle!!)
         val vc = Variables(bundleCompat!!)
 
-        Assert.assertEquals("vframesentences", vc.varSubstitution("\${vtemplates.table}", false))
-        Assert.assertEquals("vtemplates", v.varSubstitution("\${vtemplates.table}", false))
-        Assert.assertEquals("`vframesentences`", vc.varSubstitution("\${vtemplates.table}", true))
-        Assert.assertEquals("`vtemplates`", v.varSubstitution("\${vtemplates.table}", true))
+        Assert.assertEquals("vframesentences", vc.varSubstitution($$"${vtemplates.table}", false))
+        Assert.assertEquals("vtemplates", v.varSubstitution($$"${vtemplates.table}", false))
+        Assert.assertEquals("`vframesentences`", vc.varSubstitution($$"${vtemplates.table}", true))
+        Assert.assertEquals("`vtemplates`", v.varSubstitution($$"${vtemplates.table}", true))
     }
 
     companion object {
