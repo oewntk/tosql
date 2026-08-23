@@ -413,6 +413,8 @@ object Names {
         lateinit var TABLE: String
         lateinit var synset1id: String
         lateinit var synset2id: String
+        lateinit var lu2id: String
+        lateinit var word2id: String
         lateinit var relationid: String
 
         fun set(bundle: ResourceBundle) {
@@ -420,6 +422,8 @@ object Names {
             TABLE = bundle.getString("semrelations.table")
             synset1id = bundle.getString("semrelations.synset1id")
             synset2id = bundle.getString("semrelations.synset2id")
+            lu2id = bundle.getString("semrelations.lu2id")
+            word2id = bundle.getString("semrelations.word2id")
             relationid = bundle.getString("semrelations.relationid")
         }
 
