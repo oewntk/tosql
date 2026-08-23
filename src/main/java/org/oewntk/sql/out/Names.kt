@@ -444,11 +444,11 @@ object Names {
             FILE = bundle.getString("lexrelations.file")
             TABLE = bundle.getString("lexrelations.table")
             synset1id = bundle.getString("lexrelations.synset1id")
-            lu1id = bundle.getString("semrelations.lu1id")
-            word1id = bundle.getString("semrelations.word1id")
+            lu1id = bundle.getString("lexrelations.lu1id")
+            word1id = bundle.getString("lexrelations.word1id")
             synset2id = bundle.getString("lexrelations.synset2id")
-            lu2id = bundle.getString("semrelations.lu2id")
-            word2id = bundle.getString("semrelations.word2id")
+            lu2id = bundle.getString("lexrelations.lu2id")
+            word2id = bundle.getString("lexrelations.word2id")
             relationid = bundle.getString("lexrelations.relationid")
         }
 
