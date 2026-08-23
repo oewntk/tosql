@@ -15,6 +15,7 @@ import org.oewntk.sql.out.Printers.printInserts
 import org.oewntk.sql.out.Printers.printInsertsWithComment
 import org.oewntk.sql.out.Utils.escape
 import java.io.PrintStream
+import java.util.Locale
 
 /**
  * Process senses
@@ -81,6 +82,13 @@ object Senses {
         return idToNID
     }
 
+    private data class RelationData(
+        val relation: Relation,
+        val relationNid: Int,
+        val targetSynsetId: SynsetId,
+        val targetLexId: LexId?
+    )
+
     /**
      * Generate sense relations
      *
@@ -95,6 +103,7 @@ object Senses {
         ps: PrintStream,
         senses: Collection<Sense>,
         senseResolver: (SenseKey) -> Sense,
+        synsetResolver: (SynsetId) -> Synset,
         synsetIdToNIDMap: Map<SynsetId, Int>,
         lexIdToNIDMap: Map<LexId, Int>,
         wordIdToNIDMap: Map<Lemma, Int>,
@@ -124,34 +133,34 @@ object Senses {
                     val relation: Relation = it
                     val relationNID: Int = BuiltIn.OEWN_RELATION_TYPES[it]!! // relation NID
                     sense.relations!![it]!!
-                        .asSequence() // sequence of synset2 ids
-                        .map { senseKey2 ->
-                            val sense2 = senseResolver(senseKey2)
-                            (relation to relationNID) to sense2
+                        .asSequence() // sequence of target ids
+                        .map { targetId ->
+                            if (targetId.isSynsetId()) {
+                                val synset2 = synsetResolver(targetId)
+                                RelationData(relation, relationNID, synset2.synsetId, null)
+                            } else {
+                                val sense2 = senseResolver(targetId)
+                                RelationData(relation, relationNID, sense2.synsetId, sense2.lexId)
+                            }
                         }
                 } // sequence of ((relation, relationNID), sense2_1) ((relation, relationNID), sense2_2) ...
                 .sortedWith(
                     Comparator
-                        .comparingInt { data: Pair<Pair<Relation, Int>, Sense> -> data.first.second } // relation NID
-                        .thenComparing { data -> data.second.lemma } //  lemma2
-                        .thenComparing { data -> data.second.senseKey } //  sensekey2
+                        .comparingInt { data: RelationData -> data.relationNid }
+                        .thenComparing { data -> data.targetSynsetId }
                 )
         }
 
         val toSqlRows = { sense: Sense ->
             val lu1NID = lookup(lexIdToNIDMap, sense.lexId)
-            val word1NID = lookupLC(wordIdToNIDMap, sense.lCLemma)
+            val word1NID = lookup(wordIdToNIDMap, sense.lemma)
             val synset1NID = lookup(synsetIdToNIDMap, sense.synsetId)
             toTargetData(sense) // sequence of ((relation, relationNID), sense2_1) ((relation, relationNID), sense2_2) ...
-                .map {
-                    val sense2 = it.second
-                    val word2 = sense2.lCLemma
-                    val synsetId2 = sense2.synsetId
-
-                    val lu2NID = lookup(lexIdToNIDMap, sense2.lexId)
-                    val word2NID = lookupLC(wordIdToNIDMap, word2)
-                    val synset2NID = lookup(synsetIdToNIDMap, synsetId2)
-                    val relationNID: Int = BuiltIn.OEWN_RELATION_TYPES[it.first.first]!! // relation
+                .map { data ->
+                    val lu2NID = if (data.targetLexId != null) lookup(lexIdToNIDMap, data.targetLexId) else "NULL"
+                    val word2NID = if (data.targetLexId != null) lookup(wordIdToNIDMap, data.targetLexId.lemma) else "NULL" //TODO check lc
+                    val synset2NID = lookup(synsetIdToNIDMap, data.targetSynsetId)
+                    val relationNID: Int = BuiltIn.OEWN_RELATION_TYPES[data.relation]!! // relation
                     "$synset1NID,$lu1NID,$word1NID,$synset2NID,$lu2NID,$word2NID,$relationNID"
                 }
                 .toList()
@@ -167,11 +176,8 @@ object Senses {
                 val word1 = sense.lemma
                 val comments = toTargetData(sense) // sequence of ((relation, relationNID), sense2_1) ((relation, relationNID), sense2_2) ...
                     .map {
-                        val relation = it.first.first
-                        val sense2 = it.second
-                        val word2 = sense2.lCLemma
-                        val synsetId2 = sense2.synsetId
-                        "$synsetId1 '$word1' -$relation-> $synsetId2 '$word2'"
+                        val word2 = it.targetLexId?.lemma
+                        "$synsetId1 '$word1' -${it.relation}-> ${it.targetSynsetId}${if (word2 != null) " '$word2'" else ""}"
                     }
                 rows
                     .asSequence()

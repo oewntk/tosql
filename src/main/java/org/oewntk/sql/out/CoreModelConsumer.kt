@@ -88,8 +88,8 @@ class CoreModelConsumer(
 
         try {
             lexes(dataDir, model.lexes)
-            synsets(dataDir, model.synsets)
-            senses(dataDir, model.senses, model.senseResolver)
+            synsets(dataDir, model.synsets, model.synsetResolver, model.senseResolver)
+            senses(dataDir, model.senses, model.senseResolver, model.synsetResolver)
             builtins(dataDir)
             if (withSources) sources(outDir)
             if (withSchema) schema(outDir.absolutePath, compat = compatSchema)
@@ -133,14 +133,17 @@ class CoreModelConsumer(
      * @throws FileNotFoundException file not found exception
      */
     @Throws(FileNotFoundException::class)
-    private fun synsets(outDir: File, synsets: Collection<Synset>) {
+    private fun synsets(outDir: File, synsets: Collection<Synset>, synsetResolver: (SynsetId) -> Synset, senseResolver: (SenseKey) -> Sense) {
         synsetIdToNID = generate(outDir, Names.SYNSETS.FILE, append = false, synsets, ::generateSynsets)
         // synsets are generated first, so do not append
         generate(outDir, Names.SAMPLES.FILE, append = false, synsets) { ps, synsets -> generateSynsetSamples(ps, synsets, synsetIdToNID!!) }
         generate(outDir, Names.USAGES.FILE, append = false, synsets) { ps, synsets -> generateSynsetUsages(ps, synsets, synsetIdToNID!!) }
-        generate(outDir, Names.SEMRELATIONS.FILE, append = false, synsets) { ps, synsets -> generateSynsetRelations(ps, synsets, synsetIdToNID!!) }
         generate(outDir, Names.ILIS.FILE, append = false, synsets) { ps, synsets -> generateSynsetIlis(ps, synsets, synsetIdToNID!!) }
         generate(outDir, Names.WIKIDATAS.FILE, append = false, synsets) { ps, synsets -> generateSynsetWikidatas(ps, synsets, synsetIdToNID!!) }
+        generate(outDir, Names.SEMRELATIONS.FILE, append = false, synsets) { ps, synsets ->
+            generateSynsetRelations(ps, synsets,
+                senseResolver, synsetResolver,
+                synsetIdToNID!!, lexIdToNID!!, wordToNID!!) }
     }
 
     /**
@@ -152,12 +155,15 @@ class CoreModelConsumer(
      * @throws FileNotFoundException file not found exception
      */
     @Throws(FileNotFoundException::class)
-    private fun senses(outDir: File, senses: Collection<Sense>, senseResolver: (SenseKey) -> Sense) {
+    private fun senses(outDir: File, senses: Collection<Sense>, senseResolver: (SenseKey) -> Sense, synsetResolver: (SynsetId) -> Synset) {
         generate(outDir, Names.SENSES.FILE, append = false, senses) { ps, senses -> generateSenses(ps, senses, synsetIdToNID!!, lexIdToNID!!, wordToNID!!, casedWordToNID!!) }
-        generate(outDir, Names.LEXRELATIONS.FILE, append = false, senses) { ps, senses -> generateSenseRelations(ps, senses, senseResolver, synsetIdToNID!!, lexIdToNID!!, wordToNID!!) }
         generate(outDir, Names.SAMPLES.FILE, append = true, senses) { ps, senses -> generateSensesSamples(ps, senses, synsetIdToNID!!, lexIdToNID!!, wordToNID!!) }
         generate(outDir, Names.SENSES_VFRAMES.FILE, append = false, senses) { ps, senses -> generateSensesVerbFrames(ps, senses, synsetIdToNID!!, lexIdToNID!!, wordToNID!!) }
         generate(outDir, Names.SENSES_ADJPOSITIONS.FILE, append = false, senses) { ps, senses -> generateSensesAdjPositions(ps, senses, synsetIdToNID!!, lexIdToNID!!, wordToNID!!) }
+        generate(outDir, Names.LEXRELATIONS.FILE, append = false, senses) { ps, senses ->
+            generateSenseRelations(ps, senses,
+                senseResolver, synsetResolver,
+                synsetIdToNID!!, lexIdToNID!!, wordToNID!!) }
     }
 
     companion object {

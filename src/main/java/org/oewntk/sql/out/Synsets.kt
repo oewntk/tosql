@@ -3,15 +3,21 @@
  */
 package org.oewntk.sql.out
 
+import org.oewntk.model.Lemma
+import org.oewntk.model.LexId
 import org.oewntk.model.NIDs.lookup
 import org.oewntk.model.NIDs.makeSynsetNIDs
 import org.oewntk.model.Relation
+import org.oewntk.model.Sense
+import org.oewntk.model.SenseKey
 import org.oewntk.model.Synset
 import org.oewntk.model.SynsetId
+import org.oewntk.model.isSynsetId
 import org.oewntk.sql.out.Printers.printInsert
 import org.oewntk.sql.out.Printers.printInsertWithComment
 import org.oewntk.sql.out.Printers.printInserts
 import org.oewntk.sql.out.Printers.printInsertsWithComment
+import org.oewntk.sql.out.Senses.RelationData
 import org.oewntk.sql.out.Utils.escape
 import java.io.PrintStream
 
@@ -55,6 +61,13 @@ object Synsets {
         return synsetIdToNID
     }
 
+    private data class RelationData(
+        val relation: Relation,
+        val relationNid: Int,
+        val targetSynsetId: SynsetId,
+        val targetLexId: LexId?
+    )
+
     /**
      * Generate synset relations table
      *
@@ -62,7 +75,15 @@ object Synsets {
      * @param synsets          synsets
      * @param synsetIdToNIDMap id-to-nid map
      */
-    fun generateSynsetRelations(ps: PrintStream, synsets: Collection<Synset>, synsetIdToNIDMap: Map<String, Int>) {
+    fun generateSynsetRelations(
+        ps: PrintStream,
+        synsets: Collection<Synset>,
+        senseResolver: (SenseKey) -> Sense,
+        synsetResolver: (SynsetId) -> Synset,
+        synsetIdToNIDMap: Map<String, Int>,
+        lexIdToNIDMap: Map<LexId, Int>,
+        wordIdToNIDMap: Map<Lemma, Int>,
+    ) {
 
         // synset sequence
         val synsetSeq = synsets
@@ -74,6 +95,8 @@ object Synsets {
         val columns = listOf(
             Names.SEMRELATIONS.synset1id,
             Names.SEMRELATIONS.synset2id,
+            Names.SEMRELATIONS.lu2id,
+            Names.SEMRELATIONS.word2id,
             Names.SEMRELATIONS.relationid
         ).joinToString(",")
 
@@ -85,23 +108,33 @@ object Synsets {
                     val relation: Relation = it
                     val relationNID: Int = BuiltIn.OEWN_RELATION_TYPES[it]!! // relation NID
                     synset.relations!![it]!!
-                        .asSequence() // sequence of synset2 ids
-                        .map { synset2Id -> (relation to relationNID) to synset2Id }
+                        .asSequence() // sequence of target ids
+                        .map { targetId ->
+                            if (targetId.isSynsetId()) {
+                                val synset2 = synsetResolver(targetId)
+                                RelationData(relation, relationNID, synset2.synsetId, null)
+                            } else {
+                                val sense2 = senseResolver(targetId)
+                                RelationData(relation, relationNID, sense2.synsetId, sense2.lexId)
+                            }
+                        }
                 } // sequence of ((relation, relationNID), synset2Id_1) ((relation, relationNID, synset2Id_2) ...
                 .sortedWith(
                     Comparator
-                        .comparingInt { data: Pair<Pair<Relation, Int>, SynsetId> -> data.first.second } // relationNID
-                        .thenComparing { data -> data.second } //  synset2Id
+                        .comparingInt { data: Synsets.RelationData -> data.relationNid }
+                        .thenComparing { data -> data.targetSynsetId }
                 )
         }
 
         val toSqlRows = { synset: Synset ->
             val synset1NID = lookup(synsetIdToNIDMap, synset.synsetId)
             toTargetData(synset) // sequence of ((relation, relationNID), synset2Id_1) ((relation, relationNID, synset2Id_2) ...
-                .map {
-                    val relationNID: Int = BuiltIn.OEWN_RELATION_TYPES[it.first.first]!! // relation
-                    val synset2NID = lookup(synsetIdToNIDMap, it.second)
-                    "$synset1NID,$synset2NID,$relationNID"
+                .map { data ->
+                    val lu2NID = if (data.targetLexId != null) lookup(lexIdToNIDMap, data.targetLexId) else "NULL"
+                    val word2NID = if (data.targetLexId != null) lookup(wordIdToNIDMap, data.targetLexId.lemma) else "NULL" //TODO check lc
+                    val synset2NID = lookup(synsetIdToNIDMap, data.targetSynsetId)
+                    val relationNID: Int = BuiltIn.OEWN_RELATION_TYPES[data.relation]!! // relation
+                    "$synset1NID,$synset2NID,$lu2NID,$word2NID,$relationNID"
                 }
                 .toList()
         }
@@ -111,8 +144,12 @@ object Synsets {
         } else {
             val toSqlRowsWithComments = { synset: Synset ->
                 val rows = toSqlRows.invoke(synset)
-                val comments = toTargetData(synset) // sequence of ((relation, relationNID), synset2Id_1) ((relation, relationNID, synset2Id_2) ...
-                    .map { "${synset.synsetId} -${it.first.first}-> ${it.second}" }
+
+                 val comments = toTargetData(synset) // sequence of ((relation, relationNID), synset2Id_1) ((relation, relationNID, synset2Id_2) ...
+                    .map {
+                        val word2 = it.targetLexId?.lemma
+                        "${synset.synsetId} -${it.relation}-> ${it.targetSynsetId}${if (word2 != null) " '$word2'" else ""}"
+                    }
                 rows
                     .asSequence()
                     .zip(comments)
