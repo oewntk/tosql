@@ -17,7 +17,6 @@ import org.oewntk.sql.out.Printers.printInsert
 import org.oewntk.sql.out.Printers.printInsertWithComment
 import org.oewntk.sql.out.Printers.printInserts
 import org.oewntk.sql.out.Printers.printInsertsWithComment
-import org.oewntk.sql.out.Senses.RelationData
 import org.oewntk.sql.out.Utils.escape
 import java.io.PrintStream
 
