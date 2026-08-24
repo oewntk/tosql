@@ -124,9 +124,9 @@ object Senses {
                     val relation: Relation = it
                     val relationNID: Int = BuiltIn.OEWN_RELATION_TYPES[it]!! // relation NID
                     sense.relations!![it]!!
-                        .asSequence() // sequence of synset2 ids
-                        .map { senseKey2 ->
-                            val sense2 = senseResolver(senseKey2)
+                        .asSequence() // sequence of target ids
+                        .map { targetId ->
+                            val sense2 = senseResolver(targetId)
                             (relation to relationNID) to sense2
                         }
                 } // sequence of ((relation, relationNID), sense2_1) ((relation, relationNID), sense2_2) ...

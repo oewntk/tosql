@@ -85,8 +85,8 @@ object Synsets {
                     val relation: Relation = it
                     val relationNID: Int = BuiltIn.OEWN_RELATION_TYPES[it]!! // relation NID
                     synset.relations!![it]!!
-                        .asSequence() // sequence of synset2 ids
-                        .map { synset2Id -> (relation to relationNID) to synset2Id }
+                        .asSequence() // sequence of target ids
+                        .map { targetId -> (relation to relationNID) to targetId }
                 } // sequence of ((relation, relationNID), synset2Id_1) ((relation, relationNID, synset2Id_2) ...
                 .sortedWith(
                     Comparator
@@ -111,6 +111,7 @@ object Synsets {
         } else {
             val toSqlRowsWithComments = { synset: Synset ->
                 val rows = toSqlRows.invoke(synset)
+
                 val comments = toTargetData(synset) // sequence of ((relation, relationNID), synset2Id_1) ((relation, relationNID, synset2Id_2) ...
                     .map { "${synset.synsetId} -${it.first.first}-> ${it.second}" }
                 rows
