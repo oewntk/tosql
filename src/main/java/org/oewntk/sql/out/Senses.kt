@@ -15,7 +15,7 @@ import org.oewntk.sql.out.Printers.printInserts
 import org.oewntk.sql.out.Printers.printInsertsWithComment
 import org.oewntk.sql.out.Utils.escape
 import java.io.PrintStream
-import java.util.Locale
+import java.util.*
 
 /**
  * Process senses
@@ -153,12 +153,12 @@ object Senses {
 
         val toSqlRows = { sense: Sense ->
             val lu1NID = lookup(lexIdToNIDMap, sense.lexId)
-            val word1NID = lookup(wordIdToNIDMap, sense.lemma)
+            val word1NID = lookup(wordIdToNIDMap, sense.lCLemma)
             val synset1NID = lookup(synsetIdToNIDMap, sense.synsetId)
             toTargetData(sense) // sequence of ((relation, relationNID), sense2_1) ((relation, relationNID), sense2_2) ...
                 .map { data ->
                     val lu2NID = if (data.targetLexId != null) lookup(lexIdToNIDMap, data.targetLexId) else "NULL"
-                    val word2NID = if (data.targetLexId != null) lookup(wordIdToNIDMap, data.targetLexId.lemma) else "NULL" //TODO check lc
+                    val word2NID = if (data.targetLexId != null) lookupLC(wordIdToNIDMap, data.targetLexId.lemma.lowercase(Locale.ENGLISH)) else "NULL"
                     val synset2NID = lookup(synsetIdToNIDMap, data.targetSynsetId)
                     val relationNID: Int = BuiltIn.OEWN_RELATION_TYPES[data.relation]!! // relation
                     "$synset1NID,$lu1NID,$word1NID,$synset2NID,$lu2NID,$word2NID,$relationNID"

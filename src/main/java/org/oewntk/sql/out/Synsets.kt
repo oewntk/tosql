@@ -3,22 +3,17 @@
  */
 package org.oewntk.sql.out
 
-import org.oewntk.model.Lemma
-import org.oewntk.model.LexId
+import org.oewntk.model.*
 import org.oewntk.model.NIDs.lookup
+import org.oewntk.model.NIDs.lookupLC
 import org.oewntk.model.NIDs.makeSynsetNIDs
-import org.oewntk.model.Relation
-import org.oewntk.model.Sense
-import org.oewntk.model.SenseKey
-import org.oewntk.model.Synset
-import org.oewntk.model.SynsetId
-import org.oewntk.model.isSynsetId
 import org.oewntk.sql.out.Printers.printInsert
 import org.oewntk.sql.out.Printers.printInsertWithComment
 import org.oewntk.sql.out.Printers.printInserts
 import org.oewntk.sql.out.Printers.printInsertsWithComment
 import org.oewntk.sql.out.Utils.escape
 import java.io.PrintStream
+import java.util.*
 
 /**
  * Process synsets
@@ -130,7 +125,7 @@ object Synsets {
             toTargetData(synset) // sequence of ((relation, relationNID), synset2Id_1) ((relation, relationNID, synset2Id_2) ...
                 .map { data ->
                     val lu2NID = if (data.targetLexId != null) lookup(lexIdToNIDMap, data.targetLexId) else "NULL"
-                    val word2NID = if (data.targetLexId != null) lookup(wordIdToNIDMap, data.targetLexId.lemma) else "NULL" //TODO check lc
+                    val word2NID = if (data.targetLexId != null) lookupLC(wordIdToNIDMap, data.targetLexId.lemma.lowercase(Locale.ENGLISH)) else "NULL"
                     val synset2NID = lookup(synsetIdToNIDMap, data.targetSynsetId)
                     val relationNID: Int = BuiltIn.OEWN_RELATION_TYPES[data.relation]!! // relation
                     "$synset1NID,$synset2NID,$lu2NID,$word2NID,$relationNID"
