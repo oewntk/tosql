@@ -134,7 +134,7 @@ class CoreModelConsumer(
      */
     @Throws(FileNotFoundException::class)
     private fun synsets(outDir: File, synsets: Collection<Synset>) {
-        synsetIdToNID = generate(outDir, Names.SYNSETS.FILE, append = false, synsets, ::generateSynsets)
+        synsetIdToNID = generate(outDir, Names.SYNSETS.FILE, append = false, synsets, ::generateSynsets).map { SynsetId(it.key) to it.value }.toMap()
         // synsets are generated first, so do not append
         generate(outDir, Names.SAMPLES.FILE, append = false, synsets) { ps, synsets -> generateSynsetSamples(ps, synsets, synsetIdToNID!!) }
         generate(outDir, Names.USAGES.FILE, append = false, synsets) { ps, synsets -> generateSynsetUsages(ps, synsets, synsetIdToNID!!) }

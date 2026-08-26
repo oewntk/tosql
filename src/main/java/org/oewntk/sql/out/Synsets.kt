@@ -47,10 +47,10 @@ object Synsets {
             "'${type.value}',$lexdomainId,'${escape(definition!!)}'"
         }
         if (!Printers.WITH_COMMENT) {
-            printInsert(ps, Names.SYNSETS.TABLE, columns, synsets, { it.synsetId }, synsetIdToNID, toSqlRow)
+            printInsert(ps, Names.SYNSETS.TABLE, columns, synsets, { it.synsetId.id }, synsetIdToNID, toSqlRow)
         } else {
-            val toSqlRowWithComment = { synset: Synset -> toSqlRow.invoke(synset) to synset.synsetId }
-            printInsertWithComment(ps, Names.SYNSETS.TABLE, columns, synsets, { it.synsetId }, synsetIdToNID, toSqlRowWithComment)
+            val toSqlRowWithComment = { synset: Synset -> toSqlRow.invoke(synset) to synset.synsetId.id }
+            printInsertWithComment(ps, Names.SYNSETS.TABLE, columns, synsets, { it.synsetId.id }, synsetIdToNID, toSqlRowWithComment)
         }
         return synsetIdToNID
     }
@@ -62,7 +62,7 @@ object Synsets {
      * @param synsets          synsets
      * @param synsetIdToNIDMap id-to-nid map
      */
-    fun generateSynsetRelations(ps: PrintStream, synsets: Collection<Synset>, synsetIdToNIDMap: Map<String, Int>) {
+    fun generateSynsetRelations(ps: PrintStream, synsets: Collection<Synset>, synsetIdToNIDMap: Map<SynsetId, Int>) {
 
         // synset sequence
         val synsetSeq = synsets
@@ -129,7 +129,7 @@ object Synsets {
      * @param synsets          synsets
      * @param synsetIdToNIDMap id-to-nid map
      */
-    fun generateSynsetSamples(ps: PrintStream, synsets: Collection<Synset>, synsetIdToNIDMap: Map<String, Int>) {
+    fun generateSynsetSamples(ps: PrintStream, synsets: Collection<Synset>, synsetIdToNIDMap: Map<SynsetId, Int>) {
 
         // sequence of synsets
         // val synsetCountWithExamples = synsets.count { !it.examples.isNullOrEmpty() }
@@ -169,7 +169,7 @@ object Synsets {
      * @param synsets          synsets
      * @param synsetIdToNIDMap id-to-nid map
      */
-    fun generateSynsetUsages(ps: PrintStream, synsets: Collection<Synset>, synsetIdToNIDMap: Map<String, Int>) {
+    fun generateSynsetUsages(ps: PrintStream, synsets: Collection<Synset>, synsetIdToNIDMap: Map<SynsetId, Int>) {
 
         // sequence of synsets
         val synsetSeq = synsets
@@ -204,7 +204,7 @@ object Synsets {
      * @param synsets          synsets
      * @param synsetIdToNIDMap id-to-nid map
      */
-    fun generateSynsetIlis(ps: PrintStream, synsets: Collection<Synset>, synsetIdToNIDMap: Map<String, Int>) {
+    fun generateSynsetIlis(ps: PrintStream, synsets: Collection<Synset>, synsetIdToNIDMap: Map<SynsetId, Int>) {
 
         // sequence of synsets
         val synsetSeq = synsets
@@ -231,7 +231,7 @@ object Synsets {
      * @param synsets          synsets
      * @param synsetIdToNIDMap id-to-nid map
      */
-    fun generateSynsetWikidatas(ps: PrintStream, synsets: Collection<Synset>, synsetIdToNIDMap: Map<String, Int>) {
+    fun generateSynsetWikidatas(ps: PrintStream, synsets: Collection<Synset>, synsetIdToNIDMap: Map<SynsetId, Int>) {
 
         // sequence of synsets
         val synsetSeq = synsets

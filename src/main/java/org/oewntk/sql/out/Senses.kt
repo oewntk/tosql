@@ -70,7 +70,7 @@ object Senses {
             val lexNID = lookup(lexIdToNIDMap, lexId)
             val casedWordNID = lookupNullable(casedWordIdToNIDMap, casedWord)
             val tagCnt = tagCount?.toString() ?: "NULL"
-            "'${escape(sensekey)}',$senseNum,$synsetNID,$lexNID,$wordNID,$casedWordNID,$lexid,$tagCnt"
+            "'${escape(sensekey.id)}',$senseNum,$synsetNID,$lexNID,$wordNID,$casedWordNID,$lexid,$tagCnt"
         }
         if (!Printers.WITH_COMMENT) {
             printInsert(ps, Names.SENSES.TABLE, columns, senses, Sense::uniqueId, idToNID, toSqlRow)
@@ -270,7 +270,7 @@ object Senses {
         if (!Printers.WITH_COMMENT) {
             printInsert(ps, Names.SENSES_ADJPOSITIONS.TABLE, columns, senseSeq, toSqlRow, false)
         } else {
-            val toSqlRowWithComment = { sense: Sense -> toSqlRow.invoke(sense) to sense.senseKey }
+            val toSqlRowWithComment = { sense: Sense -> toSqlRow.invoke(sense) to sense.senseKey.id }
             printInsertWithComment(ps, Names.SENSES_ADJPOSITIONS.TABLE, columns, senseSeq, toSqlRowWithComment, false)
         }
     }
@@ -321,7 +321,7 @@ object Senses {
         } else {
             val toSqlRowsWithComments = { sense: Sense ->
                 val rows = toSqlRows.invoke(sense)
-                val comments = generateSequence { sense.senseKey }
+                val comments = generateSequence { sense.senseKey.id }
                 rows
                     .asSequence()
                     .zip(comments)
@@ -373,7 +373,7 @@ object Senses {
         } else {
             val toSqlRowsWithComments = { sense: Sense ->
                 val rows = toSqlRows.invoke(sense)
-                val comments = generateSequence { sense.senseKey }
+                val comments = generateSequence { sense.senseKey.id }
                 rows
                     .asSequence()
                     .zip(comments)
