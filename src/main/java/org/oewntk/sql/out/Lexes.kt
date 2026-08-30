@@ -220,7 +220,7 @@ object Lexes {
             Names.PRONUNCIATIONS.pronunciationid,
             Names.PRONUNCIATIONS.pronunciation
         ).joinToString(",")
-        val toSqlRow = { pronunciationValue: PronunciationValue -> "'${Utils.escape(pronunciationValue)}'" }
+        val toSqlRow = { pronunciationValue: String -> "'${Utils.escape(pronunciationValue)}'" }
         Printers.printInsert(ps, Names.PRONUNCIATIONS.TABLE, columns, pronunciationValueToNID, toSqlRow)
 
         return pronunciationValueToNID
@@ -262,7 +262,7 @@ object Lexes {
             lex.pronunciations!!
                 .map {
                     val variety = if (it.variety == null) "NULL" else "'${it.variety}'"
-                    val pronunciationNID = lookup(pronunciationToNID, it.value)
+                    val pronunciationNID = lookup(pronunciationToNID, it.value.ipa)
                     "$pronunciationNID,$variety,$lexNID,$wordNID,'${lex.partOfSpeech.value}'"
                 }
                 .toList()
