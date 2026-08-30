@@ -80,10 +80,10 @@ object Synsets {
         val toTargetData = { synset: Synset ->
             synset.relations!!.keys
                 .asSequence()
-                .onEach { require(BuiltIn.OEWN_RELATION_TYPES.containsKey(it)) { it } } // relation type
+                .onEach { require(BuiltIn.OEWN_RELATION_TYPES.containsKey(it.id)) { it } } // relation type
                 .flatMap {
                     val relation: Relation = it
-                    val relationNID: Int = BuiltIn.OEWN_RELATION_TYPES[it]!! // relation NID
+                    val relationNID: Int = BuiltIn.OEWN_RELATION_TYPES[it.id]!! // relation NID
                     synset.relations!![it]!!
                         .asSequence() // sequence of target ids
                         .map { targetId -> (relation to relationNID) to targetId }
@@ -99,7 +99,7 @@ object Synsets {
             val synset1NID = lookup(synsetIdToNIDMap, synset.synsetId)
             toTargetData(synset) // sequence of ((relation, relationNID), synset2Id_1) ((relation, relationNID, synset2Id_2) ...
                 .map {
-                    val relationNID: Int = BuiltIn.OEWN_RELATION_TYPES[it.first.first]!! // relation
+                    val relationNID: Int = BuiltIn.OEWN_RELATION_TYPES[it.first.first.id]!! // relation
                     val synset2NID = lookup(synsetIdToNIDMap, it.second)
                     "$synset1NID,$synset2NID,$relationNID"
                 }

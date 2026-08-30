@@ -119,10 +119,10 @@ object Senses {
         val toTargetData = { sense: Sense ->
             sense.relations!!.keys
                 .asSequence()
-                .onEach { require(BuiltIn.OEWN_RELATION_TYPES.containsKey(it)) { it } } // relation type
+                .onEach { require(BuiltIn.OEWN_RELATION_TYPES.containsKey(it.id)) { it } } // relation type
                 .flatMap {
                     val relation: Relation = it
-                    val relationNID: Int = BuiltIn.OEWN_RELATION_TYPES[it]!! // relation NID
+                    val relationNID: Int = BuiltIn.OEWN_RELATION_TYPES[it.id]!! // relation NID
                     sense.relations!![it]!!
                         .asSequence() // sequence of target ids
                         .map { targetId ->
@@ -151,7 +151,7 @@ object Senses {
                     val lu2NID = lookup(lexIdToNIDMap, sense2.lexId)
                     val word2NID = lookupLC(wordIdToNIDMap, word2)
                     val synset2NID = lookup(synsetIdToNIDMap, synsetId2)
-                    val relationNID: Int = BuiltIn.OEWN_RELATION_TYPES[it.first.first]!! // relation
+                    val relationNID: Int = BuiltIn.OEWN_RELATION_TYPES[it.first.first.id]!! // relation
                     "$synset1NID,$lu1NID,$word1NID,$synset2NID,$lu2NID,$word2NID,$relationNID"
                 }
                 .toList()
