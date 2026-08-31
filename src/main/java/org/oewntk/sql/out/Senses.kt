@@ -38,7 +38,7 @@ object Senses {
         synsetIdToNIDMap: Map<SynsetId, Int>,
         lexIdToNIDMap: Map<LexId, Int>,
         wordIdToNIDMap: Map<Lemma, Int>,
-        casedWordIdToNIDMap: Map<LowerCasedLemma, Int>,
+        casedWordIdToNIDMap: Map<Lemma, Int>,
     ): Map<String, Int> {
 
         // make sensekey␣lemma-to-nid map

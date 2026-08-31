@@ -73,7 +73,7 @@ object Lexes {
      * @param lexes lexes
      * @return word-to-nid map
      */
-    fun generateWords(ps: PrintStream, lexes: Collection<Lex>): Map<String, Int> {
+    fun generateWords(ps: PrintStream, lexes: Collection<Lex>): Map<Lemma, Int> {
         // make word-to-nid map
         val wordToNID = makeWordNIDs(lexes)
 
@@ -82,7 +82,7 @@ object Lexes {
             Names.WORDS.wordid,
             Names.WORDS.word
         ).joinToString(",")
-        val toSqlRow = { lemma: Lemma -> "'${Utils.escape(lemma)}'" }
+        val toSqlRow = { lemma: Lemma -> "'${Utils.escape(lemma.form)}'" }
         Printers.printInsert(ps, Names.WORDS.TABLE, columns, wordToNID, toSqlRow)
 
         return wordToNID
@@ -101,8 +101,8 @@ object Lexes {
     fun generateCasedWords(
         ps: PrintStream,
         lexes: Collection<Lex>,
-        wordIdToNID: Map<String, Int>,
-    ): Map<String, Int> {
+        wordIdToNID: Map<Lemma, Int>,
+    ): Map<Lemma, Int> {
 
         // make casedword-to-nid map
         val casedWordToNID = makeCasedWordNIDs(lexes)
@@ -114,8 +114,8 @@ object Lexes {
             Names.CASEDWORDS.wordid
         ).joinToString(",")
         val toSqlRow = { casedWord: Lemma ->
-            val nid = lookupLC(wordIdToNID, casedWord.lowercase(Locale.ENGLISH))
-            "'${Utils.escape(casedWord)}',$nid"
+            val nid = lookupLC(wordIdToNID, casedWord.lCLemma)
+            "'${Utils.escape(casedWord.form)}',$nid"
         }
         Printers.printInsert(ps, Names.CASEDWORDS.TABLE, columns, casedWordToNID, toSqlRow)
 
@@ -210,7 +210,7 @@ object Lexes {
      * @param lexes lexes
      * @return pronunciation-to-nid
      */
-    fun generatePronunciations(ps: PrintStream, lexes: Collection<Lex>): Map<String, Int> {
+    fun generatePronunciations(ps: PrintStream, lexes: Collection<Lex>): Map<PronunciationValue, Int> {
 
         // make pronunciation_value-to-nid map
         val pronunciationValueToNID = makePronunciationNIDs(lexes)
@@ -220,7 +220,7 @@ object Lexes {
             Names.PRONUNCIATIONS.pronunciationid,
             Names.PRONUNCIATIONS.pronunciation
         ).joinToString(",")
-        val toSqlRow = { pronunciationValue: String -> "'${Utils.escape(pronunciationValue)}'" }
+        val toSqlRow = { pronunciationValue: PronunciationValue -> "'${Utils.escape(pronunciationValue.ipa)}'" }
         Printers.printInsert(ps, Names.PRONUNCIATIONS.TABLE, columns, pronunciationValueToNID, toSqlRow)
 
         return pronunciationValueToNID
@@ -239,8 +239,8 @@ object Lexes {
         ps: PrintStream,
         lexes: Collection<Lex>,
         lexIdToNID: Map<LexId, Int>,
-        wordToNID: Map<String, Int>,
-        pronunciationToNID: Map<String, Int>,
+        wordToNID: Map<Lemma, Int>,
+        pronunciationToNID: Map<PronunciationValue, Int>,
     ) {
         // stream of lexes
         val lexSeq = lexes
@@ -262,7 +262,7 @@ object Lexes {
             lex.pronunciations!!
                 .map {
                     val variety = if (it.variety == null) "NULL" else "'${it.variety}'"
-                    val pronunciationNID = lookup(pronunciationToNID, it.value.ipa)
+                    val pronunciationNID = lookup(pronunciationToNID, it.value)
                     "$pronunciationNID,$variety,$lexNID,$wordNID,'${lex.partOfSpeech.value}'"
                 }
                 .toList()
