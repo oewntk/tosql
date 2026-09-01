@@ -8,6 +8,7 @@
       <excludeFolder url="file://$MODULE_DIR$/queries" />
       <excludeFolder url="file://$MODULE_DIR$/renames" />
       <excludeFolder url="file://$MODULE_DIR$/sql" />
+      <excludeFolder url="file://$MODULE_DIR$/tosql.iml" />
     </content>
   </component>
 </module>

@@ -17,8 +17,8 @@ class TestSqlVariables {
     )
 
     private val illFormedInputs = arrayOf(
-        "\${senses.file} b \${var4} ",
-        "\${senses.file} c \${senses._file_} ",
+        $$"${senses.file} b ${var4} ",
+        $$"${senses.file} c ${senses._file_} ",
     )
 
     @Test

@@ -13,7 +13,6 @@ import org.oewntk.model.NIDs.makeMorphNIDs
 import org.oewntk.model.NIDs.makePronunciationNIDs
 import org.oewntk.model.NIDs.makeWordNIDs
 import java.io.PrintStream
-import java.util.*
 
 /**
  * Process lexes
