@@ -49,6 +49,11 @@ object DeSerializeNIDs {
                 val m = deSerializeNIDs(it)
                 maps.put(Names.SENSES.FILE, m)
             }
+        FileInputStream(File(inDir, SerializeNIDs.NID_PREFIX + Names.SENSES_WORDS.FILE))
+            .use {
+                val m = deSerializeNIDs(it)
+                maps.put(Names.SENSES_WORDS.FILE, m)
+            }
         FileInputStream(File(inDir, SerializeNIDs.NID_PREFIX + Names.SYNSETS.FILE))
             .use {
                 val m = deSerializeNIDs(it)

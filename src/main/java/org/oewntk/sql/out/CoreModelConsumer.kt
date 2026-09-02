@@ -21,6 +21,7 @@ import org.oewntk.sql.out.Senses.generateSenses
 import org.oewntk.sql.out.Senses.generateSensesAdjPositions
 import org.oewntk.sql.out.Senses.generateSensesSamples
 import org.oewntk.sql.out.Senses.generateSensesVerbFrames
+import org.oewntk.sql.out.Senses.generateSensesWords
 import org.oewntk.sql.out.SourcesGenerator.sources
 import org.oewntk.sql.out.Synsets.generateSynsetIlis
 import org.oewntk.sql.out.Synsets.generateSynsetRelations
@@ -157,6 +158,7 @@ class CoreModelConsumer(
     @Throws(FileNotFoundException::class)
     private fun senses(outDir: File, senses: Collection<Sense>, senseResolver: (SenseKey) -> Sense, synsetResolver: (SynsetId) -> Synset) {
         generate(outDir, Names.SENSES.FILE, append = false, senses) { ps, senses -> generateSenses(ps, senses, synsetIdToNID!!, lexIdToNID!!, wordToNID!!, casedWordToNID!!) }
+        generate(outDir, Names.SENSES_WORDS.FILE, append = false, senses) { ps, senses -> generateSensesWords(ps, senses, synsetIdToNID!!, lexIdToNID!!, wordToNID!!, casedWordToNID!!) }
         generate(outDir, Names.SAMPLES.FILE, append = true, senses) { ps, senses -> generateSensesSamples(ps, senses, synsetIdToNID!!, lexIdToNID!!, wordToNID!!) }
         generate(outDir, Names.SENSES_VFRAMES.FILE, append = false, senses) { ps, senses -> generateSensesVerbFrames(ps, senses, synsetIdToNID!!, lexIdToNID!!, wordToNID!!) }
         generate(outDir, Names.SENSES_ADJPOSITIONS.FILE, append = false, senses) { ps, senses -> generateSensesAdjPositions(ps, senses, synsetIdToNID!!, lexIdToNID!!, wordToNID!!) }

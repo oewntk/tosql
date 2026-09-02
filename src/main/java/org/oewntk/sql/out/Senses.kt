@@ -9,6 +9,7 @@ import org.oewntk.model.NIDs.lookup
 import org.oewntk.model.NIDs.lookupLC
 import org.oewntk.model.NIDs.lookupNullable
 import org.oewntk.model.NIDs.makeSenseNIDs
+import org.oewntk.model.NIDs.makeSenseWordNIDs
 import org.oewntk.sql.out.Printers.printInsert
 import org.oewntk.sql.out.Printers.printInsertWithComment
 import org.oewntk.sql.out.Printers.printInserts
@@ -39,10 +40,64 @@ object Senses {
         lexIdToNIDMap: Map<LexId, Int>,
         wordIdToNIDMap: Map<Lemma, Int>,
         casedWordIdToNIDMap: Map<Lemma, Int>,
+    ): Map<SenseKey, Int> {
+
+        // make sensekey-to-nid map
+        val sensekeyToNID = makeSenseNIDs(senses)
+        val resolver = { sense: Sense -> lookup(sensekeyToNID, sense.senseKey) }
+
+        // insert map
+        val columns = listOf(
+            Names.SENSES.senseid,
+            Names.SENSES.sensekey,
+            Names.SENSES.sensenum,
+            Names.SENSES.synsetid,
+            Names.SENSES.luid,
+            Names.SENSES.wordid,
+            Names.SENSES.casedwordid,
+            Names.SENSES.lexid,
+            Names.SENSES.tagcount
+        ).joinToString(",")
+        val toSqlRow = { sense: Sense ->
+            val casedWord = sense.lemma
+            val word = sense.lCLemma
+            val synsetId = sense.synsetId
+            val lexId = sense.lexId
+            val sensekey = sense.senseKey
+            val senseNum = sense.indexInLex + 1
+            val lexid = sense.findLexid()
+            val tagCount = sense.tagCount
+            val wordNID = lookupLC(wordIdToNIDMap, word)
+            val synsetNID = lookup(synsetIdToNIDMap, synsetId)
+            val lexNID = lookup(lexIdToNIDMap, lexId)
+            val casedWordNID = lookupNullable(casedWordIdToNIDMap, casedWord)
+            val tagCnt = tagCount?.toString() ?: "NULL"
+            "'${escape(sensekey.id)}',$senseNum,$synsetNID,$lexNID,$wordNID,$casedWordNID,$lexid,$tagCnt"
+        }
+        if (!Printers.WITH_COMMENT) {
+            printInsert(ps, Names.SENSES.TABLE, columns, senses, resolver, toSqlRow)
+        } else {
+            val toSqlRowWithComment = { sense: Sense -> toSqlRow.invoke(sense) to "${sense.senseKey} ${sense.synsetId} '${sense.lemma}'" }
+            printInsertWithComment(ps, Names.SENSES.TABLE, columns, senses, resolver, toSqlRowWithComment)
+        }
+        return sensekeyToNID
+    }
+
+    /**
+     * Used in WN31 where senseKeys may collide due to case (for example for Baroque adn baroque)
+     * To make a unique lookup id we concatenate sensekey and cased form
+     */
+    fun generateSensesWords(
+        ps: PrintStream,
+        senses: Collection<Sense>,
+        synsetIdToNIDMap: Map<SynsetId, Int>,
+        lexIdToNIDMap: Map<LexId, Int>,
+        wordIdToNIDMap: Map<Lemma, Int>,
+        casedWordIdToNIDMap: Map<Lemma, Int>,
     ): Map<String, Int> {
 
         // make sensekey␣lemma-to-nid map
-        val idToNID = makeSenseNIDs(senses)
+        val idToNID = makeSenseWordNIDs(senses)
 
         // insert map
         val columns = listOf(
