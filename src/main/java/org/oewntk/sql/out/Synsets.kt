@@ -27,9 +27,10 @@ object Synsets {
      * @param synsets synsets
      * @return synsets id-to-nid map
      */
-    fun generateSynsets(ps: PrintStream, synsets: Collection<Synset>): Map<String, Int> {
+    fun generateSynsets(ps: PrintStream, synsets: Collection<Synset>): Map<SynsetId, Int> {
         // make synsetId-to-nid map
         val synsetIdToNID = makeSynsetNIDs(synsets)
+        val resolver = { synset: Synset -> lookup(synsetIdToNID, synset.synsetId) }
 
         // insert map
         val columns = listOf(
@@ -47,10 +48,10 @@ object Synsets {
             "'${type.value}',$lexdomainId,'${escape(definition!!)}'"
         }
         if (!Printers.WITH_COMMENT) {
-            printInsert(ps, Names.SYNSETS.TABLE, columns, synsets, { it.synsetId.id }, synsetIdToNID, toSqlRow)
+            printInsert(ps, Names.SYNSETS.TABLE, columns, synsets, resolver, toSqlRow)
         } else {
             val toSqlRowWithComment = { synset: Synset -> toSqlRow.invoke(synset) to synset.synsetId.id }
-            printInsertWithComment(ps, Names.SYNSETS.TABLE, columns, synsets, { it.synsetId.id }, synsetIdToNID, toSqlRowWithComment)
+            printInsertWithComment(ps, Names.SYNSETS.TABLE, columns, synsets, resolver, toSqlRowWithComment)
         }
         return synsetIdToNID
     }

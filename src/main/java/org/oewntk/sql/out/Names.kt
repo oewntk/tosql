@@ -407,6 +407,40 @@ object Names {
         }
     }
 
+    object SENSES_WORDS // word - casedword - synset
+    {
+
+        lateinit var FILE: String
+        lateinit var TABLE: String
+        lateinit var senseid: String
+        lateinit var sensekey: String
+        lateinit var luid: String
+        lateinit var wordid: String
+        lateinit var casedwordid: String
+        lateinit var synsetid: String
+        lateinit var sensenum: String
+        lateinit var lexid: String
+        lateinit var tagcount: String
+
+        fun set(bundle: ResourceBundle) {
+            FILE = bundle.getString("senses_words.file")
+            TABLE = bundle.getString("senses_words.table")
+            senseid = bundle.getString("senses.senseid")
+            sensekey = bundle.getString("senses.sensekey")
+            luid = bundle.getString("senses.luid")
+            wordid = bundle.getString("senses.wordid")
+            casedwordid = bundle.getString("senses.casedwordid")
+            synsetid = bundle.getString("senses.synsetid")
+            sensenum = bundle.getString("senses.sensenum")
+            lexid = bundle.getString("senses.lexid")
+            tagcount = bundle.getString("senses.tagcount")
+        }
+
+        init {
+            set(bundle)
+        }
+    }
+
     object SEMRELATIONS {
 
         lateinit var FILE: String
