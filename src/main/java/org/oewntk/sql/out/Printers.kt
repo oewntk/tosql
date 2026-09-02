@@ -59,6 +59,46 @@ object Printers {
      * @param table         table name
      * @param columns       column names
      * @param objects       collection of objects
+     * @param resolver      object to nid resolver
+     * @param toRow         stringifier of objects
+     * @param T             type of objects
+     */
+    fun <T> printInsert(
+        ps: PrintStream,
+        table: String,
+        columns: String,
+        objects: Collection<T>,
+        resolver: (T) -> Int,
+        toRow: (T) -> String,
+    ) {
+        if (objects.isEmpty()) {
+            ps.print("-- NONE")
+        } else {
+            ps.print("INSERT INTO $table ($columns) VALUES")
+            objects
+                .asSequence()
+                .map { it to resolver(it) }
+                .toList()
+                .sortedBy { it.second }
+                .withIndex()
+                .forEach { (index, valueWithNID) ->
+                    if (index > 0) {
+                        ps.print(',')
+                    }
+                    val row = toRow.invoke(valueWithNID.first)
+                    ps.print("\n(${valueWithNID.second},$row)")
+                }
+            ps.println(";")
+        }
+    }
+
+    /**
+     * Print inserts for collection
+     *
+     * @param ps            print stream
+     * @param table         table name
+     * @param columns       column names
+     * @param objects       collection of objects
      * @param toId          id extractor
      * @param objectIdToNID id-to-nid map
      * @param toRow         stringifier of objects
@@ -94,13 +134,24 @@ object Printers {
         }
     }
 
-    fun <T> printInsert(
+    /**
+     * Print inserts for collection with comments
+     *
+     * @param ps                   print stream
+     * @param table                table name
+     * @param columns              column names
+     * @param objects              collection of objects
+     * @param resolver             object to nid resolver
+     * @param toRowWithComment     double stringifier of objects, two strings are produced: [0] insert values , [1] comment
+     * @param T                    type of objects
+     */
+    fun <T> printInsertWithComment(
         ps: PrintStream,
         table: String,
         columns: String,
         objects: Collection<T>,
-        lookupNID: (T) -> Int,
-        toRow: (T) -> String,
+        resolver: (T) -> Int,
+        toRowWithComment: (T) -> Pair<String, String>,
     ) {
         if (objects.isEmpty()) {
             ps.print("-- NONE")
@@ -108,7 +159,7 @@ object Printers {
             ps.print("INSERT INTO $table ($columns) VALUES")
             objects
                 .asSequence()
-                .map { it to lookupNID(it) }
+                .map { it to resolver(it) }
                 .toList()
                 .sortedBy { it.second }
                 .withIndex()
@@ -116,8 +167,8 @@ object Printers {
                     if (index > 0) {
                         ps.print(',')
                     }
-                    val row = toRow.invoke(valueWithNID.first)
-                    ps.print("\n(${valueWithNID.second},$row)")
+                    val rowWithComment = toRowWithComment.invoke(valueWithNID.first)
+                    ps.print("\n(${valueWithNID.second},${rowWithComment.first}) /* ${rowWithComment.second} */")
                 }
             ps.println(";")
         }
@@ -151,35 +202,6 @@ object Printers {
             objects
                 .asSequence()
                 .map { it to lookup(objectIdToNID, toId.invoke(it)) }
-                .toList()
-                .sortedBy { it.second }
-                .withIndex()
-                .forEach { (index, valueWithNID) ->
-                    if (index > 0) {
-                        ps.print(',')
-                    }
-                    val rowWithComment = toRowWithComment.invoke(valueWithNID.first)
-                    ps.print("\n(${valueWithNID.second},${rowWithComment.first}) /* ${rowWithComment.second} */")
-                }
-            ps.println(";")
-        }
-    }
-
-    fun <T> printInsertWithComment(
-        ps: PrintStream,
-        table: String,
-        columns: String,
-        objects: Collection<T>,
-        lookupNID: (T) -> Int,
-        toRowWithComment: (T) -> Pair<String, String>,
-    ) {
-        if (objects.isEmpty()) {
-            ps.print("-- NONE")
-        } else {
-            ps.print("INSERT INTO $table ($columns) VALUES")
-            objects
-                .asSequence()
-                .map { it to lookupNID(it) }
                 .toList()
                 .sortedBy { it.second }
                 .withIndex()
