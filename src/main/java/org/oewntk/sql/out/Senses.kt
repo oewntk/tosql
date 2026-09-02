@@ -81,6 +81,13 @@ object Senses {
         return idToNID
     }
 
+    private data class RelationData(
+        val relation: Relation,
+        val relationNid: Int,
+        val targetSynsetId: SynsetId,
+        val targetLexId: LexId?
+    )
+
     /**
      * Generate sense relations
      *
@@ -95,6 +102,7 @@ object Senses {
         ps: PrintStream,
         senses: Collection<Sense>,
         senseResolver: (SenseKey) -> Sense,
+        synsetResolver: (SynsetId) -> Synset,
         synsetIdToNIDMap: Map<SynsetId, Int>,
         lexIdToNIDMap: Map<LexId, Int>,
         wordIdToNIDMap: Map<Lemma, Int>,
@@ -126,15 +134,19 @@ object Senses {
                     sense.relations!![it]!!
                         .asSequence() // sequence of target ids
                         .map { targetId ->
-                            val sense2 = senseResolver(targetId)
-                            (relation to relationNID) to sense2
+                            if (targetId.targetsSynset) {
+                                val synset2 = synsetResolver(targetId.synsetId)
+                                RelationData(relation, relationNID, synset2.synsetId, null)
+                            } else {
+                                val sense2 = senseResolver(targetId.senseKey)
+                                RelationData(relation, relationNID, sense2.synsetId, sense2.lexId)
+                            }
                         }
                 } // sequence of ((relation, relationNID), sense2_1) ((relation, relationNID), sense2_2) ...
                 .sortedWith(
                     Comparator
-                        .comparingInt { data: Pair<Pair<Relation, Int>, Sense> -> data.first.second } // relation NID
-                        .thenComparing { data -> data.second.lemma } //  lemma2
-                        .thenComparing { data -> data.second.senseKey } //  sensekey2
+                        .comparingInt { data: RelationData -> data.relationNid }
+                        .thenComparing { data -> data.targetSynsetId }
                 )
         }
 
@@ -143,15 +155,11 @@ object Senses {
             val word1NID = lookupLC(wordIdToNIDMap, sense.lCLemma)
             val synset1NID = lookup(synsetIdToNIDMap, sense.synsetId)
             toTargetData(sense) // sequence of ((relation, relationNID), sense2_1) ((relation, relationNID), sense2_2) ...
-                .map {
-                    val sense2 = it.second
-                    val word2 = sense2.lCLemma
-                    val synsetId2 = sense2.synsetId
-
-                    val lu2NID = lookup(lexIdToNIDMap, sense2.lexId)
-                    val word2NID = lookupLC(wordIdToNIDMap, word2)
-                    val synset2NID = lookup(synsetIdToNIDMap, synsetId2)
-                    val relationNID: Int = BuiltIn.OEWN_RELATION_TYPES[it.first.first.id]!! // relation
+                .map { data ->
+                    val lu2NID = if (data.targetLexId != null) lookup(lexIdToNIDMap, data.targetLexId) else "NULL"
+                    val word2NID = if (data.targetLexId != null) lookupLC(wordIdToNIDMap, data.targetLexId.lemma.lCLemma) else "NULL"
+                    val synset2NID = lookup(synsetIdToNIDMap, data.targetSynsetId)
+                    val relationNID: Int = BuiltIn.OEWN_RELATION_TYPES[data.relation.id]!! // relation
                     "$synset1NID,$lu1NID,$word1NID,$synset2NID,$lu2NID,$word2NID,$relationNID"
                 }
                 .toList()
@@ -167,11 +175,8 @@ object Senses {
                 val word1 = sense.lemma
                 val comments = toTargetData(sense) // sequence of ((relation, relationNID), sense2_1) ((relation, relationNID), sense2_2) ...
                     .map {
-                        val relation = it.first.first
-                        val sense2 = it.second
-                        val word2 = sense2.lCLemma
-                        val synsetId2 = sense2.synsetId
-                        "$synsetId1 '$word1' -$relation-> $synsetId2 '$word2'"
+                        val word2 = it.targetLexId?.lemma
+                        "$synsetId1 '$word1' -${it.relation}-> ${it.targetSynsetId}${if (word2 != null) " '$word2'" else ""}"
                     }
                 rows
                     .asSequence()

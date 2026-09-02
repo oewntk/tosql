@@ -3,11 +3,10 @@
  */
 package org.oewntk.sql.out
 
+import org.oewntk.model.*
 import org.oewntk.model.NIDs.lookup
+import org.oewntk.model.NIDs.lookupLC
 import org.oewntk.model.NIDs.makeSynsetNIDs
-import org.oewntk.model.Relation
-import org.oewntk.model.Synset
-import org.oewntk.model.SynsetId
 import org.oewntk.sql.out.Printers.printInsert
 import org.oewntk.sql.out.Printers.printInsertWithComment
 import org.oewntk.sql.out.Printers.printInserts
@@ -27,9 +26,10 @@ object Synsets {
      * @param synsets synsets
      * @return synsets id-to-nid map
      */
-    fun generateSynsets(ps: PrintStream, synsets: Collection<Synset>): Map<String, Int> {
+    fun generateSynsets(ps: PrintStream, synsets: Collection<Synset>): Map<SynsetId, Int> {
         // make synsetId-to-nid map
         val synsetIdToNID = makeSynsetNIDs(synsets)
+        val resolver = { synset: Synset -> lookup(synsetIdToNID, synset.synsetId) }
 
         // insert map
         val columns = listOf(
@@ -47,13 +47,20 @@ object Synsets {
             "'${type.value}',$lexdomainId,'${escape(definition!!)}'"
         }
         if (!Printers.WITH_COMMENT) {
-            printInsert(ps, Names.SYNSETS.TABLE, columns, synsets, { it.synsetId.id }, synsetIdToNID, toSqlRow)
+            printInsert(ps, Names.SYNSETS.TABLE, columns, synsets, resolver, toSqlRow)
         } else {
             val toSqlRowWithComment = { synset: Synset -> toSqlRow.invoke(synset) to synset.synsetId.id }
-            printInsertWithComment(ps, Names.SYNSETS.TABLE, columns, synsets, { it.synsetId.id }, synsetIdToNID, toSqlRowWithComment)
+            printInsertWithComment(ps, Names.SYNSETS.TABLE, columns, synsets, resolver, toSqlRowWithComment)
         }
         return synsetIdToNID
     }
+
+    private data class RelationData(
+        val relation: Relation,
+        val relationNid: Int,
+        val targetSynsetId: SynsetId,
+        val targetLexId: LexId?
+    )
 
     /**
      * Generate synset relations table
@@ -62,7 +69,15 @@ object Synsets {
      * @param synsets          synsets
      * @param synsetIdToNIDMap id-to-nid map
      */
-    fun generateSynsetRelations(ps: PrintStream, synsets: Collection<Synset>, synsetIdToNIDMap: Map<SynsetId, Int>) {
+    fun generateSynsetRelations(
+        ps: PrintStream,
+        synsets: Collection<Synset>,
+        senseResolver: (SenseKey) -> Sense,
+        synsetResolver: (SynsetId) -> Synset,
+        synsetIdToNIDMap: Map<SynsetId, Int>,
+        lexIdToNIDMap: Map<LexId, Int>,
+        wordIdToNIDMap: Map<Lemma, Int>,
+    ) {
 
         // synset sequence
         val synsetSeq = synsets
@@ -74,6 +89,8 @@ object Synsets {
         val columns = listOf(
             Names.SEMRELATIONS.synset1id,
             Names.SEMRELATIONS.synset2id,
+            Names.SEMRELATIONS.lu2id,
+            Names.SEMRELATIONS.word2id,
             Names.SEMRELATIONS.relationid
         ).joinToString(",")
 
@@ -86,22 +103,32 @@ object Synsets {
                     val relationNID: Int = BuiltIn.OEWN_RELATION_TYPES[it.id]!! // relation NID
                     synset.relations!![it]!!
                         .asSequence() // sequence of target ids
-                        .map { targetId -> (relation to relationNID) to targetId }
+                        .map { targetId ->
+                            if (targetId.targetsSynset) {
+                                val synset2 = synsetResolver(targetId.synsetId)
+                                RelationData(relation, relationNID, synset2.synsetId, null)
+                            } else {
+                                val sense2 = senseResolver(targetId.senseKey)
+                                RelationData(relation, relationNID, sense2.synsetId, sense2.lexId)
+                            }
+                        }
                 } // sequence of ((relation, relationNID), synset2Id_1) ((relation, relationNID, synset2Id_2) ...
                 .sortedWith(
                     Comparator
-                        .comparingInt { data: Pair<Pair<Relation, Int>, SynsetId> -> data.first.second } // relationNID
-                        .thenComparing { data -> data.second } //  synset2Id
+                        .comparingInt { data: Synsets.RelationData -> data.relationNid }
+                        .thenComparing { data -> data.targetSynsetId }
                 )
         }
 
         val toSqlRows = { synset: Synset ->
             val synset1NID = lookup(synsetIdToNIDMap, synset.synsetId)
             toTargetData(synset) // sequence of ((relation, relationNID), synset2Id_1) ((relation, relationNID, synset2Id_2) ...
-                .map {
-                    val relationNID: Int = BuiltIn.OEWN_RELATION_TYPES[it.first.first.id]!! // relation
-                    val synset2NID = lookup(synsetIdToNIDMap, it.second)
-                    "$synset1NID,$synset2NID,$relationNID"
+                .map { data ->
+                    val lu2NID = if (data.targetLexId != null) lookup(lexIdToNIDMap, data.targetLexId) else "NULL"
+                    val word2NID = if (data.targetLexId != null) lookupLC(wordIdToNIDMap, data.targetLexId.lemma.lCLemma) else "NULL"
+                    val synset2NID = lookup(synsetIdToNIDMap, data.targetSynsetId)
+                    val relationNID: Int = BuiltIn.OEWN_RELATION_TYPES[data.relation.id]!! // relation
+                    "$synset1NID,$synset2NID,$lu2NID,$word2NID,$relationNID"
                 }
                 .toList()
         }
@@ -113,7 +140,10 @@ object Synsets {
                 val rows = toSqlRows.invoke(synset)
 
                 val comments = toTargetData(synset) // sequence of ((relation, relationNID), synset2Id_1) ((relation, relationNID, synset2Id_2) ...
-                    .map { "${synset.synsetId} -${it.first.first}-> ${it.second}" }
+                    .map {
+                        val word2 = it.targetLexId?.lemma
+                        "${synset.synsetId} -${it.relation}-> ${it.targetSynsetId}${if (word2 != null) " '$word2'" else ""}"
+                    }
                 rows
                     .asSequence()
                     .zip(comments)

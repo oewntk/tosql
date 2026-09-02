@@ -94,6 +94,35 @@ object Printers {
         }
     }
 
+    fun <T> printInsert(
+        ps: PrintStream,
+        table: String,
+        columns: String,
+        objects: Collection<T>,
+        lookupNID: (T) -> Int,
+        toRow: (T) -> String,
+    ) {
+        if (objects.isEmpty()) {
+            ps.print("-- NONE")
+        } else {
+            ps.print("INSERT INTO $table ($columns) VALUES")
+            objects
+                .asSequence()
+                .map { it to lookupNID(it) }
+                .toList()
+                .sortedBy { it.second }
+                .withIndex()
+                .forEach { (index, valueWithNID) ->
+                    if (index > 0) {
+                        ps.print(',')
+                    }
+                    val row = toRow.invoke(valueWithNID.first)
+                    ps.print("\n(${valueWithNID.second},$row)")
+                }
+            ps.println(";")
+        }
+    }
+
     /**
      * Print inserts for collection with comments
      *
@@ -122,6 +151,35 @@ object Printers {
             objects
                 .asSequence()
                 .map { it to lookup(objectIdToNID, toId.invoke(it)) }
+                .toList()
+                .sortedBy { it.second }
+                .withIndex()
+                .forEach { (index, valueWithNID) ->
+                    if (index > 0) {
+                        ps.print(',')
+                    }
+                    val rowWithComment = toRowWithComment.invoke(valueWithNID.first)
+                    ps.print("\n(${valueWithNID.second},${rowWithComment.first}) /* ${rowWithComment.second} */")
+                }
+            ps.println(";")
+        }
+    }
+
+    fun <T> printInsertWithComment(
+        ps: PrintStream,
+        table: String,
+        columns: String,
+        objects: Collection<T>,
+        lookupNID: (T) -> Int,
+        toRowWithComment: (T) -> Pair<String, String>,
+    ) {
+        if (objects.isEmpty()) {
+            ps.print("-- NONE")
+        } else {
+            ps.print("INSERT INTO $table ($columns) VALUES")
+            objects
+                .asSequence()
+                .map { it to lookupNID(it) }
                 .toList()
                 .sortedBy { it.second }
                 .withIndex()
