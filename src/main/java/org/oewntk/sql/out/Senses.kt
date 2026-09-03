@@ -5,6 +5,7 @@
 package org.oewntk.sql.out
 
 import org.oewntk.model.*
+import org.oewntk.model.InverseRelationFactory.INVERSE_SENSE_RELATIONS_SET
 import org.oewntk.model.NIDs.lookup
 import org.oewntk.model.NIDs.lookupLC
 import org.oewntk.model.NIDs.lookupNullable
@@ -153,6 +154,7 @@ object Senses {
         synsetIdToNIDMap: Map<SynsetId, Int>,
         lexIdToNIDMap: Map<LexId, Int>,
         wordIdToNIDMap: Map<Lemma, Int>,
+        skipInverses: Boolean = false
     ) {
         // sequence of senses
         val senseSeq = senses
@@ -174,6 +176,7 @@ object Senses {
         val toTargetData = { sense: Sense ->
             sense.relations!!.keys
                 .asSequence()
+                .filter { relation -> !skipInverses || !INVERSE_SENSE_RELATIONS_SET.contains(relation) }
                 .onEach { require(BuiltIn.OEWN_RELATION_TYPES.containsKey(it.id)) { it } } // relation type
                 .flatMap {
                     val relation: Relation = it

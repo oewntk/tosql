@@ -49,6 +49,7 @@ class CoreModelConsumer(
     private val withSchema: Boolean = true,
     private val withSources: Boolean = true,
     private val compatSchema: Boolean = false,
+    private val skipInverses: Boolean = false,
     private val verbose: Boolean = false,
 ) : Consumer<CoreModel> {
 
@@ -139,9 +140,9 @@ class CoreModelConsumer(
         // synsets are generated first, so do not append
         generate(outDir, Names.SAMPLES.FILE, append = false, synsets) { ps, synsets -> generateSynsetSamples(ps, synsets, synsetIdToNID!!) }
         generate(outDir, Names.USAGES.FILE, append = false, synsets) { ps, synsets -> generateSynsetUsages(ps, synsets, synsetIdToNID!!) }
-        generate(outDir, Names.SEMRELATIONS.FILE, append = false, synsets) { ps, synsets -> generateSynsetRelations(ps, synsets, synsetIdToNID!!) }
         generate(outDir, Names.ILIS.FILE, append = false, synsets) { ps, synsets -> generateSynsetIlis(ps, synsets, synsetIdToNID!!) }
         generate(outDir, Names.WIKIDATAS.FILE, append = false, synsets) { ps, synsets -> generateSynsetWikidatas(ps, synsets, synsetIdToNID!!) }
+        generate(outDir, Names.SEMRELATIONS.FILE, append = false, synsets) { ps, synsets -> generateSynsetRelations(ps, synsets, synsetIdToNID!!, skipInverses = skipInverses) }
     }
 
     /**
@@ -156,10 +157,10 @@ class CoreModelConsumer(
     private fun senses(outDir: File, senses: Collection<Sense>, senseResolver: (SenseKey) -> Sense) {
         generate(outDir, Names.SENSES.FILE, append = false, senses) { ps, senses -> generateSenses(ps, senses, synsetIdToNID!!, lexIdToNID!!, wordToNID!!, casedWordToNID!!) }
         generate(outDir, Names.SENSES_WORDS.FILE, append = false, senses) { ps, senses -> generateSensesWords(ps, senses, synsetIdToNID!!, lexIdToNID!!, wordToNID!!, casedWordToNID!!) }
-        generate(outDir, Names.LEXRELATIONS.FILE, append = false, senses) { ps, senses -> generateSenseRelations(ps, senses, senseResolver, synsetIdToNID!!, lexIdToNID!!, wordToNID!!) }
         generate(outDir, Names.SAMPLES.FILE, append = true, senses) { ps, senses -> generateSensesSamples(ps, senses, synsetIdToNID!!, lexIdToNID!!, wordToNID!!) }
         generate(outDir, Names.SENSES_VFRAMES.FILE, append = false, senses) { ps, senses -> generateSensesVerbFrames(ps, senses, synsetIdToNID!!, lexIdToNID!!, wordToNID!!) }
         generate(outDir, Names.SENSES_ADJPOSITIONS.FILE, append = false, senses) { ps, senses -> generateSensesAdjPositions(ps, senses, synsetIdToNID!!, lexIdToNID!!, wordToNID!!) }
+        generate(outDir, Names.LEXRELATIONS.FILE, append = false, senses) { ps, senses -> generateSenseRelations(ps, senses, senseResolver, synsetIdToNID!!, lexIdToNID!!, wordToNID!!, skipInverses = skipInverses) }
     }
 
     companion object {
