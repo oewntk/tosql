@@ -49,6 +49,7 @@ class CoreModelConsumer(
     private val withSchema: Boolean = true,
     private val withSources: Boolean = true,
     private val compatSchema: Boolean = false,
+    private val skipInverses: Boolean = false,
     private val verbose: Boolean = false,
 ) : Consumer<CoreModel> {
 
@@ -144,7 +145,7 @@ class CoreModelConsumer(
         generate(outDir, Names.SEMRELATIONS.FILE, append = false, synsets) { ps, synsets ->
             generateSynsetRelations(ps, synsets,
                 senseResolver, synsetResolver,
-                synsetIdToNID!!, lexIdToNID!!, wordToNID!!) }
+                synsetIdToNID!!, lexIdToNID!!, wordToNID!!, skipInverses = skipInverses) }
     }
 
     /**
@@ -165,7 +166,7 @@ class CoreModelConsumer(
         generate(outDir, Names.LEXRELATIONS.FILE, append = false, senses) { ps, senses ->
             generateSenseRelations(ps, senses,
                 senseResolver, synsetResolver,
-                synsetIdToNID!!, lexIdToNID!!, wordToNID!!) }
+                synsetIdToNID!!, lexIdToNID!!, wordToNID!!, skipInverses = skipInverses) }
     }
 
     companion object {
