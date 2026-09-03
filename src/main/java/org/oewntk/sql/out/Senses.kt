@@ -5,6 +5,7 @@
 package org.oewntk.sql.out
 
 import org.oewntk.model.*
+import org.oewntk.model.InverseRelationFactory.INVERSE_SENSE_RELATIONS_SET
 import org.oewntk.model.NIDs.lookup
 import org.oewntk.model.NIDs.lookupLC
 import org.oewntk.model.NIDs.lookupNullable
@@ -148,10 +149,12 @@ object Senses {
      *
      * @param ps               print stream
      * @param senses           senses
-     * @param senseResolver    sense resolver
-     * @param synsetIdToNIDMap id-to-nid map for synsets
-     * @param lexIdToNIDMap    id-to-nid map for lexes
-     * @param wordIdToNIDMap   id-to-nid map for words
+     * @param senseResolver    sense resolver from sense key
+     * @param synsetResolver   synset resolver from synset id
+     * @param synsetIdToNIDMap synset id id-to-nid map
+     * @param lexIdToNIDMap    lex id-to-nid map
+     * @param wordIdToNIDMap   word id-to-nid map
+     * @param skipInverses     ship inverse relations flag
      */
     fun generateSenseRelations(
         ps: PrintStream,
@@ -161,6 +164,7 @@ object Senses {
         synsetIdToNIDMap: Map<SynsetId, Int>,
         lexIdToNIDMap: Map<LexId, Int>,
         wordIdToNIDMap: Map<Lemma, Int>,
+        skipInverses: Boolean = false
     ) {
         // sequence of senses
         val senseSeq = senses
@@ -182,6 +186,7 @@ object Senses {
         val toTargetData = { sense: Sense ->
             sense.relations!!.keys
                 .asSequence()
+                .filter { relation -> !skipInverses || !INVERSE_SENSE_RELATIONS_SET.contains(relation) }
                 .onEach { require(BuiltIn.OEWN_RELATION_TYPES.containsKey(it.id)) { it } } // relation type
                 .flatMap {
                     val relation: Relation = it

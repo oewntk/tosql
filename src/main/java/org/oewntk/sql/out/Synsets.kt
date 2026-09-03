@@ -4,6 +4,7 @@
 package org.oewntk.sql.out
 
 import org.oewntk.model.*
+import org.oewntk.model.InverseRelationFactory.INVERSE_SYNSET_RELATIONS_SET
 import org.oewntk.model.NIDs.lookup
 import org.oewntk.model.NIDs.lookupLC
 import org.oewntk.model.NIDs.makeSynsetNIDs
@@ -67,7 +68,12 @@ object Synsets {
      *
      * @param ps               print stream
      * @param synsets          synsets
-     * @param synsetIdToNIDMap id-to-nid map
+     * @param senseResolver    sense resolver from sense key
+     * @param synsetResolver   synset resolver from synset id
+     * @param synsetIdToNIDMap synset id id-to-nid map
+     * @param lexIdToNIDMap    lex id-to-nid map
+     * @param wordIdToNIDMap   word id-to-nid map
+     * @param skipInverses     ship inverse relations flag
      */
     fun generateSynsetRelations(
         ps: PrintStream,
@@ -77,6 +83,7 @@ object Synsets {
         synsetIdToNIDMap: Map<SynsetId, Int>,
         lexIdToNIDMap: Map<LexId, Int>,
         wordIdToNIDMap: Map<Lemma, Int>,
+        skipInverses: Boolean = false
     ) {
 
         // synset sequence
@@ -97,6 +104,7 @@ object Synsets {
         val toTargetData = { synset: Synset ->
             synset.relations!!.keys
                 .asSequence()
+                .filter { relation -> !skipInverses || !INVERSE_SYNSET_RELATIONS_SET.contains(relation) }
                 .onEach { require(BuiltIn.OEWN_RELATION_TYPES.containsKey(it.id)) { it } } // relation type
                 .flatMap {
                     val relation: Relation = it
