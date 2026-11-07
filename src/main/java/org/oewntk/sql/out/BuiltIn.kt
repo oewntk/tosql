@@ -65,6 +65,21 @@ object BuiltIn {
         arrayOf<Any>("stative",        PartOfSpeech.V, "${PartOfSpeech.V.fullName}.stative",         42),
         arrayOf<Any>("weather",        PartOfSpeech.V, "${PartOfSpeech.V.fullName}.weather",         43),
         arrayOf<Any>("adjs.ppl",       PartOfSpeech.A, "${PartOfSpeech.A.fullName}.ppl",             44),
+
+        arrayOf<Any>("act",            PartOfSpeech.E, "${PartOfSpeech.E.fullName}.act",             50),
+        arrayOf<Any>("animal",         PartOfSpeech.E, "${PartOfSpeech.E.fullName}.animal",          51),
+        arrayOf<Any>("artifact",       PartOfSpeech.E, "${PartOfSpeech.E.fullName}.artifact",        52),
+        arrayOf<Any>("cognition",      PartOfSpeech.E, "${PartOfSpeech.E.fullName}.cognition",       53),
+        arrayOf<Any>("communication",  PartOfSpeech.E, "${PartOfSpeech.E.fullName}.communication",   54),
+        arrayOf<Any>("event",          PartOfSpeech.E, "${PartOfSpeech.E.fullName}.event",           55),
+        arrayOf<Any>("group",          PartOfSpeech.E, "${PartOfSpeech.E.fullName}.group",           56),
+        arrayOf<Any>("location",       PartOfSpeech.E, "${PartOfSpeech.E.fullName}.location",        57),
+        arrayOf<Any>("object",         PartOfSpeech.E, "${PartOfSpeech.E.fullName}.object",          58),
+        arrayOf<Any>("person",         PartOfSpeech.E, "${PartOfSpeech.E.fullName}.person",          59),
+        arrayOf<Any>("plant",          PartOfSpeech.E, "${PartOfSpeech.E.fullName}.plant",           60),
+        arrayOf<Any>("possession",     PartOfSpeech.E, "${PartOfSpeech.E.fullName}.possession",      61),
+        arrayOf<Any>("state",          PartOfSpeech.E, "${PartOfSpeech.E.fullName}.state",           62),
+        arrayOf<Any>("time",           PartOfSpeech.E, "${PartOfSpeech.E.fullName}.time",            63),
         // @formatter:on
         )
 
@@ -146,6 +161,7 @@ object BuiltIn {
         arrayOf("adjective",           SynsetType.A.value.toString()),
         arrayOf("adverb",              SynsetType.R.value.toString()),
         arrayOf("adjective satellite", SynsetType.S.value.toString()),
+        arrayOf("name",                SynsetType.E.value.toString()),
     )
 
     private val POS_TYPES = sequenceOf(*posArray).associate { it[0] to it[1] }
